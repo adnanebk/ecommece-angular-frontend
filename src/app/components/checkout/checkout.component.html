@@ -1,0 +1,121 @@
+<div class="main-content page-m">
+  <div class="section-content section-content-p30">
+    <div class="container-fluid">
+      <div *ngIf="!cartItems || cartItems.length == 0" class="alert alert-warning col-md-12" role="alert">
+        You cannot checkout.
+      </div>
+      <form *ngIf=" this.cartItems?.length>0" #form [formGroup]="checkoutFormGroup" (ngSubmit)="onSubmit()">
+        <ul>
+
+
+</ul>
+        <label class="">
+          <b>Disable client side errors</b>
+        <input type="checkbox" [checked]="clientErrorEnabled" (change)="clientErrorEnabled=!clientErrorEnabled">
+        </label>
+        <br>
+        <br>
+        <!-- customer form group -->
+        <div formGroupName="customer" class="form-area">
+          <h3>Customer</h3>
+
+          <div class="row">
+            <div class="col-md-2"> <label>First Name</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <input  #firstname  formControlName="firstName" class="form-control" type="text">
+                <span>{{getErrorMessage(firstname)}}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"> <label>Last Name</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <input #lastName formControlName="lastName" type="text">
+                <span>{{getErrorMessage(lastName)}}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"> <label>Email</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <input #email formControlName="email" type="text">
+                <span>{{getErrorMessage(email)}}</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- shipping Address -->
+        <div formGroupName="shippingAddress" class="form-area">
+          <h3>Shipping Address</h3>
+
+          <div class="row">
+            <div  class="col-md-2"> <label>Country</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <select #country formControlName="country">
+                  <option>Morocco</option>
+                  <option>Algeria</option>
+                  <option>Tunisia</option>
+                  <option>France</option>
+                  <option>Germany</option>
+                  <option>Usa</option>
+                  <option>Russia</option>
+                  <option>China</option>
+                </select>
+                <span>{{getErrorMessage(country)}}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"> <label>Street</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <input #street formControlName="street" type="text">
+                <span>{{getErrorMessage(street)}}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"> <label>City</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <input #city formControlName="city" type="text">
+                <span>{{getErrorMessage(city)}}</span>
+              </div>
+            </div>
+          </div>
+
+
+
+        </div>
+
+
+
+        <!-- Order details -->
+        <div class="form-area">
+          <h3>Review Your Order</h3>
+
+          <p>Total Quantity: {{ totalQuantity }}</p>
+          <p>Shipping: FREE</p>
+          <p>Total Price: {{ totalPrice | currency: 'USD' }}</p>
+        </div>
+
+        <!-- submit button-->
+        <div class="text-center">
+          <button type="submit" class="btn btn-info">Purchase</button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>
