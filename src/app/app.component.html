@@ -20,7 +20,20 @@
 
       <app-product-search></app-product-search>
             <a routerLink="/orders" routerLinkActive="active-link" class="text-light">
-              <b>All orders</b>
+              <b>My orders</b>
+            </a>
+            <a *ngIf="getUser()" class="text-light">
+              <b class="text-dark font-weight-bold">Hello {{user.userName}}</b>
+            </a>
+
+            <a *ngIf="getUser()"  href="#" (click)="logout()" class="btn btn-warning">
+            Logout
+            </a>
+            <a *ngIf="!getUser()" routerLink="/login"  class="btn btn-light">
+              Login
+            </a>
+            <a *ngIf="!getUser()" routerLink="/register"  class="btn btn-light">
+              Register
             </a>
       <app-my-cart></app-my-cart>
           </div>

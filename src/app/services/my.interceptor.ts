@@ -12,20 +12,40 @@ import {catchError} from 'rxjs/operators';
 export class MyInterceptor implements HttpInterceptor {
 
   constructor() {}
-
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    return next.handle(request).pipe(
-      catchError((resp) => {
-        console.log('error is intercept');
-        if (!(resp.error instanceof ErrorEvent)) {
-          {
-            if (resp.status === 400)
-            {
-              return throwError(resp?.error?.errors);
-            }
-          }
+
+    const token = localStorage.getItem('token');
+    if (token) {
+      const cloned = request.clone({
+        headers: request.headers.set('Authorization', 'Bearer ' + token)
+      });
+      return next.handle(cloned).pipe(
+        catchError((resp) => {
+          return this.handleError(resp);
+        })
+      );
+    }
+    else {
+      return next.handle(request).pipe(
+        catchError((resp) => {
+          return this.handleError(resp);
+        })
+      );
+    }
+  }
+
+  private handleError(resp) {
+    console.log('error is intercept');
+    console.log(resp);
+    if (!(resp.error instanceof ErrorEvent)) {
+      {
+        console.log(resp);
+        if (resp.status === 400) {
+          return resp.error.errors ? throwError(resp.error.errors ) : throwError(resp.error);
+        } else if (resp.status === 403) {
+          return throwError(resp?.error?.message);
         }
-      })
-    );
+      }
+    }
   }
 }

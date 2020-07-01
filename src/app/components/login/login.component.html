@@ -1,0 +1,41 @@
+<div class="main-content page-m">
+  <div class="section-content section-content-p30">
+    <div class="container-fluid">
+
+      <form (ngSubmit)="onSubmit()" #form="ngForm" >
+        <div  class="form-area text-center">
+          <span class="text-danger ">{{getError()}}</span>
+          <div class="row">
+            <div class="col-md-2"> <label>User name</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <input name="userName"  required class="form-control"  [(ngModel)]="user.userName" required>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-2"> <label>Password</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <input name="password" required class="form-control" type="password" [(ngModel)]="user.password" required>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- submit button-->
+          <div class="text-center">
+            <button [disabled]="form.invalid" type="submit" class="btn btn-info">Login</button>
+          </div>
+
+        </div>
+
+
+
+      </form>
+
+    </div>
+
+  </div>
+
+</div>

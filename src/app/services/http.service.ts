@@ -7,13 +7,15 @@ import { map } from 'rxjs/operators';
 import {ProductCategory} from '../models/product-category';
 import {Order} from '../models/order';
 import {MyError} from '../models/my-error';
+import {AppUser} from '../models/app-user';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpService {
-  private baseUrl = 'https://adnanbk-shopp.herokuapp.com/api/';
+ // private baseUrl = 'https://adnanbk-shopp.herokuapp.com/api/';
+  private baseUrl = 'http://localhost:8080/api/';
 
   private productUrl = this.baseUrl + 'products';
   private orderUrl = this.baseUrl + 'userOrders';
@@ -63,11 +65,23 @@ export class HttpService {
     }
   }
 
-  getOrders(): Observable<Order[]> {
-    return this.httpClient.get<Order[]>(this.orderUrl).pipe(
+  getOrders(userName: string): Observable<Order[]> {
+    return this.httpClient.get<Order[]>(this.orderUrl + '/byUserName/' + userName , ).pipe(
       map(response => response)
     );
   }
+
+  saveUser(user: any) {
+    return this.httpClient.post<{ token: string, appUser: AppUser }>(this.baseUrl + 'register', user ).pipe(
+      map(response => {
+        localStorage.setItem('appUser', JSON.stringify(response.appUser));
+        localStorage.setItem('token', response.token);
+        return response.appUser;
+      })
+    );
+  }
+
+
 }
 
 interface GetResponse {

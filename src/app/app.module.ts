@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppComponent } from './app.component';
 import { ProductListComponent } from './components/product-list-grid/product-list-grid.component';
 import {HttpService} from './services/http.service';
@@ -18,11 +17,17 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MyInterceptor} from './services/my.interceptor';
 import { OrderComponent } from './components/order/order.component';
+import { InputComponent } from './Shared/input/input.component';
+import { RegisterComponent } from './components/register/register.component';
+import { LoginComponent } from './components/login/login.component';
+import {AuthGuard} from './Shared/auth-guard';
 
 
 const routes: Routes = [
+  {path: 'login', component: LoginComponent},
+  {path: 'register', component: RegisterComponent},
   {path: 'orders', component: OrderComponent},
-  {path: 'checkout', component: CheckoutComponent},
+  {path: 'checkout', component: CheckoutComponent, canActivate : [AuthGuard] },
   {path: 'cart', component: CartDetailsComponent},
   {path: 'product/:id', component: ProductDetailsComponent},
   {path: 'category/:id', component: ProductListComponent},
@@ -34,7 +39,6 @@ const routes: Routes = [
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -45,7 +49,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     MyCartComponent,
     CartDetailsComponent,
     CheckoutComponent,
-    OrderComponent
+    OrderComponent,
+    InputComponent,
+    RegisterComponent,
+    LoginComponent
   ],
   imports: [
     RouterModule.forRoot(routes),
@@ -63,7 +70,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     })*/
   ],
-  providers: [HttpService, { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true }],
+  providers: [HttpService, { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true }, AuthGuard ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

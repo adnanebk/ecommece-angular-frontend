@@ -1,0 +1,74 @@
+<div class="main-content page-m">
+  <div class="section-content section-content-p30">
+    <div class="container-fluid">
+
+      <form (ngSubmit)="onSubmit()" [formGroup]="form">
+        <div  class="form-area">
+
+
+          <div class="row">
+            <div class="col-md-2"> <label>First Name</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <app-input [control]="form.controls.firstName" placeholder="First name" ></app-input>
+                <span class="text-danger">{{getError('firstName')}}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"> <label>Last Name</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <app-input [control]="form.controls.lastName" placeholder="Last name" ></app-input>
+                <span class="text-danger">{{getError('lastName')}}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"> <label>User name</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <app-input [control]="form.controls.userName" placeholder="User name" ></app-input>
+                <span class="text-danger">{{getError('userName')}}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"> <label>Password</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <app-input [control]="form.controls.password" placeholder="Password" ></app-input>
+                <span class="text-danger">{{getError('password')}}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"> <label>Confirm password</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <app-input [control]="form.controls.confirmPassword" placeholder="Confirm password" ></app-input>
+                <span class="text-danger">{{getError('confirmPassword')}}</span>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- submit button-->
+          <div class="text-center">
+            <button type="submit" class="btn btn-info">Register</button>
+          </div>
+
+        </div>
+
+
+      </form>
+
+    </div>
+
+  </div>
+
+</div>

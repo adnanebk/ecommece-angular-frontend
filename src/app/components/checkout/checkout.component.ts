@@ -6,7 +6,10 @@ import {Order} from '../../models/order';
 import {MyError} from '../../models/my-error';
 import {Router} from '@angular/router';
 import {CartItem} from '../../models/cart-item';
-import {ValidationService} from '../../services/validation.service';
+import {AuthService} from '../../services/auth.service';
+import {AppUser} from '../../models/app-user';
+import {MonthYearFormControl} from '../../Shared/month-year-form-control';
+
 
 @Component({
   selector: 'app-checkout',
@@ -19,59 +22,38 @@ export class CheckoutComponent implements OnInit {
 
   totalPrice = 0;
   totalQuantity = 0;
-  clientErrorEnabled = true;
+  user: AppUser;
   errors: MyError[] = [];
   cartItems: CartItem[];
   constructor(private formBuilder: FormBuilder, private cartService: CartService,
-              private validationService: ValidationService, private httpService: HttpService,
-              private router: Router) {
+              private httpService: HttpService, private router: Router, private authService: AuthService) {
     this.cartItems = this.router.getCurrentNavigation().extras.state?.products;
   }
-   getClientError(fieldName: string) {
-  }
-  get getEmail() {
-    return this.checkoutFormGroup.get('email');
-  }
-  get getLastName() {
-    return this.checkoutFormGroup.get('lastName');
-  }
-  get getStreet() {
-    return this.checkoutFormGroup.get('street');
-  }
-  get getCity() {
-    return this.checkoutFormGroup.get('city');
-  }
-  get getCountry() {
-    return this.checkoutFormGroup.get('country');
-  }
+
   ngOnInit(): void {
-    this.totalQuantity = this.cartService.totalQuantity;
-    this.totalPrice = this.cartService.totalPrice;
-    this.checkoutFormGroup = this.formBuilder.group({
+   this.user = this.authService.getUser();
+   this.totalQuantity = this.cartService.totalQuantity;
+   this.totalPrice = this.cartService.totalPrice;
+   this.checkoutFormGroup = this.formBuilder.group({
       customer: this.formBuilder.group({
-        firstName: ['', Validators.required],
-        lastName: ['', Validators.required],
+        firstName: [this.user?.firstName, [Validators.required, Validators.minLength(2)]],
+        lastName: [this.user?.lastName, [Validators.required, Validators.minLength(2)]],
         email: ['', [Validators.email, Validators.required]]
       }),
       shippingAddress: this.formBuilder.group({
-        street: ['', Validators.required],
+        street: ['', [Validators.required, Validators.minLength(4)]],
         city: ['', Validators.required],
         country: ['', Validators.required]
       }),
+     creditCard: this.formBuilder.group({
+       cardType: [''],
+       cardNumber : [''],
+       expirationDate: new MonthYearFormControl('')
+     })
     });
   }
 
-  copyShippingAddressToBillingAddress(event) {
 
-    if (event.target.checked) {
-      this.checkoutFormGroup.controls.billingAddress
-        .setValue(this.checkoutFormGroup.controls.shippingAddress.value);
-    }
-    else {
-      this.checkoutFormGroup.controls.billingAddress.reset();
-    }
-
-  }
 saveOrder(order: Order) {
     order.orderItems = this.cartItems;
     order.quantity = this.totalQuantity;
@@ -85,52 +67,19 @@ saveOrder(order: Order) {
 }
 
   onSubmit() {
-
+    this.checkoutFormGroup.clearValidators();
+    this.checkoutFormGroup.markAsPristine();
     this.errors = [];
     const myOrder = {...this.checkoutFormGroup.get('customer').value, ...this.checkoutFormGroup.get('shippingAddress').value};
+    console.log(myOrder);
     this.saveOrder(myOrder);
   }
-  getErrorMessage(input: AbstractControl)
+/*  getErrorMessage(input: AbstractControl)
   {
    return  this.validationService.getErrorMessage(input, this.checkoutFormGroup, this.clientErrorEnabled, this.errors);
-  }
- /* getErrorMessage(input) {
-    const fieldName = input.getAttribute('formControlName');
-    if (this.clientErrorEnabled)
-    {
-      input.classList.add('ng-invalid');
-      for (const key of Object.keys(this.checkoutFormGroup.controls)) {
-        const control = this.checkoutFormGroup.get(key).get(fieldName);
-        console.log(control);
-        if (control &&  (control.dirty) && control.invalid)
-        {
-          if (control.errors.required)
-          {
-           return  'this field is required';
-          }
-          else if (fieldName === 'email' && control.errors.email) {
-            return 'email must be a valid email';
-          }
-        }
-      }
-    }
-    else {
-      input.classList.remove('ng-invalid');
-    }
-    if (this.errors.length > 0)
-   {
-     const err =  this.errors.find(error => error.fieldName === fieldName);
-     console.log(err);
-     if (err !== undefined)
-     {
-       input.style.border = '1px solid red';
-       input.nextElementSibling?.classList.add( 'err-text');
-       return err?.name + ' ' + err?.message;
-     }
-     else {
-       input.style.border = 'none';
-       input.nextElementSibling?.classList.remove( 'err-text');
-     }
-   }
   }*/
+  getError(fieldName: string) {
+    const error = this.errors.find(er => er.fieldName === fieldName);
+    return error && error.name + ' ' + error.message;
+  }
 }

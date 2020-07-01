@@ -4,15 +4,8 @@
       <div *ngIf="!cartItems || cartItems.length == 0" class="alert alert-warning col-md-12" role="alert">
         You cannot checkout.
       </div>
+
       <form *ngIf=" this.cartItems?.length>0" #form [formGroup]="checkoutFormGroup" (ngSubmit)="onSubmit()">
-        <ul>
-
-
-</ul>
-        <label class="">
-          <b>Disable client side errors</b>
-        <input type="checkbox" [checked]="clientErrorEnabled" (change)="clientErrorEnabled=!clientErrorEnabled">
-        </label>
         <br>
         <br>
         <!-- customer form group -->
@@ -20,11 +13,14 @@
           <h3>Customer</h3>
 
           <div class="row">
-            <div class="col-md-2"> <label>First Name</label></div>
+            <div  class="col-md-2"> <label>First Name</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <input  #firstname  formControlName="firstName" class="form-control" type="text">
-                <span>{{getErrorMessage(firstname)}}</span>
+
+<!--                <input  #firstname  formControlName="firstName" class="form-control" type="text">-->
+             <input type="text" readonly  formControlName="firstName" >
+
+
               </div>
             </div>
           </div>
@@ -33,8 +29,7 @@
             <div class="col-md-2"> <label>Last Name</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <input #lastName formControlName="lastName" type="text">
-                <span>{{getErrorMessage(lastName)}}</span>
+                <input type="text" readonly   formControlName="lastName">
               </div>
             </div>
           </div>
@@ -43,8 +38,9 @@
             <div class="col-md-2"> <label>Email</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <input #email formControlName="email" type="text">
-                <span>{{getErrorMessage(email)}}</span>
+                <app-input [control]="checkoutFormGroup.controls.customer.get('email')"
+                           placeholder="Email" ></app-input>
+                <span class="text-danger">{{getError('email')}}</span>
               </div>
             </div>
           </div>
@@ -59,17 +55,10 @@
             <div  class="col-md-2"> <label>Country</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <select #country formControlName="country">
-                  <option>Morocco</option>
-                  <option>Algeria</option>
-                  <option>Tunisia</option>
-                  <option>France</option>
-                  <option>Germany</option>
-                  <option>Usa</option>
-                  <option>Russia</option>
-                  <option>China</option>
-                </select>
-                <span>{{getErrorMessage(country)}}</span>
+                <app-input [control]="checkoutFormGroup.controls.shippingAddress.get('country')"
+                           type="select"
+                           [data]="['Morocco','Algeria','France','China']"></app-input>
+                <span class="text-danger">{{getError('country')}}</span>
               </div>
             </div>
           </div>
@@ -78,8 +67,9 @@
             <div class="col-md-2"> <label>Street</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <input #street formControlName="street" type="text">
-                <span>{{getErrorMessage(street)}}</span>
+                <app-input [control]="checkoutFormGroup.controls.shippingAddress.get('street')"
+                           placeholder="Street" ></app-input>
+                <span class="text-danger">{{getError('street')}}</span>
               </div>
             </div>
           </div>
@@ -88,8 +78,9 @@
             <div class="col-md-2"> <label>City</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <input #city formControlName="city" type="text">
-                <span>{{getErrorMessage(city)}}</span>
+                <app-input [control]="checkoutFormGroup.controls.shippingAddress.get('city')"
+                           placeholder="City" ></app-input>
+                <span class="text-danger">{{getError('city')}}</span>
               </div>
             </div>
           </div>
@@ -98,7 +89,44 @@
 
         </div>
 
+        <!-- Credit Card -->
+        <div formGroupName="creditCard" class="form-area">
+          <h3>Credit Card</h3>
 
+          <div class="row">
+            <div class="col-md-2"> <label>Card Type</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <select formControlName="cardType">
+                  <option>Visa</option>
+                  <option>Mastercard</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"> <label>Expiration Date</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <input formControlName="expirationDate" type="text" placeholder="month/year(ex: 10/22)">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"> <label>Card number</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <select formControlName="cardNumber">
+                  <option>TO DO</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
 
         <!-- Order details -->
         <div class="form-area">

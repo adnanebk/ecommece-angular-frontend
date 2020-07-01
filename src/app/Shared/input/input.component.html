@@ -1,0 +1,13 @@
+
+  <input *ngIf="type==='text'" [type]="type" [formControl]="control"  [placeholder]="placeholder" >
+  <select   *ngIf="type==='select'" [formControl]="control">
+    <option [ngValue]="el" *ngFor="let el of data ">{{el}}</option>
+  </select>
+<ng-container *ngIf="showError()">
+<span class="text-danger" *ngIf="control.errors.required"> this field is required </span>
+<span class="text-danger" *ngIf="control.errors.email"> email must be in valid format </span>
+<span class="text-danger" *ngIf="control.errors.minlength">
+  The characters must be at least {{control.errors.minlength.requiredLength}} </span>
+  <span class="text-danger" *ngIf="control.errors.mustMatch">
+  Passwords must match </span>
+  </ng-container>
