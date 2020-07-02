@@ -21,17 +21,17 @@
             <a routerLink="/orders" routerLinkActive="active-link" class="text-light">
               <b>My orders</b>
             </a>
-            <a *ngIf="getUser()" class="text-light">
+            <a *ngIf=user class="text-light">
               <b class="text-dark font-weight-bold">Hello {{user.userName}}</b>
             </a>
 
-            <a *ngIf="getUser()" routerLink=""  (click)="logout()" class="text-warning">
+            <a *ngIf="user" routerLink=""  (click)="logout()" class="text-warning">
               Logout
             </a>
-            <a *ngIf="!getUser()" routerLink="/login"  class="text-light">
+            <a *ngIf="!user" routerLink="/login"  class="text-light">
               Login
             </a>
-            <a *ngIf="!getUser()" routerLink="/register"  class="text-light">
+            <a *ngIf="!user" routerLink="/register"  class="text-light">
               Register
             </a>
             <app-my-cart></app-my-cart>

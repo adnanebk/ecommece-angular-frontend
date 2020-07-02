@@ -31,10 +31,12 @@ export class CheckoutComponent implements OnInit {
   }
 
   ngOnInit(): void {
-   this.user = this.authService.getUser();
-   this.totalQuantity = this.cartService.totalQuantity;
-   this.totalPrice = this.cartService.totalPrice;
-   this.checkoutFormGroup = this.formBuilder.group({
+    this.authService.userSubject.subscribe((user) => {
+      this.user = user;
+    });
+    this.totalQuantity = this.cartService.totalQuantity;
+    this.totalPrice = this.cartService.totalPrice;
+    this.checkoutFormGroup = this.formBuilder.group({
       customer: this.formBuilder.group({
         firstName: [this.user?.firstName, [Validators.required, Validators.minLength(2)]],
         lastName: [this.user?.lastName, [Validators.required, Validators.minLength(2)]],

@@ -4,6 +4,7 @@ import {CartItem} from '../../models/cart-item';
 import {Order} from '../../models/order';
 import {HttpService} from '../../services/http.service';
 import {AuthService} from '../../services/auth.service';
+import {AppUser} from '../../models/app-user';
 
 
 
@@ -17,17 +18,21 @@ export class OrderComponent implements OnInit {
   totalPrice = 0;
   totalQuantity = 0;
   items: CartItem[] ;
+  user: AppUser;
 
   constructor(private httpService: HttpService, private authService: AuthService) { }
 
   ngOnInit(): void {
+    this.authService.userSubject.subscribe((user) => {
+      this.user = user;
+    });
     this.getUserOrders();
   }
    getUserOrders() {
-    const user = this.authService.getUser();
-    if (user)
+
+    if (this.user)
      {
-       this.httpService.getOrders(user.userName).subscribe(orders => this.orders = orders.reverse());
+       this.httpService.getOrders(this.user.userName).subscribe(orders => this.orders = orders.reverse());
      }
   }
 }

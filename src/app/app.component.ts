@@ -13,18 +13,13 @@ import {ActivatedRoute, Router} from '@angular/router';
 export class AppComponent implements OnInit{
   title = 'ecommece-app';
   user: AppUser;
-  isLoggedIn = false ;
   constructor(private authService: AuthService, private router: Router){
   }
 
   ngOnInit(): void {
-    this.user = this.authService.getUser();
-    console.log('load');
-  }
-
-  getUser(): AppUser {
-      this.user = this.authService.getUser();
-      return this.user;
+    this.authService.userSubject.subscribe((user) => {
+      this.user = user;
+    });
   }
   logout() {
     this.authService.logout();

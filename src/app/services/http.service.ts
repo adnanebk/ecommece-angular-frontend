@@ -71,16 +71,6 @@ export class HttpService {
     );
   }
 
-  saveUser(user: any) {
-    return this.httpClient.post<{ token: string, appUser: AppUser }>(this.baseUrl + 'register', user ).pipe(
-      map(response => {
-        localStorage.setItem('appUser', JSON.stringify(response.appUser));
-        localStorage.setItem('token', response.token);
-        return response.appUser;
-      })
-    );
-  }
-
 
 }
 
