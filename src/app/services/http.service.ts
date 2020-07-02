@@ -14,8 +14,8 @@ import {AppUser} from '../models/app-user';
   providedIn: 'root'
 })
 export class HttpService {
- // private baseUrl = 'https://adnanbk-shopp.herokuapp.com/api/';
-  private baseUrl = 'http://localhost:8080/api/';
+  private baseUrl = 'https://adnanbk-shopp.herokuapp.com/api/';
+ // private baseUrl = 'http://localhost:8080/api/';
 
   private productUrl = this.baseUrl + 'products';
   private orderUrl = this.baseUrl + 'userOrders';

@@ -4,6 +4,7 @@
 
       <form (ngSubmit)="onSubmit()" #form="ngForm" >
         <div  class="form-area text-center">
+
           <span class="text-danger ">{{getError()}}</span>
           <div class="row">
             <div class="col-md-2"> <label>User name</label></div>
@@ -25,7 +26,8 @@
 
           <!-- submit button-->
           <div class="text-center">
-            <button [disabled]="form.invalid" type="submit" class="btn btn-info">Login</button>
+            <button [disabled]="form.invalid" type="submit" class="btn btn-info mr-2">Login</button>
+            <a routerLink="" (click)="createAccount()" > Create new account</a>
           </div>
 
         </div>

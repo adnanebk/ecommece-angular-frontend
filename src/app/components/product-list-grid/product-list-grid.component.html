@@ -2,13 +2,15 @@
   <div class="section-content section-content-p30">
     <div class="container-fluid">
       <div  *ngIf="isLoaded && products?.length > 0" class="col-md-3 mt-2 form-inline" style="text-align: right;">
+        <app-product-search></app-product-search>
+       <div class="mt-2">
         <span class="d-inline-block mr-1">Sort by </span>
-
         <select #select (change)="updateSort(select.value)" class="custom-select d-inline-block">
           <option value="dateCreated" select>Newest</option>
           <option value="name">Name</option>
           <option value="unitPrice">Price</option>
         </select>
+       </div>
       </div>
       <br>
       <div class="row">

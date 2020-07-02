@@ -12,7 +12,9 @@ import {MustMatch} from '../../validators/mustMatch';
 })
 export class RegisterComponent implements OnInit {
   form: FormGroup;
+  state: {};
   errors: MyError[];
+  private returnUrl = '/';
 
 
   constructor(private httpService: HttpService, private router: Router, private formBuilder: FormBuilder) {
@@ -24,10 +26,13 @@ export class RegisterComponent implements OnInit {
       confirmPassword: new FormControl('', [Validators.required, Validators.minLength(2)])
   }, {validator: MustMatch('password', 'confirmPassword')}
   );
+    this.state = this.router.getCurrentNavigation().extras.state;
+    this.returnUrl = this.router.getCurrentNavigation().extras.queryParams?.return ?? '/';
+    console.log('extra', this.router.getCurrentNavigation().extras);
   }
 
   ngOnInit(): void {
-
+    console.log(this.returnUrl);
   }
 
   onSubmit() {
@@ -37,9 +42,10 @@ export class RegisterComponent implements OnInit {
     this.httpService.saveUser(this.form.value).subscribe(
       (user) => {
         console.log('userr', user);
-        this.router.navigateByUrl('/');
+       // this.router.navigateByUrl('/');
+        this.state ? this.router.navigate([this.returnUrl], { state: {...this.state} }) :
+          this.router.navigateByUrl(this.returnUrl);
       }, (err) => {
-        console.log('errrrrr', err);
         this.errors = err;
       }
     );

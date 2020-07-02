@@ -7,8 +7,8 @@ import {HttpClient} from '@angular/common/http';
   providedIn: 'root'
 })
 export class AuthService {
-  // private baseUrl = 'https://adnanbk-shopp.herokuapp.com/api/';
-   private baseUrl = 'http://localhost:8080/api/';
+   private baseUrl = 'https://adnanbk-shopp.herokuapp.com/api/';
+  // private baseUrl = 'http://localhost:8080/api/';
   private user: AppUser;
   constructor(private httpClient: HttpClient) { }
 
@@ -23,6 +23,7 @@ export class AuthService {
     );
   }
   logout() {
+    this.user = null;
     localStorage.removeItem('appUser');
     localStorage.removeItem('token');
   }

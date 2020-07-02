@@ -13,7 +13,7 @@ import {AppUser} from '../../models/app-user';
 })
 export class LoginComponent implements OnInit {
   user: any = {};
-  private errors: MyError[];
+
   private error: any = {} ;
   private returnUrl = '/';
   private state: {};
@@ -29,20 +29,27 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     console.log('loggg', this.user);
-    this.errors = [];
+    // this.errors = [];
     this.authService.login(this.user).subscribe(
       (user) => {
         console.log('userr', user);
         this.state ? this.router.navigate([this.returnUrl], { state: {...this.state} }) :
         this.router.navigateByUrl(this.returnUrl);
       }, (err) => {
-        console.log('errrrrr', err);
         this.error = err;
+        console.log(err);
       }
     );
   }
   getError() {
-     return this.error.message;
+     return this.error?.message;
   }
 
+  createAccount() {
+    this.router.navigate(['/register'], {
+      queryParams: {
+        return: this.returnUrl
+      }, state: {...this.state}
+    });
+  }
 }

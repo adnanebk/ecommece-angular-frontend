@@ -7,7 +7,7 @@
         <img src="assets/images/logo.png" alt="luv2shop" class="img-responsive">
       </a>
     </div>
-<app-product-category></app-product-category>
+    <app-product-category></app-product-category>
   </aside>
   <!-- END MENU SIDEBAR-->
 
@@ -18,7 +18,6 @@
         <div class="container-fluid">
           <div class="header-wrap">
 
-      <app-product-search></app-product-search>
             <a routerLink="/orders" routerLinkActive="active-link" class="text-light">
               <b>My orders</b>
             </a>
@@ -26,16 +25,16 @@
               <b class="text-dark font-weight-bold">Hello {{user.userName}}</b>
             </a>
 
-            <a *ngIf="getUser()"  href="#" (click)="logout()" class="btn btn-warning">
-            Logout
+            <a *ngIf="getUser()" routerLink=""  (click)="logout()" class="text-warning">
+              Logout
             </a>
-            <a *ngIf="!getUser()" routerLink="/login"  class="btn btn-light">
+            <a *ngIf="!getUser()" routerLink="/login"  class="text-light">
               Login
             </a>
-            <a *ngIf="!getUser()" routerLink="/register"  class="btn btn-light">
+            <a *ngIf="!getUser()" routerLink="/register"  class="text-light">
               Register
             </a>
-      <app-my-cart></app-my-cart>
+            <app-my-cart></app-my-cart>
           </div>
           <div class="account-wrap"></div>
         </div>
