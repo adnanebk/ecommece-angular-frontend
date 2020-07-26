@@ -24,7 +24,6 @@
               "src/assets"
             ],
             "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -122,5 +121,8 @@
       }
     }
   },
-  "defaultProject": "ecommece-app"
+  "defaultProject": "ecommece-app",
+  "cli": {
+    "analytics": "f3f58715-3763-4ba2-ae24-c302d8dc779e"
+  }
 }

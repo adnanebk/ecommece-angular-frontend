@@ -21,6 +21,9 @@ import { InputComponent } from './Shared/input/input.component';
 import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
 import {AuthGuard} from './Shared/auth-guard';
+import { EditableTableComponent } from './Shared/editable-table/editable-table.component';
+import { ProductEditingComponent } from './components/product-editing/product-editing.component';
+import {DatePipe} from '@angular/common';
 
 
 const routes: Routes = [
@@ -33,6 +36,7 @@ const routes: Routes = [
   {path: 'category/:id', component: ProductListComponent},
   {path: 'category', component: ProductListComponent},
   {path: 'products', component: ProductListComponent},
+  {path: 'products/editing', component: ProductEditingComponent},
   {path: '', redirectTo: '/products', pathMatch: 'full'},
   {path: '**', redirectTo: '/products', pathMatch: 'full'}
 ];
@@ -52,7 +56,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     OrderComponent,
     InputComponent,
     RegisterComponent,
-    LoginComponent
+    LoginComponent,
+    EditableTableComponent,
+    ProductEditingComponent
   ],
   imports: [
     RouterModule.forRoot(routes),
@@ -61,7 +67,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     NgbModule,
     FormsModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule,
+    BrowserAnimationsModule
 /*    TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -70,7 +76,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     })*/
   ],
-  providers: [HttpService, { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true }, AuthGuard ],
+  providers: [HttpService, { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true }, AuthGuard, DatePipe ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

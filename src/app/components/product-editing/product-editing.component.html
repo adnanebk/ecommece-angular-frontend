@@ -1,0 +1,17 @@
+<div class="main-content">
+  <div class="section-content section-content-p30">
+    <div class="container-fluid">
+      <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Manage products</h3>
+<ng-container *ngIf="products?.length>0">
+      <app-editable-table   (dataChanged)="handleDataChanged($event)" (fileUploaded)="handleUploadFile($event)"
+                            [newElement]="getNewProduct()"
+                            [Data]="products" [columnNames]="headers" [fields]="fields"
+                            [options]="{categoryName:categories}"
+                            (dataAdded)="handleDataAdded($event)"
+                            (dataDeleted)="handleDataDeleted($event)"
+                            [elementSize]="size"
+                            [errors]="errors"
+      ></app-editable-table>
+</ng-container>
+    </div></div></div>
+

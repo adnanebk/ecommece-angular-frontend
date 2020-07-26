@@ -3,13 +3,13 @@ import {AppUser} from '../models/app-user';
 import {map} from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject} from 'rxjs';
+import {environment} from '../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-   private baseUrl = 'https://adnanbk-shopp.herokuapp.com/api/';
-  // private baseUrl = 'http://localhost:8080/api/';
+   private baseUrl = environment.path;
    public userSubject = new BehaviorSubject<AppUser>(null);
   constructor(private httpClient: HttpClient) { }
 

@@ -39,7 +39,7 @@ export class ProductListComponent implements OnInit {
 
   listProducts() {
     // this.currentCategoryId = this.route.snapshot.paramMap.has('id') && +this.route.snapshot.paramMap.get('id');
-this.httpService.getProductList(this.currentCategoryId, this.searchValue, (this.page - 1), this.pageSize, this.sort).subscribe(
+this.httpService.getProductList((this.page - 1), this.pageSize, this.sort, this.currentCategoryId, this.searchValue).subscribe(
       data => {
         this.isLoaded = true;
         this.products = data.data;

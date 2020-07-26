@@ -1,14 +1,31 @@
 <div class="page-wrapper">
+
   <header class="header-desktop">
-    <nav class="navbar navbar-expand-md navbar-dark bg-info mb-4">
-      <a class="navbar-brand" routerLink="/" routerLinkActive="active-link">Home</a>
-      <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-lg navbar-dark primary-color">
+
+      <!-- Navbar brand -->
+      <a class="navbar-brand" routerLink="/" >Home</a>
+
+      <!-- Collapse button -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
+              aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="navbar-collapse collapse" id="navbarCollapse" style="">
+
+      <!-- Collapsible content -->
+      <div class="collapse navbar-collapse" id="basicExampleNav">
+
+        <!-- Links -->
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/orders" routerLinkActive="active-link" >My orders</a>
+
+
+
+          <li class="nav-item" routerLinkActive="active">
+            <a class="nav-link" routerLink="/orders"  >My orders</a>
+          </li>
+          <li class="nav-item" routerLinkActive="active">
+            <a class="nav-link" routerLink="/products/editing"  >Manage products</a>
           </li>
           <ng-container *ngIf="user">
             <li class="nav-item">
@@ -21,29 +38,75 @@
           </ng-container>
           <ng-container *ngIf="!user">
 
-            <li class="nav-item">
-              <a class="nav-link"  routerLink="/login">Login</a>
+            <li class="nav-item" routerLinkActive="active">
+              <a class="nav-link"  routerLink="/login" >Login</a>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item" routerLinkActive="active">
               <a class="nav-link" routerLink="/register">Register</a>
             </li>
           </ng-container>
-        </ul>
-        <div class="form-inline mt-2 mt-md-0">
+
+          <!-- Dropdown -->
           <app-product-category isMenu="true"></app-product-category>
-          <app-my-cart></app-my-cart>
-        </div>
+
+
+
+        </ul>
+        <!-- Links -->
+        <app-my-cart></app-my-cart>
       </div>
+      <!-- Collapsible content -->
+
     </nav>
+    <!--/.Navbar-->
+    <!--
+        <nav class="navbar navbar-expand-md navbar-dark bg-info mb-4">
+          <a class="navbar-brand" routerLink="/" routerLinkActive="active-link">Home</a>
+          <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="navbar-collapse collapse" id="navbarCollapse" style="">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+                <a class="nav-link" routerLink="/orders" routerLinkActive="active-link" >My orders</a>
+              </li>
+              <ng-container *ngIf="user">
+                <li class="nav-item">
+                  <a class="nav-link" href="#">
+                    <b class="text-dark font-weight-bold">Hello {{user.userName}}</b></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" routerLink=""  (click)="logout()" >Logout</a>
+                </li>
+              </ng-container>
+              <ng-container *ngIf="!user">
+
+                <li class="nav-item">
+                  <a class="nav-link"  routerLink="/login">Login</a>
+                </li>
+
+                <li class="nav-item">
+                  <a class="nav-link" routerLink="/register">Register</a>
+                </li>
+              </ng-container>
+            </ul>
+            <div class="form-inline mt-2 mt-md-0">
+              <app-product-category isMenu="true"></app-product-category>
+              <app-my-cart></app-my-cart>
+            </div>
+          </div>
+        </nav>
+    -->
   </header>
   <!-- MENU SIDEBAR-->
   <aside class="menu-sidebar d-none d-lg-block">
     <div class="logo">
       <a routerLink="/">
-        <img src="assets/images/logo2.jpg" width="100" height="73" alt="shopping logo" class="img-responsive">
+        <img src="assets/images/logo.png" width="100" height="73" alt="shopping logo" class="img-responsive">
       </a>
     </div>
+
     <app-product-category></app-product-category>
   </aside>
   <!-- END MENU SIDEBAR-->

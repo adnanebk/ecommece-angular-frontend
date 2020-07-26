@@ -8,13 +8,14 @@ import {ProductCategory} from '../models/product-category';
 import {Order} from '../models/order';
 import {MyError} from '../models/my-error';
 import {AppUser} from '../models/app-user';
+import {environment} from '../../environments/environment.prod';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpService {
-  private baseUrl = 'https://adnanbk-shopp.herokuapp.com/api/';
+  private baseUrl = environment.path;
  // private baseUrl = 'http://localhost:8080/api/';
 
   private productUrl = this.baseUrl + 'products';
@@ -22,7 +23,7 @@ export class HttpService {
   private categoryUrl = this.baseUrl + 'product-category';
   constructor(private httpClient: HttpClient) { }
 
-  getProductList(theCategoryId: number = 0, search: string= '', page: number= 0, pageSize: number = 20, sort: string = 'dateCreated'){
+  getProductList(page: number= 0, pageSize: number = 20, sort: string = 'dateCreated', theCategoryId: number = 0, search: string= ''){
     // need to build URL based on category id
 
     const searchUrl = (theCategoryId > 0 && search === '') ? `${this.productUrl}/search/byCategory?id=${theCategoryId}&page=${page}`
@@ -55,23 +56,18 @@ export class HttpService {
       // map(response => response)
     );
   }
-  getErrorMessage(input: HTMLInputElement, errors: MyError[]) {
-    if (errors.length > 0)
-    {
-      const err =  errors.find(error => error.fieldName === input.getAttribute('formControlName'));
-      input.style.border = '1px solid red';
-      input.nextElementSibling?.classList.add( 'err-text');
-      return err.name + ' ' + err.message;
-    }
-  }
-
   getOrders(userName: string): Observable<Order[]> {
     return this.httpClient.get<Order[]>(this.orderUrl + '/byUserName/' + userName , ).pipe(
       map(response => response)
     );
   }
 
-
+  saveProduct(product: Product): any {
+   return this.httpClient.put(this.baseUrl + 'products', product);
+  }
+  removeProduct(product: Product) {
+    return this.httpClient.delete(this.baseUrl + 'products/' + product.id);
+  }
 }
 
 interface GetResponse {

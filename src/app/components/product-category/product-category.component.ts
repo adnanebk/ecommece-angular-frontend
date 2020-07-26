@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {HttpService} from '../../services/http.service';
 import {ProductCategory} from '../../models/product-category';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -11,6 +11,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 export class ProductCategoryComponent implements OnInit {
    productCategories: ProductCategory[];
   params: {};
+  @Input() isMenu: false;
   constructor(private httpService: HttpService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
