@@ -1,3 +1,4 @@
+Note that this repository has not been changed to reflect what you see in the demo
 # EcommeceApp
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.5.
