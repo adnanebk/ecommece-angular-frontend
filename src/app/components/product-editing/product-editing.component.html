@@ -9,9 +9,21 @@
                             [options]="{categoryName:categories}"
                             (dataAdded)="handleDataAdded($event)"
                             (dataDeleted)="handleDataDeleted($event)"
-                            [elementSize]="size"
                             [errors]="errors"
       ></app-editable-table>
+  <ngb-pagination (pageChange)="fetchProducts()"
+    [(page)]="page"
+    [pageSize]="pageSize"
+    [collectionSize]="size">
+  </ngb-pagination>
+
+  <select  class="browser-default custom-select w-auto float-right" (change)="fetchProducts()" [(ngModel)]="pageSize" >
+    <option>10</option>
+    <option>20</option>
+    <option>30</option>
+  </select>
+
 </ng-container>
+
     </div></div></div>
 

@@ -65,6 +65,9 @@ export class HttpService {
   saveProduct(product: Product): any {
    return this.httpClient.put(this.baseUrl + 'products', product);
   }
+  updateProduct(product: Product): any {
+    return this.httpClient.post(this.baseUrl + 'products', product);
+  }
   removeProduct(product: Product) {
     return this.httpClient.delete(this.baseUrl + 'products/' + product.id);
   }

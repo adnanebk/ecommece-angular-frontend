@@ -16,12 +16,11 @@ export class EditableTableComponent implements OnInit, OnChanges {
   @Input() columnNames: string[];
   @Input() options: any;
   @Input() newElement: any;
-  @Input() elementSize: number;
   @Input() errors: any[];
   @Output() dataChanged = new EventEmitter<any>();
   @Output() dataAdded = new EventEmitter<any>();
   @Output() dataDeleted = new EventEmitter<any>();
-  @Output() fileUploaded = new EventEmitter<any>();
+  @Output() fileUploaded = new EventEmitter<File>();
 
   constructor(private datePipe: DatePipe) {
   }
@@ -49,6 +48,7 @@ export class EditableTableComponent implements OnInit, OnChanges {
 
   add() {
     this.Data.unshift({...this.newElement, isChanged: true , isPost: true});
+    this.editedField = this.Data[0];
 
   }
   refreshData() {

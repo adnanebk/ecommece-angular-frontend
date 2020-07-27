@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {HttpService} from '../../services/http.service';
 import {Product} from '../../models/product';
 import {ProductCategory} from '../../models/product-category';
+import {ImageService} from '../../services/image.service';
 
 @Component({
   selector: 'app-product-editing',
@@ -13,18 +14,16 @@ export class ProductEditingComponent implements OnInit {
   headers: string[];
   fields: any[];
   categories: string[];
-  size: number;
-  isLoaded: boolean;
+  pageSize = 20;
+  size = 20;
+  page = 0;
   errors = [];
 
-  constructor(private httpService: HttpService) {
-    this.fields = [...Product.fields];
+
+  constructor(private httpService: HttpService, private imageService: ImageService) {
+    this.fields =  [...Product.fields];
     this.headers = [...Product.headers];
-    this.httpService.getProductList
-    (0, this.size).subscribe(resp => {
-      this.products = [...resp.data];
-      this.size = resp.page.totalElements;
-    });
+    this.fetchProducts();
     this.httpService.getProductCategories().subscribe(resp => {
       this.categories = resp.map(c => c.categoryName);
     });
@@ -34,34 +33,59 @@ export class ProductEditingComponent implements OnInit {
 
   }
   handleDataChanged($event: any) {
-    this.httpService.saveProduct($event).subscribe(resp => {
-this.products = this.products.map( p => {
-        if (p.id === $event.id)
+    this.httpService.updateProduct($event).subscribe(resp => {
+    this.products = this.products.map( p => {
+        if (p.id === resp.id)
         {
           return resp;
         }
         return p;
       });
-    });
+    },
+      errors => this.errors = errors);
   }
-
-  handleUploadFile($event: any) {
-
-  }
-
-  getNewProduct() {
-
-  }
-
-  handleDataPaged($event: any) {
-
-  }
-
   handleDataAdded($event: any) {
-
+    this.errors = [];
+    this.httpService.saveProduct($event).subscribe(resp => {
+     // this.products[0] = {...resp};
+        this.products = this.products.map( p => {
+          if (this.products.indexOf(p) === 0)
+          {
+            return resp;
+          }
+          return p;
+        });
+        console.log('product saved', this.products);
+    },
+        errors => this.errors = errors
+    );
   }
 
   handleDataDeleted($event: any) {
-
+    this.errors = [];
+    this.httpService.removeProduct($event);
   }
+  handleUploadFile(file: File) {
+    this.errors = [];
+    this.imageService.uploadImage(file).subscribe(
+      (res) => {
+      },
+      (err) => {
+
+      });
+  }
+
+  getNewProduct() {
+  return new Product();
+  }
+
+  fetchProducts() {
+    this.httpService.getProductList
+    (this.page, this.pageSize).subscribe(resp => {
+      this.products = [...resp.data];
+      this.size = resp.page.totalElements;
+    });
+  }
+
+
 }

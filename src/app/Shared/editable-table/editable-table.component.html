@@ -1,3 +1,9 @@
+<span class="table-add float-right mb-3 mr-2"><a (click)="add()" class="text-success"><i
+  class="fas fa-plus fa-2x" aria-hidden="true"></i></a></span>
+
+<ul>
+  <li class="text-danger" *ngFor="let err of errors">{{err}}</li>
+</ul>
 <table class="table table-bordered table-responsive table-striped text-center">
   <thead>
   <tr >
@@ -9,7 +15,8 @@
   <tr *ngFor="let el of Data ; let idx= index ">
     <td>
       <span class="table-remove">
-        <button *ngIf="this.editedField===el" (click)="update(idx)" type="button" class="btn btn-info btn-rounded btn-sm my-0">Update</button>
+        <button *ngIf="this.editedField!==el" (click)="changeView(el,$event)" type="button" class="btn btn-info btn-rounded btn-sm my-0">Update</button>
+        <button *ngIf="this.editedField===el" (click)="update(idx)" type="button" class="btn btn-info btn-rounded btn-sm my-0">Save</button>
         <button (click)="remove(idx)" type="button" class="btn btn-danger btn-rounded btn-sm my-0">Remove</button></span>
     </td>
 
@@ -26,8 +33,8 @@
       <ng-container *ngIf="this.editedField===el">
           <input *ngIf="!field.type" [value]="el[field.name]" type="text" class="form-control w-auto"
                  (change)="changeValue(idx,this.field,$event)">
-          <input *ngIf="field.type === 'image'" type="file" class="form-control w-auto"
-                 (change)="changeValue(idx,this.field,$event)">
+          <input *ngIf="field.type === 'image'" #file type="file" class="form-control w-auto"
+                 (change)="processFile(idx,this.field.name,file)">
           <input *ngIf="field.type === 'number'"type="number" [value]="el[field.name]" class="form-control w-auto"
                  (change)="changeValue(idx,this.field,$event)">
           <input disabled *ngIf="field.type === 'date'" type="date" [value]="el[field.name] | date:'yyyy-MM-dd'" class="form-control w-auto">
@@ -37,7 +44,7 @@
           <label class="custom-control-label" for="customSwitches"></label>
         </div>
 
-        <select *ngIf="field.type === 'select'" class="browser-default custom-select w-auto">
+        <select *ngIf="field.type === 'select'"  (change)="changeValue(idx,this.field,$event)" class="browser-default custom-select w-auto" >
           <option>Choose</option>
           <option *ngFor="let op of options[field.name]" [selected]="op===el[field.name]" [value]="op">{{op}}</option>
         </select>
