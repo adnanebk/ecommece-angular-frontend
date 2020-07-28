@@ -23,14 +23,14 @@ export class HttpService {
   private categoryUrl = this.baseUrl + 'product-category';
   constructor(private httpClient: HttpClient) { }
 
-  getProductList(page: number= 0, pageSize: number = 20, sort: string = 'dateCreated', theCategoryId: number = 0, search: string= ''){
+  getProductList(page: number= 0, pageSize: number = 20, sort: string = 'dateCreated', direction: string = 'asc', theCategoryId: number = 0, search: string= ''){
     // need to build URL based on category id
 
     const searchUrl = (theCategoryId > 0 && search === '') ? `${this.productUrl}/search/byCategory?id=${theCategoryId}&page=${page}`
     : (theCategoryId > 0 && search !== '') ? `${this.productUrl}/search/byCategoryAndName?id=${theCategoryId}&name=${search}&page=${page}`
     : (theCategoryId <= 0 && search !== '') ? `${this.productUrl}/search/byName?name=${search}&page=${page}`
     : this.productUrl + '?page=' + page;
-    return this.httpClient.get<GetResponse>(searchUrl + '&size=' + pageSize + '&sort=' + sort + ',asc').pipe(
+    return this.httpClient.get<GetResponse>(searchUrl + '&size=' + pageSize + '&sort=' + sort + ',' + direction).pipe(
       map(response =>  {
         return { data: response._embedded.products, page: response.page};
       })

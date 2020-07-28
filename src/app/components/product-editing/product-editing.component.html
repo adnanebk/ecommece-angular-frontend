@@ -11,10 +11,12 @@
                             (dataDeleted)="handleDataDeleted($event)"
                             [errors]="errors"
       ></app-editable-table>
-  <ngb-pagination (pageChange)="fetchProducts()"
+  <ngb-pagination (pageChange)="fetchProducts($event)"
     [(page)]="page"
     [pageSize]="pageSize"
-    [collectionSize]="size">
+    [collectionSize]="size"
+    [boundaryLinks]="true"
+  >
   </ngb-pagination>
 
   <select  class="browser-default custom-select w-auto float-right" (change)="fetchProducts()" [(ngModel)]="pageSize" >

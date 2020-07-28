@@ -16,14 +16,14 @@ export class ProductEditingComponent implements OnInit {
   categories: string[];
   pageSize = 20;
   size = 20;
-  page = 0;
+  page = 1;
   errors = [];
 
 
   constructor(private httpService: HttpService, private imageService: ImageService) {
     this.fields =  [...Product.fields];
     this.headers = [...Product.headers];
-    this.fetchProducts();
+    this.fetchProducts(this.page);
     this.httpService.getProductCategories().subscribe(resp => {
       this.categories = resp.map(c => c.categoryName);
     });
@@ -79,9 +79,9 @@ export class ProductEditingComponent implements OnInit {
   return new Product();
   }
 
-  fetchProducts() {
+  fetchProducts(page?: number) {
     this.httpService.getProductList
-    (this.page, this.pageSize).subscribe(resp => {
+    (page - 1, this.pageSize, 'dateCreated', 'desc').subscribe(resp => {
       this.products = [...resp.data];
       this.size = resp.page.totalElements;
     });
