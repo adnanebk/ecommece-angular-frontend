@@ -12,8 +12,8 @@ export class ImageService {
 
   uploadImage(file: File) {
     const fileName = file.name.toLowerCase();
-    if (!fileName.endsWith('jpeg') || !fileName.endsWith('png')) {
-      return throwError('File must be an image of jpeg or png');
+    if (!fileName.endsWith('jpeg') && !fileName.endsWith('jpeg') && !fileName.endsWith('png')) {
+      return throwError('File must be an image of types jpg or jpeg or png');
     }
     const formData = new FormData();
 
