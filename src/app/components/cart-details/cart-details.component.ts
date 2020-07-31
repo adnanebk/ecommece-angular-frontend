@@ -46,6 +46,6 @@ export class CartDetailsComponent implements OnInit {
   }
 
   handleCheckout() {
-    this.route.navigate(['/checkout'], { state: { products: this.cartItems} });
+  this.totalPrice > 0 && this.route.navigate(['/checkout'], { state: { products: this.cartItems} });
   }
 }

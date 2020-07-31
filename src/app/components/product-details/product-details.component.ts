@@ -11,7 +11,7 @@ import {CartService} from '../../services/cart.service';
   styleUrls: ['./product-details.component.css']
 })
 export class ProductDetailsComponent implements OnInit {
-  product: CartItem;
+  cartItem: CartItem;
 
   constructor(private activatedRoute: ActivatedRoute, private httpService: HttpService, private cartService: CartService, private route: Router) { }
 
@@ -20,33 +20,33 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   private loadProduct() {
-    this.httpService.getProduct(this.activatedRoute.snapshot.paramMap.get('id')).subscribe(resp => this.product = new CartItem(resp));
+    this.httpService.getProduct(this.activatedRoute.snapshot.paramMap.get('id')).subscribe(resp => this.cartItem = new CartItem(resp));
   }
   addToCart() {
-    this.cartService.addToCart(this.product, this.product.quantity);
+    this.cartService.addToCart(this.cartItem);
   }
 
   handleQuantityChange(qt: number) {
-    if ( qt > 1)
+    if ( qt >= 1)
     {
-      this.product.quantity = qt;
+      this.cartItem.quantity = qt;
     }
   }
 
   increment(qt: HTMLInputElement) {
     qt.valueAsNumber = qt.valueAsNumber + 1;
-    this.product.quantity = qt.valueAsNumber;
+    this.cartItem.quantity = qt.valueAsNumber;
   }
   decrement(qt: HTMLInputElement ) {
     if ( qt.valueAsNumber > 1)
     {
+      console.log('decrement');
       qt.valueAsNumber = qt.valueAsNumber - 1;
-      this.product.quantity = qt.valueAsNumber;
+      this.cartItem.quantity = qt.valueAsNumber;
     }
   }
   handleCheckout() {
-    const cartItems: CartItem[] = [];
-    cartItems.push(this.product);
-    this.route.navigate(['/checkout'], { state: { products: cartItems} });
+    console.log('product', this.cartItem);
+    this.route.navigate(['/checkout'], { state: { products: [this.cartItem]} });
   }
 }

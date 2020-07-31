@@ -23,9 +23,12 @@ export class HttpService {
   private categoryUrl = this.baseUrl + 'product-category';
   constructor(private httpClient: HttpClient) { }
 
-  getProductList(page: number= 0, pageSize: number = 20, sort: string = 'dateCreated', direction: string = 'asc', theCategoryId: number = 0, search: string= ''){
+ getProductList(page: number= 0, pageSize: number = 20, sort: string = 'dateCreated', direction: string = 'asc', theCategoryId: number = 0, search: string= ''){
     // need to build URL based on category id
-
+    if ( sort === 'dateCreated' )
+    {
+      direction = 'desc';
+    }
     const searchUrl = (theCategoryId > 0 && search === '') ? `${this.productUrl}/search/byCategory?id=${theCategoryId}&page=${page}`
     : (theCategoryId > 0 && search !== '') ? `${this.productUrl}/search/byCategoryAndName?id=${theCategoryId}&name=${search}&page=${page}`
     : (theCategoryId <= 0 && search !== '') ? `${this.productUrl}/search/byName?name=${search}&page=${page}`
@@ -63,10 +66,10 @@ export class HttpService {
   }
 
   saveProduct(product: Product): any {
-   return this.httpClient.put(this.baseUrl + 'products', product);
+   return this.httpClient.post(this.baseUrl + 'products', product);
   }
   updateProduct(product: Product): any {
-    return this.httpClient.post(this.baseUrl + 'products', product);
+    return this.httpClient.put(this.baseUrl + 'products', product);
   }
   removeProduct(product: Product) {
     return this.httpClient.delete(this.baseUrl + 'products/' + product.id);

@@ -34,8 +34,16 @@ export class CheckoutComponent implements OnInit {
     this.authService.userSubject.subscribe((user) => {
       this.user = user;
     });
-    this.totalQuantity = this.cartService.totalQuantity;
-    this.totalPrice = this.cartService.totalPrice;
+    if (this.cartItems?.length > 1)
+    {
+      this.totalQuantity = this.cartService.totalQuantity;
+      this.totalPrice = this.cartService.totalPrice;
+    }
+    else {
+      this.totalQuantity = this.cartItems[0].quantity;
+      this.totalPrice = this.cartItems[0].quantity * this.cartItems[0].unitPrice;
+    }
+
     this.checkoutFormGroup = this.formBuilder.group({
       customer: this.formBuilder.group({
         firstName: [this.user?.firstName, [Validators.required, Validators.minLength(2)]],

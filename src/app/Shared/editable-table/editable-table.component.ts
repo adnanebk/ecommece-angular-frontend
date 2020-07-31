@@ -7,52 +7,45 @@ import {DatePipe} from '@angular/common';
   templateUrl: './editable-table.component.html',
   styleUrls: ['./editable-table.component.css']
 })
-export class EditableTableComponent implements OnInit, OnChanges {
+export class EditableTableComponent implements OnInit {
 
   @Input() Data: any[];
    tableData: any[];
    editedField: any;
+   originalField: {index: number , obj: any};
   @Input() fields: any[];
   @Input() columnNames: string[];
   @Input() options: any;
   @Input() newElement: any;
   @Input() errors: any[];
-  @Output() dataChanged = new EventEmitter<any>();
-  @Output() dataAdded = new EventEmitter<any>();
+  @Output() dataChanged = new EventEmitter<number>();
+  @Output() dataAdded = new EventEmitter();
   @Output() dataDeleted = new EventEmitter<any>();
-  @Output() fileUploaded = new EventEmitter<File>();
+  @Output() dataSorted = new EventEmitter<{sort: string, direction: string}>();
+  @Output() fileUploaded = new EventEmitter<{file: File , index: number}>();
 
   constructor(private datePipe: DatePipe) {
   }
 
-/*  ngOnChanges(changes: SimpleChanges): void {
-    console.log('ng data changed ', changes);
-    if (changes.Date)
-    {
-      console.log('ng load data ', changes);
-      this.refreshData();
-    }
-    }*/
+
 
   ngOnInit(): void {
-    console.log('ng data changed ', this.Data);
-  }
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log('changes ', changes);
   }
 
   saveChange(obj: any) {
-    obj.isPost ? this.dataAdded.emit(obj)
-      : this.dataChanged.emit(obj);
+    this.originalField = null ;
+    obj.isPost ? this.dataAdded.emit()
+      : this.dataChanged.emit(this.Data.indexOf(obj));
   }
 
   add() {
-    this.Data.unshift({...this.newElement, isChanged: true , isPost: true});
-    this.editedField = this.Data[0];
-
+    if (!this.Data[0].isPost)
+    {
+      this.Data.unshift({...this.newElement, isChanged: true , isPost: true});
+      this.editedField = this.Data[0];
+    }
   }
   refreshData() {
-    console.log('ng data changed ', this.Data);
     this.tableData = [...this.Data];
     /*this.Data.map(el=>{
       return {...el,isChanging:true}
@@ -78,23 +71,9 @@ export class EditableTableComponent implements OnInit, OnChanges {
 
   }
 
-  changeValueOfCheckbox(index: number, property: string, event: any) {
-    console.log('checkbox changed', event.target.checked);
-    this.Data[index][property] = event.target.checked;
-  }
-  changeValueOfNumber(index: number, property: string, event: any) {
-    if (isNaN(event.target.value))
-    {
-      event.target.value = this.Data[index][property];
-      return;
-    }
-    this.Data[index][property] = event.target.value;
-
-  }
-
-  remove(id: any) {
-    this.Data.splice(id, 1);
-    // this.dataDeleted.emit(this.Data[id]);
+  remove(idx: any) {
+    !this.Data[idx].isPost && this.dataDeleted.emit(this.Data[idx]);
+    this.Data.splice(idx, 1);
   }
   getSting(val: any, type: string) {
     if (val?.length > 60)
@@ -103,12 +82,13 @@ export class EditableTableComponent implements OnInit, OnChanges {
     }
     if (type === 'date')
     {
-      return  this.datePipe.transform(val);
+      return  this.datePipe.transform(val, 'short');
     }
     return val;
   }
 
   changeView(elem: any, $event: MouseEvent) {
+
     if ($event.target !== $event.currentTarget)
     {
       return;
@@ -117,11 +97,16 @@ export class EditableTableComponent implements OnInit, OnChanges {
     {
       this.editedField.isChanged = false;
     }*/
-    this.editedField = elem;
+    if (this.editedField !== elem)
+    {
+      if (this.originalField) {
+      this.Data[this.originalField.index] = {...this.originalField.obj};
+      }
+      this.originalField = {index: this.Data.indexOf(elem), obj : {...elem}};
+      this.editedField = elem;
+    }
    // const data = elem;
   //  elem = elem.isChanged = true;
-
-    console.log('view changed ', elem);
   }
 
 
@@ -129,9 +114,8 @@ export class EditableTableComponent implements OnInit, OnChanges {
   processFile(index: number, fieldName: string, input: HTMLInputElement) {
     const file: File = input.files[0];
     const reader = new FileReader();
-    console.log(file);
     reader.addEventListener('load', (event: any) => {
-      this.fileUploaded.emit(file);
+      this.fileUploaded.emit({ file, index});
       this.Data[index][fieldName] = file.name;
     });
     reader.readAsDataURL(file);
@@ -139,9 +123,26 @@ export class EditableTableComponent implements OnInit, OnChanges {
 
 
 
-  update(idx: number) {
-    console.log('updating', this.Data[idx]);
-    this.dataChanged.emit(this.Data[idx]);
+
+
+  sort(idx: number, ic: HTMLElement) {
+    let direction = '';
+    if (ic.classList.contains('fa-sort-up'))
+    {
+      direction = 'desc';
+      ic.classList.replace('fa-sort-up', 'fa-sort-down');
+    }
+    else if (ic.classList.contains('fa-sort-down'))
+    {
+      ic.classList.replace('fa-sort-down', 'fa-sort-up');
+      direction = 'asc';
+    }
+    else
+    {
+      ic.classList.add('fa-sort-up');
+      direction = 'asc';
+    }
+    this.dataSorted.emit({sort: this.fields[idx].name, direction});
   }
 
 }

@@ -1,10 +1,12 @@
+<div class="main-content">
+
 <div class="detail-section">
   <div class="container-fluid">
 
-    <img src="{{ product?.imageUrl }}" class="detail-img">
+    <img src="{{ cartItem?.imageUrl }}" class="detail-img">
 
-    <h3>{{ product?.name }}</h3>
-    <div class="price">{{ product?.unitPrice | currency:'USD' }}</div>
+    <h3>{{ cartItem?.name }}</h3>
+    <div class="price">{{ cartItem?.unitPrice | currency:'USD' }}</div>
     <a (click)="addToCart()" class="btn btn-lg btn-primary">Add to cart</a>
     <a  (click)="handleCheckout()" par class="btn btn-lg btn-success m-1">Checkout</a>
     <div class="float-right">
@@ -14,12 +16,13 @@
       <input (click)="increment(qt)" type="button" value="+" class="plus">
       <input #qt (change)="handleQuantityChange(qt.valueAsNumber)" type="number" step="1" max="99" min="1" value="1" title="Qty" class="qty"
              size="4">
-      <input (click)="decrement(qt)" type="button" value="-" class="minus">
+      <input (click)="decrement(qt)"  type="button" value="-" class="minus">
     </div>
   </div>
     <hr>
     <h4>Description</h4>
-    <p>{{ product?.description }}</p>
+    <p>{{ cartItem?.description }}</p>
     <a routerLink="/products" class="mt-5 btn btn-info">Back to Product List</a>
   </div>
+</div>
 </div>

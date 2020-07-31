@@ -16,7 +16,7 @@ export class CartService {
   constructor() {
   }
 
-  addToCart(newItem: CartItem , quantity: number = 1) {
+  addToCart(newItem: CartItem ) {
     if (this.items !== undefined && this.items.length > 0)
     {
       this.ExistingItem = this.items.find(it => it.productId === newItem.productId);
@@ -29,7 +29,7 @@ export class CartService {
         this.items.map(it => {
           if (it.productId === newItem.productId)
           {
-            it.quantity = it.quantity + quantity;
+            it.quantity = it.quantity + newItem.quantity;
             return it;
           }
         });
@@ -80,11 +80,8 @@ export class CartService {
   }
 
   QuantityChanged(item: CartItem, quantity: number) {
-    if (item.quantity > 1)
-    {
       item.quantity = quantity;
       this.refreshCart();
-    }
   }
 
 

@@ -17,6 +17,9 @@ export class ProductEditingComponent implements OnInit {
   pageSize = 20;
   size = 20;
   page = 1;
+  sort: string;
+  search = '';
+  direction: string;
   errors = [];
 
 
@@ -32,8 +35,9 @@ export class ProductEditingComponent implements OnInit {
   ngOnInit(): void {
 
   }
-  handleDataChanged($event: any) {
-    this.httpService.updateProduct($event).subscribe(resp => {
+  handleDataChanged(index: number) {
+    this.errors = [];
+    this.httpService.updateProduct(this.products[index]).subscribe(resp => {
     this.products = this.products.map( p => {
         if (p.id === resp.id)
         {
@@ -44,18 +48,17 @@ export class ProductEditingComponent implements OnInit {
     },
       errors => this.errors = errors);
   }
-  handleDataAdded($event: any) {
+  handleDataAdded() {
     this.errors = [];
-    this.httpService.saveProduct($event).subscribe(resp => {
+    this.httpService.saveProduct(this.products[0]).subscribe(resp => {
      // this.products[0] = {...resp};
         this.products = this.products.map( p => {
-          if (this.products.indexOf(p) === 0)
+          if (p.id === 0)
           {
             return resp;
           }
           return p;
         });
-        console.log('product saved', this.products);
     },
         errors => this.errors = errors
     );
@@ -63,15 +66,17 @@ export class ProductEditingComponent implements OnInit {
 
   handleDataDeleted($event: any) {
     this.errors = [];
-    this.httpService.removeProduct($event);
+    this.httpService.removeProduct($event).subscribe();
   }
-  handleUploadFile(file: File) {
+
+  handleUploadFile($event: { file: File; index: number }) {
     this.errors = [];
-    this.imageService.uploadImage(file).subscribe(
+    this.imageService.uploadImage($event.file).subscribe(
       (res) => {
+        this.products = [...this.products];
       },
       (err) => {
-
+        this.errors.push(err);
       });
   }
 
@@ -80,12 +85,23 @@ export class ProductEditingComponent implements OnInit {
   }
 
   fetchProducts(page?: number) {
+    this.errors = [];
     this.httpService.getProductList
-    (page - 1, this.pageSize, 'dateCreated', 'desc').subscribe(resp => {
+    (page - 1, this.pageSize, this.sort, this.direction , 0, this.search).subscribe(resp => {
       this.products = [...resp.data];
       this.size = resp.page.totalElements;
     });
   }
 
 
+  handleDataSorted($event: { sort: string; direction: string }) {
+    this.sort = $event.sort;
+    this.direction = $event.direction;
+    this.fetchProducts();
+  }
+
+  handleDataSearched($event: string) {
+      this.search = $event;
+      this.fetchProducts();
+  }
 }

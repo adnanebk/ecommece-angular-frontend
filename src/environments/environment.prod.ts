@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  path : 'https://adnanbk-shopp.herokuapp.com/api/'
+  path : 'https://ang-shop.herokuapp.com/api/'
 };

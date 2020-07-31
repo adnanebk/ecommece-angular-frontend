@@ -11,7 +11,14 @@ import {environment} from '../../environments/environment.prod';
 export class AuthService {
    private baseUrl = environment.path;
    public userSubject = new BehaviorSubject<AppUser>(null);
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {
+    const currentUserSt = localStorage.getItem('appUser');
+    if (currentUserSt?.length > 0)
+    {
+      const currentUser = JSON.parse(currentUserSt);
+      this.userSubject.next(currentUser);
+    }
+  }
 
   register(user: any) {
     return this.httpClient.post<{ token: string, appUser: AppUser }>(this.baseUrl + 'register', user ).pipe(
