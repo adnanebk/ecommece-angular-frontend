@@ -7,7 +7,7 @@ import {DatePipe} from '@angular/common';
   templateUrl: './editable-table.component.html',
   styleUrls: ['./editable-table.component.css']
 })
-export class EditableTableComponent implements OnInit, OnChanges {
+export class EditableTableComponent implements OnChanges {
 
   @Input() Data: any[];
    tableData: any[];
@@ -27,9 +27,13 @@ export class EditableTableComponent implements OnInit, OnChanges {
   constructor(private datePipe: DatePipe) {
   }
 
-
-
-  ngOnInit(): void {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.editedField && changes.errors && this.errors.length > 0)
+    {
+      const indexOfEditedField = this.Data.indexOf(this.editedField);
+      this.Data[indexOfEditedField].hasError = true;
+      window.scroll(0, 0);
+    }
   }
 
   saveChange(obj: any) {
@@ -143,12 +147,4 @@ export class EditableTableComponent implements OnInit, OnChanges {
   showErrors() {
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-   if (this.editedField && changes.errors)
-   {
-     const indexOfEditedField = this.Data.indexOf(this.editedField);
-     this.Data[indexOfEditedField].hasError = true;
-     window.scroll(0, 0);
-   }
-  }
 }
