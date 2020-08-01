@@ -7,3 +7,15 @@ img{
 .file-input{
   width: 250px;
 }
+.my-custom-scrollbar {
+
+}
+.table-wrapper-scroll-y {
+  position: relative;
+  height: 600px;
+  overflow: auto;
+  display: block;
+}
+.row-error {
+  background-color: indianred;
+}

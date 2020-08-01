@@ -11,8 +11,8 @@ export class ImageService {
   constructor(private http: HttpClient) { }
 
   uploadImage(file: File) {
-    const fileName = file.name.toLowerCase();
-    if (!fileName.endsWith('jpeg') && !fileName.endsWith('jpeg') && !fileName.endsWith('png')) {
+    const type = file.type.toLowerCase();
+    if (!type.endsWith('jpeg') && !type.endsWith('jpg') && !type.endsWith('png')) {
       return throwError('File must be an image of types jpg or jpeg or png');
     }
     const formData = new FormData();

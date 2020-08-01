@@ -4,8 +4,9 @@
 <ul>
   <li class="text-danger" *ngFor="let err of errors">{{err}}</li>
 </ul>
-
-<table class="table table-bordered table-responsive table-striped text-center">
+<div class="table-responsive table-wrapper-scroll-y">
+<table class="table table-bordered table-striped w-auto text-center " scrollY="true" maxHeight="200" cellspacing="0"
+       width="100%">
   <thead>
   <tr >
     <th class="text-center align-middle"><h3>Edit</h3></th>
@@ -16,9 +17,10 @@
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let el of Data ; let idx= index ">
 
-    <td class="p-10 align-middle">
+  <tr *ngFor="let el of Data ; let idx= index " [className]="el.hasError?'bg-warning':''">
+
+    <td class="p-10 align-middle" >
       <span class="table-remove">
         <button *ngIf="this.editedField!==el" (click)="changeView(el,$event)" type="button" class="btn btn-info btn-rounded btn-sm my-0">Update</button>
         <button *ngIf="this.editedField===el" (click)="saveChange(el)" type="button" class="btn btn-info btn-rounded btn-sm my-0">Save</button>
@@ -38,7 +40,7 @@
           <input *ngIf="!field.type  &&  el[field.name].length<35" [value]="el[field.name]" type="text" class="form-control w-auto"
                  (change)="changeValue(idx,this.field,$event)" (keyup.enter)="saveChange(el)">
         <textarea *ngIf="!field.type &&  el[field.name].length>=35" [value]="el[field.name]" type="text" class="form-control w-auto"
-                  (change)="changeValue(idx,this.field,$event)" (keyup.enter)="saveChange(el)"></textarea>
+                  (change)="changeValue(idx,this.field,$event)" ></textarea>
 
           <input *ngIf="field.type === 'image'" #file type="file" class="form-control file-input" accept="image/*"
                  (change)="processFile(idx,this.field.name,file)">
@@ -59,9 +61,9 @@
           <option *ngFor="let op of options[field.name]" [selected]="op===el[field.name]" [value]="op">{{op}}</option>
         </select>
       </ng-container>
-
     </td>
   </tr>
+
   </tbody>
 </table>
-
+</div>

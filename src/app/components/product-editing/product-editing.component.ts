@@ -20,7 +20,8 @@ export class ProductEditingComponent implements OnInit {
   sort: string;
   search = '';
   direction: string;
-  errors = [];
+  errors: any[];
+
 
 
   constructor(private httpService: HttpService, private imageService: ImageService) {

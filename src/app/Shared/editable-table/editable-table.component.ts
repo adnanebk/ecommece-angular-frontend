@@ -7,12 +7,12 @@ import {DatePipe} from '@angular/common';
   templateUrl: './editable-table.component.html',
   styleUrls: ['./editable-table.component.css']
 })
-export class EditableTableComponent implements OnInit {
+export class EditableTableComponent implements OnInit, OnChanges {
 
   @Input() Data: any[];
    tableData: any[];
    editedField: any;
-   originalField: {index: number , obj: any};
+   originalField: {};
   @Input() fields: any[];
   @Input() columnNames: string[];
   @Input() options: any;
@@ -88,25 +88,20 @@ export class EditableTableComponent implements OnInit {
   }
 
   changeView(elem: any, $event: MouseEvent) {
-
     if ($event.target !== $event.currentTarget)
     {
       return;
     }
- /*   if (this.editedField)
-    {
-      this.editedField.isChanged = false;
-    }*/
+
     if (this.editedField !== elem)
     {
       if (this.originalField) {
-      this.Data[this.originalField.index] = {...this.originalField.obj};
+      this.Data[this.Data.indexOf(this.editedField)] = {...this.originalField};
       }
-      this.originalField = {index: this.Data.indexOf(elem), obj : {...elem}};
+      this.originalField = {...elem};
       this.editedField = elem;
     }
-   // const data = elem;
-  //  elem = elem.isChanged = true;
+
   }
 
 
@@ -145,4 +140,15 @@ export class EditableTableComponent implements OnInit {
     this.dataSorted.emit({sort: this.fields[idx].name, direction});
   }
 
+  showErrors() {
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+   if (this.editedField && changes.errors)
+   {
+     const indexOfEditedField = this.Data.indexOf(this.editedField);
+     this.Data[indexOfEditedField].hasError = true;
+     window.scroll(0, 0);
+   }
+  }
 }
