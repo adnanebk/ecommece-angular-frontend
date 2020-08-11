@@ -55,7 +55,7 @@ export class HttpService {
   }
 
   saveOrder(order: Order): Observable<Order> {
-    return this.httpClient.post<Order>(this.orderUrl, order).pipe(
+    return this.httpClient.post<Order>(this.orderUrl , order).pipe(
       // map(response => response)
     );
   }
@@ -65,14 +65,27 @@ export class HttpService {
     );
   }
 
-  saveProduct(product: Product): any {
-   return this.httpClient.post(this.baseUrl + 'products', product);
+  saveProduct(product: Product): Observable<Product> {
+   return this.httpClient.post<Product>(this.baseUrl + 'products/v2', product);
   }
-  updateProduct(product: Product): any {
-    return this.httpClient.put(this.baseUrl + 'products', product);
+  updateProduct(product: Product): Observable<Product> {
+    return this.httpClient.put<Product>(this.baseUrl + 'products/v2' , product);
   }
-  removeProduct(product: Product) {
-    return this.httpClient.delete(this.baseUrl + 'products/' + product.id);
+  removeProduct(id: number) {
+    return this.httpClient.delete(this.baseUrl + 'products/' + id);
+  }
+
+  saveCategory(productCategory: ProductCategory): Observable<ProductCategory> {
+    return this.httpClient.post<ProductCategory>(this.categoryUrl , productCategory);
+  }
+
+  updateCategory(productCategory: ProductCategory): Observable<ProductCategory> {
+    return this.httpClient.put<ProductCategory>(this.categoryUrl + '/' + productCategory.id , productCategory);
+  }
+
+  removeCategory(id: number) {
+    return this.httpClient.delete(this.categoryUrl + '/' + id);
+
   }
 }
 

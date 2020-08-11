@@ -1,4 +1,10 @@
 export class ProductCategory {
-  id: number;
-  categoryName: string;
+
+  static fields = [{name: 'categoryName'}];
+  static headers = ['category Name'];
+
+  id = 0 ;
+  categoryName = '';
+
+
 }

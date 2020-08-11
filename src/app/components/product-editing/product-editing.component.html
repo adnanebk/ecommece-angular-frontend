@@ -1,30 +1,43 @@
 <div class="main-content">
   <div class="section-content section-content-p30">
-    <div class="container-fluid">
-      <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Manage products</h3>
-      <form class="form-inline d-flex justify-content-center md-form form-sm mt-0">
-        <i class="fas fa-search" aria-hidden="true"></i>
-        <input class="form-control form-control-sm ml-3 w-75" type="text" placeholder="Search By product names"
-               (keyup.enter)="handleDataSearched($event.target.value)"
-               aria-label="Search">
-      </form>
+
+    <div class="custom-control custom-radio custom-control-inline">
+      <input (change)="changeProductswitch(true)" checked type="radio" class="custom-control-input" id="defaultInline1" name="inlineDefaultRadiosExample">
+      <label  class="custom-control-label" for="defaultInline1">manage products</label>
+    </div>
+    <div class="custom-control custom-radio custom-control-inline">
+      <input (change)="changeProductswitch(false)"  type="radio" class="custom-control-input" id="defaultInline2" name="inlineDefaultRadiosExample">
+      <label class="custom-control-label" for="defaultInline2">manage categories</label>
+    </div>
+    <div *ngIf="isProductSwitch" class="container-fluid">
       <ngb-alert *ngIf="products?.length<=0">No products found</ngb-alert>
+      <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Manage products</h3>
+
+
+
       <ng-container *ngIf="products?.length>0">
 
+        <form class="form-inline d-flex justify-content-center md-form form-sm mt-0">
+          <i class="fas fa-search" aria-hidden="true"></i>
+          <input class="form-control form-control-sm ml-3 w-75" type="text" placeholder="Search By product names"
+                 (keyup.enter)="handleDataSearched($event.target.value)"
+                 aria-label="Search">
+        </form>
 
  Display <select  class="browser-default custom-select w-auto" (change)="fetchProducts()" [(ngModel)]="pageSize" >
     <option>10</option>
     <option>20</option>
     <option>30</option>
   </select> elements
-      <app-editable-table   (dataChanged)="handleDataChanged($event)" (fileUploaded)="handleUploadFile($event)"
-                            [newElement]="getNewProduct()"
-                            [Data]="products" [columnNames]="headers" [fields]="fields"
-                            [options]="{categoryName:categories}"
-                            (dataAdded)="handleDataAdded()"
-                            (dataDeleted)="handleDataDeleted($event)"
-                            (dataSorted)="handleDataSorted($event)"
-                            [errors]="errors"
+      <app-editable-table (dataChanged)="handleDataChanged($event)" (fileUploaded)="handleUploadFile($event)"
+                          [newElement]="getNewProduct()"
+                          [Data]="products" [columnNames]="productHeaders" [fields]="productFields"
+                          [options]="{categoryName:categoryNames}"
+                          [filesUploading]="filesUploading"
+                          (dataAdded)="handleDataAdded()"
+                          (dataDeleted)="handleDataDeleted($event)"
+                          (dataSorted)="handleDataSorted($event)"
+                          [errors]="errors"
       ></app-editable-table>
   <ngb-pagination (pageChange)="fetchProducts($event)"
     [(page)]="page"
@@ -36,5 +49,22 @@
 
 </ng-container>
 
-    </div></div></div>
+    </div>
+
+    <div *ngIf="!isProductSwitch" class="container-fluid">
+      <ngb-alert *ngIf="categories?.length<=0">No categories found</ngb-alert>
+      <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Manage Categories</h3>
+      <app-editable-table *ngIf="categories?.length>0" (dataChanged)="handleDataChanged($event)" (fileUploaded)="handleUploadFile($event)"
+                          [Data]="categories" [columnNames]="categoryHeaders" [fields]="categoryFields"
+                          [newElement]="getNewProductCategory()"
+                          (dataAdded)="handleCategoryAdded()"
+                          (dataDeleted)="handleCategoryDeleted($event)"
+                          (dataChanged)="handleCategoryChanged($event)"
+                          [errors]="errors"
+      ></app-editable-table>
+    </div>
+
+  </div></div>
+
+
 

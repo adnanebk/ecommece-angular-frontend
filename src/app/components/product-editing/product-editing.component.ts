@@ -11,9 +11,12 @@ import {ImageService} from '../../services/image.service';
 })
 export class ProductEditingComponent implements OnInit {
   products: Product[];
-  headers: string[];
-  fields: any[];
-  categories: string[];
+  productHeaders: string[];
+  productFields: any[];
+  categoryFields: any[];
+  categoryHeaders: any[];
+  categoryNames: string[];
+  categories: ProductCategory[];
   pageSize = 20;
   size = 20;
   page = 1;
@@ -21,15 +24,20 @@ export class ProductEditingComponent implements OnInit {
   search = '';
   direction: string;
   errors: any[];
+  filesUploading: boolean[] = [];
+  isProductSwitch = false;
 
 
 
   constructor(private httpService: HttpService, private imageService: ImageService) {
-    this.fields =  [...Product.fields];
-    this.headers = [...Product.headers];
+    this.productFields =  [...Product.fields];
+    this.productHeaders = [...Product.headers];
+    this.categoryFields =  [...ProductCategory.fields];
+    this.categoryHeaders = [...ProductCategory.headers];
     this.fetchProducts(this.page);
     this.httpService.getProductCategories().subscribe(resp => {
-      this.categories = resp.map(c => c.categoryName);
+      this.categories = resp;
+      this.categoryNames = resp.map(c => c.categoryName);
     });
   }
 
@@ -47,7 +55,7 @@ export class ProductEditingComponent implements OnInit {
         return p;
       });
     },
-      errors => this.errors = errors);
+      errors => this.errors.push(errors));
   }
   handleDataAdded() {
     this.errors = [];
@@ -61,28 +69,36 @@ export class ProductEditingComponent implements OnInit {
           return p;
         });
     },
-        errors => this.errors = errors
+        errors => this.errors.push(errors)
     );
   }
 
-  handleDataDeleted($event: any) {
+  handleDataDeleted($event: Product) {
     this.errors = [];
-    this.httpService.removeProduct($event).subscribe();
+    this.httpService.removeProduct($event.id).subscribe();
   }
 
   handleUploadFile($event: { file: File; index: number }) {
+    this.filesUploading[$event.index] = true;
     this.errors = [];
     this.imageService.uploadImage($event.file).subscribe(
       (res) => {
-        this.products = [...this.products];
+        const prod = this.products[$event.index];
+        prod.imageUrl = prod.imageUrl.toString();
+        this.products = [...this.products, {...prod}];
+        this.filesUploading[$event.index] = false;
       },
       (err) => {
         this.errors.push(err);
+        this.filesUploading[$event.index] = false;
       });
   }
 
   getNewProduct() {
   return new Product();
+  }
+  getNewProductCategory() {
+  return new ProductCategory();
   }
 
   fetchProducts(page?: number) {
@@ -104,5 +120,40 @@ export class ProductEditingComponent implements OnInit {
   handleDataSearched($event: string) {
       this.search = $event;
       this.fetchProducts();
+  }
+
+  handleCategoryAdded() {
+    this.errors = [];
+    this.httpService.saveCategory(this.categories[0]).subscribe(resp => {
+        // this.products[0] = {...resp};
+        this.categories = this.categories.map( c => {
+          if (c.id === 0)
+            return resp;
+          return c;
+        });
+      },
+      errors => this.errors.push(errors)
+    );
+  }
+  handleCategoryChanged(index: number) {
+    this.errors = [];
+    this.httpService.updateCategory(this.categories[index]).subscribe(resp => {
+        this.categories = this.categories.map( c => {
+          if (c.id === resp.id)
+            return resp;
+          return c;
+        });
+      },
+      errors => this.errors.push(errors));
+  }
+
+  handleCategoryDeleted($event: ProductCategory) {
+    this.errors = [];
+    this.httpService.removeCategory($event.id).subscribe();
+  }
+
+  changeProductswitch(b: boolean) {
+    this.errors = [];
+    this.isProductSwitch = b;
   }
 }
