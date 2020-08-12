@@ -11,7 +11,7 @@ export class EditableTableComponent implements OnChanges {
 
   @Input() Data: any[];
    tableData: any[];
-   editedField: any;
+   editedElement: any;
    originalField: {};
   @Input() fields: any[];
   @Input() columnNames: string[];
@@ -29,25 +29,25 @@ export class EditableTableComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.editedField && changes.errors && this.errors.length > 0)
+    if (this.editedElement && changes.errors && this.errors.length > 0)
     {
-      const indexOfEditedField = this.Data.indexOf(this.editedField);
+      const indexOfEditedField = this.Data.indexOf(this.editedElement);
       this.Data[indexOfEditedField].hasError = true;
       window.scroll(0, 0);
     }
   }
 
-  saveChange(obj: any) {
+  saveChange() {
     this.originalField = null ;
-    obj.isPost ? this.dataAdded.emit()
-      : this.dataChanged.emit(this.Data.indexOf(obj));
+    this.editedElement.isPost ? this.dataAdded.emit()
+      : this.dataChanged.emit(this.Data.indexOf(this.editedElement));
   }
 
   add() {
     if (!this.Data[0].isPost)
     {
       this.Data.unshift({...this.newElement, isChanged: true , isPost: true});
-      this.editedField = this.Data[0];
+      this.editedElement = this.Data[0];
     }
   }
   refreshData() {
@@ -98,13 +98,13 @@ export class EditableTableComponent implements OnChanges {
       return;
     }
 
-    if (this.editedField !== elem)
+    if (this.editedElement !== elem)
     {
       if (this.originalField) {
-      this.Data[this.Data.indexOf(this.editedField)] = {...this.originalField};
+      this.Data[this.Data.indexOf(this.editedElement)] = {...this.originalField};
       }
       this.originalField = {...elem};
-      this.editedField = elem;
+      this.editedElement = elem;
     }
 
   }
@@ -116,7 +116,7 @@ export class EditableTableComponent implements OnChanges {
     const reader = new FileReader();
     reader.addEventListener('load', (event: any) => {
       this.fileUploaded.emit({ file, index});
-      this.Data[index][fieldName] = file.name;
+      this.editedElement[fieldName] = file.name;
     });
     reader.readAsDataURL(file);
   }

@@ -22,8 +22,8 @@
         <div class="row">
 
           <!-- Grid column -->
-          <div *ngFor="let product of products" class="col-md-3 mb-4">
-
+          <ng-container *ngFor="let product of products" >
+            <div *ngIf="product.active" class="col-md-3 mb-4">
             <!-- Card -->
             <div class="card">
 
@@ -52,8 +52,8 @@
 
             </div>
             <!-- Card -->
-
-          </div>
+            </div>
+          </ng-container>
           <!-- Grid column -->
 
 

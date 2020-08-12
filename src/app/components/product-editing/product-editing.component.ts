@@ -25,7 +25,7 @@ export class ProductEditingComponent implements OnInit {
   direction: string;
   errors: any[];
   filesUploading: boolean[] = [];
-  isProductSwitch = false;
+  isProductSwitch = true;
 
 
 

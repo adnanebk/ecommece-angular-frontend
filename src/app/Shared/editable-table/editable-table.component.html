@@ -23,15 +23,17 @@
 
     <td class="p-10 align-middle" >
       <span class="table-remove">
-        <button *ngIf="this.editedField!==el" (click)="changeView(el,$event)" type="button" class="btn btn-info btn-rounded btn-sm my-0">Update</button>
-        <button *ngIf="this.editedField===el" (click)="saveChange(el)" type="button" class="btn btn-info btn-rounded btn-sm my-0">Save</button>
-        <button  (click)="remove(idx)" type="button" class="btn btn-danger btn-rounded  btn-sm my-1">Remove</button></span>
+        <button *ngIf="this.editedElement!==el" (click)="changeView(el,$event)" type="button" class="btn btn-info btn-rounded btn-sm my-0">Update</button>
+        <button *ngIf="this.editedElement===el" (click)="saveChange()" type="button" class="btn btn-info btn-rounded btn-sm my-0">Save</button>
+
+        <button  (click)="remove(idx)" type="button" class="btn btn-danger btn-rounded  btn-sm my-1">Remove</button>
+      </span>
 
     </td>
 
     <td *ngFor="let field of fields" (click)="changeView(el,$event)" class="pt-3-half p-1 align-middle">
 
-      <ng-container *ngIf="this.editedField!==el">
+      <ng-container *ngIf="this.editedElement!==el">
          <span *ngIf="(!field.type || field.type !== 'image')"
          >{{getSting(el[field.name],field.type)}}</span>
           <img *ngIf="field.type === 'image' && (!filesUploading[idx])"  [src]="el[field.name]" >
@@ -40,9 +42,9 @@
         </div>
       </ng-container>
 
-      <ng-container *ngIf="this.editedField===el">
+      <ng-container *ngIf="this.editedElement===el">
           <input *ngIf="!field.type  &&  el[field.name].length<35" [value]="el[field.name]" type="text" class="form-control w-auto"
-                 (change)="changeValue(idx,this.field,$event)" (keyup.enter)="saveChange(el)">
+                 (change)="changeValue(idx,this.field,$event)" (keyup.enter)="saveChange()">
         <textarea *ngIf="!field.type &&  el[field.name].length>=35" [value]="el[field.name]" type="text" class="form-control w-auto"
                   (change)="changeValue(idx,this.field,$event)" ></textarea>
 
@@ -50,7 +52,7 @@
                  (change)="processFile(idx,this.field.name,file)">
 
           <input *ngIf="field.type === 'number'"  [value]="el[field.name]" class="form-control number-input"
-                 (input)="changeValue(idx,this.field,$event)" (keyup.enter)="saveChange(el)">
+                 (input)="changeValue(idx,this.field,$event)" (keyup.enter)="saveChange()">
 
           <input disabled *ngIf="field.type === 'date'" type="date" [value]="el[field.name] | date:'yyyy-MM-dd'" class="form-control w-auto">
 
