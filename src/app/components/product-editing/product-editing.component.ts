@@ -55,7 +55,8 @@ export class ProductEditingComponent implements OnInit {
         return p;
       });
     },
-      errors => this.errors.push(errors));
+      errors => this.errors = errors
+    );
   }
   handleDataAdded() {
     this.errors = [];
@@ -69,7 +70,7 @@ export class ProductEditingComponent implements OnInit {
           return p;
         });
     },
-        errors => this.errors.push(errors)
+        errors => this.errors = errors
     );
   }
 
@@ -132,7 +133,7 @@ export class ProductEditingComponent implements OnInit {
           return c;
         });
       },
-      errors => this.errors.push(errors)
+      errors => this.errors = errors
     );
   }
   handleCategoryChanged(index: number) {
@@ -144,7 +145,8 @@ export class ProductEditingComponent implements OnInit {
           return c;
         });
       },
-      errors => this.errors.push(errors));
+      errors => this.errors = errors
+    );
   }
 
   handleCategoryDeleted($event: ProductCategory) {

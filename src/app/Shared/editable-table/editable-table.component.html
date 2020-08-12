@@ -1,3 +1,4 @@
+
 <br>
 <span class="table-add  mb-3 mr-2"><a (click)="add()" class="text-success">Add<i
   class="fas fa-plus fa-2x" aria-hidden="true"></i></a></span>
@@ -6,7 +7,7 @@
   <li class="text-danger" *ngFor="let err of errors">{{err}}</li>
 </ul>
 <div class="table-responsive table-wrapper-scroll-y">
-<table class="table table-bordered table-striped w-auto text-center " scrollY="true" maxHeight="200" cellspacing="0"
+<table class="table table-bordered table-striped w-auto text-center table-fixed" scrollY="true" maxHeight="200" cellspacing="0"
        width="100%">
   <thead>
   <tr >
@@ -73,3 +74,4 @@
   </tbody>
 </table>
 </div>
+
