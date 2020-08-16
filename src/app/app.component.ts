@@ -4,6 +4,7 @@ import {HttpService} from './services/http.service';
 import {AppUser} from './models/app-user';
 import {AuthService} from './services/auth.service';
 import {ActivatedRoute, Router} from '@angular/router';
+import {environment} from '../environments/environment.prod';
 
 @Component({
   selector: 'app-root',
@@ -26,4 +27,7 @@ export class AppComponent implements OnInit{
     this.router.navigateByUrl('/');
   }
 
+  getDocs() {
+    return environment.pathDoc;
+  }
 }

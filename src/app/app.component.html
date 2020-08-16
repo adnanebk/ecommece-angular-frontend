@@ -46,6 +46,9 @@
               <a class="nav-link" routerLink="/register">Register</a>
             </li>
           </ng-container>
+          <li class="nav-item" routerLinkActive="active">
+            <a class="nav-link" [href]="getDocs()" >Api documentation</a>
+          </li>
 
           <!-- Dropdown -->
           <app-product-category isMenu="true"></app-product-category>
