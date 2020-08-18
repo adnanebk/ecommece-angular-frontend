@@ -69,6 +69,7 @@ export class HttpService {
    return this.httpClient.post<Product>(this.baseUrl + 'products/v2', product);
   }
   updateProduct(product: Product): Observable<Product> {
+    console.log('update pod', product);
     return this.httpClient.put<Product>(this.baseUrl + 'products/v2' , product);
   }
   removeProduct(id: number) {

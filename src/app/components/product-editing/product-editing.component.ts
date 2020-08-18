@@ -45,8 +45,9 @@ export class ProductEditingComponent implements OnInit {
 
   }
   handleDataChanged(index: number) {
+    console.log('prod  changed');
     this.errors = [];
-    this.httpService.updateProduct(this.products[index]).subscribe(resp => {
+    this.isProductSwitch && this.httpService.updateProduct(this.products[index]).subscribe(resp => {
     this.products = this.products.map( p => {
         if (p.id === resp.id)
         {
@@ -55,7 +56,7 @@ export class ProductEditingComponent implements OnInit {
         return p;
       });
     },
-      errors => this.errors = errors
+      errors => Array.isArray(errors) ? this.errors = errors : this.errors.push(errors)
     );
   }
   handleDataAdded() {
@@ -70,7 +71,7 @@ export class ProductEditingComponent implements OnInit {
           return p;
         });
     },
-        errors => this.errors = errors
+      errors => Array.isArray(errors) ? this.errors = errors : this.errors.push(errors)
     );
   }
 
@@ -133,7 +134,7 @@ export class ProductEditingComponent implements OnInit {
           return c;
         });
       },
-      errors => this.errors = errors
+      errors => Array.isArray(errors) ? this.errors = errors : this.errors.push(errors)
     );
   }
   handleCategoryChanged(index: number) {
@@ -145,7 +146,7 @@ export class ProductEditingComponent implements OnInit {
           return c;
         });
       },
-      errors => this.errors = errors
+      errors => Array.isArray(errors) ? this.errors = errors : this.errors.push(errors)
     );
   }
 

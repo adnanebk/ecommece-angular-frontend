@@ -10,9 +10,9 @@ import {DatePipe} from '@angular/common';
 export class EditableTableComponent implements OnChanges {
 
   @Input() Data: any[];
-   tableData: any[];
-   editedElement: any;
-   originalField: {};
+  tableData: any[];
+  editedElement: any;
+  originalField: {};
   @Input() fields: any[];
   @Input() columnNames: string[];
   @Input() options: any;
@@ -24,6 +24,7 @@ export class EditableTableComponent implements OnChanges {
   @Output() dataDeleted = new EventEmitter<any>();
   @Output() dataSorted = new EventEmitter<{sort: string, direction: string}>();
   @Output() fileUploaded = new EventEmitter<{file: File , index: number}>();
+  isBatch = false;
 
   constructor(private datePipe: DatePipe) {
   }
@@ -101,7 +102,7 @@ export class EditableTableComponent implements OnChanges {
     if (this.editedElement !== elem)
     {
       if (this.originalField) {
-      this.Data[this.Data.indexOf(this.editedElement)] = {...this.originalField};
+        this.Data[this.Data.indexOf(this.editedElement)] = {...this.originalField};
       }
       this.originalField = {...elem};
       this.editedElement = elem;

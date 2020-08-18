@@ -6,23 +6,27 @@
 <ul>
   <li class="text-danger" *ngFor="let err of errors">{{err}}</li>
 </ul>
+<!--<div class="custom-control custom-switch">
+  <input type="checkbox" class="custom-control-input" [checked]="isBatch" id="sw">
+  <label class="custom-control-label" for="sw">Batch operations</label>
+</div>-->
 <div class="table-responsive table-wrapper-scroll-y">
-<table class="table table-bordered table-striped w-auto text-center table-fixed" scrollY="true" maxHeight="200" cellspacing="0"
-       width="100%">
-  <thead>
-  <tr >
-    <th class="text-center align-middle"><h3>Edit</h3></th>
-    <th (click)="sort(idx,ic)" *ngFor="let cl of columnNames; let idx = index" class="text-center align-middle"><a><b>{{cl}}</b></a>
-      <i #ic class="fa fa-sort" aria-hidden="true"></i>
-    </th>
+  <table class="table table-bordered table-striped w-auto text-center table-fixed" scrollY="true" maxHeight="200" cellspacing="0"
+         width="100%">
+    <thead>
+    <tr >
+      <th class="text-center align-middle"><h3>Edit</h3></th>
+      <th (click)="sort(idx,ic)" *ngFor="let cl of columnNames; let idx = index" class="text-center align-middle"><a><b>{{cl}}</b></a>
+        <i #ic class="fa fa-sort" aria-hidden="true"></i>
+      </th>
 
-  </tr>
-  </thead>
-  <tbody>
+    </tr>
+    </thead>
+    <tbody>
 
-  <tr *ngFor="let el of Data ; let idx= index " [className]="el.hasError?'bg-warning':''">
+    <tr *ngFor="let el of Data ; let idx= index " [className]="el.hasError?'bg-warning':''">
 
-    <td class="p-10 align-middle" >
+      <td class="p-10 align-middle" >
       <span class="table-remove">
         <button *ngIf="this.editedElement!==el" (click)="changeView(el,$event)" type="button" class="btn btn-info btn-rounded btn-sm my-0">Update</button>
         <button *ngIf="this.editedElement===el" (click)="saveChange()" type="button" class="btn btn-info btn-rounded btn-sm my-0">Save</button>
@@ -30,24 +34,24 @@
         <button  (click)="remove(idx)" type="button" class="btn btn-danger btn-rounded  btn-sm my-1">Remove</button>
       </span>
 
-    </td>
+      </td>
 
-    <td *ngFor="let field of fields" (click)="changeView(el,$event)" class="pt-3-half p-1 align-middle">
+      <td *ngFor="let field of fields" (click)="changeView(el,$event)" class="pt-3-half p-1 align-middle">
 
-      <ng-container *ngIf="this.editedElement!==el">
+        <ng-container *ngIf="this.editedElement!==el">
          <span *ngIf="(!field.type || field.type !== 'image')"
          >{{getSting(el[field.name],field.type)}}</span>
           <img *ngIf="field.type === 'image' && (!filesUploading[idx])"  [src]="el[field.name]" >
-        <div *ngIf="field.type === 'image' && (filesUploading[idx])" class="spinner-border text-primary" role="status">
-          <span class="sr-only"></span>
-        </div>
-      </ng-container>
+          <div *ngIf="field.type === 'image' && (filesUploading[idx])" class="spinner-border text-primary" role="status">
+            <span class="sr-only"></span>
+          </div>
+        </ng-container>
 
-      <ng-container *ngIf="this.editedElement===el">
+        <ng-container *ngIf="this.editedElement===el">
           <input *ngIf="!field.type  &&  el[field.name].length<35" [value]="el[field.name]" type="text" class="form-control w-auto"
                  (change)="changeValue(idx,this.field,$event)" (keyup.enter)="saveChange()">
-        <textarea *ngIf="!field.type &&  el[field.name].length>=35" [value]="el[field.name]" type="text" class="form-control w-auto"
-                  (change)="changeValue(idx,this.field,$event)" ></textarea>
+          <textarea *ngIf="!field.type &&  el[field.name].length>=35" [value]="el[field.name]" type="text" class="form-control w-auto"
+                    (change)="changeValue(idx,this.field,$event)" ></textarea>
 
           <input *ngIf="field.type === 'image'" #file type="file" class="form-control file-input" accept="image/*"
                  (change)="processFile(idx,this.field.name,file)">
@@ -57,21 +61,21 @@
 
           <input disabled *ngIf="field.type === 'date'" type="date" [value]="el[field.name] | date:'yyyy-MM-dd'" class="form-control w-auto">
 
-        <div *ngIf="field.type === 'bool'"class="custom-control custom-switch">
-          <input type="checkbox" class="custom-control-input" [checked]="true" id="customSwitches"
-                 (change)="changeValue(idx,this.field,$event)">
-          <label class="custom-control-label" for="customSwitches"></label>
-        </div>
+          <div *ngIf="field.type === 'bool'"class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" [checked]="true" id="customSwitches"
+                   (change)="changeValue(idx,this.field,$event)">
+            <label class="custom-control-label" for="customSwitches"></label>
+          </div>
 
-        <select *ngIf="field.type === 'select'"  (change)="changeValue(idx,this.field,$event)" class="browser-default custom-select w-auto" >
-          <option>Choose</option>
-          <option *ngFor="let op of options[field.name]" [selected]="op===el[field.name]" [value]="op">{{op}}</option>
-        </select>
-      </ng-container>
-    </td>
-  </tr>
+          <select *ngIf="field.type === 'select'"  (change)="changeValue(idx,this.field,$event)" class="browser-default custom-select w-auto" >
+            <option>Choose</option>
+            <option *ngFor="let op of options[field.name]" [selected]="op===el[field.name]" [value]="op">{{op}}</option>
+          </select>
+        </ng-container>
+      </td>
+    </tr>
 
-  </tbody>
-</table>
+    </tbody>
+  </table>
 </div>
 
