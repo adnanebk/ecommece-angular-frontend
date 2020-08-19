@@ -13,10 +13,7 @@ export class ProductEditingComponent implements OnInit {
   products: Product[];
   productHeaders: string[];
   productFields: any[];
-  categoryFields: any[];
-  categoryHeaders: any[];
   categoryNames: string[];
-  categories: ProductCategory[];
   pageSize = 20;
   size = 20;
   page = 1;
@@ -26,28 +23,28 @@ export class ProductEditingComponent implements OnInit {
   errors: any[];
   filesUploading: boolean[] = [];
   isProductSwitch = true;
+   categories: ProductCategory[];
 
 
 
   constructor(private httpService: HttpService, private imageService: ImageService) {
-    this.productFields =  [...Product.fields];
-    this.productHeaders = [...Product.headers];
-    this.categoryFields =  [...ProductCategory.fields];
-    this.categoryHeaders = [...ProductCategory.headers];
-    this.fetchProducts(this.page);
-    this.httpService.getProductCategories().subscribe(resp => {
-      this.categories = resp;
-      this.categoryNames = resp.map(c => c.categoryName);
-    });
+
   }
 
   ngOnInit(): void {
+    this.productFields =  [...Product.fields];
+    this.productHeaders = [...Product.headers];
 
+    this.fetchProducts(this.page);
+    this.httpService.getProductCategories().subscribe(resp => {
+      this.categoryNames = resp.map(c => c.categoryName);
+      this.categories = resp;
+    });
   }
   handleDataChanged(index: number) {
     console.log('prod  changed');
     this.errors = [];
-    this.isProductSwitch && this.httpService.updateProduct(this.products[index]).subscribe(resp => {
+    this.httpService.updateProduct(this.products[index]).subscribe(resp => {
     this.products = this.products.map( p => {
         if (p.id === resp.id)
         {
@@ -99,10 +96,6 @@ export class ProductEditingComponent implements OnInit {
   getNewProduct() {
   return new Product();
   }
-  getNewProductCategory() {
-  return new ProductCategory();
-  }
-
   fetchProducts(page?: number) {
     this.errors = [];
     this.httpService.getProductList
@@ -124,39 +117,7 @@ export class ProductEditingComponent implements OnInit {
       this.fetchProducts();
   }
 
-  handleCategoryAdded() {
-    this.errors = [];
-    this.httpService.saveCategory(this.categories[0]).subscribe(resp => {
-        // this.products[0] = {...resp};
-        this.categories = this.categories.map( c => {
-          if (c.id === 0)
-            return resp;
-          return c;
-        });
-      },
-      errors => Array.isArray(errors) ? this.errors = errors : this.errors.push(errors)
-    );
-  }
-  handleCategoryChanged(index: number) {
-    this.errors = [];
-    this.httpService.updateCategory(this.categories[index]).subscribe(resp => {
-        this.categories = this.categories.map( c => {
-          if (c.id === resp.id)
-            return resp;
-          return c;
-        });
-      },
-      errors => Array.isArray(errors) ? this.errors = errors : this.errors.push(errors)
-    );
-  }
-
-  handleCategoryDeleted($event: ProductCategory) {
-    this.errors = [];
-    this.httpService.removeCategory($event.id).subscribe();
-  }
-
   changeProductswitch(b: boolean) {
-    this.errors = [];
     this.isProductSwitch = b;
   }
 }

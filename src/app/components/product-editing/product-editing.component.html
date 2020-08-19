@@ -52,16 +52,7 @@
     </div>
 
     <div *ngIf="!isProductSwitch" class="container-fluid">
-      <ngb-alert *ngIf="categories?.length<=0">No categories found</ngb-alert>
-      <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Manage Categories</h3>
-      <app-editable-table *ngIf="categories?.length>0" (dataChanged)="handleDataChanged($event)" (fileUploaded)="handleUploadFile($event)"
-                          [Data]="categories" [columnNames]="categoryHeaders" [fields]="categoryFields"
-                          [newElement]="getNewProductCategory()"
-                          (dataAdded)="handleCategoryAdded()"
-                          (dataDeleted)="handleCategoryDeleted($event)"
-                          (dataChanged)="handleCategoryChanged($event)"
-                          [errors]="errors"
-      ></app-editable-table>
+     <app-category-editing [categories]="categories"></app-category-editing>
     </div>
 
   </div></div>

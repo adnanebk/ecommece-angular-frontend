@@ -24,6 +24,7 @@ import {AuthGuard} from './Shared/auth-guard';
 import { EditableTableComponent } from './Shared/editable-table/editable-table.component';
 import { ProductEditingComponent } from './components/product-editing/product-editing.component';
 import {DatePipe} from '@angular/common';
+import { CategoryEditingComponent } from './components/category-editing/category-editing.component';
 
 
 const routes: Routes = [
@@ -58,7 +59,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     RegisterComponent,
     LoginComponent,
     EditableTableComponent,
-    ProductEditingComponent
+    ProductEditingComponent,
+    CategoryEditingComponent
   ],
   imports: [
     RouterModule.forRoot(routes),
