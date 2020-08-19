@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {HttpService} from '../../services/http.service';
 import {Product} from '../../models/product';
 import {ProductCategory} from '../../models/product-category';
@@ -119,5 +119,7 @@ export class ProductEditingComponent implements OnInit {
 
   changeProductswitch(b: boolean) {
     this.isProductSwitch = b;
+    if (b)
+    this.categoryNames = this.categories.map(c => c.categoryName);
   }
 }
