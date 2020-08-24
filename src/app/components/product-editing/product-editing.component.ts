@@ -21,7 +21,6 @@ export class ProductEditingComponent implements OnInit {
   search = '';
   direction: string;
   errors: any[];
-  filesUploading: boolean[] = [];
   isProductSwitch = true;
    categories: ProductCategory[];
 
@@ -76,20 +75,20 @@ export class ProductEditingComponent implements OnInit {
     this.errors = [];
     this.httpService.removeProduct($event.id).subscribe();
   }
+  
 
   handleUploadFile($event: { file: File; index: number }) {
-    this.filesUploading[$event.index] = true;
     this.errors = [];
+	
     this.imageService.uploadImage($event.file).subscribe(
       (res) => {
         const prod = this.products[$event.index];
-        prod.imageUrl = prod.imageUrl.toString();
-        this.products = [...this.products, {...prod}];
-        this.filesUploading[$event.index] = false;
+        prod.imageUrl = res.toString();
+        this.products = [...this.products,prod];
+
       },
       (err) => {
         this.errors.push(err);
-        this.filesUploading[$event.index] = false;
       });
   }
 
