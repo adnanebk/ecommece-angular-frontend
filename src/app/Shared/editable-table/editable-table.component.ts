@@ -16,7 +16,6 @@ export class EditableTableComponent implements OnChanges {
   @Input() fields: any[];
   @Input() columnNames: string[];
   @Input() options: any;
-  @Input() filesUploading: boolean[];
   @Input() newElement: any;
   @Input() errors: any[];
   @Output() dataChanged = new EventEmitter<number>();
@@ -107,7 +106,7 @@ export class EditableTableComponent implements OnChanges {
       this.originalField = {...elem};
       this.editedElement = elem;
     }
-
+    console.log('dattaaa' , this.Data);
   }
 
 
