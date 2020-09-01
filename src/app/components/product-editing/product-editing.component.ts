@@ -22,7 +22,8 @@ export class ProductEditingComponent implements OnInit {
   direction: string;
   errors: any[];
   isProductSwitch = true;
-   categories: ProductCategory[];
+  categories: ProductCategory[];
+  hasFileUploading: boolean[] = [] ;
 
 
 
@@ -41,32 +42,19 @@ export class ProductEditingComponent implements OnInit {
     });
   }
   handleDataChanged(index: number) {
-    console.log('prod  changed');
     this.errors = [];
     this.httpService.updateProduct(this.products[index]).subscribe(resp => {
-    this.products = this.products.map( p => {
-        if (p.id === resp.id)
-        {
-          return resp;
-        }
-        return p;
-      });
-    },
+        this.products[index] = {...resp};
+      },
       errors => Array.isArray(errors) ? this.errors = errors : this.errors.push(errors)
     );
   }
   handleDataAdded() {
     this.errors = [];
     this.httpService.saveProduct(this.products[0]).subscribe(resp => {
-     // this.products[0] = {...resp};
-        this.products = this.products.map( p => {
-          if (p.id === 0)
-          {
-            return resp;
-          }
-          return p;
-        });
-    },
+        this.products[0] = {...resp};
+
+      },
       errors => Array.isArray(errors) ? this.errors = errors : this.errors.push(errors)
     );
   }
@@ -75,25 +63,33 @@ export class ProductEditingComponent implements OnInit {
     this.errors = [];
     this.httpService.removeProduct($event.id).subscribe();
   }
-  
+
 
   handleUploadFile($event: { file: File; index: number }) {
     this.errors = [];
-	
     this.imageService.uploadImage($event.file).subscribe(
-      (res) => {
-        const prod = this.products[$event.index];
-        prod.imageUrl = res.toString();
-        this.products = [...this.products,prod];
+      (res: string) => {
+        this.hasFileUploading[$event.index] = false;
+        if (this.products[$event.index].imageUrl !== $event.file.name)
+        {
+          const prod = this.products[$event.index];
+          prod.imageUrl = res.toString();
+          // setTimeout(() => {
+          console.log('file uploaded');
+          this.products[$event.index] = {...prod};
+         // }, 4000);
+        }
+
 
       },
       (err) => {
         this.errors.push(err);
+        this.hasFileUploading[$event.index] = false;
       });
   }
 
   getNewProduct() {
-  return new Product();
+    return new Product();
   }
   fetchProducts(page?: number) {
     this.errors = [];
@@ -112,13 +108,14 @@ export class ProductEditingComponent implements OnInit {
   }
 
   handleDataSearched($event: string) {
-      this.search = $event;
-      this.fetchProducts();
+    this.search = $event;
+    this.fetchProducts();
   }
 
   changeProductswitch(b: boolean) {
     this.isProductSwitch = b;
-    if (b)
-    this.categoryNames = this.categories.map(c => c.categoryName);
+    if (b) {
+      this.categoryNames = this.categories.map(c => c.categoryName);
+    }
   }
 }

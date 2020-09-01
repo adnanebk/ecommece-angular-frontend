@@ -8,12 +8,12 @@ import {DatePipe} from '@angular/common';
   styleUrls: ['./editable-table.component.css']
 })
 export class EditableTableComponent implements OnChanges {
-
   @Input() Data: any[];
   tableData: any[];
   editedElement: any;
   originalField: {};
   @Input() fields: any[];
+  @Input() hasFileUploading: boolean[];
   @Input() columnNames: string[];
   @Input() options: any;
   @Input() newElement: any;
@@ -23,7 +23,7 @@ export class EditableTableComponent implements OnChanges {
   @Output() dataDeleted = new EventEmitter<any>();
   @Output() dataSorted = new EventEmitter<{sort: string, direction: string}>();
   @Output() fileUploaded = new EventEmitter<{file: File , index: number}>();
-  isBatch = false;
+  fileNames: string[] = [];
 
   constructor(private datePipe: DatePipe) {
   }
@@ -38,9 +38,10 @@ export class EditableTableComponent implements OnChanges {
   }
 
   saveChange() {
+    const index = this.Data.indexOf(this.editedElement);
     this.originalField = null ;
     this.editedElement.isPost ? this.dataAdded.emit()
-      : this.dataChanged.emit(this.Data.indexOf(this.editedElement));
+      : this.dataChanged.emit(index);
   }
 
   add() {
@@ -73,7 +74,6 @@ export class EditableTableComponent implements OnChanges {
       return;
     }
     this.Data[index][field.name] = event.target.value;
-
   }
 
   remove(idx: any) {
@@ -106,7 +106,7 @@ export class EditableTableComponent implements OnChanges {
       this.originalField = {...elem};
       this.editedElement = elem;
     }
-    console.log('dattaaa' , this.Data);
+
   }
 
 
@@ -115,16 +115,13 @@ export class EditableTableComponent implements OnChanges {
     const file: File = input.files[0];
     const reader = new FileReader();
     reader.addEventListener('load', (event: any) => {
+      this.hasFileUploading[index] = true;
       this.fileUploaded.emit({ file, index});
       this.editedElement[fieldName] = file.name;
+      this.fileNames[index] = file.name;
     });
     reader.readAsDataURL(file);
   }
-
-
-
-
-
   sort(idx: number, ic: HTMLElement) {
     let direction = '';
     if (ic.classList.contains('fa-sort-up'))
@@ -145,6 +142,5 @@ export class EditableTableComponent implements OnChanges {
     this.dataSorted.emit({sort: this.fields[idx].name, direction});
   }
 
-  showErrors() {
-  }
+
 }

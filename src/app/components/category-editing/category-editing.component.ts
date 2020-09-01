@@ -23,12 +23,7 @@ export class CategoryEditingComponent implements OnInit {
   handleCategoryAdded() {
     this.errors = [];
     this.httpService.saveCategory(this.categories[0]).subscribe(resp => {
-        // this.products[0] = {...resp};
-        this.categories = this.categories.map( c => {
-          if (c.id === 0)
-            return resp;
-          return c;
-        });
+      this.categories[0] = {...resp};
       },
       errors => Array.isArray(errors) ? this.errors = errors : this.errors.push(errors)
     );
@@ -36,11 +31,7 @@ export class CategoryEditingComponent implements OnInit {
   handleCategoryChanged(index: number) {
     this.errors = [];
     this.httpService.updateCategory(this.categories[index]).subscribe(resp => {
-        this.categories = this.categories.map( c => {
-          if (c.id === resp.id)
-            return resp;
-          return c;
-        });
+      this.categories[index] = {...resp};
       },
       errors => Array.isArray(errors) ? this.errors = errors : this.errors.push(errors)
     );

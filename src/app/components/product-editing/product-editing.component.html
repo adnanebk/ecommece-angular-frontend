@@ -30,6 +30,7 @@
     <option>30</option>
   </select> elements
       <app-editable-table (dataChanged)="handleDataChanged($event)" (fileUploaded)="handleUploadFile($event)"
+                          [hasFileUploading]="hasFileUploading"
                           [newElement]="getNewProduct()"
                           [Data]="products" [columnNames]="productHeaders" [fields]="productFields"
                           [options]="{categoryName:categoryNames}"
