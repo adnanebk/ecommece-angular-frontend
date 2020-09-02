@@ -10,12 +10,11 @@
       <label class="custom-control-label" for="defaultInline2">manage categories</label>
     </div>
     <div *ngIf="isProductSwitch" class="container-fluid">
-      <ngb-alert *ngIf="products?.length<=0">No products found</ngb-alert>
       <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Manage products</h3>
 
 
 
-      <ng-container *ngIf="products?.length>0">
+
 
         <form class="form-inline d-flex justify-content-center md-form form-sm mt-0">
           <i class="fas fa-search" aria-hidden="true"></i>
@@ -23,7 +22,9 @@
                  (keyup.enter)="handleDataSearched($event.target.value)"
                  aria-label="Search">
         </form>
+      <ngb-alert *ngIf="products?.length<=0">No products found</ngb-alert>
 
+      <ng-container *ngIf="products?.length>0">
  Display <select  class="browser-default custom-select w-auto" (change)="fetchProducts()" [(ngModel)]="pageSize" >
     <option>10</option>
     <option>20</option>

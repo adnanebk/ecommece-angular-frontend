@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {DatePipe} from '@angular/common';
 
 
@@ -29,6 +29,7 @@ export class EditableTableComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+
     if (this.editedElement && changes.errors && this.errors.length > 0)
     {
       const indexOfEditedField = this.Data.indexOf(this.editedElement);
@@ -77,7 +78,8 @@ export class EditableTableComponent implements OnChanges {
   }
 
   remove(idx: any) {
-    !this.Data[idx].isPost && this.dataDeleted.emit(this.Data[idx]);
+    if (!this.Data[idx].isPost)
+    this.dataDeleted.emit(this.Data[idx]);
     this.Data.splice(idx, 1);
   }
   getSting(val: any, type: string) {
@@ -114,9 +116,9 @@ export class EditableTableComponent implements OnChanges {
   processFile(index: number, fieldName: string, input: HTMLInputElement) {
     const file: File = input.files[0];
     const reader = new FileReader();
-    reader.addEventListener('load', (event: any) => {
+    reader.addEventListener('load',  (event: any) => {
       this.hasFileUploading[index] = true;
-      this.fileUploaded.emit({ file, index});
+      this.fileUploaded.emit({file, index});
       this.editedElement[fieldName] = file.name;
       this.fileNames[index] = file.name;
     });

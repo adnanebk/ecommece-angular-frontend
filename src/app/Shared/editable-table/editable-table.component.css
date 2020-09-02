@@ -10,6 +10,9 @@ img{
 .my-custom-scrollbar {
 
 }
+button{
+  padding: 7px !important;
+}
 .table-wrapper-scroll-y {
   position: relative;
   height: 600px;

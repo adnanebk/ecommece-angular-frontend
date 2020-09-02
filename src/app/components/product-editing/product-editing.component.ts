@@ -75,7 +75,6 @@ export class ProductEditingComponent implements OnInit {
           const prod = this.products[$event.index];
           prod.imageUrl = res.toString();
           // setTimeout(() => {
-          console.log('file uploaded');
           this.products[$event.index] = {...prod};
          // }, 4000);
         }
