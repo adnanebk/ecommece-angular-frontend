@@ -26,7 +26,7 @@
 
     <tr *ngFor="let el of Data ; let idx= index " [className]="el.hasError?'bg-warning':''">
 
-      <td class="p-10 align-middle" >
+      <td class="p-0 align-middle" >
       <span class="table-remove">
         <button *ngIf="this.editedElement!==el" (click)="changeView(el,$event)" type="button" class="btn btn-info btn-rounded btn-sm my-0">Update</button>
         <button *ngIf="this.editedElement===el" (click)="saveChange()" type="button" class="btn btn-info btn-rounded btn-sm my-0">Save</button>
