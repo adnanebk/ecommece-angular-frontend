@@ -9,6 +9,7 @@ import {CartItem} from '../../models/cart-item';
 import {AuthService} from '../../services/auth.service';
 import {AppUser} from '../../models/app-user';
 import {MonthYearFormControl} from '../../Shared/month-year-form-control';
+import {CardNumberFormControl} from '../../Shared/card-number-form-control';
 
 
 @Component({
@@ -24,7 +25,7 @@ export class CheckoutComponent implements OnInit {
   totalQuantity = 0;
   user: AppUser;
   errors: MyError[] = [];
-  cartItems: CartItem[];
+  cartItems: CartItem[] = [];
   constructor(private formBuilder: FormBuilder, private cartService: CartService,
               private httpService: HttpService, private router: Router, private authService: AuthService) {
     this.cartItems = this.router.getCurrentNavigation().extras.state?.products;
@@ -39,7 +40,7 @@ export class CheckoutComponent implements OnInit {
       this.totalQuantity = this.cartService.totalQuantity;
       this.totalPrice = this.cartService.totalPrice;
     }
-    else {
+    else if (this.cartItems?.length === 1){
       this.totalQuantity = this.cartItems[0].quantity;
       this.totalPrice = this.cartItems[0].quantity * this.cartItems[0].unitPrice;
     }
@@ -57,8 +58,8 @@ export class CheckoutComponent implements OnInit {
       }),
      creditCard: this.formBuilder.group({
        cardType: [''],
-       cardNumber : [''],
-       expirationDate: new MonthYearFormControl('')
+       cardNumber : new CardNumberFormControl('', [Validators.required]),
+       expirationDate: new MonthYearFormControl('', [Validators.required])
      })
     });
   }

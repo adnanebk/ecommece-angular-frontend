@@ -17,7 +17,7 @@ export class CartService {
   }
 
   addToCart(newItem: CartItem ) {
-    if (this.items !== undefined && this.items.length > 0)
+    if (this.items?.length > 0)
     {
       this.ExistingItem = this.items.find(it => it.productId === newItem.productId);
       if ( this.ExistingItem === undefined)

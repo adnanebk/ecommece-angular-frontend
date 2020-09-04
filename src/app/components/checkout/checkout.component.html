@@ -97,10 +97,11 @@
             <div class="col-md-2"> <label>Card Type</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <select formControlName="cardType">
-                  <option>Visa</option>
-                  <option>Mastercard</option>
-                </select>
+
+                <app-input [control]="checkoutFormGroup.controls.creditCard.get('cardType')"
+                          type="select" [data]="['Visa','Master card']" ></app-input>
+                <span class="text-danger">{{getError('cardType')}}</span>
+
               </div>
             </div>
           </div>
@@ -109,7 +110,9 @@
             <div class="col-md-2"> <label>Expiration Date</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <input formControlName="expirationDate" type="text" placeholder="month/year(ex: 10/22)">
+                <app-input [control]="checkoutFormGroup.controls.creditCard.get('expirationDate')"
+                           placeholder="expiration Date" ></app-input>
+                <span class="text-danger">{{getError('expirationDate')}}</span>
               </div>
             </div>
           </div>
@@ -118,9 +121,10 @@
             <div class="col-md-2"> <label>Card number</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <select formControlName="cardNumber">
-                  <option>TO DO</option>
-                </select>
+                <app-input [control]="checkoutFormGroup.controls.creditCard.get('cardNumber')"
+                           placeholder="cardNumber" ></app-input>
+                <span class="text-danger">{{getError('cardNumber')}}</span>
+
               </div>
             </div>
           </div>
