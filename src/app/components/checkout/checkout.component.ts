@@ -40,7 +40,7 @@ export class CheckoutComponent implements OnInit {
       this.totalQuantity = this.cartService.totalQuantity;
       this.totalPrice = this.cartService.totalPrice;
     }
-    else if (this.cartItems?.length === 1){
+    else  if (this.cartItems?.length === 1) {
       this.totalQuantity = this.cartItems[0].quantity;
       this.totalPrice = this.cartItems[0].quantity * this.cartItems[0].unitPrice;
     }
