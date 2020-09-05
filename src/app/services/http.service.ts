@@ -1,6 +1,6 @@
 
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { Product } from '../models/product';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -87,6 +87,14 @@ export class HttpService {
   removeCategory(id: number) {
     return this.httpClient.delete(this.categoryUrl + '/' + id);
 
+  }
+
+  updateProducts(products: Product[]) {
+    return this.httpClient.put<Product[]>(this.productUrl + '/v3', products );
+  }
+  deleteProducts(productsIds: number[]) {
+    const params = new HttpParams().set('Ids', productsIds.join(','));
+    return this.httpClient.delete(this.productUrl + '/v3' , {params});
   }
 }
 

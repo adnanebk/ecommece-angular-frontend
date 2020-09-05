@@ -14,7 +14,7 @@ export class Product {
   imageUrl = '';
   active = false;
   unitsInStock = 0;
-  categoryName = 0;
+  categoryName = '';
   dateCreated = new Date();
   lastUpdated = new Date();
 }

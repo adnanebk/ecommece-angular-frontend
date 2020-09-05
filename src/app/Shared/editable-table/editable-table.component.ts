@@ -9,8 +9,8 @@ import {DatePipe} from '@angular/common';
 })
 export class EditableTableComponent implements OnChanges {
   @Input() Data: any[];
-  tableData: any[];
   editedElement: any;
+  @Input() batchEnabled = false;
   originalField: {};
   @Input() fields: any[];
   @Input() hasFileUploading: boolean[];
@@ -23,13 +23,15 @@ export class EditableTableComponent implements OnChanges {
   @Output() dataDeleted = new EventEmitter<any>();
   @Output() dataSorted = new EventEmitter<{sort: string, direction: string}>();
   @Output() fileUploaded = new EventEmitter<{file: File , index: number}>();
+  @Output() UpdateAll = new EventEmitter<any[]>();
+  @Output() RemoveAll = new EventEmitter<any[]>();
   fileNames: string[] = [];
 
   constructor(private datePipe: DatePipe) {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-
+  console.log('ng change ', changes);
     if (this.editedElement && changes.errors && this.errors.length > 0)
     {
       const indexOfEditedField = this.Data.indexOf(this.editedElement);
@@ -52,14 +54,10 @@ export class EditableTableComponent implements OnChanges {
       this.editedElement = this.Data[0];
     }
   }
-  refreshData() {
-    this.tableData = [...this.Data];
-    /*this.Data.map(el=>{
-      return {...el,isChanging:true}
-    });*/
-  }
+
 
   changeValue(index: number, field: any, event: any) {
+    this.Data[index].dirty = true;
     if (field.type === 'number')
     {
       if (isNaN(event.target.value))
@@ -78,8 +76,9 @@ export class EditableTableComponent implements OnChanges {
   }
 
   remove(idx: any) {
-    if (!this.Data[idx].isPost)
-    this.dataDeleted.emit(this.Data[idx]);
+    if (!this.Data[idx].isPost) {
+        this.dataDeleted.emit(this.Data[idx]);
+      }
     this.Data.splice(idx, 1);
   }
   getSting(val: any, type: string) {
@@ -102,6 +101,7 @@ export class EditableTableComponent implements OnChanges {
 
     if (this.editedElement !== elem)
     {
+
       if (this.originalField) {
         this.Data[this.Data.indexOf(this.editedElement)] = {...this.originalField};
       }
@@ -117,9 +117,11 @@ export class EditableTableComponent implements OnChanges {
     const file: File = input.files[0];
     const reader = new FileReader();
     reader.addEventListener('load',  (event: any) => {
+      this.Data[index].dirty = true;
       this.hasFileUploading[index] = true;
       this.fileUploaded.emit({file, index});
       this.editedElement[fieldName] = file.name;
+      // this.Data[fieldName] = file.name;
       this.fileNames[index] = file.name;
     });
     reader.readAsDataURL(file);
@@ -145,4 +147,28 @@ export class EditableTableComponent implements OnChanges {
   }
 
 
+  onElSelected(check: HTMLInputElement, index: number) {
+    if (check.checked) {
+      this.Data[index].selected = true;
+    }
+    else {
+      this.Data[index].selected = false;
+    }
+  }
+
+  getSelectedSize() {
+    return this.Data.filter( e => e.selected).length;
+  }
+
+  deleteAll() {
+    if (confirm('Are you sure to remove '))
+    this.RemoveAll.emit(this.Data.filter(e => e.selected));
+  }
+  saveAll() {
+    this.UpdateAll.emit(this.Data.filter(e => e.dirty));
+  }
+
+  isDataDirty() {
+    return this.Data.find(el => el.dirty);
+  }
 }

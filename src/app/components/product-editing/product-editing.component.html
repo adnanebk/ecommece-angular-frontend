@@ -24,20 +24,31 @@
         </form>
       <ngb-alert *ngIf="products?.length<=0">No products found</ngb-alert>
 
+
       <ng-container *ngIf="products?.length>0">
- Display <select  class="browser-default custom-select w-auto" (change)="fetchProducts()" [(ngModel)]="pageSize" >
+        -<div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input" (change)="batchEnable=batch.checked" #batch [checked]="batchEnable" id="sw">
+        <label class="custom-control-label" for="sw">Batch operations</label>
+      </div>
+        Display <select  class="browser-default custom-select w-auto" (change)="fetchProducts()" [(ngModel)]="pageSize" >
     <option>10</option>
     <option>20</option>
     <option>30</option>
   </select> elements
-      <app-editable-table (dataChanged)="handleDataChanged($event)" (fileUploaded)="handleUploadFile($event)"
+
+        <button (click)="reloadData()" class="btn btn-warning">Refresh</button>
+
+        <app-editable-table (dataChanged)="handleDataChanged($event)" (fileUploaded)="handleUploadFile($event)"
                           [hasFileUploading]="hasFileUploading"
                           [newElement]="getNewProduct()"
                           [Data]="products" [columnNames]="productHeaders" [fields]="productFields"
+                          [batchEnabled]="batchEnable"
                           [options]="{categoryName:categoryNames}"
                           (dataAdded)="handleDataAdded()"
                           (dataDeleted)="handleDataDeleted($event)"
                           (dataSorted)="handleDataSorted($event)"
+                          (UpdateAll)="handleUpdateAll($event)"
+                          (RemoveAll)="handleRemoveAll($event)"
                           [errors]="errors"
       ></app-editable-table>
   <ngb-pagination (pageChange)="fetchProducts($event)"

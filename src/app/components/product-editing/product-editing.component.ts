@@ -21,6 +21,7 @@ export class ProductEditingComponent implements OnInit {
   search = '';
   direction: string;
   errors: any[];
+  batchEnable: boolean;
   isProductSwitch = true;
   categories: ProductCategory[];
   hasFileUploading: boolean[] = [] ;
@@ -116,5 +117,28 @@ export class ProductEditingComponent implements OnInit {
     if (b) {
       this.categoryNames = this.categories.map(c => c.categoryName);
     }
+  }
+
+  handleUpdateAll($products: Product[]) {
+    this.httpService.updateProducts($products).subscribe(products => {
+      this.products = this.products.map(prod => {
+             const pr =  products.find(p => p.id === prod.id);
+             if (pr) {
+               return pr;
+             }
+             return  prod;
+      });
+    }, errors => Array.isArray(errors) ? this.errors = errors : this.errors.push(errors)
+    );
+  }
+
+  handleRemoveAll($products: Product[]) {
+   this.httpService.deleteProducts($products.map(pr => pr.id)).subscribe(() => {
+     this.products = this.products.filter( p => !$products.includes(p));
+   } );
+  }
+
+  reloadData() {
+    this.fetchProducts(this.page);
   }
 }

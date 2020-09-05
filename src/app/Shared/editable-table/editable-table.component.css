@@ -1,5 +1,8 @@
+.bgDirty{
+  background-color: #f1e9be;
+}
 img{
- width: 100px;
+ width: 80px;
 }
 .number-input{
   width: 100px;
