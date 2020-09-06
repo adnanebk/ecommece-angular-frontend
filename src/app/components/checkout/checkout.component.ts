@@ -82,7 +82,6 @@ saveOrder(order: Order) {
     this.checkoutFormGroup.markAsPristine();
     this.errors = [];
     const myOrder = {...this.checkoutFormGroup.get('customer').value, ...this.checkoutFormGroup.get('shippingAddress').value};
-    console.log(myOrder);
     this.saveOrder(myOrder);
   }
 /*  getErrorMessage(input: AbstractControl)

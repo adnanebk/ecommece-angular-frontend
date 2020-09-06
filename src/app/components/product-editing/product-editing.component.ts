@@ -3,7 +3,7 @@ import {HttpService} from '../../services/http.service';
 import {Product} from '../../models/product';
 import {ProductCategory} from '../../models/product-category';
 import {ImageService} from '../../services/image.service';
-
+import {saveAs} from 'file-saver';
 @Component({
   selector: 'app-product-editing',
   templateUrl: './product-editing.component.html',
@@ -20,11 +20,12 @@ export class ProductEditingComponent implements OnInit {
   sort: string;
   search = '';
   direction: string;
-  errors: any[];
+  errors: any[] = [];
   batchEnable: boolean;
   isProductSwitch = true;
   categories: ProductCategory[];
   hasFileUploading: boolean[] = [] ;
+  private SelectedProducts: Product[] = [];
 
 
 
@@ -43,7 +44,6 @@ export class ProductEditingComponent implements OnInit {
     });
   }
   handleDataChanged(index: number) {
-    this.errors = [];
     this.httpService.updateProduct(this.products[index]).subscribe(resp => {
         this.products[index] = {...resp};
       },
@@ -51,7 +51,6 @@ export class ProductEditingComponent implements OnInit {
     );
   }
   handleDataAdded() {
-    this.errors = [];
     this.httpService.saveProduct(this.products[0]).subscribe(resp => {
         this.products[0] = {...resp};
 
@@ -61,13 +60,11 @@ export class ProductEditingComponent implements OnInit {
   }
 
   handleDataDeleted($event: Product) {
-    this.errors = [];
     this.httpService.removeProduct($event.id).subscribe();
   }
 
 
   handleUploadFile($event: { file: File; index: number }) {
-    this.errors = [];
     this.imageService.uploadImage($event.file).subscribe(
       (res: string) => {
         this.hasFileUploading[$event.index] = false;
@@ -92,7 +89,6 @@ export class ProductEditingComponent implements OnInit {
     return new Product();
   }
   fetchProducts(page?: number) {
-    this.errors = [];
     this.httpService.getProductList
     (page - 1, this.pageSize, this.sort, this.direction , 0, this.search).subscribe(resp => {
       this.products = [...resp.data];
@@ -141,4 +137,31 @@ export class ProductEditingComponent implements OnInit {
   reloadData() {
     this.fetchProducts(this.page);
   }
+
+  handleSelectedElements($products: Product[]) {
+    this.SelectedProducts = $products;
+  }
+  saveToExcel(){
+    this.httpService.saveProductsToExcel(this.SelectedProducts.length > 0 ? this.SelectedProducts : this.products)
+      .subscribe(resp => {
+      const blob = new Blob([resp], { type: 'application/vnd.ms.excel' }  );
+      const file = new File([blob], 'products-' + new Date().toLocaleDateString()  + '.xlsx',
+                                                { type: 'application/vnd.ms.excel' });
+      saveAs(file);
+    });
+  }
+
+  loadFromExcel($input: HTMLInputElement) {
+    this.errors = [];
+    const file: File = $input.files[0];
+    this.httpService.saveProductsFromExcel(file).subscribe(products => {
+    products.forEach(p => this.products.unshift(p));
+    $input.value = '';
+    },
+        errors => {
+          $input.value = '';
+          Array.isArray(errors) ? this.errors = errors : this.errors.push(errors);
+        }, () => $input.value = ''
+   );
+}
 }

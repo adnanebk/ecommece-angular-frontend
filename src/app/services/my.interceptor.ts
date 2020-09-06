@@ -35,8 +35,6 @@ export class MyInterceptor implements HttpInterceptor {
   }
 
   private handleError(resp) {
-    console.log('error is intercept');
-    console.log(resp);
     if (!(resp.error instanceof ErrorEvent)) {
       {
         console.log(resp);

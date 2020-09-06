@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import { Product } from '../models/product';
-import { Observable } from 'rxjs';
+import {Observable, throwError} from 'rxjs';
 import { map } from 'rxjs/operators';
 import {ProductCategory} from '../models/product-category';
 import {Order} from '../models/order';
@@ -69,7 +69,6 @@ export class HttpService {
    return this.httpClient.post<Product>(this.baseUrl + 'products/v2', product);
   }
   updateProduct(product: Product): Observable<Product> {
-    console.log('update pod', product);
     return this.httpClient.put<Product>(this.baseUrl + 'products/v2' , product);
   }
   removeProduct(id: number) {
@@ -96,6 +95,22 @@ export class HttpService {
     const params = new HttpParams().set('Ids', productsIds.join(','));
     return this.httpClient.delete(this.productUrl + '/v3' , {params});
   }
+
+  saveProductsToExcel(products: Product[]) {
+    const params = new HttpParams().set('Ids', products.map(p => p.id).join(','));
+    // @ts-ignore
+    return this.httpClient.get<any>(this.productUrl + '/excel', {params, responseType: 'blob'});
+  }
+  saveProductsFromExcel(file: File){
+    if (!file.name.toLowerCase().endsWith('.xlsx')) {
+      return throwError('File must be Xlsx type');
+    }
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.httpClient.post<Product[]>(this.productUrl + '/excel', formData);
+
+  }
+
 }
 
 interface GetResponse {

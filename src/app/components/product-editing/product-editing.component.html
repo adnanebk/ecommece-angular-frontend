@@ -37,7 +37,18 @@
   </select> elements
 
         <button (click)="reloadData()" class="btn btn-warning">Refresh</button>
-
+        <button (click)="saveToExcel()" class="btn btn-info">save to excel</button>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+          </div>
+          <div class="custom-file">
+            <input (change)="loadFromExcel(file)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                   #file type="file" class="custom-file-input" id="inputGroupFile01"
+                   aria-describedby="inputGroupFileAddon01">
+            <label class="custom-file-label" for="inputGroupFile01">Load from excel</label>
+          </div>
+        </div>
         <app-editable-table (dataChanged)="handleDataChanged($event)" (fileUploaded)="handleUploadFile($event)"
                           [hasFileUploading]="hasFileUploading"
                           [newElement]="getNewProduct()"
@@ -49,6 +60,7 @@
                           (dataSorted)="handleDataSorted($event)"
                           (UpdateAll)="handleUpdateAll($event)"
                           (RemoveAll)="handleRemoveAll($event)"
+                            (SelectedElements)="handleSelectedElements($event)"
                           [errors]="errors"
       ></app-editable-table>
   <ngb-pagination (pageChange)="fetchProducts($event)"

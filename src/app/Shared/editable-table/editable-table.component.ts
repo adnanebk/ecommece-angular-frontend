@@ -25,13 +25,14 @@ export class EditableTableComponent implements OnChanges {
   @Output() fileUploaded = new EventEmitter<{file: File , index: number}>();
   @Output() UpdateAll = new EventEmitter<any[]>();
   @Output() RemoveAll = new EventEmitter<any[]>();
+  @Output() SelectedElements = new EventEmitter<any[]>();
+
   fileNames: string[] = [];
 
   constructor(private datePipe: DatePipe) {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-  console.log('ng change ', changes);
     if (this.editedElement && changes.errors && this.errors.length > 0)
     {
       const indexOfEditedField = this.Data.indexOf(this.editedElement);
@@ -41,6 +42,7 @@ export class EditableTableComponent implements OnChanges {
   }
 
   saveChange() {
+    this.errors = [];
     const index = this.Data.indexOf(this.editedElement);
     this.originalField = null ;
     this.editedElement.isPost ? this.dataAdded.emit()
@@ -77,6 +79,7 @@ export class EditableTableComponent implements OnChanges {
 
   remove(idx: any) {
     if (!this.Data[idx].isPost) {
+        this.errors = [];
         this.dataDeleted.emit(this.Data[idx]);
       }
     this.Data.splice(idx, 1);
@@ -114,6 +117,7 @@ export class EditableTableComponent implements OnChanges {
 
 
   processFile(index: number, fieldName: string, input: HTMLInputElement) {
+    this.errors=[];
     const file: File = input.files[0];
     const reader = new FileReader();
     reader.addEventListener('load',  (event: any) => {
@@ -154,6 +158,8 @@ export class EditableTableComponent implements OnChanges {
     else {
       this.Data[index].selected = false;
     }
+    this.SelectedElements.emit(this.Data.filter(e => e.selected));
+
   }
 
   getSelectedSize() {
@@ -161,10 +167,14 @@ export class EditableTableComponent implements OnChanges {
   }
 
   deleteAll() {
-    if (confirm('Are you sure to remove '))
+    if (confirm('Are you sure to remove ')) {
+      this.errors = [];
     this.RemoveAll.emit(this.Data.filter(e => e.selected));
+    }
   }
+
   saveAll() {
+    this.errors = [];
     this.UpdateAll.emit(this.Data.filter(e => e.dirty));
   }
 

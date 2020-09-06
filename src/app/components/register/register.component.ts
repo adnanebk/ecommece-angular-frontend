@@ -29,11 +29,9 @@ export class RegisterComponent implements OnInit {
   );
     this.state = this.router.getCurrentNavigation().extras.state;
     this.returnUrl = this.router.getCurrentNavigation().extras.queryParams?.return ?? '/';
-    console.log('extra', this.router.getCurrentNavigation().extras);
   }
 
   ngOnInit(): void {
-    console.log(this.returnUrl);
   }
 
   onSubmit() {
@@ -42,7 +40,6 @@ export class RegisterComponent implements OnInit {
     this.errors = [];
     this.authService.register(this.form.value).subscribe(
       (user) => {
-        console.log('userr', user);
        // this.router.navigateByUrl('/');
         this.state ? this.router.navigate([this.returnUrl], { state: {...this.state} }) :
           this.router.navigateByUrl(this.returnUrl);

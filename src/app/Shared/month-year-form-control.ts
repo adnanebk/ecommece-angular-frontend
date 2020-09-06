@@ -23,8 +23,6 @@ export class MonthYearFormControl extends FormControl{
     }
     else if ( value.length >= 5  && value.length !== 2 )
     {
-      console.log('y3', value.length);
-      console.log('y3', value);
       const values = value.split('/');
       const  currentDate = new Date();
       const month = +values[0];

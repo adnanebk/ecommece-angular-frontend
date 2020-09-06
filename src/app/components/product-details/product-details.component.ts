@@ -40,13 +40,11 @@ export class ProductDetailsComponent implements OnInit {
   decrement(qt: HTMLInputElement ) {
     if ( qt.valueAsNumber > 1)
     {
-      console.log('decrement');
       qt.valueAsNumber = qt.valueAsNumber - 1;
       this.cartItem.quantity = qt.valueAsNumber;
     }
   }
   handleCheckout() {
-    console.log('product', this.cartItem);
     this.route.navigate(['/checkout'], { state: { products: [this.cartItem]} });
   }
 }

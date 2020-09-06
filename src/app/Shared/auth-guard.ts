@@ -16,7 +16,6 @@ export class AuthGuard {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
 
-   console.log('---auth---', this.router.getCurrentNavigation().extras.state);
    if (!this.user)
    {
      this.router.navigate(['/login'], {

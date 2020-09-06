@@ -28,16 +28,13 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log('loggg', this.user);
     // this.errors = [];
     this.authService.login(this.user).subscribe(
       (user) => {
-        console.log('userr', user);
         this.state ? this.router.navigate([this.returnUrl], { state: {...this.state} }) :
         this.router.navigateByUrl(this.returnUrl);
       }, (err) => {
         this.error = err;
-        console.log(err);
       }
     );
   }

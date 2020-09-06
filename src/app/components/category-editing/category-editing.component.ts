@@ -21,7 +21,6 @@ export class CategoryEditingComponent implements OnInit {
   }
 
   handleCategoryAdded() {
-    this.errors = [];
     this.httpService.saveCategory(this.categories[0]).subscribe(resp => {
       this.categories[0] = {...resp};
       },
@@ -29,7 +28,6 @@ export class CategoryEditingComponent implements OnInit {
     );
   }
   handleCategoryChanged(index: number) {
-    this.errors = [];
     this.httpService.updateCategory(this.categories[index]).subscribe(resp => {
       this.categories[index] = {...resp};
       },
@@ -38,7 +36,6 @@ export class CategoryEditingComponent implements OnInit {
   }
 
   handleCategoryDeleted($event: ProductCategory) {
-    this.errors = [];
     this.httpService.removeCategory($event.id).subscribe();
   }
   getNewProductCategory() {
