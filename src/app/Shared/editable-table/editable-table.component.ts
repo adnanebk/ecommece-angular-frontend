@@ -58,8 +58,9 @@ export class EditableTableComponent implements OnChanges {
   }
 
 
-  changeValue(index: number, field: any, event: any) {
+  changeValue(index: number, field: any, event: Event) {
     this.Data[index].dirty = true;
+    this.removeError(field.name);
     if (field.type === 'number')
     {
       if (isNaN(event.target.value))
@@ -185,6 +186,9 @@ export class EditableTableComponent implements OnChanges {
   getError(fieldName: string) {
     const error = this.errors.find(er => er.fieldName === fieldName);
     return error && error.name + ' ' + error.message;
+  }
+  removeError(fieldName: string) {
+    this.errors = this.errors.filter(er => er.fieldName !== fieldName);
   }
 
   isArrayString() {

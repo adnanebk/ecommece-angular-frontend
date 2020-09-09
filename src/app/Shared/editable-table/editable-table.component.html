@@ -68,7 +68,7 @@
           <input *ngIf="field.type === 'number'"  [value]="el[field.name]" class="form-control number-input"
                  (input)="changeValue(idx,this.field,$event)" (keyup.enter)="saveChange()">
 
-          <input disabled *ngIf="field.type === 'date'" type="date" [value]="el[field.name] | date:'yyyy-MM-dd'" class="form-control w-auto">
+          <input [disabled]="field.readOnly" *ngIf="field.type === 'date'" type="date" [value]="el[field.name] | date:'yyyy-MM-dd'" class="form-control w-auto">
 
           <div *ngIf="field.type === 'bool'"class="custom-control custom-switch">
             <input type="checkbox" class="custom-control-input" [checked]="true" id="customSwitches"
