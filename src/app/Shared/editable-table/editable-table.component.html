@@ -3,7 +3,7 @@
 <span *ngIf="!batchEnabled" class="table-add  mb-3 mr-2"><a (click)="add()" class="text-success">Add<i
   class="fas fa-plus fa-2x" aria-hidden="true"></i></a></span>
 
-<ul>
+<ul *ngIf="isArrayString()">
   <li class="text-danger" *ngFor="let err of errors">{{err}}</li>
 </ul>
 <div *ngIf="batchEnabled">
@@ -80,6 +80,7 @@
             <option>Choose</option>
             <option *ngFor="let op of options[field.name]" [selected]="op===el[field.name]" [value]="op">{{op}}</option>
           </select>
+          <span *ngIf="errors.length>0" class="text-danger" >{{getError(field.name)}}</span>
         </ng-container>
       </td>
     </tr>

@@ -37,7 +37,7 @@ export class EditableTableComponent implements OnChanges {
     {
       const indexOfEditedField = this.Data.indexOf(this.editedElement);
       this.Data[indexOfEditedField].hasError = true;
-      window.scroll(0, 0);
+      this.isArrayString() && window.scroll(0, 0);
     }
   }
 
@@ -180,5 +180,14 @@ export class EditableTableComponent implements OnChanges {
 
   isDataDirty() {
     return this.Data.find(el => el.dirty);
+  }
+
+  getError(fieldName: string) {
+    const error = this.errors.find(er => er.fieldName === fieldName);
+    return error && error.name + ' ' + error.message;
+  }
+
+  isArrayString() {
+    return this.errors.length > 0 && typeof this.errors[0] === 'string';
   }
 }
