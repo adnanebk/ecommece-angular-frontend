@@ -45,7 +45,7 @@ export class EditableTableComponent implements OnChanges {
   saveChange() {
     this.errors = [];
     const index = this.Data.indexOf(this.editedElement);
-    this.originalField = null ;
+    //this.originalField = null ;
     this.editedElement.isPost ? this.dataAdded.emit()
       : this.dataChanged.emit(index);
   }
@@ -59,7 +59,7 @@ export class EditableTableComponent implements OnChanges {
   }
 
 
-  changeValue(index: number, field: any, event: Event) {
+  changeValue(index: number, field: any, event: any) {
     this.Data[index].dirty = true;
     this.removeError(field.name);
 
@@ -100,6 +100,7 @@ export class EditableTableComponent implements OnChanges {
   }
 
   changeView(elem: any, $event: MouseEvent) {
+    console.log('change view ', this.originalField);
     if ($event.target !== $event.currentTarget)
     {
       return;
@@ -120,7 +121,7 @@ export class EditableTableComponent implements OnChanges {
 
 
   processFile(index: number, fieldName: string, input: HTMLInputElement) {
-    this.errors=[];
+    this.errors = [];
     const file: File = input.files[0];
     const reader = new FileReader();
     reader.addEventListener('load',  (event: any) => {
