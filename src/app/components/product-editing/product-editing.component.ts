@@ -47,7 +47,7 @@ export class ProductEditingComponent implements OnInit {
     this.httpService.updateProduct(this.products[index]).subscribe(resp => {
         this.products[index] = {...resp};
       },
-      errors => Array.isArray(errors) ? this.errors = errors : this.errors.push(errors)
+      errors => Array.isArray(errors) ? this.errors = errors : this.errors = [errors]
     );
   }
   handleDataAdded() {
@@ -55,7 +55,7 @@ export class ProductEditingComponent implements OnInit {
         this.products[0] = {...resp};
 
       },
-      errors => Array.isArray(errors) ? this.errors = errors : this.errors.push(errors)
+      errors => Array.isArray(errors) ? this.errors = errors : this.errors = [errors]
     );
   }
 
@@ -80,7 +80,7 @@ export class ProductEditingComponent implements OnInit {
 
       },
       (err) => {
-        this.errors.push(err);
+        this.errors = [err];
         this.hasFileUploading[$event.index] = false;
       });
   }
@@ -124,7 +124,8 @@ export class ProductEditingComponent implements OnInit {
              }
              return  prod;
       });
-    }, errors => Array.isArray(errors) ? this.errors = errors : this.errors.push(errors)
+    },
+      errors => Array.isArray(errors) ? this.errors = errors : this.errors = [errors]
     );
   }
 
@@ -160,7 +161,7 @@ export class ProductEditingComponent implements OnInit {
     },
         errors => {
           $input.value = '';
-          Array.isArray(errors) ? this.errors = errors : this.errors.push(errors);
+          Array.isArray(errors) ? this.errors = errors : this.errors = [errors];
         }, () => $input.value = ''
    );
 }

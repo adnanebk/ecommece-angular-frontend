@@ -33,11 +33,12 @@ export class EditableTableComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.editedElement && changes.errors && this.errors.length > 0)
+    console.log('changes', changes);
+    if (this.editedElement && changes.errors)
     {
       const indexOfEditedField = this.Data.indexOf(this.editedElement);
       this.Data[indexOfEditedField].hasError = true;
-      this.isArrayString() && window.scroll(0, 0);
+      this.isErrorsString() && window.scroll(0, 0);
     }
   }
 
@@ -61,6 +62,7 @@ export class EditableTableComponent implements OnChanges {
   changeValue(index: number, field: any, event: Event) {
     this.Data[index].dirty = true;
     this.removeError(field.name);
+
     if (field.type === 'number')
     {
       if (isNaN(event.target.value))
@@ -191,7 +193,14 @@ export class EditableTableComponent implements OnChanges {
     this.errors = this.errors.filter(er => er.fieldName !== fieldName);
   }
 
-  isArrayString() {
-    return this.errors.length > 0 && typeof this.errors[0] === 'string';
+  isErrorsString() {
+    return this.errors?.length > 0 && typeof this.errors[0] === 'string';
+  }
+
+  onAllSelected(check: HTMLInputElement) {
+    if(check.checked)
+    this.Data.map(e => e.selected = true);
+    else
+      this.Data.map(e => e.selected = false);
   }
 }

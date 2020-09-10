@@ -3,7 +3,7 @@
 <span *ngIf="!batchEnabled" class="table-add  mb-3 mr-2"><a (click)="add()" class="text-success">Add<i
   class="fas fa-plus fa-2x" aria-hidden="true"></i></a></span>
 
-<ul *ngIf="isArrayString()">
+<ul *ngIf="isErrorsString()">
   <li class="text-danger" *ngFor="let err of errors">{{err}}</li>
 </ul>
 <div *ngIf="batchEnabled">
@@ -17,7 +17,12 @@
     <thead>
     <tr >
       <th *ngIf="!batchEnabled" class="text-center align-middle"><h3>Edit</h3></th>
-      <th *ngIf="batchEnabled" class="text-center align-middle"><h3>Select</h3></th>
+      <th *ngIf="batchEnabled" class="text-center align-middle"><h3>Select
+        <div class="custom-control custom-checkbox">
+          <input [checked]="false"  (change)="onAllSelected(check)" #check type="checkbox" class="custom-control-input" [id]="'selectCheck'">
+          <label class="custom-control-label" [for]="'selectCheck'"></label>
+        </div>
+      </h3></th>
       <th (click)="sort(idx,ic)" *ngFor="let cl of columnNames; let idx = index" class="text-center align-middle"><a><b>{{cl}}</b></a>
         <i #ic class="fa fa-sort" aria-hidden="true"></i>
       </th>
@@ -26,7 +31,7 @@
     </thead>
     <tbody>
 
-    <tr *ngFor="let el of Data ; let idx= index " [className]="el.hasError?'bg-warning':''">
+    <tr *ngFor="let el of Data ; let idx= index "  [className]="el.hasError?'bg-warning':''">
 
       <td class="p-1 align-middle" >
       <span *ngIf="!batchEnabled" class="table-edit">
@@ -36,7 +41,7 @@
       </span>
         <span *ngIf="batchEnabled" class="select">
     <div class="custom-control custom-checkbox">
-    <input [checked]="false"  (change)="onElSelected(check,idx)" #check type="checkbox" class="custom-control-input" [id]="'selectCheck'+idx">
+    <input [checked]="el.selected"  (change)="onElSelected(check,idx)" #check type="checkbox" class="custom-control-input" [id]="'selectCheck'+idx">
     <label class="custom-control-label" [for]="'selectCheck'+idx"></label>
     </div>
         </span>
@@ -45,7 +50,7 @@
 
       <td *ngFor="let field of fields" (click)="changeView(el,$event)" class="pt-3-half p-1 align-middle mw-200"
           [ngStyle]="el[field.name]?.length>100 && {minWidth: '200px'}"
-           [ngClass]="(el?.dirty && batchEnabled) && 'bgDirty'">
+           [ngClass]="(el?.dirty && batchEnabled && !el.hasError) && 'bgDirty'">
 
         <ng-container *ngIf="this.editedElement!==el && !batchEnabled">
          <span *ngIf="(!field.type || field.type !== 'image')">
@@ -80,7 +85,7 @@
             <option>Choose</option>
             <option *ngFor="let op of options[field.name]" [selected]="op===el[field.name]" [value]="op">{{op}}</option>
           </select>
-          <span *ngIf="errors.length>0" class="text-danger" >{{getError(field.name)}}</span>
+          <span *ngIf="el.hasError" class="text-danger" >{{getError(field.name)}}</span>
         </ng-container>
       </td>
     </tr>

@@ -12,7 +12,7 @@ export class CategoryEditingComponent implements OnInit {
   categoryHeaders: any[];
   categoryNames: string[];
   @Input() categories: ProductCategory[];
-  errors: any[];
+   errors: any[] = [];
   constructor(private httpService: HttpService) {}
 
   ngOnInit(): void {
@@ -24,14 +24,14 @@ export class CategoryEditingComponent implements OnInit {
     this.httpService.saveCategory(this.categories[0]).subscribe(resp => {
       this.categories[0] = {...resp};
       },
-      errors => Array.isArray(errors) ? this.errors = errors : this.errors.push(errors)
+      errors => Array.isArray(errors) ? this.errors = errors : this.errors = [errors]
     );
   }
   handleCategoryChanged(index: number) {
     this.httpService.updateCategory(this.categories[index]).subscribe(resp => {
       this.categories[index] = {...resp};
       },
-      errors => Array.isArray(errors) ? this.errors = errors : this.errors.push(errors)
+      errors => Array.isArray(errors) ? this.errors = errors : this.errors = [errors]
     );
   }
 
