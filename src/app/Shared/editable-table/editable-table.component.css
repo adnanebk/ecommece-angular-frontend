@@ -2,6 +2,10 @@
   background-color: #f1e9be;
 }
 
+.max-content{
+  width: max-content;
+}
+
 img {
   width: 80px;
 }
