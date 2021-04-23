@@ -1,6 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import {Router} from '@angular/router';
-
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 @Component({
   selector: 'app-product-search',
   templateUrl: './product-search.component.html',
@@ -8,13 +6,16 @@ import {Router} from '@angular/router';
 })
 export class ProductSearchComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  @Output() onSearch = new EventEmitter<string>(true);
+
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
 
   doSearch(value: string) {
-    value ? this.router.navigate(['/products'], { queryParams: { search: value} })
-    : this.router.navigateByUrl('/products');
+    this.onSearch.emit(value);
+    // this.router.navigate(['/products'], { queryParams: { search: value} });
   }
 }

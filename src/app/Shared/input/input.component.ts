@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AbstractControl} from '@angular/forms';
 
 @Component({
@@ -12,7 +12,7 @@ export class InputComponent implements OnInit {
   @Input() type = 'text';
   @Input() placeholder: string;
   @Input() data: [];
-
+  @Output() inputChanged=new EventEmitter<any>();
 
   constructor() {
   }
@@ -24,7 +24,11 @@ export class InputComponent implements OnInit {
 
   showError() {
     const {dirty, touched, errors} = this.control;
-    return (dirty && touched && errors );
+    return (dirty && touched && errors);
+  }
+
+  onInputChange() {
+    this.inputChanged.emit();
   }
 }
 

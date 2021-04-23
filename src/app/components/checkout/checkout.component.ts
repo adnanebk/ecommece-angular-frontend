@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormGroup, FormBuilder, Validators, AbstractControl} from '@angular/forms';
 import {CartService} from '../../services/cart.service';
 import {HttpService} from '../../services/http.service';
@@ -26,6 +26,7 @@ export class CheckoutComponent implements OnInit {
   user: AppUser;
   errors: MyError[] = [];
   cartItems: CartItem[] = [];
+
   constructor(private formBuilder: FormBuilder, private cartService: CartService,
               private httpService: HttpService, private router: Router, private authService: AuthService) {
     this.cartItems = this.router.getCurrentNavigation().extras.state?.products;
@@ -35,12 +36,10 @@ export class CheckoutComponent implements OnInit {
     this.authService.userSubject.subscribe((user) => {
       this.user = user;
     });
-    if (this.cartItems?.length > 1)
-    {
+    if (this.cartItems?.length > 1) {
       this.totalQuantity = this.cartService.totalQuantity;
       this.totalPrice = this.cartService.totalPrice;
-    }
-    else  if (this.cartItems?.length === 1) {
+    } else if (this.cartItems?.length === 1) {
       this.totalQuantity = this.cartItems[0].quantity;
       this.totalPrice = this.cartItems[0].quantity * this.cartItems[0].unitPrice;
     }
@@ -56,26 +55,26 @@ export class CheckoutComponent implements OnInit {
         city: ['', Validators.required],
         country: ['', Validators.required]
       }),
-     creditCard: this.formBuilder.group({
-       cardType: [''],
-       cardNumber : new CardNumberFormControl('', [Validators.required]),
-       expirationDate: new MonthYearFormControl('', [Validators.required])
-     })
+      creditCard: this.formBuilder.group({
+        cardType: [''],
+        cardNumber: new CardNumberFormControl('', [Validators.required]),
+        expirationDate: new MonthYearFormControl('', [Validators.required])
+      })
     });
   }
 
 
-saveOrder(order: Order) {
+  saveOrder(order: Order) {
     order.orderItems = this.cartItems;
     order.quantity = this.totalQuantity;
     order.id = 0;
     order.totalPrice = this.totalPrice;
-    this.httpService.saveOrder(order).subscribe( next => {
+    this.httpService.saveOrder(order).subscribe(next => {
       this.router.navigateByUrl('/orders');
-    } , (errors => {
+    }, (errors => {
       this.errors = errors;
     }));
-}
+  }
 
   onSubmit() {
     this.checkoutFormGroup.clearValidators();
@@ -84,12 +83,17 @@ saveOrder(order: Order) {
     const myOrder = {...this.checkoutFormGroup.get('customer').value, ...this.checkoutFormGroup.get('shippingAddress').value};
     this.saveOrder(myOrder);
   }
-/*  getErrorMessage(input: AbstractControl)
-  {
-   return  this.validationService.getErrorMessage(input, this.checkoutFormGroup, this.clientErrorEnabled, this.errors);
-  }*/
+
+  /*  getErrorMessage(input: AbstractControl)
+    {
+     return  this.validationService.getErrorMessage(input, this.checkoutFormGroup, this.clientErrorEnabled, this.errors);
+    }*/
   getError(fieldName: string) {
-    const error = this.errors.find(er => er.fieldName === fieldName);
+    const error = this.errors?.find(er => er.fieldName === fieldName);
     return error && error.name + ' ' + error.message;
+  }
+
+  handleChange($event: any) {
+    this.errors=null;
   }
 }

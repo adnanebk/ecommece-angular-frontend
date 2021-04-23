@@ -11,10 +11,11 @@ import {environment} from '../environments/environment.prod';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
   title = 'ecommece-app';
   user: AppUser;
-  constructor(private authService: AuthService, private router: Router){
+
+  constructor(private authService: AuthService, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -22,6 +23,7 @@ export class AppComponent implements OnInit{
       this.user = user;
     });
   }
+
   logout() {
     this.authService.logout();
     this.router.navigateByUrl('/');

@@ -1,0 +1,57 @@
+.container {
+  height: 100vh;
+  width: 100%;
+  opacity: 0.75;
+  background-color: #3b3a3a;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+}
+
+.dialog {
+  width: 400px;
+  min-height: 200px;
+  background-color: rgb(228, 228, 228);
+  box-shadow: 5px 2px #3b3a3a;
+  position: relative;
+}
+
+.header {
+  margin: 10px;
+  height: 20%;
+}
+
+.custom-alert {
+  position: absolute;
+  top: 100px;
+  left: 20px;
+}
+
+.content {
+  margin: 10px;
+  height: 70px;
+}
+
+.footer {
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer {
+  height: 35px;
+  width: 60px;
+  color: white;
+  margin: 5px;
+  border: none;
+}
+
+.success {
+  background-color: green;
+}
+
+.cancel {
+  background-color: brown;
+}

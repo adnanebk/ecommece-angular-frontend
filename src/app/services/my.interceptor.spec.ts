@@ -1,12 +1,12 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { MyInterceptor } from './my.interceptor';
+import {MyInterceptor} from './my.interceptor';
 
 describe('MyInterceptor', () => {
   beforeEach(() => TestBed.configureTestingModule({
     providers: [
       MyInterceptor
-      ]
+    ]
   }));
 
   it('should be created', () => {

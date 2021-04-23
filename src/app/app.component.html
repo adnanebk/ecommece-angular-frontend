@@ -5,7 +5,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark primary-color">
 
       <!-- Navbar brand -->
-      <a class="navbar-brand" routerLink="/" >Home</a>
+      <a class="navbar-brand" routerLink="/">Home</a>
 
       <!-- Collapse button -->
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
@@ -20,12 +20,11 @@
         <ul class="navbar-nav mr-auto">
 
 
-
           <li class="nav-item" routerLinkActive="active">
-            <a class="nav-link" routerLink="/orders"  >My orders</a>
+            <a class="nav-link" routerLink="/orders">My orders</a>
           </li>
           <li class="nav-item" routerLinkActive="active">
-            <a class="nav-link" routerLink="/products/editing"  >Manage products</a>
+            <a class="nav-link" routerLink="/products/editing">Manage products</a>
           </li>
           <ng-container *ngIf="user">
             <li class="nav-item">
@@ -33,13 +32,13 @@
                 <b class="text-dark font-weight-bold">Hello {{user.userName}}</b></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" routerLink=""  (click)="logout()" >Logout</a>
+              <a class="nav-link" routerLink="" (click)="logout()">Logout</a>
             </li>
           </ng-container>
           <ng-container *ngIf="!user">
 
             <li class="nav-item" routerLinkActive="active">
-              <a class="nav-link"  routerLink="/login" >Login</a>
+              <a class="nav-link" routerLink="/login">Login</a>
             </li>
 
             <li class="nav-item" routerLinkActive="active">
@@ -47,18 +46,18 @@
             </li>
           </ng-container>
           <li class="nav-item" routerLinkActive="active">
-            <a class="nav-link" [href]="getDocs()" >Api documentation</a>
+            <a class="nav-link" [href]="getDocs()">Api documentation</a>
           </li>
 
           <!-- Dropdown -->
           <app-product-category isMenu="true"></app-product-category>
 
 
-
         </ul>
         <!-- Links -->
         <app-my-cart></app-my-cart>
       </div>
+
       <!-- Collapsible content -->
 
     </nav>

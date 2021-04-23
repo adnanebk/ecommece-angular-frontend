@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CartItem} from '../../models/cart-item';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HttpService} from '../../services/http.service';
@@ -14,7 +14,8 @@ export class CartDetailsComponent implements OnInit {
   totalPrice: number;
   totalQuantity: number;
 
-  constructor(private activatedRoute: ActivatedRoute, private cartService: CartService, private route: Router ) { }
+  constructor(private activatedRoute: ActivatedRoute, private cartService: CartService, private route: Router) {
+  }
 
   ngOnInit(): void {
     this.cartItems = this.cartService.items;
@@ -25,16 +26,12 @@ export class CartDetailsComponent implements OnInit {
   }
 
 
-  updateCart() {
-    this.cartService.refreshCart();
-  }
-
   removeProduct(cartItem: CartItem) {
-   this.cartItems =  this.cartService.removeItem(cartItem);
+    this.cartItems = this.cartService.removeItem(cartItem);
   }
 
   increment(item: CartItem) {
-  this.cartService.increment(item);
+    this.cartService.increment(item);
   }
 
   decrement(item: CartItem) {
@@ -46,6 +43,6 @@ export class CartDetailsComponent implements OnInit {
   }
 
   handleCheckout() {
-  this.totalPrice > 0 && this.route.navigate(['/checkout'], { state: { products: this.cartItems} });
+    this.totalPrice > 0 && this.route.navigate(['/checkout'], {state: {products: this.cartItems}});
   }
 }

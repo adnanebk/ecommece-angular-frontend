@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Product} from '../../models/product';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HttpService} from '../../services/http.service';
@@ -13,7 +13,8 @@ import {CartService} from '../../services/cart.service';
 export class ProductDetailsComponent implements OnInit {
   cartItem: CartItem;
 
-  constructor(private activatedRoute: ActivatedRoute, private httpService: HttpService, private cartService: CartService, private route: Router) { }
+  constructor(private activatedRoute: ActivatedRoute, private httpService: HttpService, private cartService: CartService, private route: Router) {
+  }
 
   ngOnInit(): void {
     this.loadProduct();
@@ -22,13 +23,13 @@ export class ProductDetailsComponent implements OnInit {
   private loadProduct() {
     this.httpService.getProduct(this.activatedRoute.snapshot.paramMap.get('id')).subscribe(resp => this.cartItem = new CartItem(resp));
   }
+
   addToCart() {
     this.cartService.addToCart(this.cartItem);
   }
 
   handleQuantityChange(qt: number) {
-    if ( qt >= 1)
-    {
+    if (qt >= 1) {
       this.cartItem.quantity = qt;
     }
   }
@@ -37,14 +38,15 @@ export class ProductDetailsComponent implements OnInit {
     qt.valueAsNumber = qt.valueAsNumber + 1;
     this.cartItem.quantity = qt.valueAsNumber;
   }
-  decrement(qt: HTMLInputElement ) {
-    if ( qt.valueAsNumber > 1)
-    {
+
+  decrement(qt: HTMLInputElement) {
+    if (qt.valueAsNumber > 1) {
       qt.valueAsNumber = qt.valueAsNumber - 1;
       this.cartItem.quantity = qt.valueAsNumber;
     }
   }
+
   handleCheckout() {
-    this.route.navigate(['/checkout'], { state: { products: [this.cartItem]} });
+    this.route.navigate(['/checkout'], {state: {products: [this.cartItem]}});
   }
 }

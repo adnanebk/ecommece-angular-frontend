@@ -1,40 +1,42 @@
-<div class="main-content">
+<div class="main-content"  (click)="reloadData()">
   <div class="section-content section-content-p30">
 
     <div class="custom-control custom-radio custom-control-inline">
-      <input (change)="changeProductswitch(true)" checked type="radio" class="custom-control-input" id="defaultInline1" name="inlineDefaultRadiosExample">
-      <label  class="custom-control-label" for="defaultInline1">manage products</label>
+      <input (change)="changeProductswitch(true)" checked type="radio" class="custom-control-input" id="defaultInline1"
+             name="inlineDefaultRadiosExample">
+      <label class="custom-control-label" for="defaultInline1">manage products</label>
     </div>
     <div class="custom-control custom-radio custom-control-inline">
-      <input (change)="changeProductswitch(false)"  type="radio" class="custom-control-input" id="defaultInline2" name="inlineDefaultRadiosExample">
+      <input (change)="changeProductswitch(false)" type="radio" class="custom-control-input" id="defaultInline2"
+             name="inlineDefaultRadiosExample">
       <label class="custom-control-label" for="defaultInline2">manage categories</label>
     </div>
     <div *ngIf="isProductSwitch" class="container-fluid">
       <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Manage products</h3>
 
 
-
-
-
-        <form class="form-inline d-flex justify-content-center md-form form-sm mt-0">
-          <i class="fas fa-search" aria-hidden="true"></i>
-          <input class="form-control form-control-sm ml-3 w-75" type="text" placeholder="Search By product names"
-                 (keyup.enter)="handleDataSearched($event.target.value)"
-                 aria-label="Search">
-        </form>
+      <form class="form-inline d-flex justify-content-center md-form form-sm mt-0">
+        <i class="fas fa-search" aria-hidden="true"></i>
+        <input class="form-control form-control-sm ml-3 w-75" type="text"
+               placeholder="Search By product name or description"
+               (keyup.enter)="handleDataSearched($event.target.value)"
+               aria-label="Search">
+      </form>
       <ngb-alert *ngIf="products?.length<=0">No products found</ngb-alert>
 
 
       <ng-container *ngIf="products?.length>0">
-        -<div class="custom-control custom-switch">
-        <input type="checkbox" class="custom-control-input" (change)="batchEnable=batch.checked" #batch [checked]="batchEnable" id="sw">
-        <label class="custom-control-label" for="sw">Batch operations</label>
-      </div>
-        Display <select  class="browser-default custom-select w-auto" (change)="fetchProducts()" [(ngModel)]="pageSize" >
-    <option>10</option>
-    <option>20</option>
-    <option>30</option>
-  </select> elements
+        -
+        <div class="custom-control custom-switch">
+          <input type="checkbox" class="custom-control-input" (change)="batchEnable=batch.checked" #batch
+                 [checked]="batchEnable" id="sw">
+          <label class="custom-control-label" for="sw">Batch operations</label>
+        </div>
+        Display <select class="browser-default custom-select w-auto" (change)="fetchProducts()" [(ngModel)]="pageSize">
+        <option>10</option>
+        <option>20</option>
+        <option>30</option>
+      </select> elements
 
         <button (click)="reloadData()" class="btn btn-warning">Refresh</button>
         <button (click)="saveToExcel()" class="btn btn-info">save to excel</button>
@@ -43,43 +45,45 @@
             <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
           </div>
           <div class="custom-file">
-            <input (change)="loadFromExcel(file)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            <input (change)="loadFromExcel(file)"
+                   accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                    #file type="file" class="custom-file-input" id="inputGroupFile01"
                    aria-describedby="inputGroupFileAddon01">
             <label class="custom-file-label" for="inputGroupFile01">Load from excel</label>
           </div>
         </div>
         <app-editable-table (dataChanged)="handleDataChanged($event)" (fileUploaded)="handleUploadFile($event)"
-                          [hasFileUploading]="hasFileUploading"
-                          [newElement]="getNewProduct()"
-                          [Data]="products" [columnNames]="productHeaders" [fields]="productFields"
-                          [batchEnabled]="batchEnable"
-                          [options]="{categoryName:categoryNames}"
-                          (dataAdded)="handleDataAdded()"
-                          (dataDeleted)="handleDataDeleted($event)"
-                          (dataSorted)="handleDataSorted($event)"
-                          (UpdateAll)="handleUpdateAll($event)"
-                          (RemoveAll)="handleRemoveAll($event)"
+                            [hasFileUploading]="hasFileUploading"
+                            [newElement]="getNewProduct()"
+                            [Data]="products" [columnNames]="productHeaders" [fields]="productFields"
+                            [batchEnabled]="batchEnable"
+                            [options]="{categoryName:categoryNames}"
+                            (dataAdded)="handleDataAdded()"
+                            (dataDeleted)="handleDataDeleted($event)"
+                            (dataSorted)="handleDataSorted($event)"
+                            (UpdateAll)="handleUpdateAll($event)"
+                            (RemoveAll)="handleRemoveAll($event)"
                             (SelectedElements)="handleSelectedElements($event)"
-                          [errors]="errors"
-      ></app-editable-table>
-  <ngb-pagination (pageChange)="fetchProducts($event)"
-    [(page)]="page"
-    [pageSize]="pageSize"
-    [collectionSize]="size"
-    [boundaryLinks]="true"
-  >
-  </ngb-pagination>
+                            [errors]="errors"
+        ></app-editable-table>
+        <ngb-pagination (pageChange)="fetchProducts($event)"
+                        [(page)]="page"
+                        [pageSize]="pageSize"
+                        [collectionSize]="size"
+                        [boundaryLinks]="true"
+        >
+        </ngb-pagination>
 
-</ng-container>
+      </ng-container>
 
     </div>
 
     <div *ngIf="!isProductSwitch" class="container-fluid">
-     <app-category-editing [categories]="categories"></app-category-editing>
+      <app-category-editing [categories]="categories"></app-category-editing>
     </div>
 
-  </div></div>
+  </div>
+</div>
 
 
 

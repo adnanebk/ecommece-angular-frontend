@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Product} from '../models/product';
-import {Subject} from 'rxjs';
+import {BehaviorSubject, Subject} from 'rxjs';
 import {CartItem} from '../models/cart-item';
 
 @Injectable({
@@ -9,52 +9,49 @@ import {CartItem} from '../models/cart-item';
 export class CartService {
   items: CartItem[] = [];
   ExistingItem: CartItem;
-  totalPriceSubject: Subject<number> = new Subject<number>();
-  totalQuantitySubject: Subject<number> = new Subject<number>();
-   totalPrice: number;
-   totalQuantity: number;
+  totalPriceSubject: Subject<number> = new BehaviorSubject<number>(0);
+  totalQuantitySubject: Subject<number> = new BehaviorSubject<number>(0);
+  totalPrice: number;
+  totalQuantity: number;
+
   constructor() {
+    this.totalPriceSubject.next(0);
+    this.totalQuantitySubject.next(0);
   }
 
-  addToCart(newItem: CartItem ) {
-    if (this.items?.length > 0)
-    {
-      this.ExistingItem = this.items.find(it => it.productId === newItem.productId);
-      if ( this.ExistingItem === undefined)
-      {
-        this.items.push(newItem);
-      }
-      else
-      {
-        this.items.map(it => {
-          if (it.productId === newItem.productId)
-          {
-            it.quantity = it.quantity + newItem.quantity;
-            return it;
-          }
-        });
-      }
+  addToCart(newItem: CartItem) {
+    this.ExistingItem = this.items.find(it => it.productId === newItem.productId);
+    if (!this.ExistingItem) {
+      this.items.push(newItem);
+    } else {
+      this.items.map(it => {
+        if (it.productId === newItem.productId) {
+          it.quantity = it.quantity + newItem.quantity;
+          return it;
+        }
+      });
     }
-    else { this.items.push(newItem); }
     this.refreshCart();
   }
 
-   private updateMyCart() {
-     this.totalPrice = 0;
-     this.totalQuantity = 0;
-     this.items.forEach(it => {
+  private updateMyCart() {
+    this.totalPrice = 0;
+    this.totalQuantity = 0;
+    this.items.forEach(it => {
       this.totalPrice += (it.unitPrice * it.quantity);
       this.totalQuantity += it.quantity;
     });
-     this.totalPriceSubject.next(this.totalPrice);
-     this.totalQuantitySubject.next(this.totalQuantity);
+    this.totalPriceSubject.next(this.totalPrice);
+    this.totalQuantitySubject.next(this.totalQuantity);
   }
-  refreshCart(){
+
+  refreshCart() {
     this.updateMyCart();
-    localStorage.setItem('CartItems', JSON.stringify(this.items) );
+    localStorage.setItem('CartItems', JSON.stringify(this.items));
   }
-  loadMyCart(){
-    if (localStorage.length > 0) {
+
+  loadMyCart() {
+    if (this.items.length === 0 && localStorage.getItem('CartItems')) {
       this.items = JSON.parse(localStorage.getItem('CartItems'));
       this.updateMyCart();
     }
@@ -67,21 +64,20 @@ export class CartService {
   }
 
   increment(item: CartItem) {
-      item.quantity++;
-      this.refreshCart();
+    item.quantity++;
+    this.refreshCart();
   }
 
   decrement(item: CartItem) {
-    if (item.quantity > 1)
-    {
+    if (item.quantity > 1) {
       item.quantity--;
       this.refreshCart();
     }
   }
 
   QuantityChanged(item: CartItem, quantity: number) {
-      item.quantity = quantity;
-      this.refreshCart();
+    item.quantity = quantity;
+    this.refreshCart();
   }
 
 

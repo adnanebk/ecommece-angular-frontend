@@ -1,5 +1,4 @@
 
-
 .quantity {
   float: left;
   margin-right: 15px;
@@ -62,6 +61,7 @@
 .quantity .minus {
   bottom: 0
 }
+
 .shopping-cart {
   margin-top: 20px;
 }

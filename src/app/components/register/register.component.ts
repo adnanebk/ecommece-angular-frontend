@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MyError} from '../../models/my-error';
 import {HttpService} from '../../services/http.service';
@@ -20,13 +20,13 @@ export class RegisterComponent implements OnInit {
 
   constructor(private authService: AuthService, private router: Router, private formBuilder: FormBuilder) {
     this.form = this.formBuilder.group({
-      firstName: new FormControl('', [Validators.required, Validators.minLength(2)]),
-      lastName: new FormControl('', [Validators.required, Validators.minLength(2)]),
-      userName: new FormControl('', [Validators.required, Validators.minLength(2)]),
-      password: new FormControl('', [Validators.required, Validators.minLength(2)]),
-      confirmPassword: new FormControl('', [Validators.required, Validators.minLength(2)])
-  }, {validator: MustMatch('password', 'confirmPassword')}
-  );
+        firstName: new FormControl('', [Validators.required, Validators.minLength(2)]),
+        lastName: new FormControl('', [Validators.required, Validators.minLength(2)]),
+        userName: new FormControl('', [Validators.required, Validators.minLength(2)]),
+        password: new FormControl('', [Validators.required, Validators.minLength(2)]),
+        confirmPassword: new FormControl('', [Validators.required, Validators.minLength(2)])
+      }, {validator: MustMatch('password', 'confirmPassword')}
+    );
     this.state = this.router.getCurrentNavigation().extras.state;
     this.returnUrl = this.router.getCurrentNavigation().extras.queryParams?.return ?? '/';
   }
@@ -40,16 +40,22 @@ export class RegisterComponent implements OnInit {
     this.errors = [];
     this.authService.register(this.form.value).subscribe(
       (user) => {
-       // this.router.navigateByUrl('/');
-        this.state ? this.router.navigate([this.returnUrl], { state: {...this.state} }) :
+        // this.router.navigateByUrl('/');
+        this.state ? this.router.navigate([this.returnUrl], {state: {...this.state}}) :
           this.router.navigateByUrl(this.returnUrl);
       }, (err) => {
         this.errors = err;
       }
     );
   }
+
   getError(fieldName: string) {
     const error = this.errors?.find(er => er.fieldName === fieldName);
     return error && error.name + ' ' + error.message;
+  }
+
+  handleChange($event: any) {
+    console.log('change---');
+    this.errors=null;
   }
 }

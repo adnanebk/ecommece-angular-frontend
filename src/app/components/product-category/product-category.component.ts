@@ -9,22 +9,25 @@ import {ActivatedRoute, Router} from '@angular/router';
   styleUrls: ['./product-category.component.css']
 })
 export class ProductCategoryComponent implements OnInit {
-   productCategories: ProductCategory[];
+  productCategories: ProductCategory[];
   params: {};
   @Input() isMenu: false;
-  constructor(private httpService: HttpService, private route: ActivatedRoute) { }
+
+  constructor(private httpService: HttpService, private route: ActivatedRoute) {
+  }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe( (paramQ) => {
+    this.route.queryParams.subscribe((paramQ) => {
       this.params = {search: paramQ.search};
-    } );
+    });
     this.fetchData();
   }
-fetchData(){
-  this.httpService.getProductCategories().subscribe(
-    data => {
-      this.productCategories = data;
-    }
-  );
-}
+
+  fetchData() {
+    this.httpService.getProductCategories().subscribe(
+      data => {
+        this.productCategories = data;
+      }
+    );
+  }
 }

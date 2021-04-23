@@ -10,34 +10,38 @@ import {HttpService} from '../../services/http.service';
 export class CategoryEditingComponent implements OnInit {
   categoryFields: any[];
   categoryHeaders: any[];
-  categoryNames: string[];
   @Input() categories: ProductCategory[];
-   errors: any[] = [];
-  constructor(private httpService: HttpService) {}
+  errors: any[] = [];
+
+  constructor(private httpService: HttpService) {
+  }
 
   ngOnInit(): void {
-    this.categoryFields =  [...ProductCategory.fields];
+    this.categoryFields = [...ProductCategory.fields];
     this.categoryHeaders = [...ProductCategory.headers];
   }
 
   handleCategoryAdded() {
     this.httpService.saveCategory(this.categories[0]).subscribe(resp => {
-      this.categories[0] = {...resp};
-      },
-      errors => Array.isArray(errors) ? this.errors = errors : this.errors = [errors]
-    );
-  }
-  handleCategoryChanged(index: number) {
-    this.httpService.updateCategory(this.categories[index]).subscribe(resp => {
-      this.categories[index] = {...resp};
+        this.categories[0] = resp;
       },
       errors => Array.isArray(errors) ? this.errors = errors : this.errors = [errors]
     );
   }
 
-  handleCategoryDeleted($event: ProductCategory) {
-    this.httpService.removeCategory($event.id).subscribe();
+  handleCategoryChanged(index: number) {
+    this.httpService.updateCategory(this.categories[index]).subscribe(resp => {
+        this.categories[index] = resp;
+      },
+      errors => Array.isArray(errors) ? this.errors = errors : this.errors = [errors]
+    );
   }
+
+  handleCategoryDeleted($event: any) {
+    this.httpService.removeCategory($event.data.id).subscribe();
+    this.categories.splice($event.index, 1);
+  }
+
   getNewProductCategory() {
     return new ProductCategory();
   }

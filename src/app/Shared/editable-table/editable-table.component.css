@@ -1,50 +1,63 @@
-.bgDirty{
+.bgDirty {
   background-color: #f1e9be;
 }
-img{
- width: 80px;
+
+img {
+  width: 80px;
 }
-.number-input{
+
+.number-input {
   width: 100px;
 }
-.file-input{
+
+.file-input {
   width: 105px;
 }
+
 .my-custom-scrollbar {
 
 }
-button{
+
+button {
   padding: 7px !important;
 }
+
 .table-wrapper-scroll-y {
   position: relative;
   height: 600px;
   overflow: auto;
   display: block;
 }
+
 .row-error {
   background-color: indianred;
 }
+
 table {
   text-align: left;
   position: relative;
   border-collapse: collapse;
 }
+
 th, td {
   padding: 0.25rem;
 }
+
 tr.red th {
   background: red;
   color: white;
 }
+
 tr.green th {
   background: green;
   color: white;
 }
+
 tr.purple th {
   background: purple;
   color: white;
 }
+
 th {
   background: white;
   position: sticky;

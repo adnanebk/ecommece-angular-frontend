@@ -1,49 +1,50 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {AppUser} from '../models/app-user';
 import {map} from 'rxjs/operators';
-import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject} from 'rxjs';
-import {environment} from '../../environments/environment.prod';
+import {HttpService} from './http.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-   private baseUrl = environment.path;
-   public userSubject = new BehaviorSubject<AppUser>(null);
-  constructor(private httpClient: HttpClient) {
+  public userSubject = new BehaviorSubject<AppUser>(null);
+
+  constructor(private httpService: HttpService) {
     const currentUserSt = localStorage.getItem('appUser');
-    if (currentUserSt?.length > 0)
-    {
+    if (currentUserSt?.length > 0) {
       const currentUser = JSON.parse(currentUserSt);
       this.userSubject.next(currentUser);
     }
   }
 
   register(user: any) {
-    return this.httpClient.post<{ token: string, appUser: AppUser }>(this.baseUrl + 'register', user ).pipe(
+    return this.httpService.register(user).pipe(
       map(response => {
-        localStorage.setItem('appUser', JSON.stringify(response.appUser));
-        localStorage.setItem('token', response.token);
-        this.userSubject.next(response.appUser);
-        return response.appUser;
+        return this.returnConnectedUser(response);
       })
     );
   }
+
+
   login(user: any) {
-    return this.httpClient.post<{ token: string, appUser: AppUser }>(this.baseUrl + 'login', user).pipe(
+    return this.httpService.login(user).pipe(
       map(response => {
-        localStorage.setItem('appUser', JSON.stringify(response.appUser));
-        localStorage.setItem('token', response.token);
-        this.userSubject.next(response.appUser);
-        return response.appUser;
+        return this.returnConnectedUser(response);
       })
     );
   }
+
   logout() {
     this.userSubject.next(null);
     localStorage.removeItem('appUser');
     localStorage.removeItem('token');
   }
 
+  private returnConnectedUser(response: { token: string; appUser: AppUser }) {
+    localStorage.setItem('appUser', JSON.stringify(response.appUser));
+    localStorage.setItem('token', response.token);
+    this.userSubject.next(response.appUser);
+    return response.appUser;
+  }
 }

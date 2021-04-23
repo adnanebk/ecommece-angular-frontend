@@ -1,18 +1,21 @@
 
-.err-text{
+.err-text {
   color: indianred;
 }
-.err-input{
-  border : 1px solid red;
+
+.err-input {
+  border: 1px solid red;
 }
+
 .ng-valid,
 .ng-valid.required {
   background-color: #d4eed4;
 }
 
-.form-area .ng-dirty.ng-invalid{
+.form-area .ng-dirty.ng-invalid {
   background-color: lightcoral;
 }
-.form-area .ng-dirty.ng-invalid + span{
+
+.form-area .ng-dirty.ng-invalid + span {
   color: darkred;
 }

@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { EditableTableComponent } from './editable-table.component';
+import {EditableTableComponent} from './editable-table.component';
 
 describe('EditableTableComponent', () => {
   let component: EditableTableComponent;
@@ -8,9 +8,9 @@ describe('EditableTableComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EditableTableComponent ]
+      declarations: [EditableTableComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -1,5 +1,5 @@
 {
-  "extends": "tslint:recommended",
+  "extends": "tslint",
   "rules": {
     "align": {
       "options": [
@@ -121,12 +121,7 @@
     },
     "whitespace": {
       "options": [
-        "check-branch",
-        "check-decl",
-        "check-operator",
-        "check-separator",
-        "check-type",
-        "check-typecast"
+
       ]
     },
     "no-conflicting-lifecycle": true,

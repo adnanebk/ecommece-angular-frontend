@@ -1,5 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {DatePipe} from '@angular/common';
+import {ToastrService} from 'ngx-toastr';
+import {ConfirmDialogService} from '../services/confirm-dialog.service';
 
 
 @Component({
@@ -8,7 +10,7 @@ import {DatePipe} from '@angular/common';
   styleUrls: ['./editable-table.component.css']
 })
 export class EditableTableComponent implements OnChanges {
-  @Input() Data: any[];
+  @Input() Data: any[]=[];
   editedElement: any;
   @Input() batchEnabled = false;
   originalField: {};
@@ -20,40 +22,35 @@ export class EditableTableComponent implements OnChanges {
   @Input() errors: any[];
   @Output() dataChanged = new EventEmitter<number>();
   @Output() dataAdded = new EventEmitter();
-  @Output() dataDeleted = new EventEmitter<any>();
-  @Output() dataSorted = new EventEmitter<{sort: string, direction: string}>();
-  @Output() fileUploaded = new EventEmitter<{file: File , index: number}>();
+  @Output() dataDeleted = new EventEmitter<{ index: number, data: any }>();
+  @Output() dataSorted = new EventEmitter<{ sort: string, direction: string }>();
+  @Output() fileUploaded = new EventEmitter<{ file: File, index: number }>();
   @Output() UpdateAll = new EventEmitter<any[]>();
   @Output() RemoveAll = new EventEmitter<any[]>();
   @Output() SelectedElements = new EventEmitter<any[]>();
 
   fileNames: string[] = [];
 
-  constructor(private datePipe: DatePipe) {
+  constructor(private datePipe: DatePipe, private confirmDialogService: ConfirmDialogService) {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('changes', changes);
-    if (this.editedElement && changes.errors)
-    {
+    if (this.editedElement && changes.errors) {
       const indexOfEditedField = this.Data.indexOf(this.editedElement);
       this.Data[indexOfEditedField].hasError = true;
-      this.isErrorsString() && window.scroll(0, 0);
     }
   }
 
-  saveChange() {
+
+  onSave(index: number) {
     this.errors = [];
-    const index = this.Data.indexOf(this.editedElement);
-    //this.originalField = null ;
-    this.editedElement.isPost ? this.dataAdded.emit()
-      : this.dataChanged.emit(index);
+    this.Data[index].isNew ? this.dataAdded.emit() : this.dataChanged.emit(index);
   }
 
-  add() {
-    if (!this.Data[0].isPost)
-    {
-      this.Data.unshift({...this.newElement, isChanged: true , isPost: true});
+  insertToTable($event: MouseEvent) {
+    $event.stopPropagation();
+    if (!this.Data[0].isNew) {
+      this.Data.unshift({...this.newElement, isNew: true});
       this.editedElement = this.Data[0];
     }
   }
@@ -63,55 +60,49 @@ export class EditableTableComponent implements OnChanges {
     this.Data[index].dirty = true;
     this.removeError(field.name);
 
-    if (field.type === 'number')
-    {
-      if (isNaN(event.target.value))
-      {
+    if (field.type === 'number') {
+      if (isNaN(event.target.value)) {
         event.target.value = this.Data[index][field.name];
-        return;
+      } else {
+        this.Data[index][field.name] = event.target.value;
       }
-      this.Data[index][field.name] = event.target.value;
-      return;
-    }
-    else if ( field.type === 'bool'){
+    } else if (field.type === 'bool') {
       this.Data[index][field.name] = event.target.checked;
-      return;
+    } else {
+      this.Data[index][field.name] = event.target.value;
     }
-    this.Data[index][field.name] = event.target.value;
   }
 
-  remove(idx: any) {
-    if (!this.Data[idx].isPost) {
+  remove(index: any) {
+    this.confirmDialogService.confirmThis(() => {
+      if (!this.Data[index].isNew) {
         this.errors = [];
-        this.dataDeleted.emit(this.Data[idx]);
+        this.dataDeleted.emit({index, data: this.Data[index]});
       }
-    this.Data.splice(idx, 1);
+    });
   }
+
   getSting(val: any, type: string) {
-    if (val?.length > 60)
-    {
-      return  val.substring(0, 60);
+    if (val?.length > 60) {
+      return val.substring(0, 60);
     }
-    if (type === 'date')
-    {
-      return  this.datePipe.transform(val, 'short');
+    if (type === 'date') {
+      return this.datePipe.transform(val, 'short');
     }
     return val;
   }
 
   changeView(elem: any, $event: MouseEvent) {
-    console.log('change view ', this.originalField);
-    if ($event.target !== $event.currentTarget)
-    {
+    $event.stopPropagation();
+    if ($event.target !== $event.currentTarget) {
       return;
     }
 
-    if (this.editedElement !== elem)
-    {
-
+    if (this.editedElement !== elem) {
       if (this.originalField) {
         this.Data[this.Data.indexOf(this.editedElement)] = {...this.originalField};
       }
+
       this.originalField = {...elem};
       this.editedElement = elem;
     }
@@ -119,35 +110,29 @@ export class EditableTableComponent implements OnChanges {
   }
 
 
-
   processFile(index: number, fieldName: string, input: HTMLInputElement) {
     this.errors = [];
     const file: File = input.files[0];
     const reader = new FileReader();
-    reader.addEventListener('load',  (event: any) => {
+    reader.addEventListener('load', (event: any) => {
       this.Data[index].dirty = true;
       this.hasFileUploading[index] = true;
       this.fileUploaded.emit({file, index});
       this.editedElement[fieldName] = file.name;
-      // this.Data[fieldName] = file.name;
       this.fileNames[index] = file.name;
     });
     reader.readAsDataURL(file);
   }
+
   sort(idx: number, ic: HTMLElement) {
     let direction = '';
-    if (ic.classList.contains('fa-sort-up'))
-    {
+    if (ic.classList.contains('fa-sort-up')) {
       direction = 'desc';
       ic.classList.replace('fa-sort-up', 'fa-sort-down');
-    }
-    else if (ic.classList.contains('fa-sort-down'))
-    {
+    } else if (ic.classList.contains('fa-sort-down')) {
       ic.classList.replace('fa-sort-down', 'fa-sort-up');
       direction = 'asc';
-    }
-    else
-    {
+    } else {
       ic.classList.add('fa-sort-up');
       direction = 'asc';
     }
@@ -158,8 +143,7 @@ export class EditableTableComponent implements OnChanges {
   onElSelected(check: HTMLInputElement, index: number) {
     if (check.checked) {
       this.Data[index].selected = true;
-    }
-    else {
+    } else {
       this.Data[index].selected = false;
     }
     this.SelectedElements.emit(this.Data.filter(e => e.selected));
@@ -167,13 +151,13 @@ export class EditableTableComponent implements OnChanges {
   }
 
   getSelectedSize() {
-    return this.Data.filter( e => e.selected).length;
+    return this.Data.filter(e => e.selected).length;
   }
 
   deleteAll() {
     if (confirm('Are you sure to remove ')) {
       this.errors = [];
-    this.RemoveAll.emit(this.Data.filter(e => e.selected));
+      this.RemoveAll.emit(this.Data.filter(e => e.selected));
     }
   }
 
@@ -190,18 +174,19 @@ export class EditableTableComponent implements OnChanges {
     const error = this.errors.find(er => er.fieldName === fieldName);
     return error && error.name + ' ' + error.message;
   }
+
   removeError(fieldName: string) {
     this.errors = this.errors.filter(er => er.fieldName !== fieldName);
   }
 
-  isErrorsString() {
-    return this.errors?.length > 0 && typeof this.errors[0] === 'string';
-  }
 
   onAllSelected(check: HTMLInputElement) {
-    if(check.checked)
-    this.Data.map(e => e.selected = true);
-    else
+    if (check.checked) {
+      this.Data.map(e => e.selected = true);
+    } else {
       this.Data.map(e => e.selected = false);
+    }
   }
+
+
 }

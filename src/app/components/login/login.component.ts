@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MyError} from '../../models/my-error';
 import {HttpService} from '../../services/http.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -14,32 +14,32 @@ import {AppUser} from '../../models/app-user';
 export class LoginComponent implements OnInit {
   user: any = {};
 
-  private error: any = {} ;
+  private error: any = {};
   private returnUrl = '/';
   private state: {};
 
-  constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute)  {
-   this.state = this.router.getCurrentNavigation().extras.state;
+  constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) {
+    this.state = this.router.getCurrentNavigation().extras.state;
   }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => this.returnUrl = params.return );
+    this.route.queryParams.subscribe(params => this.returnUrl = params.return);
     // this.router.getCurrentNavigation().extras.state?.products;
   }
 
-  onSubmit() {
-    // this.errors = [];
+  onLogin() {
     this.authService.login(this.user).subscribe(
       (user) => {
-        this.state ? this.router.navigate([this.returnUrl], { state: {...this.state} }) :
-        this.router.navigateByUrl(this.returnUrl);
+        this.state ? this.router.navigate([this.returnUrl], {state: {...this.state}}) :
+          this.router.navigateByUrl(this.returnUrl);
       }, (err) => {
         this.error = err;
       }
     );
   }
+
   getError() {
-     return this.error?.message;
+    return this.error?.message;
   }
 
   createAccount() {

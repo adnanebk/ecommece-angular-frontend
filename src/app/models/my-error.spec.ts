@@ -1,4 +1,4 @@
-import { MyError } from './my-error';
+import {MyError} from './my-error';
 
 describe('MyError', () => {
   it('should create an instance', () => {

@@ -1,29 +1,33 @@
-
 <br>
-<span *ngIf="!batchEnabled" class="table-add  mb-3 mr-2"><a (click)="add()" class="text-success">Add<i
+<span *ngIf="!batchEnabled" class="table-add  mb-3 mr-2"><a (click)="insertToTable($event)" class="text-success">Add<i
   class="fas fa-plus fa-2x" aria-hidden="true"></i></a></span>
 
-<ul *ngIf="isErrorsString()">
-  <li class="text-danger" *ngFor="let err of errors">{{err}}</li>
-</ul>
+
 <div *ngIf="batchEnabled">
   <div *ngIf="getSelectedSize()>0" class="alert alert-info">{{getSelectedSize()}} elements has been selected</div>
   <button [disabled]="!isDataDirty()" (click)="saveAll()" class="btn btn-info">Save all</button>
   <button [disabled]="getSelectedSize()<=0" (click)="deleteAll()" class="btn btn-danger">Remove all</button>
 </div>
 <div class="table-responsive table-wrapper-scroll-y">
-  <table class="table table-bordered table-striped w-auto text-center table-fixed" scrollY="true" maxHeight="200" cellspacing="0"
+  <app-dialog text="Are you sure to delete ?"></app-dialog>
+
+  <table class="table table-bordered table-striped w-auto text-center table-fixed" scrollY="true" maxHeight="200"
+         cellspacing="0"
          width="100%">
     <thead>
-    <tr >
+    <tr>
       <th *ngIf="!batchEnabled" class="text-center align-middle"><h3>Edit</h3></th>
-      <th *ngIf="batchEnabled" class="text-center align-middle"><h3>Select
-        <div class="custom-control custom-checkbox">
-          <input [checked]="false"  (change)="onAllSelected(check)" #check type="checkbox" class="custom-control-input" [id]="'selectCheck'">
-          <label class="custom-control-label" [for]="'selectCheck'"></label>
-        </div>
-      </h3></th>
-      <th (click)="sort(idx,ic)" *ngFor="let cl of columnNames; let idx = index" class="text-center align-middle"><a><b>{{cl}}</b></a>
+      <th *ngIf="batchEnabled" class="text-center align-middle">
+        <h3>Select
+          <div class="custom-control custom-checkbox">
+            <input [checked]="false" (change)="onAllSelected(check)" #check type="checkbox" class="custom-control-input"
+                   [id]="'selectCheck'">
+            <label class="custom-control-label" [for]="'selectCheck'"></label>
+          </div>
+        </h3>
+      </th>
+      <th (click)="sort(idx,ic)" *ngFor="let cl of columnNames; let idx = index" class="text-center align-middle">
+        <a><b>{{cl}}</b></a>
         <i #ic class="fa fa-sort" aria-hidden="true"></i>
       </th>
 
@@ -31,17 +35,20 @@
     </thead>
     <tbody>
 
-    <tr *ngFor="let el of Data ; let idx= index "  [className]="el.hasError?'bg-warning':''">
+    <tr *ngFor="let el of Data ; let idx= index " [className]="el.hasError?'bg-warning':''">
 
-      <td class="p-1 align-middle" >
+      <td class="p-1 align-middle">
       <span *ngIf="!batchEnabled" class="table-edit">
-        <button *ngIf="this.editedElement!==el" (click)="changeView(el,$event)" type="button" class="btn btn-info btn-rounded btn-sm my-0">Update</button>
-        <button *ngIf="this.editedElement===el" (click)="saveChange()" type="button" class="btn btn-success btn-rounded btn-sm my-0">Save</button>
-        <button  (click)="remove(idx)" type="button" class="btn btn-danger btn-rounded  btn-sm my-1">Remove</button>
+        <button *ngIf="this.editedElement!==el" (click)="changeView(el,$event)" type="button"
+                class="btn btn-info btn-rounded btn-sm my-0">Update</button>
+        <button *ngIf="this.editedElement===el" (click)="onSave(idx)" type="button"
+                class="btn btn-success btn-rounded btn-sm my-0">Save</button>
+        <button (click)="remove(idx)" type="button" class="btn btn-danger btn-rounded  btn-sm my-1">Remove</button>
       </span>
         <span *ngIf="batchEnabled" class="select">
     <div class="custom-control custom-checkbox">
-    <input [checked]="el.selected"  (change)="onElSelected(check,idx)" #check type="checkbox" class="custom-control-input" [id]="'selectCheck'+idx">
+    <input [checked]="el.selected" (change)="onElSelected(check,idx)" #check type="checkbox"
+           class="custom-control-input" [id]="'selectCheck'+idx">
     <label class="custom-control-label" [for]="'selectCheck'+idx"></label>
     </div>
         </span>
@@ -50,42 +57,46 @@
 
       <td *ngFor="let field of fields" (click)="changeView(el,$event)" class="pt-3-half p-1 align-middle mw-200"
           [ngStyle]="el[field.name]?.length>100 && {minWidth: '200px'}"
-           [ngClass]="(el?.dirty && batchEnabled && !el.hasError) && 'bgDirty'">
+          [ngClass]="(el?.dirty && batchEnabled && !el.hasError) && 'bgDirty'">
 
         <ng-container *ngIf="this.editedElement!==el && !batchEnabled">
          <span *ngIf="(!field.type || field.type !== 'image')">
-           {{getSting(el[field.name],field.type)}}</span>
-          <img  *ngIf="field.type === 'image' && !hasFileUploading[idx]" [src]="el[field.name]" >
-          <div *ngIf="field.type === 'image' && hasFileUploading[idx]"  class="spinner-border" role="status">
+           {{getSting(el[field.name], field.type)}}</span>
+          <img *ngIf="field.type === 'image' && !hasFileUploading[idx]" [src]="el[field.name]">
+          <div *ngIf="field.type === 'image' && hasFileUploading[idx]" class="spinner-border" role="status">
             <span class="sr-only">Loading...</span>
           </div>
         </ng-container>
 
         <ng-container *ngIf="this.editedElement===el || batchEnabled">
-          <input *ngIf="!field.type  &&  el[field.name].length<35" [value]="el[field.name]" type="text" class="form-control w-auto"
-                 (change)="changeValue(idx,this.field,$event)" (keyup.enter)="saveChange()">
-          <textarea *ngIf="!field.type &&  el[field.name].length>=35" [value]="el[field.name]" type="text" class="form-control w-auto"
-                    (change)="changeValue(idx,this.field,$event)" ></textarea>
+          <input *ngIf="!field.type  &&  el[field.name].length<35" [value]="el[field.name]" type="text"
+                 class="form-control w-auto"
+                 (change)="changeValue(idx,this.field,$event)" (keyup.enter)="onSave(idx)">
+          <textarea (keyup.enter)="onSave(idx)" *ngIf="!field.type &&  el[field.name].length>=35"
+                    [value]="el[field.name]" type="text" class="form-control w-auto"
+                    (change)="changeValue(idx,this.field,$event)"></textarea>
 
           <input *ngIf="field.type === 'image'" #file type="file" class="form-control file-input" accept="image/*"
                  (change)="processFile(idx,this.field.name,file)">
 
-          <input *ngIf="field.type === 'number'"  [value]="el[field.name]" class="form-control number-input"
-                 (input)="changeValue(idx,this.field,$event)" (keyup.enter)="saveChange()">
+          <input *ngIf="field.type === 'number'" #input [value]="el[field.name]" class="form-control number-input"
+                 (input)="changeValue(idx,this.field,$event)" (keyup.enter)="onSave(idx)">
 
-          <input [disabled]="field.readOnly" *ngIf="field.type === 'date'" type="date" [value]="el[field.name] | date:'yyyy-MM-dd'" class="form-control w-auto">
+          <input [disabled]="field.readOnly" *ngIf="field.type === 'date'" type="date"
+                 [value]="el[field.name] | date:'yyyy-MM-dd'" class="form-control w-auto">
 
-          <div *ngIf="field.type === 'bool'"class="custom-control custom-switch">
+          <div *ngIf="field.type === 'bool'" class="custom-control custom-switch">
             <input type="checkbox" class="custom-control-input" [checked]="true" id="customSwitches"
                    (change)="changeValue(idx,this.field,$event)">
             <label class="custom-control-label" for="customSwitches"></label>
           </div>
 
-          <select *ngIf="field.type === 'select'"  (change)="changeValue(idx,this.field,$event)" class="browser-default custom-select w-auto" >
-            <option>Choose</option>
+          <select *ngIf="field.type === 'select'" (change)="changeValue(idx,this.field,$event)"
+                  class="browser-default custom-select w-auto">
+            <option value="">Choose</option>
             <option *ngFor="let op of options[field.name]" [selected]="op===el[field.name]" [value]="op">{{op}}</option>
           </select>
-          <span *ngIf="el.hasError" class="text-danger" >{{getError(field.name)}}</span>
+          <span *ngIf="el.hasError" class="text-danger">{{getError(field.name)}}</span>
         </ng-container>
       </td>
     </tr>

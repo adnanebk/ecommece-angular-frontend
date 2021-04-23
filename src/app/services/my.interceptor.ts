@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {
   HttpRequest,
   HttpHandler,
@@ -7,11 +7,14 @@ import {
 } from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
+import {ToastrService} from 'ngx-toastr';
 
 @Injectable()
 export class MyInterceptor implements HttpInterceptor {
 
-  constructor() {}
+  constructor(private toastrService: ToastrService) {
+  }
+
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
 
     const token = localStorage.getItem('token');
@@ -24,8 +27,7 @@ export class MyInterceptor implements HttpInterceptor {
           return this.handleError(resp);
         })
       );
-    }
-    else {
+    } else {
       return next.handle(request).pipe(
         catchError((resp) => {
           return this.handleError(resp);
@@ -39,8 +41,18 @@ export class MyInterceptor implements HttpInterceptor {
       {
         console.log(resp);
         if (resp.status === 400) {
-          return resp.error.errors ? throwError(resp.error.errors ) : throwError(resp.error);
+          if (resp.error.errors) {
+            return throwError(resp.error.errors);
+          } else {
+            this.toastrService.error(resp.error.message ? resp.error.message : resp.error, 'Error', {
+              timeOut: 3000,
+            });
+            return throwError(resp.error);
+          }
         } else if (resp.status === 403) {
+          this.toastrService.error(resp?.error?.message, 'Error', {
+            timeOut: 3000,
+          });
           return throwError(resp?.error?.message);
         }
       }

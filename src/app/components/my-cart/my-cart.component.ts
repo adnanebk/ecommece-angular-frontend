@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import {HttpService} from '../../services/http.service';
+import {Component, OnInit} from '@angular/core';
 import {CartService} from '../../services/cart.service';
 
 @Component({
@@ -11,7 +10,8 @@ export class MyCartComponent implements OnInit {
   totalQuantity = 0;
   total = 0;
 
-  constructor(private cartService: CartService) {}
+  constructor(private cartService: CartService) {
+  }
 
   ngOnInit(): void {
     this.cartService.totalQuantitySubject.subscribe((data) => this.totalQuantity = data);
