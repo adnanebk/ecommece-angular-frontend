@@ -1,10 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {MyError} from '../../models/my-error';
-import {HttpService} from '../../services/http.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {NgForm} from '@angular/forms';
 import {AuthService} from '../../services/auth.service';
-import {AppUser} from '../../models/app-user';
+
 
 @Component({
   selector: 'app-login',
@@ -23,7 +20,8 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => this.returnUrl = params.return);
+    this.route.queryParams.subscribe(params =>
+               this.returnUrl = params.return);
     // this.router.getCurrentNavigation().extras.state?.products;
   }
 
@@ -49,4 +47,16 @@ export class LoginComponent implements OnInit {
       }, state: {...this.state}
     });
   }
+
+ async googleLogin() {
+  await this.authService.loginWithGoogle();
+  await this.router.navigateByUrl('/');
+
+ }
+
+ async facebookLogin() {
+    await this.authService.loginWithFacebook();
+    await this.router.navigateByUrl('/');
+
+ }
 }

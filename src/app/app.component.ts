@@ -1,6 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {TranslateService} from '@ngx-translate/core';
-import {HttpService} from './services/http.service';
 import {AppUser} from './models/app-user';
 import {AuthService} from './services/auth.service';
 import {ActivatedRoute, Router} from '@angular/router';

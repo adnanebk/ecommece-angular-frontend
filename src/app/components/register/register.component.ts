@@ -55,7 +55,6 @@ export class RegisterComponent implements OnInit {
   }
 
   handleChange($event: any) {
-    console.log('change---');
     this.errors=null;
   }
 }

@@ -114,13 +114,20 @@ export class HttpService {
 
 
   register(user: any) {
-    return this.httpClient.post<{ token: string, appUser: AppUser }>(this.baseUrl + 'register', user);
+    return this.httpClient.post<AuthData>(this.baseUrl + 'register', user);
   }
 
   login(user: any) {
-    return this.httpClient.post<{ token: string, appUser: AppUser }>(this.baseUrl + 'login', user);
+    return this.httpClient.post<AuthData>(this.baseUrl + 'login', user);
   }
 
+  googleLogin(data: {appUser: AppUser,token: string}) {
+    return this.httpClient.post<AuthData>(this.baseUrl + 'google', data);
+  }
+
+  facebook(data: {appUser: AppUser,token: string}) {
+    return this.httpClient.post<AuthData>(this.baseUrl + 'facebook', data);
+  }
 }
 
 interface PagedResponse {
@@ -131,6 +138,11 @@ interface PagedResponse {
     totalPages: number,
     number: number
   };
+}
+
+interface AuthData{
+  appUser: AppUser;
+  token: string;
 }
 
 interface GetResponseProductCategory {

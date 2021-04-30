@@ -25,6 +25,7 @@
     "@ngx-translate/core": "^12.1.2",
     "@ngx-translate/http-loader": "^4.0.0",
     "angular2-navigate-with-data": "^1.1.11",
+    "angularx-social-login": "^3.5.6",
     "file-saver": "^2.0.2",
     "ngx-toastr": "^12.1.0",
     "rxjs": "~6.5.4",

@@ -28,6 +28,21 @@
           <!-- submit button-->
           <div class="text-center">
             <button [disabled]="form.invalid" type="submit" class="btn btn-info mr-2">Login</button>
+            <br>
+            <span class="label">Or sign in with:</span>
+            <div id="gSignInWrapper" (click)="googleLogin()">
+              <div id="customBtn" class="customGPlusSignIn">
+                <img class="google-icon"
+                     src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"/>
+                <span class="buttonText">Google</span>
+              </div>
+            </div>
+            <a id="fb-spinner" (click)="facebookLogin()">
+              <i class="fab fa-facebook-f"></i>
+              Facebook
+
+            </a>
+            <br>
             <a routerLink="" (click)="createAccount()"> Create new account</a>
           </div>
 

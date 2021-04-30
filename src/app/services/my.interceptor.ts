@@ -39,7 +39,6 @@ export class MyInterceptor implements HttpInterceptor {
   private handleError(resp) {
     if (!(resp.error instanceof ErrorEvent)) {
       {
-        console.log(resp);
         if (resp.status === 400) {
           if (resp.error.errors) {
             return throwError(resp.error.errors);

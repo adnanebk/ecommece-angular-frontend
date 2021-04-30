@@ -48,7 +48,7 @@ export class CheckoutComponent implements OnInit {
       customer: this.formBuilder.group({
         firstName: [this.user?.firstName, [Validators.required, Validators.minLength(2)]],
         lastName: [this.user?.lastName, [Validators.required, Validators.minLength(2)]],
-        email: ['', [Validators.email, Validators.required]]
+        email: [this.user?.email, [Validators.email, Validators.required]]
       }),
       shippingAddress: this.formBuilder.group({
         street: ['', [Validators.required, Validators.minLength(4)]],
