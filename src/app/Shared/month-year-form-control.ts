@@ -10,12 +10,17 @@ export class MonthYearFormControl extends FormControl {
       super.setValue(this.value);
       return;
     }
+
+    if (value.length===2 && (Number(value)>12 || Number(value)<=0)) {
+      super.setValue(this.value);
+      return;
+    }
     /*    if (value.length > 2 && !value.includes('/') )
          {
            super.setValue(this.value);
            return ;
          }*/
-    if (value.length === 2 && this.value.length <= value.length && +value >= 1 && +value <= 12) {
+    if (value.length === 2 && this.value.length <= value.length ) {
 
       super.setValue(value + '/', {...options, emitModelToViewChange: true});
     } else if (value.length >= 5 && value.length !== 2) {

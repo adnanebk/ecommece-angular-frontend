@@ -8,18 +8,21 @@ export class CardNumberFormControl extends FormControl {
     const numValue = value.replace(/-/g, '0');
     const vLength = value?.length;
     const isTrue = vLength === 4 || vLength === 9 || vLength === 14;
-    if (vLength > 19 || (vLength > 0 && vLength <= 19 && !isNumeric(numValue))) {
+    if (vLength > 17 || (vLength > 0 && vLength <= 17 && !isNumeric(numValue))) {
       super.setValue(this.value);
       return;
     } else if (vLength === 0) {
       super.setValue('');
     }
 
-    if (isTrue && vLength >= this.value.length) {
+    else if (isTrue && vLength >= this.value.length) {
       super.setValue(value + '-', {...options, emitModelToViewChange: true});
       return;
     }
-
+    else  {
+      super.setValue(value ,{...options, emitModelToViewChange: true});
+      return;
+    }
   }
 
 

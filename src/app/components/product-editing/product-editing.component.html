@@ -1,18 +1,18 @@
-<div class="main-content"  (click)="reloadData()">
+<div class="main-content"  >
   <div class="section-content section-content-p30">
 
     <div class="custom-control custom-radio custom-control-inline">
-      <input (change)="changeProductswitch(true)" checked type="radio" class="custom-control-input" id="defaultInline1"
+      <input (change)="switchToProducts(true)" checked type="radio" class="custom-control-input" id="defaultInline1"
              name="inlineDefaultRadiosExample">
       <label class="custom-control-label" for="defaultInline1">manage products</label>
     </div>
     <div class="custom-control custom-radio custom-control-inline">
-      <input (change)="changeProductswitch(false)" type="radio" class="custom-control-input" id="defaultInline2"
+      <input (change)="switchToProducts(false)" type="radio" class="custom-control-input" id="defaultInline2"
              name="inlineDefaultRadiosExample">
       <label class="custom-control-label" for="defaultInline2">manage categories</label>
     </div>
-    <div *ngIf="isProductSwitch" class="container-fluid">
-      <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Manage products</h3>
+    <div *ngIf="isProductSwitched" class="container-fluid">
+      <h3 class="card-headchangeProductswitcher text-center font-weight-bold text-uppercase py-4">Manage products</h3>
 
 
       <form class="form-inline d-flex justify-content-center md-form form-sm mt-0">
@@ -78,7 +78,7 @@
 
     </div>
 
-    <div *ngIf="!isProductSwitch" class="container-fluid">
+    <div *ngIf="!isProductSwitched" class="container-fluid">
       <app-category-editing [categories]="categories"></app-category-editing>
     </div>
 

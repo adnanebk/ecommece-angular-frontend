@@ -11,7 +11,8 @@ export class InputComponent implements OnInit {
   @Input() control: AbstractControl;
   @Input() type = 'text';
   @Input() placeholder: string;
-  @Input() data: [];
+  @Input() valueData: []=[];
+  @Input() displayData: []=[];
   @Output() inputChanged=new EventEmitter<any>();
 
   constructor() {

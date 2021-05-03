@@ -1,6 +1,6 @@
 <input (input)="onInputChange()" *ngIf="type==='text'" [type]="type" [formControl]="control" [placeholder]="placeholder">
 <select (change)="onInputChange()" *ngIf="type==='select'" [formControl]="control">
-  <option [ngValue]="el" *ngFor="let el of data ">{{el}}</option>
+  <option [ngValue]="el" *ngFor="let el of valueData; index as i">{{displayData.length>0?displayData[i]:valueData[i]}}</option>
 </select>
 <ng-container *ngIf="showError()">
   <span class="text-danger" *ngIf="control.errors.required"> this field is required </span>

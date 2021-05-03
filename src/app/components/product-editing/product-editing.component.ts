@@ -24,7 +24,7 @@ export class ProductEditingComponent implements OnInit {
   direction: string;
   errors: any[] = [];
   batchEnable: boolean;
-  isProductSwitch = true;
+  isProductSwitched = true;
   categories: ProductCategory[];
   hasFileUploading: boolean[] = [];
   private SelectedProducts: Product[] = [];
@@ -110,9 +110,9 @@ export class ProductEditingComponent implements OnInit {
     this.fetchProducts();
   }
 
-  changeProductswitch(b: boolean) {
-    this.isProductSwitch = b;
-    if (b) {
+  switchToProducts(b: boolean) {
+    this.isProductSwitched = b;
+    if (this.isProductSwitched) {
       this.categoryNames = this.categories.map(c => c.name);
     }
   }
@@ -140,7 +140,7 @@ export class ProductEditingComponent implements OnInit {
   }
 
   reloadData() {
-    this.fetchProducts(this.page);
+   this.fetchProducts();
   }
 
   handleSelectedElements($products: Product[]) {

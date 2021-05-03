@@ -10,6 +10,7 @@ import {AuthService} from '../../services/auth.service';
 import {AppUser} from '../../models/app-user';
 import {MonthYearFormControl} from '../../Shared/month-year-form-control';
 import {CardNumberFormControl} from '../../Shared/card-number-form-control';
+import {CreditCard} from '../../models/CreditCard';
 
 
 @Component({
@@ -80,7 +81,12 @@ export class CheckoutComponent implements OnInit {
     this.checkoutFormGroup.clearValidators();
     this.checkoutFormGroup.markAsPristine();
     this.errors = [];
-    const myOrder = {...this.checkoutFormGroup.get('customer').value, ...this.checkoutFormGroup.get('shippingAddress').value};
+    const myOrder: Order = {...this.checkoutFormGroup.get('customer').value,
+                     ...this.checkoutFormGroup.get('shippingAddress').value};
+    let creditCard=this.checkoutFormGroup.controls.creditCard.value;
+    creditCard.cardNumber=creditCard.cardNumber.replaceAll('-','');
+    myOrder.creditCard=creditCard;
+
     this.saveOrder(myOrder);
   }
 

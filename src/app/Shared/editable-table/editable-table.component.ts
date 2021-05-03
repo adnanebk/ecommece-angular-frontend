@@ -93,8 +93,9 @@ export class EditableTableComponent implements OnChanges {
   }
 
   changeView(elem: any, $event: MouseEvent) {
-    $event.stopPropagation();
-    if ($event.target !== $event.currentTarget) {
+
+    if(this.batchEnabled){
+      this.editedElement = elem;
       return;
     }
 
@@ -104,7 +105,8 @@ export class EditableTableComponent implements OnChanges {
       }
 
       this.originalField = {...elem};
-      this.editedElement = elem;
+
+       this.editedElement = elem;
     }
 
   }
@@ -161,7 +163,8 @@ export class EditableTableComponent implements OnChanges {
     }
   }
 
-  saveAll() {
+  saveAll($event?: MouseEvent) {
+    $event.stopPropagation();
     this.errors = [];
     this.UpdateAll.emit(this.Data.filter(e => e.dirty));
   }
@@ -188,5 +191,8 @@ export class EditableTableComponent implements OnChanges {
     }
   }
 
+  trackByFn(index: number, prop: any): string {
+    return prop.id;
+  }
 
 }

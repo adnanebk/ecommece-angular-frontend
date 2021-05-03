@@ -43,12 +43,12 @@ export class MyInterceptor implements HttpInterceptor {
           if (resp.error.errors) {
             return throwError(resp.error.errors);
           } else {
-            this.toastrService.error(resp.error.message ? resp.error.message : resp.error, 'Error', {
+            resp.error.message &&  this.toastrService.error(resp.error.message, 'Error', {
               timeOut: 3000,
             });
             return throwError(resp.error);
           }
-        } else if (resp.status === 403) {
+        } else if (resp.status.startsWith('4')) {
           this.toastrService.error(resp?.error?.message, 'Error', {
             timeOut: 3000,
           });
