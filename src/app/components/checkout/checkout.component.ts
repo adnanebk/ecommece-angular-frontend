@@ -27,6 +27,7 @@ export class CheckoutComponent implements OnInit {
   user: AppUser;
   errors: MyError[] = [];
   cartItems: CartItem[] = [];
+  userCard: CreditCard;
 
   constructor(private formBuilder: FormBuilder, private cartService: CartService,
               private httpService: HttpService, private router: Router, private authService: AuthService) {
@@ -37,6 +38,27 @@ export class CheckoutComponent implements OnInit {
     this.authService.userSubject.subscribe((user) => {
       this.user = user;
     });
+    this.httpService.getCreditCardInfo(this.user.userName).subscribe((cards) => {
+      this.userCard = cards[0];
+      this.checkoutFormGroup = this.formBuilder.group({
+        customer: this.formBuilder.group({
+          fullName: [this.user?.firstName + ' ' + this.user?.lastName, [Validators.required, Validators.minLength(2)]],
+          email: [this.user?.email, [Validators.email, Validators.required]]
+        }),
+        shippingAddress: this.formBuilder.group({
+          street: ['', [Validators.required, Validators.minLength(4)]],
+          city: ['', Validators.required],
+          country: ['', Validators.required]
+        }),
+        creditCard: this.formBuilder.group({
+          cardType: [this.userCard?.cardType, [Validators.required]],
+          cardNumber: new CardNumberFormControl(this.userCard?.cardNumber, [Validators.required]),
+          expirationDate: new MonthYearFormControl(this.userCard?.expirationDate, [Validators.required])
+        })
+      });
+
+    });
+
     if (this.cartItems?.length > 1) {
       this.totalQuantity = this.cartService.totalQuantity;
       this.totalPrice = this.cartService.totalPrice;
@@ -45,23 +67,6 @@ export class CheckoutComponent implements OnInit {
       this.totalPrice = this.cartItems[0].quantity * this.cartItems[0].unitPrice;
     }
 
-    this.checkoutFormGroup = this.formBuilder.group({
-      customer: this.formBuilder.group({
-        firstName: [this.user?.firstName, [Validators.required, Validators.minLength(2)]],
-        lastName: [this.user?.lastName, [Validators.required, Validators.minLength(2)]],
-        email: [this.user?.email, [Validators.email, Validators.required]]
-      }),
-      shippingAddress: this.formBuilder.group({
-        street: ['', [Validators.required, Validators.minLength(4)]],
-        city: ['', Validators.required],
-        country: ['', Validators.required]
-      }),
-      creditCard: this.formBuilder.group({
-        cardType: [''],
-        cardNumber: new CardNumberFormControl('', [Validators.required]),
-        expirationDate: new MonthYearFormControl('', [Validators.required])
-      })
-    });
   }
 
 
@@ -81,11 +86,13 @@ export class CheckoutComponent implements OnInit {
     this.checkoutFormGroup.clearValidators();
     this.checkoutFormGroup.markAsPristine();
     this.errors = [];
-    const myOrder: Order = {...this.checkoutFormGroup.get('customer').value,
-                     ...this.checkoutFormGroup.get('shippingAddress').value};
-    let creditCard=this.checkoutFormGroup.controls.creditCard.value;
-    creditCard.cardNumber=creditCard.cardNumber.replaceAll('-','');
-    myOrder.creditCard=creditCard;
+    const myOrder: Order = {
+      ...this.checkoutFormGroup.get('customer').value,
+      ...this.checkoutFormGroup.get('shippingAddress').value
+    };
+    let creditCard = this.checkoutFormGroup.get('creditCard').value;
+    creditCard.cardNumber = creditCard?.cardNumber?.replaceAll('-', '');
+    myOrder.creditCard = creditCard;
 
     this.saveOrder(myOrder);
   }
@@ -100,6 +107,6 @@ export class CheckoutComponent implements OnInit {
   }
 
   handleChange($event: any) {
-    this.errors=null;
+    this.errors = null;
   }
 }

@@ -76,8 +76,9 @@ export class ProductEditingComponent implements OnInit {
     this.imageService.uploadImage($event.file).subscribe(
       (res: string) => {
         this.hasFileUploading[$event.index] = false;
-        if (this.products[$event.index].image !== $event.file.name)
-          this.products[$event.index] = {...this.products[$event.index],image:res};
+        if (this.products[$event.index].image !== $event.file.name) {
+          this.products[$event.index] = {...this.products[$event.index], image: res};
+        }
 
       },
       (err) => {
@@ -140,7 +141,7 @@ export class ProductEditingComponent implements OnInit {
   }
 
   reloadData() {
-   this.fetchProducts();
+    this.fetchProducts();
   }
 
   handleSelectedElements($products: Product[]) {

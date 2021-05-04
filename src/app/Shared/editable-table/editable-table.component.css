@@ -2,7 +2,7 @@
   background-color: #f1e9be;
 }
 
-.max-content{
+.max-content {
   width: max-content;
 }
 
@@ -66,12 +66,14 @@ th {
   box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
   z-index: 1;
 }
+
 .file {
   opacity: 0;
   width: 0.1px;
   height: 0.1px;
   position: absolute;
 }
+
 .file-input label {
   display: block;
   position: relative;

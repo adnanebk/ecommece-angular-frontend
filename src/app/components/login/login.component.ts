@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params =>
-               this.returnUrl = params.return);
+      this.returnUrl = params.return);
     // this.router.getCurrentNavigation().extras.state?.products;
   }
 
@@ -48,15 +48,15 @@ export class LoginComponent implements OnInit {
     });
   }
 
- async googleLogin() {
-  await this.authService.loginWithGoogle();
-  await this.router.navigateByUrl('/');
+  async googleLogin() {
+    await this.authService.loginWithGoogle();
+    await this.router.navigateByUrl('/');
 
- }
+  }
 
- async facebookLogin() {
+  async facebookLogin() {
     await this.authService.loginWithFacebook();
     await this.router.navigateByUrl('/');
 
- }
+  }
 }

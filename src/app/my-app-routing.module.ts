@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
 import {LoginComponent} from './components/login/login.component';
 import {RegisterComponent} from './components/register/register.component';
@@ -10,7 +10,6 @@ import {CartDetailsComponent} from './components/cart-details/cart-details.compo
 import {ProductDetailsComponent} from './components/product-details/product-details.component';
 import {ProductListComponent} from './components/product-list-grid/product-list-grid.component';
 import {ProductEditingComponent} from './components/product-editing/product-editing.component';
-
 
 
 const routes: Routes = [
@@ -33,4 +32,5 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class MyAppRoutingModule { }
+export class MyAppRoutingModule {
+}

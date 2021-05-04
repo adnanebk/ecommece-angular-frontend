@@ -20,7 +20,7 @@ export class ProductListComponent implements OnInit {
   pageSize = 20;
   sort: string;
   isLoaded = false;
-   direction='asc';
+  direction = 'asc';
 
   constructor(private httpService: HttpService, private route: ActivatedRoute, private cartService: CartService) {
   }

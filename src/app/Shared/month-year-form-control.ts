@@ -5,13 +5,17 @@ export class MonthYearFormControl extends FormControl {
 
   // tslint:disable-next-line:max-line-length
   setValue(value: string, options?: { onlySelf?: boolean; emitEvent?: boolean; emitModelToViewChange?: boolean; emitViewToModelChange?: boolean }) {
+    if (this.value == null) {
+      super.setValue('');
+      return;
+    }
     const numValue = value.replace(new RegExp('/', 'g'), '0');
     if (value.length > 0 && !isNumeric(numValue)) {
       super.setValue(this.value);
       return;
     }
 
-    if (value.length===2 && (Number(value)>12 || Number(value)<=0)) {
+    if (value.length === 2 && (Number(value) > 12 || Number(value) <= 0)) {
       super.setValue(this.value);
       return;
     }
@@ -20,7 +24,7 @@ export class MonthYearFormControl extends FormControl {
            super.setValue(this.value);
            return ;
          }*/
-    if (value.length === 2 && this.value.length <= value.length ) {
+    if (value.length === 2 && this.value?.length <= value.length) {
 
       super.setValue(value + '/', {...options, emitModelToViewChange: true});
     } else if (value.length >= 5 && value.length !== 2) {
@@ -38,7 +42,7 @@ export class MonthYearFormControl extends FormControl {
         return;
       }
       super.setValue(value, {...options, emitModelToViewChange: true});
-    } else if (value.length <= this.value.length) {
+    } else if (value.length <= this.value?.length) {
       super.setValue(value, {...options, emitModelToViewChange: true});
     }
   }

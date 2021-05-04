@@ -43,7 +43,7 @@ export class MyInterceptor implements HttpInterceptor {
           if (resp.error.errors) {
             return throwError(resp.error.errors);
           } else {
-            resp.error.message &&  this.toastrService.error(resp.error.message, 'Error', {
+            resp.error.message && this.toastrService.error(resp.error.message, 'Error', {
               timeOut: 3000,
             });
             return throwError(resp.error);

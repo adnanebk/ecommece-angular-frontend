@@ -11,7 +11,7 @@ import {FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialUse
 export class AuthService {
   public userSubject = new BehaviorSubject<AppUser>(null);
 
-  constructor(private httpService: HttpService,private socialAuthService: SocialAuthService) {
+  constructor(private httpService: HttpService, private socialAuthService: SocialAuthService) {
     const currentUserSt = localStorage.getItem('appUser');
     if (currentUserSt?.length > 0) {
       const currentUser = JSON.parse(currentUserSt);
@@ -50,28 +50,28 @@ export class AuthService {
   }
 
   async loginWithGoogle() {
-    const socialUser=await this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
-    let appUser=this.mapUser(socialUser);
-    return  this.httpService.googleLogin({appUser,token:socialUser.idToken}).subscribe(resp=>{
-     return this.returnConnectedUser(resp);
-  });
+    const socialUser = await this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
+    let appUser = this.mapUser(socialUser);
+    return this.httpService.googleLogin({appUser, token: socialUser.idToken}).subscribe(resp => {
+      return this.returnConnectedUser(resp);
+    });
   }
 
   async loginWithFacebook() {
-    const socialUser=await this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID);
-    let appUser=this.mapUser(socialUser);
-    return  this.httpService.facebook({appUser,token:socialUser.authToken}).subscribe(resp=>{
+    const socialUser = await this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID);
+    let appUser = this.mapUser(socialUser);
+    return this.httpService.facebook({appUser, token: socialUser.authToken}).subscribe(resp => {
       return this.returnConnectedUser(resp);
     });
   }
 
 
-  mapUser(socialUser: SocialUser){
-    let appUser=new AppUser();
-    appUser.firstName=socialUser.firstName;
-    appUser.lastName=socialUser.lastName;
-    appUser.email=socialUser.email;
-    appUser.userName=socialUser.firstName+'-'+socialUser.lastName;
+  mapUser(socialUser: SocialUser) {
+    let appUser = new AppUser();
+    appUser.firstName = socialUser.firstName;
+    appUser.lastName = socialUser.lastName;
+    appUser.email = socialUser.email;
+    appUser.userName = socialUser.firstName + '-' + socialUser.lastName;
     return appUser;
   }
 }

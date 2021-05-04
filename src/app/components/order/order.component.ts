@@ -14,7 +14,6 @@ import {AppUser} from '../../models/app-user';
 })
 export class OrderComponent implements OnInit {
   orders: Order[];
-;
   user: AppUser;
 
   constructor(private httpService: HttpService, private authService: AuthService) {

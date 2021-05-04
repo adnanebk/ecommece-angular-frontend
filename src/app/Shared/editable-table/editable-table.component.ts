@@ -10,7 +10,7 @@ import {ConfirmDialogService} from '../services/confirm-dialog.service';
   styleUrls: ['./editable-table.component.css']
 })
 export class EditableTableComponent implements OnChanges {
-  @Input() Data: any[]=[];
+  @Input() Data: any[] = [];
   editedElement: any;
   @Input() batchEnabled = false;
   originalField: {};
@@ -94,7 +94,7 @@ export class EditableTableComponent implements OnChanges {
 
   changeView(elem: any, $event: MouseEvent) {
 
-    if(this.batchEnabled){
+    if (this.batchEnabled) {
       this.editedElement = elem;
       return;
     }
@@ -106,7 +106,7 @@ export class EditableTableComponent implements OnChanges {
 
       this.originalField = {...elem};
 
-       this.editedElement = elem;
+      this.editedElement = elem;
     }
 
   }

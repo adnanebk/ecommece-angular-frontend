@@ -5,6 +5,10 @@ export class CardNumberFormControl extends FormControl {
 
   // tslint:disable-next-line:max-line-length
   setValue(value: string, options?: { onlySelf?: boolean; emitEvent?: boolean; emitModelToViewChange?: boolean; emitViewToModelChange?: boolean }) {
+    if (this.value == null) {
+      super.setValue('');
+      return;
+    }
     const numValue = value.replace(/-/g, '0');
     const vLength = value?.length;
     const isTrue = vLength === 4 || vLength === 9 || vLength === 14;
@@ -13,14 +17,11 @@ export class CardNumberFormControl extends FormControl {
       return;
     } else if (vLength === 0) {
       super.setValue('');
-    }
-
-    else if (isTrue && vLength >= this.value.length) {
+    } else if (isTrue && vLength >= this.value.length) {
       super.setValue(value + '-', {...options, emitModelToViewChange: true});
       return;
-    }
-    else  {
-      super.setValue(value ,{...options, emitModelToViewChange: true});
+    } else {
+      super.setValue(value, {...options, emitModelToViewChange: true});
       return;
     }
   }

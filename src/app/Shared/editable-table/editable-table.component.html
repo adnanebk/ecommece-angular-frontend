@@ -35,7 +35,7 @@
     </thead>
     <tbody>
 
-    <tr *ngFor="let el of Data ; let idx= index;trackBy: trackByFn" [className]="el.hasError?'bg-warning':''" >
+    <tr *ngFor="let el of Data ; let idx= index;trackBy: trackByFn" [className]="el.hasError?'bg-warning':''">
 
       <td class="p-1 align-middle">
       <span *ngIf="!batchEnabled" class="table-edit">
@@ -68,16 +68,16 @@
           </div>
         </ng-container>
 
-        <ng-container *ngIf="this.editedElement===el || batchEnabled" >
+        <ng-container *ngIf="this.editedElement===el || batchEnabled">
           <input *ngIf="!field.type  &&  el[field.name].length<35" [value]="el[field.name]" type="text"
                  class="form-control w-auto"
                  (input)="changeValue(idx,this.field,$event)" (keyup.enter)="onSave(idx)">
           <textarea (keyup.enter)="onSave(idx)" *ngIf="!field.type &&  el[field.name].length>=35"
                     [value]="el[field.name]" type="text" class="form-control w-auto"
                     (input)="changeValue(idx,this.field,$event)"></textarea>
-          <div class="file-input" *ngIf="field.type === 'image'" >
-          <input id="file" #file type="file" class="form-control file" accept="image/*"
-                 (change)="processFile(idx,this.field.name,file)">
+          <div class="file-input" *ngIf="field.type === 'image'">
+            <input id="file" #file type="file" class="form-control file" accept="image/*"
+                   (change)="processFile(idx,this.field.name,file)">
             <label for="file">Select file</label>
           </div>
 

@@ -22,6 +22,6 @@ export class ImageService {
     formData.append('image', file);
 
     return this.http.post(environment.path + 'products/images', formData, {responseType: 'text'})
-      .pipe(map(res=>environment.path + 'products/images/'+res));
+      .pipe(map(res => environment.path + 'products/images/' + res));
   }
 }

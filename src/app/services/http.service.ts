@@ -5,9 +5,9 @@ import {Observable, throwError} from 'rxjs';
 import {map, retry, timeout} from 'rxjs/operators';
 import {ProductCategory} from '../models/product-category';
 import {Order} from '../models/order';
-import {MyError} from '../models/my-error';
 import {AppUser} from '../models/app-user';
 import {environment} from '../../environments/environment.prod';
+import {CreditCard} from '../models/CreditCard';
 
 
 @Injectable({
@@ -17,9 +17,11 @@ export class HttpService {
   private baseUrl = environment.path;
   private productUrl = this.baseUrl + 'products';
   private orderUrl = this.baseUrl + 'userOrders';
+  private creditCardUrl = this.baseUrl + 'creditCards';
   private categoryUrl = this.baseUrl + 'product-category';
-  private  timeOut=100000;
-  private  retry=4;
+  private timeOut = 100000;
+  private retry = 4;
+
   constructor(private httpClient: HttpClient) {
   }
 
@@ -34,10 +36,10 @@ export class HttpService {
         `${this.productUrl}/search/ByNameOrDescription?name=${search}&description=${search}&page=${page}`
         : this.productUrl + '?page=' + page;
     return this.httpClient.get<PagedResponse>(searchUrl + '&size=' + pageSize + '&sort=' + sort + ',' + direction)
-       .pipe(timeout(this.timeOut),retry(this.retry),map(response => {
-        return {data: response._embedded.products, page: response.page};
-      })
-    );
+      .pipe(timeout(this.timeOut), retry(this.retry), map(response => {
+          return {data: response._embedded.products, page: response.page};
+        })
+      );
   }
 
   getProduct(id: string) {
@@ -85,7 +87,7 @@ export class HttpService {
   getProductCategories(): Observable<ProductCategory[]> {
 
     return this.httpClient.get<PagedResponse>(this.categoryUrl).pipe(
-      timeout(this.timeOut),retry(this.retry),map(response => response._embedded.productCategory)
+      timeout(this.timeOut), retry(this.retry), map(response => response._embedded.productCategory)
     );
   }
 
@@ -103,15 +105,18 @@ export class HttpService {
 
 
   getOrders(userName: string): Observable<Order[]> {
-    return this.httpClient.get<Order[]>(this.orderUrl + '/byUserName/' + userName,).pipe(
-      map(response => response)
-    );
+    return this.httpClient.get<Order[]>(this.orderUrl + '/byUserName/' + userName,);
   }
 
   saveOrder(order: Order): Observable<Order> {
     return this.httpClient.post<Order>(this.orderUrl, order);
   }
 
+  getCreditCardInfo(userName: string): Observable<CreditCard[]> {
+    return this.httpClient.get<PagedResponse>(this.creditCardUrl + '/search/byUserName?userName=' + userName,).pipe(
+      map(response => response._embedded.creditCards)
+    );
+  }
 
   register(user: any) {
     return this.httpClient.post<AuthData>(this.baseUrl + 'register', user);
@@ -121,13 +126,14 @@ export class HttpService {
     return this.httpClient.post<AuthData>(this.baseUrl + 'login', user);
   }
 
-  googleLogin(data: {appUser: AppUser,token: string}) {
+  googleLogin(data: { appUser: AppUser, token: string }) {
     return this.httpClient.post<AuthData>(this.baseUrl + 'google', data);
   }
 
-  facebook(data: {appUser: AppUser,token: string}) {
+  facebook(data: { appUser: AppUser, token: string }) {
     return this.httpClient.post<AuthData>(this.baseUrl + 'facebook', data);
   }
+
 }
 
 interface PagedResponse {
@@ -140,7 +146,7 @@ interface PagedResponse {
   };
 }
 
-interface AuthData{
+interface AuthData {
   appUser: AppUser;
   token: string;
 }

@@ -4,8 +4,7 @@ import {CreditCard} from './CreditCard';
 
 export class Order {
   id = 0;
-  firstName: string;
-  lastName: string;
+  fullName: string;
   dateCreated: string;
   country: number;
   city: string;

@@ -13,26 +13,15 @@
           <h3>Customer</h3>
 
           <div class="row">
-            <div class="col-md-2"><label>First Name</label></div>
+            <div class="col-md-2"><label>Full Name</label></div>
             <div class="col-md-9">
               <div class="input-space">
-
-                <!--                <input  #firstname  formControlName="firstName" class="form-control" type="text">-->
-                <input type="text" readonly formControlName="firstName">
-
+                <input type="text" formControlName="fullName">
 
               </div>
             </div>
           </div>
 
-          <div class="row">
-            <div class="col-md-2"><label>Last Name</label></div>
-            <div class="col-md-9">
-              <div class="input-space">
-                <input type="text" readonly formControlName="lastName">
-              </div>
-            </div>
-          </div>
 
           <div class="row">
             <div class="col-md-2"><label>Email</label></div>
@@ -53,7 +42,8 @@
             <div class="col-md-2"><label>Country</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <app-input (inputChanged)="handleChange($event)"  [control]="checkoutFormGroup.controls.shippingAddress.get('country')"
+                <app-input (inputChanged)="handleChange($event)"
+                           [control]="checkoutFormGroup.controls.shippingAddress.get('country')"
                            type="select"
                            [valueData]="['Morocco','Algeria','France','China']"></app-input>
                 <span class="text-danger">{{getError('country')}}</span>
@@ -65,7 +55,8 @@
             <div class="col-md-2"><label>Street</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <app-input (inputChanged)="handleChange($event)"  [control]="checkoutFormGroup.controls.shippingAddress.get('street')"
+                <app-input (inputChanged)="handleChange($event)"
+                           [control]="checkoutFormGroup.controls.shippingAddress.get('street')"
                            placeholder="Street"></app-input>
                 <span class="text-danger">{{getError('street')}}</span>
               </div>
@@ -76,7 +67,8 @@
             <div class="col-md-2"><label>City</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <app-input (inputChanged)="handleChange($event)"  [control]="checkoutFormGroup.controls.shippingAddress.get('city')"
+                <app-input (inputChanged)="handleChange($event)"
+                           [control]="checkoutFormGroup.controls.shippingAddress.get('city')"
                            placeholder="City"></app-input>
                 <span class="text-danger">{{getError('city')}}</span>
               </div>
@@ -95,8 +87,10 @@
             <div class="col-md-9">
               <div class="input-space">
 
-                <app-input (inputChanged)="handleChange($event)"  [control]="checkoutFormGroup.controls.creditCard.get('cardType')"
-                           type="select" [valueData]="['VISA','MASTERCARD']" [displayData]="['Visa','Master card']"></app-input>
+                <app-input (inputChanged)="handleChange($event)"
+                           [control]="checkoutFormGroup.controls.creditCard.get('cardType')"
+                           type="select" [valueData]="['VISA','MASTERCARD']"
+                           [displayData]="['Visa','Master card']"></app-input>
                 <span class="text-danger">{{getError('cardType')}}</span>
 
               </div>
@@ -107,7 +101,8 @@
             <div class="col-md-2"><label>Expiration Date</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <app-input (inputChanged)="handleChange($event)"  [control]="checkoutFormGroup.controls.creditCard.get('expirationDate')"
+                <app-input (inputChanged)="handleChange($event)"
+                           [control]="checkoutFormGroup.controls.creditCard.get('expirationDate')"
                            placeholder="expiration Date (month/year)"></app-input>
                 <span class="text-danger">{{getError('expirationDate')}}</span>
               </div>
@@ -118,7 +113,8 @@
             <div class="col-md-2"><label>Card number</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <app-input (inputChanged)="handleChange($event)"  [control]="checkoutFormGroup.controls.creditCard.get('cardNumber')"
+                <app-input (inputChanged)="handleChange($event)"
+                           [control]="checkoutFormGroup.controls.creditCard.get('cardNumber')"
                            placeholder="cardNumber"></app-input>
                 <span class="text-danger">{{getError('cardNumber')}}</span>
 
