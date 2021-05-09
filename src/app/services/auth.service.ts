@@ -4,18 +4,21 @@ import {map} from 'rxjs/operators';
 import {BehaviorSubject, timer} from 'rxjs';
 import {HttpService} from './http.service';
 import {FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialUser} from 'angularx-social-login';
+import {ToastrService} from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   public userSubject = new BehaviorSubject<AppUser>(null);
+  private currentUser: AppUser;
 
-  constructor(private httpService: HttpService, private socialAuthService: SocialAuthService) {
+  constructor(private httpService: HttpService, private socialAuthService: SocialAuthService,private toastrService: ToastrService) {
     const currentUserSt = localStorage.getItem('appUser');
     if (currentUserSt?.length > 0) {
-      const currentUser = JSON.parse(currentUserSt);
-      this.userSubject.next(currentUser);
+      this.currentUser = JSON.parse(currentUserSt);
+      this.verifyUser();
+      this.userSubject.next(this.currentUser);
     }
   }
 
@@ -27,13 +30,15 @@ export class AuthService {
     );
   }
 
-
   login(user: any) {
     return this.httpService.login(user).pipe(
       map(response => {
         return this.returnConnectedUser(response);
       })
     );
+  }
+  async getUserInfo(userName: string) {
+     return  await this.httpService.getUserInfo(userName).toPromise();
   }
 
   logout() {
@@ -45,24 +50,26 @@ export class AuthService {
   private returnConnectedUser(response: { token: string; appUser: AppUser }) {
     localStorage.setItem('appUser', JSON.stringify(response.appUser));
     localStorage.setItem('token', response.token);
-    this.userSubject.next(response.appUser);
-    return response.appUser;
+    this.currentUser=response.appUser;
+    this.verifyUser();
+    this.userSubject.next(this.currentUser);
+    return this.currentUser;
   }
 
   async loginWithGoogle() {
     const socialUser = await this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
     let appUser = this.mapUser(socialUser);
-    return this.httpService.googleLogin({appUser, token: socialUser.idToken}).subscribe(resp => {
+    return this.httpService.googleLogin({appUser, token: socialUser.idToken}).pipe(map(resp => {
       return this.returnConnectedUser(resp);
-    });
+    }));
   }
 
   async loginWithFacebook() {
     const socialUser = await this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID);
     let appUser = this.mapUser(socialUser);
-    return this.httpService.facebook({appUser, token: socialUser.authToken}).subscribe(resp => {
+    return this.httpService.facebook({appUser, token: socialUser.authToken}).pipe(map(resp => {
       return this.returnConnectedUser(resp);
-    });
+    }));
   }
 
 
@@ -73,5 +80,31 @@ export class AuthService {
     appUser.email = socialUser.email;
     appUser.userName = socialUser.firstName + '-' + socialUser.lastName;
     return appUser;
+  }
+
+  sendActivationMessage() {
+  return  this.httpService. sendActivationMessage(this.currentUser.email);
+  }
+
+  sendConfirmedWithSuccess() {
+    this.toastrService.success('you have successfully verified your account');
+    this.currentUser.enabled=true;
+    localStorage.setItem('appUser', JSON.stringify(this.currentUser));
+
+  }
+
+   verifyUser() {
+    if(!this.currentUser.enabled)
+      this.toastrService.info('Please complete your registration by activating your account in your email messages or click here te resend the activation code',
+        'Activate your account', {
+          timeOut: 10000,
+          extendedTimeOut: 3000,
+        }).onTap.subscribe(v=> {
+          if(!this.currentUser.enabled)
+          this.sendActivationMessage().subscribe(
+            () => this.toastrService.info('We have just sent you a confirmation link,check your email messages'));
+        }
+
+      );
   }
 }

@@ -27,10 +27,7 @@
             <a class="nav-link" routerLink="/products/editing">Manage products</a>
           </li>
           <ng-container *ngIf="user">
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <b class="text-dark font-weight-bold">Hello {{user.userName}}</b></a>
-            </li>
+
             <li class="nav-item">
               <a class="nav-link" routerLink="" (click)="logout()">Logout</a>
             </li>
@@ -52,7 +49,10 @@
           <!-- Dropdown -->
           <app-product-category isMenu="true"></app-product-category>
 
-
+          <li class="nav-item" *ngIf="user">
+            <a class="nav-link" routerLink="">
+              <b class="text-dark font-weight-bold">Welcome {{user.userName}}!</b></a>
+          </li>
         </ul>
         <!-- Links -->
         <app-my-cart></app-my-cart>

@@ -13,13 +13,21 @@ export class AppComponent implements OnInit {
   title = 'ecommece-app';
   user: AppUser;
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService, private router: Router,private activatedRoute: ActivatedRoute) {
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.authService.userSubject.subscribe((user) => {
       this.user = user;
+      this.activatedRoute.queryParamMap.subscribe(async param=>{
+        if(param.get('verified')) {
+          let user: AppUser= await this.authService.getUserInfo(this.user.userName);
+          if(user.enabled)
+            this.authService.sendConfirmedWithSuccess();
+        }
+      });
     });
+
   }
 
   logout() {
@@ -30,4 +38,5 @@ export class AppComponent implements OnInit {
   getDocs() {
     return environment.pathDoc;
   }
+
 }

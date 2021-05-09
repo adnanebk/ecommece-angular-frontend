@@ -78,6 +78,7 @@ export class CheckoutComponent implements OnInit {
     this.httpService.saveOrder(order).subscribe(next => {
       this.router.navigateByUrl('/orders');
     }, (errors => {
+      if(Array.isArray(errors))
       this.errors = errors;
     }));
   }

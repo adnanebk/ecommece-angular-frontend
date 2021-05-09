@@ -8,15 +8,15 @@ import {
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {ToastrService} from 'ngx-toastr';
+import {AuthService} from './auth.service';
 
 @Injectable()
 export class MyInterceptor implements HttpInterceptor {
 
-  constructor(private toastrService: ToastrService) {
+  constructor(private toastrService: ToastrService,private authService: AuthService) {
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-
     const token = localStorage.getItem('token');
     if (token) {
       const cloned = request.clone({
@@ -39,11 +39,14 @@ export class MyInterceptor implements HttpInterceptor {
   private handleError(resp) {
     if (!(resp.error instanceof ErrorEvent)) {
       {
-        if (resp.status === 400) {
+        if (resp.status === 400 || resp.status === 403) {
           if (resp.error.errors) {
             return throwError(resp.error.errors);
-          } else {
-            resp.error.message && this.toastrService.error(resp.error.message, 'Error', {
+          } else if(resp.error?.message){
+            if(resp.status===403)
+              this.authService.verifyUser();
+            else
+            this.toastrService.error(resp.error.message, 'Error', {
               timeOut: 3000,
             });
             return throwError(resp.error);

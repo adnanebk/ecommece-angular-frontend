@@ -48,15 +48,14 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  async googleLogin() {
-    await this.authService.loginWithGoogle();
-    await this.router.navigateByUrl('/');
+   async googleLogin() {
+     (await this.authService.loginWithGoogle()).subscribe(user=>this.router.navigateByUrl('/'));
 
   }
 
   async facebookLogin() {
-    await this.authService.loginWithFacebook();
-    await this.router.navigateByUrl('/');
+    (await this.authService.loginWithFacebook()).subscribe(user=>this.router.navigateByUrl('/'));
+
 
   }
 }

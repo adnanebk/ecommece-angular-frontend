@@ -52,7 +52,7 @@
             <div class="col-md-2"><label>Password</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <app-input (inputChanged)="handleChange($event)" [control]="form.controls.password"
+                <app-input (inputChanged)="handleChange($event)" type="password" [control]="form.controls.password"
                            placeholder="Password"></app-input>
                 <span class="text-danger">{{getError('password')}}</span>
               </div>
@@ -63,7 +63,7 @@
             <div class="col-md-2"><label>Confirm password</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <app-input (inputChanged)="handleChange($event)" [control]="form.controls.confirmPassword"
+                <app-input (inputChanged)="handleChange($event)" type="password" [control]="form.controls.confirmPassword"
                            placeholder="Confirm password"></app-input>
                 <span class="text-danger">{{getError('confirmPassword')}}</span>
               </div>

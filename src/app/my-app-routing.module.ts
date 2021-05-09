@@ -23,7 +23,7 @@ const routes: Routes = [
   {path: 'category', component: ProductListComponent},
   {path: 'products', component: ProductListComponent},
   {path: 'products/editing', component: ProductEditingComponent},
-  {path: '', redirectTo: '/products', pathMatch: 'full'},
+  {path: '', component: ProductListComponent, pathMatch: 'full'},
   {path: '**', redirectTo: '/products', pathMatch: 'full'},
 ];
 

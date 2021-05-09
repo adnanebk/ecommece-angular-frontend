@@ -6,4 +6,5 @@ export class AppUser {
   city: string;
   county: string;
   street: string;
+  enabled: Boolean;
 }

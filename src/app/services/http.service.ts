@@ -134,6 +134,13 @@ export class HttpService {
     return this.httpClient.post<AuthData>(this.baseUrl + 'facebook', data);
   }
 
+  getUserInfo(userName: string) {
+    return this.httpClient.get<AppUser>(this.baseUrl + 'appUsers/'+userName);
+  }
+
+  sendActivationMessage(email: string) {
+    return this.httpClient.post<void>(this.baseUrl + 'appUsers/confirm', email);
+  }
 }
 
 interface PagedResponse {
