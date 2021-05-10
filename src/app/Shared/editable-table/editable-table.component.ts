@@ -44,6 +44,7 @@ export class EditableTableComponent implements OnChanges {
 
   onSave(index: number) {
     this.errors = [];
+    this.Data[index].hasError=false;
     this.Data[index].isNew ? this.dataAdded.emit() : this.dataChanged.emit(index);
   }
 
