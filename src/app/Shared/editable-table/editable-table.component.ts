@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {DatePipe} from '@angular/common';
-import {ToastrService} from 'ngx-toastr';
 import {ConfirmDialogService} from '../services/confirm-dialog.service';
 
 
@@ -13,7 +12,6 @@ export class EditableTableComponent implements OnChanges {
   @Input() Data: any[] = [];
   editedElement: any;
   @Input() batchEnabled = false;
-  originalField: {};
   @Input() fields: any[];
   @Input() hasFileUploading: boolean[];
   @Input() columnNames: string[];
@@ -36,8 +34,7 @@ export class EditableTableComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.editedElement && changes.errors) {
-      const indexOfEditedField = this.Data.indexOf(this.editedElement);
-      this.Data[indexOfEditedField].hasError = true;
+      this.editedElement.hasError = true;
     }
   }
 
@@ -50,28 +47,18 @@ export class EditableTableComponent implements OnChanges {
 
   insertToTable($event: MouseEvent) {
     $event.stopPropagation();
+    this.Data[0].isEditing=true;
     if (!this.Data[0].isNew) {
       this.Data.unshift({...this.newElement, isNew: true});
+      this.Data[0].isEditing=true;
       this.editedElement = this.Data[0];
     }
   }
 
 
-  changeValue(index: number, field: any, event: any) {
+  changeValue(index: number, field: any) {
     this.Data[index].dirty = true;
     this.removeError(field.name);
-
-    if (field.type === 'number') {
-      if (isNaN(event.target.value)) {
-        event.target.value = this.Data[index][field.name];
-      } else {
-        this.Data[index][field.name] = event.target.value;
-      }
-    } else if (field.type === 'bool') {
-      this.Data[index][field.name] = event.target.checked;
-    } else {
-      this.Data[index][field.name] = event.target.value;
-    }
   }
 
   remove(index: any) {
@@ -83,33 +70,22 @@ export class EditableTableComponent implements OnChanges {
     });
   }
 
-  getSting(val: any, type: string) {
+  getSting(val: any) {
     if (val?.length > 60) {
       return val.substring(0, 60);
     }
-    if (type === 'date') {
+    if (Date.parse(val)) {
       return this.datePipe.transform(val, 'short');
     }
     return val;
   }
 
   changeView(elem: any, $event: MouseEvent) {
-
-    if (this.batchEnabled) {
-      this.editedElement = elem;
-      return;
-    }
-
-    if (this.editedElement !== elem) {
-      if (this.originalField) {
-        this.Data[this.Data.indexOf(this.editedElement)] = {...this.originalField};
-      }
-
-      this.originalField = {...elem};
-
-      this.editedElement = elem;
-    }
-
+    this.Data.map(el=>{
+      return (el===elem)?el.isEditing=true:el.isEditing=false;
+    });
+    elem.hasError=false;
+    this.editedElement=elem;
   }
 
 
@@ -121,7 +97,7 @@ export class EditableTableComponent implements OnChanges {
       this.Data[index].dirty = true;
       this.hasFileUploading[index] = true;
       this.fileUploaded.emit({file, index});
-      this.editedElement[fieldName] = file.name;
+      //this.editedElement[fieldName] = file.name;
       this.fileNames[index] = file.name;
     });
     reader.readAsDataURL(file);
@@ -143,12 +119,7 @@ export class EditableTableComponent implements OnChanges {
   }
 
 
-  onElSelected(check: HTMLInputElement, index: number) {
-    if (check.checked) {
-      this.Data[index].selected = true;
-    } else {
-      this.Data[index].selected = false;
-    }
+  onElSelected() {
     this.SelectedElements.emit(this.Data.filter(e => e.selected));
 
   }
@@ -158,10 +129,10 @@ export class EditableTableComponent implements OnChanges {
   }
 
   deleteAll() {
-    if (confirm('Are you sure to remove ')) {
+    this.confirmDialogService.confirmThis(() => {
       this.errors = [];
       this.RemoveAll.emit(this.Data.filter(e => e.selected));
-    }
+    });
   }
 
   saveAll($event?: MouseEvent) {

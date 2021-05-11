@@ -39,15 +39,15 @@
 
       <td class="p-1 align-middle">
       <span *ngIf="!batchEnabled" class="table-edit">
-        <button *ngIf="this.editedElement!==el" (click)="changeView(el,$event)" type="button"
+        <button *ngIf="!el.isEditing" (click)="changeView(el,$event)" type="button"
                 class="btn btn-info btn-rounded btn-sm my-0">Update</button>
-        <button *ngIf="this.editedElement===el" (click)="onSave(idx)" type="button"
+        <button *ngIf="el.isEditing" (click)="onSave(idx)" type="button"
                 class="btn btn-success btn-rounded btn-sm my-0">Save</button>
         <button (click)="remove(idx)" type="button" class="btn btn-danger btn-rounded  btn-sm my-1">Remove</button>
       </span>
         <span *ngIf="batchEnabled" class="select">
     <div class="custom-control custom-checkbox">
-    <input [checked]="el.selected" (change)="onElSelected(check,idx)" #check type="checkbox"
+    <input [(ngModel)]="el.selected" (change)="onElSelected()" #check type="checkbox"
            class="custom-control-input" [id]="'selectCheck'+idx">
     <label class="custom-control-label" [for]="'selectCheck'+idx"></label>
     </div>
@@ -59,47 +59,47 @@
           [ngStyle]="el[field.name]?.length>100 && {minWidth: '200px'}"
           [ngClass]="(el?.dirty && batchEnabled && !el.hasError) && 'bgDirty'">
 
-        <ng-container *ngIf="this.editedElement!==el && !batchEnabled">
+        <ng-container *ngIf="!el.isEditing && !batchEnabled">
          <span *ngIf="(!field.type || field.type !== 'image')">
-           {{getSting(el[field.name], field.type)}}</span>
+           {{getSting(el[field.name])}}</span>
           <img *ngIf="field.type === 'image' && !hasFileUploading[idx]" [src]="el[field.name]">
           <div *ngIf="field.type === 'image' && hasFileUploading[idx]" class="spinner-border" role="status">
             <span class="sr-only">Loading...</span>
           </div>
         </ng-container>
 
-        <ng-container *ngIf="this.editedElement===el || batchEnabled">
-          <input *ngIf="!field.type  &&  el[field.name].length<35" [value]="el[field.name]" type="text"
+        <ng-container *ngIf="el.isEditing || batchEnabled">
+          <input *ngIf="!field.type  &&  el[field.name].length<35" [(ngModel)]="el[field.name]" type="text"
                  class="form-control w-auto"
-                 (input)="changeValue(idx,this.field,$event)" (keyup.enter)="onSave(idx)">
+                 (input)="changeValue(idx,this.field)" (keyup.enter)="onSave(idx)">
           <textarea (keyup.enter)="onSave(idx)" *ngIf="!field.type &&  el[field.name].length>=35"
-                    [value]="el[field.name]" type="text" class="form-control w-auto"
-                    (input)="changeValue(idx,this.field,$event)"></textarea>
+                    [(ngModel)]="el[field.name]" type="text" class="form-control w-auto"
+                    (input)="changeValue(idx,this.field)"></textarea>
           <div class="file-input" *ngIf="field.type === 'image'">
-            <input id="file" #file type="file" class="form-control file" accept="image/*"
+            <input id="file" #file type="file" class="form-control file"  accept="image/*"
                    (change)="processFile(idx,this.field.name,file)">
             <label for="file">Select file</label>
           </div>
 
 
-          <input *ngIf="field.type === 'number'" #input [value]="el[field.name]" class="form-control number-input"
-                 (input)="changeValue(idx,this.field,$event)" (keyup.enter)="onSave(idx)">
+          <input *ngIf="field.type === 'number'" #input [(ngModel)]="el[field.name]" class="form-control number-input"
+                 (input)="changeValue(idx,this.field)" (keyup.enter)="onSave(idx)">
 
           <input [disabled]="field.readOnly" *ngIf="field.type === 'date'" type="date"
-                 [value]="el[field.name] | date:'yyyy-MM-dd'" class="form-control w-auto">
+                 [(ngModel)]="el[field.name]" class="form-control w-auto">
 
           <div *ngIf="field.type === 'bool'" class="custom-control custom-switch">
-            <input type="checkbox" class="custom-control-input" [checked]="true" id="customSwitches"
-                   (change)="changeValue(idx,this.field,$event)">
+            <input type="checkbox" class="custom-control-input"  id="customSwitches"
+                   (change)="changeValue(idx,this.field)" [(ngModel)]="el[field.name]">
             <label class="custom-control-label" for="customSwitches"></label>
           </div>
 
-          <select *ngIf="field.type === 'select'" (change)="changeValue(idx,this.field,$event)"
+          <select *ngIf="field.type === 'select'" [(ngModel)]="el[field.name]" (change)="changeValue(idx,this.field)"
                   class="browser-default custom-select w-auto">
             <option value="">Choose</option>
-            <option *ngFor="let op of options[field.name]" [selected]="op===el[field.name]" [value]="op">{{op}}</option>
+            <option *ngFor="let op of options[field.name]"  >{{op}}</option>
           </select>
-          <span *ngIf="el.hasError" class="text-danger">{{getError(field.name)}}</span>
+          <span *ngIf="el.hasError && el.isEditing" class="text-danger">{{getError(field.name)}}</span>
         </ng-container>
       </td>
     </tr>
