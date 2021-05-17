@@ -37,7 +37,7 @@ export class ProductListComponent implements OnInit {
   }
 
   getPagedProducts() {
-    this.httpService.gePagedtProducts((this.page - 1), this.pageSize, this.sort, this.searchValue, this.direction, this.currentCategoryId).subscribe(
+    this.httpService.gePagedProducts((this.page - 1), this.pageSize, this.sort, this.searchValue, this.direction, this.currentCategoryId).subscribe(
       resp => {
         this.mapDataFromResponse(resp);
       }

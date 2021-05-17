@@ -26,7 +26,7 @@ export class HttpService {
   }
 
 
-  gePagedtProducts(page = 0, pageSize = 20, sort = 'dateCreated', search = '', direction = 'asc', theCategoryId = 0) {
+  gePagedProducts(page = 0, pageSize = 20, sort = 'dateCreated', search = '', direction = 'asc', theCategoryId = 0) {
     if (sort === 'dateCreated') {
       direction = 'desc';
     }
@@ -59,12 +59,12 @@ export class HttpService {
   }
 
   updateProducts(products: Product[]) {
-    return this.httpClient.put<Product[]>(this.productUrl + '/v3', products);
+    return this.httpClient.put<Product[]>(this.productUrl + '/list', products);
   }
 
   deleteProducts(productsIds: number[]) {
     const params = new HttpParams().set('Ids', productsIds.join(','));
-    return this.httpClient.delete(this.productUrl + '/v3', {params});
+    return this.httpClient.delete(this.productUrl + '/v2', {params});
   }
 
   saveProductsToExcel(products: Product[]) {

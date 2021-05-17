@@ -5,6 +5,7 @@ import {ProductCategory} from '../../models/product-category';
 import {ImageService} from '../../services/image.service';
 import {saveAs} from 'file-saver';
 import {ToastrService} from 'ngx-toastr';
+import {Selects} from '../../Shared/editable-table/editable-table.component';
 
 @Component({
   selector: 'app-product-editing',
@@ -28,6 +29,8 @@ export class ProductEditingComponent implements OnInit {
   categories: ProductCategory[];
   hasFileUploading: boolean[] = [];
   private SelectedProducts: Product[] = [];
+  categorySelects=new Selects();
+
 
 
   constructor(private httpService: HttpService, private imageService: ImageService, private toastrService: ToastrService) {
@@ -42,6 +45,7 @@ export class ProductEditingComponent implements OnInit {
     this.httpService.getProductCategories().subscribe(resp => {
       this.categoryNames = resp.map(c => c.name);
       this.categories = resp;
+      this.categorySelects.set('category',{valueField:'id',displayField:'name',options:resp});
     });
   }
 
@@ -92,7 +96,7 @@ export class ProductEditingComponent implements OnInit {
   }
 
   fetchProducts(page?: number) {
-    this.httpService.gePagedtProducts
+    this.httpService.gePagedProducts
     (page - 1, this.pageSize, this.sort, this.search, this.direction).subscribe(resp => {
       this.products = [...resp.data];
       this.size = resp.page.totalElements;

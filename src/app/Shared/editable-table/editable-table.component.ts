@@ -10,7 +10,7 @@ import {ConfirmDialogService} from '../services/confirm-dialog.service';
 })
 export class EditableTableComponent implements OnChanges {
   @Input() Data: any[] = [];
-  editedElement: any;
+  @Input() selects=new Selects();
   @Input() batchEnabled = false;
   @Input() fields: any[];
   @Input() hasFileUploading: boolean[];
@@ -33,8 +33,14 @@ export class EditableTableComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.editedElement && changes.errors) {
-      this.editedElement.hasError = true;
+    console.log('selects--',this.selects);
+    if (changes.errors) {
+     this.Data.map(e=>{
+       if(e.isEditing)
+         e.hasError=true;
+       return e;
+     });
+
     }
   }
 
@@ -51,12 +57,11 @@ export class EditableTableComponent implements OnChanges {
     if (!this.Data[0].isNew) {
       this.Data.unshift({...this.newElement, isNew: true});
       this.Data[0].isEditing=true;
-      this.editedElement = this.Data[0];
     }
   }
 
 
-  changeValue(index: number, field: any) {
+  onValueChanged(index: number, field: any) {
     this.Data[index].dirty = true;
     this.removeError(field.name);
   }
@@ -70,22 +75,28 @@ export class EditableTableComponent implements OnChanges {
     });
   }
 
-  getSting(val: any) {
+  getSting(el: any, name: any) {
+    let val=el[name];
     if (val?.length > 60) {
       return val.substring(0, 60);
     }
     if (Date.parse(val)) {
       return this.datePipe.transform(val, 'short');
     }
+    if(this.selects.get(name))
+      return val[this.selects.get(name).displayField];
+    if(typeof  val ==='boolean')
+      return  val?'Yes':'No';
     return val;
   }
 
-  changeView(elem: any, $event: MouseEvent) {
+  onViewChanged(elem: any, $event: MouseEvent) {
     this.Data.map(el=>{
-      return (el===elem)?el.isEditing=true:el.isEditing=false;
+       (el===elem)?el.isEditing=true:el.isEditing=false;
+       return el;
     });
     elem.hasError=false;
-    this.editedElement=elem;
+
   }
 
 
@@ -102,6 +113,7 @@ export class EditableTableComponent implements OnChanges {
     });
     reader.readAsDataURL(file);
   }
+
 
   sort(idx: number, ic: HTMLElement) {
     let direction = '';
@@ -166,5 +178,13 @@ export class EditableTableComponent implements OnChanges {
   trackByFn(index: number, prop: any): string {
     return prop.id;
   }
+
+  byId(item1,item2){
+    return ((item1 && item2) && item1.id === item2.id) || item1===item2;
+  }
+
+
+}
+export class Selects extends Map<string,{title?: string,displayField:string,valueField:string,options:any[]}>{
 
 }

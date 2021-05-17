@@ -57,7 +57,7 @@
                             [newElement]="getNewProduct()"
                             [Data]="products" [columnNames]="productHeaders" [fields]="productFields"
                             [batchEnabled]="batchEnable"
-                            [options]="{categoryName:categoryNames}"
+                            [selects]="categorySelects"
                             (dataAdded)="handleDataAdded()"
                             (dataDeleted)="handleDataDeleted($event)"
                             (dataSorted)="handleDataSorted($event)"
