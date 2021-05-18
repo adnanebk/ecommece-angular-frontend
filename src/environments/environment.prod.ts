@@ -12,4 +12,3 @@ export const environment = {
     clientId: '464555957988601'
   }
 };
-
