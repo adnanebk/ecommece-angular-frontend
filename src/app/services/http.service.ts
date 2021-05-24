@@ -134,7 +134,7 @@ export class HttpService {
     return this.httpClient.post<AuthData>(this.baseUrl + 'facebook', data);
   }
 
-  getUserInfo(userName: string) {
+  getUserInfo() {
     return this.httpClient.get<AppUser>(this.baseUrl + 'appUsers/info');
   }
 
