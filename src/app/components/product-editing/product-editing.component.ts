@@ -27,7 +27,7 @@ export class ProductEditingComponent implements OnInit {
   batchEnable: boolean;
   isProductSwitched = true;
   categories: ProductCategory[];
-  hasFileUploading: boolean[] = [];
+  isFileUploading: boolean[] = [];
   private SelectedProducts: Product[] = [];
   categorySelects = new Selects();
 
@@ -118,7 +118,7 @@ export class ProductEditingComponent implements OnInit {
   handleUploadImage($event: { file: File; index: number }) {
     this.imageService.uploadImage($event.file).subscribe(
       (res: string) => {
-        this.hasFileUploading[$event.index] = false;
+        this.isFileUploading[$event.index] = false;
         if (this.products[$event.index].image !== $event.file.name) {
           this.products[$event.index] = {...this.products[$event.index], image: res};
         }
@@ -126,7 +126,7 @@ export class ProductEditingComponent implements OnInit {
       },
       (err) => {
         this.errors = [err];
-        this.hasFileUploading[$event.index] = false;
+        this.isFileUploading[$event.index] = false;
       });
   }
 

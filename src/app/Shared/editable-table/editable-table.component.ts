@@ -13,12 +13,12 @@ export class EditableTableComponent implements OnChanges {
   @Input() selects = new Selects();
   @Input() batchEnabled = false;
   @Input() fields: Field[];
-  @Input() hasFileUploading: boolean[];
+  @Input() isFileUploading: boolean[];
   @Input() columnNames: string[];
   @Input() options: any;
   @Input() newElement: any;
   @Input() errors: any[];
-  @Output() dataChanged = new EventEmitter<number>();
+  @Output() dataUpdated = new EventEmitter<number>();
   @Output() dataAdded = new EventEmitter();
   @Output() dataDeleted = new EventEmitter<{ index: number, data: any }>();
   @Output() dataSorted = new EventEmitter<{ sort: string, direction: string }>();
@@ -33,7 +33,7 @@ export class EditableTableComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('selects--', this.selects);
+    console.log('changes',changes);
     if (changes.errors) {
       this.Data.map(e => {
         if (e.isEditing) {
@@ -49,7 +49,7 @@ export class EditableTableComponent implements OnChanges {
   onSave(index: number) {
     this.errors = [];
     this.Data[index].hasError = false;
-    this.Data[index].isNew ? this.dataAdded.emit() : this.dataChanged.emit(index);
+    this.Data[index].isNew ? this.dataAdded.emit() : this.dataUpdated.emit(index);
   }
 
   insertToTable($event: MouseEvent) {
@@ -94,11 +94,12 @@ export class EditableTableComponent implements OnChanges {
     this.removeError(field.name);
   }
   onViewChanged(currentEl: any) {
-      this.Data = this.Data.map(el => {
+    console.log('view',currentEl);
+     this.Data.map(el => {
         el.isEditing = (el === currentEl);
         return el;
       });
-      currentEl.hasError = false;
+    currentEl.hasError = false;
   }
 
 
@@ -108,7 +109,7 @@ export class EditableTableComponent implements OnChanges {
     const reader = new FileReader();
     reader.addEventListener('load', (event: any) => {
       this.Data[index].dirty = true;
-      this.hasFileUploading[index] = true;
+      this.isFileUploading[index] = true;
       this.fileUploaded.emit({file, index});
       //this.editedElement[fieldName] = file.name;
       this.fileNames[index] = file.name;

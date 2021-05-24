@@ -62,8 +62,8 @@
         <ng-container *ngIf="!el.isEditing && !batchEnabled">
          <span *ngIf="(!field.type || field.type !== 'image')">
            {{getSting(el, field.name)}}</span>
-          <img *ngIf="field.type === 'image' && !hasFileUploading[idx]" [src]="el[field.name]">
-          <div *ngIf="field.type === 'image' && hasFileUploading[idx]" class="spinner-border" role="status">
+          <img *ngIf="field.type === 'image' && !isFileUploading[idx]" [src]="el[field.name]">
+          <div *ngIf="field.type === 'image' && isFileUploading[idx]" class="spinner-border" role="status">
             <span class="sr-only">Loading...</span>
           </div>
         </ng-container>

@@ -52,8 +52,8 @@
             <label class="custom-file-label" for="inputGroupFile01">Load from excel</label>
           </div>
         </div>
-        <app-editable-table (dataChanged)="updateProduct($event)" (fileUploaded)="handleUploadImage($event)"
-                            [hasFileUploading]="hasFileUploading"
+        <app-editable-table (dataUpdated)="updateProduct($event)" (fileUploaded)="handleUploadImage($event)"
+                            [isFileUploading]="isFileUploading"
                             [newElement]="getNewProduct()"
                             [Data]="products" [columnNames]="productHeaders" [fields]="productFields"
                             [batchEnabled]="batchEnable"
