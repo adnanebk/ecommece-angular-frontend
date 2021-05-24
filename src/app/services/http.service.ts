@@ -135,7 +135,7 @@ export class HttpService {
   }
 
   getUserInfo(userName: string) {
-    return this.httpClient.get<AppUser>(this.baseUrl + 'appUsers/'+userName);
+    return this.httpClient.get<AppUser>(this.baseUrl + 'appUsers/info');
   }
 
   sendActivationMessage(email: string) {
