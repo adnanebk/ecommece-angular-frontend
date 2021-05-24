@@ -1,4 +1,3 @@
-import {Product} from './product';
 import {CartItem} from './cart-item';
 import {CreditCard} from './CreditCard';
 

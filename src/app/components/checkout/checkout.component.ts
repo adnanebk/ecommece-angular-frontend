@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormGroup, FormBuilder, Validators, AbstractControl} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CartService} from '../../services/cart.service';
 import {HttpService} from '../../services/http.service';
 import {Order} from '../../models/order';
@@ -78,8 +78,9 @@ export class CheckoutComponent implements OnInit {
     this.httpService.saveOrder(order).subscribe(next => {
       this.router.navigateByUrl('/orders');
     }, (errors => {
-      if(Array.isArray(errors))
-      this.errors = errors;
+      if (Array.isArray(errors)) {
+        this.errors = errors;
+      }
     }));
   }
 

@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MyError} from '../../models/my-error';
-import {HttpService} from '../../services/http.service';
 import {Router} from '@angular/router';
 import {MustMatch} from '../../validators/mustMatch';
 import {AuthService} from '../../services/auth.service';

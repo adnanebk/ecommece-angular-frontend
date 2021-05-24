@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {Product} from '../models/product';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {CartItem} from '../models/cart-item';
 

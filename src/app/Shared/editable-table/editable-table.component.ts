@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {DatePipe} from '@angular/common';
-import {ConfirmDialogService} from '../services/confirm-dialog.service';
+import {ConfirmDialogService} from '../../services/confirm-dialog.service';
 
 
 @Component({
@@ -10,9 +10,9 @@ import {ConfirmDialogService} from '../services/confirm-dialog.service';
 })
 export class EditableTableComponent implements OnChanges {
   @Input() Data: any[] = [];
-  @Input() selects=new Selects();
+  @Input() selects = new Selects();
   @Input() batchEnabled = false;
-  @Input() fields: any[];
+  @Input() fields: Field[];
   @Input() hasFileUploading: boolean[];
   @Input() columnNames: string[];
   @Input() options: any;
@@ -33,13 +33,14 @@ export class EditableTableComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('selects--',this.selects);
+    console.log('selects--', this.selects);
     if (changes.errors) {
-     this.Data.map(e=>{
-       if(e.isEditing)
-         e.hasError=true;
-       return e;
-     });
+      this.Data.map(e => {
+        if (e.isEditing) {
+          e.hasError = true;
+        }
+        return e;
+      });
 
     }
   }
@@ -47,24 +48,21 @@ export class EditableTableComponent implements OnChanges {
 
   onSave(index: number) {
     this.errors = [];
-    this.Data[index].hasError=false;
+    this.Data[index].hasError = false;
     this.Data[index].isNew ? this.dataAdded.emit() : this.dataChanged.emit(index);
   }
 
   insertToTable($event: MouseEvent) {
     $event.stopPropagation();
-    this.Data[0].isEditing=true;
+    this.Data[0].isEditing = true;
     if (!this.Data[0].isNew) {
       this.Data.unshift({...this.newElement, isNew: true});
-      this.Data[0].isEditing=true;
+      this.Data[0].isEditing = true;
     }
   }
 
 
-  onValueChanged(index: number, field: any) {
-    this.Data[index].dirty = true;
-    this.removeError(field.name);
-  }
+
 
   remove(index: any) {
     this.confirmDialogService.confirmThis(() => {
@@ -76,27 +74,31 @@ export class EditableTableComponent implements OnChanges {
   }
 
   getSting(el: any, name: any) {
-    let val=el[name];
+    let val = el[name];
     if (val?.length > 60) {
       return val.substring(0, 60);
     }
     if (Date.parse(val)) {
       return this.datePipe.transform(val, 'short');
     }
-    if(this.selects.get(name))
+    if (this.selects.get(name)) {
       return val[this.selects.get(name).displayField];
-    if(typeof  val ==='boolean')
-      return  val?'Yes':'No';
+    }
+    if (typeof val === 'boolean') {
+      return val ? 'Yes' : 'No';
+    }
     return val;
   }
-
-  onViewChanged(elem: any, $event: MouseEvent) {
-    this.Data.map(el=>{
-       (el===elem)?el.isEditing=true:el.isEditing=false;
-       return el;
-    });
-    elem.hasError=false;
-
+  onValueChanged(index: number, field: any) {
+    this.Data[index].dirty = true;
+    this.removeError(field.name);
+  }
+  onViewChanged(currentEl: any) {
+      this.Data = this.Data.map(el => {
+        el.isEditing = (el === currentEl);
+        return el;
+      });
+      currentEl.hasError = false;
   }
 
 
@@ -179,12 +181,19 @@ export class EditableTableComponent implements OnChanges {
     return prop.id;
   }
 
-  byId(item1,item2){
-    return ((item1 && item2) && item1.id === item2.id) || item1===item2;
+  byId(item1, item2) {
+    return ((item1 && item2) && item1.id === item2.id) || item1 === item2;
   }
 
 
 }
-export class Selects extends Map<string,{title?: string,displayField:string,valueField:string,options:any[]}>{
 
+export class Selects extends Map<string, { title?: string, displayField: string, valueField: string, options: any[] }> {
+
+}
+
+export interface Field {
+  name: string;
+  type?: string;
+  readOnly?: boolean;
 }

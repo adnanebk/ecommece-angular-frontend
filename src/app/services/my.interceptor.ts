@@ -1,10 +1,5 @@
 import {Injectable} from '@angular/core';
-import {
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpInterceptor
-} from '@angular/common/http';
+import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {ToastrService} from 'ngx-toastr';
@@ -13,7 +8,7 @@ import {AuthService} from './auth.service';
 @Injectable()
 export class MyInterceptor implements HttpInterceptor {
 
-  constructor(private toastrService: ToastrService,private authService: AuthService) {
+  constructor(private toastrService: ToastrService, private authService: AuthService) {
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
@@ -42,13 +37,14 @@ export class MyInterceptor implements HttpInterceptor {
         if (resp.status === 400 || resp.status === 403) {
           if (resp.error.errors) {
             return throwError(resp.error.errors);
-          } else if(resp.error?.message){
-            if(resp.status===403)
+          } else if (resp.error?.message) {
+            if (resp.status === 403) {
               this.authService.verifyUser();
-            else
-            this.toastrService.error(resp.error.message, 'Error', {
-              timeOut: 3000,
-            });
+            } else {
+              this.toastrService.error(resp.error.message, 'Error', {
+                timeOut: 3000,
+              });
+            }
             return throwError(resp.error);
           }
         } else if (resp.status.startsWith('4')) {

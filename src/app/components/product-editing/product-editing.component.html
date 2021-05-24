@@ -19,7 +19,7 @@
         <i class="fas fa-search" aria-hidden="true"></i>
         <input class="form-control form-control-sm ml-3 w-75" type="text"
                placeholder="Search By product name or description"
-               (keyup.enter)="handleDataSearched($event.target.value)"
+               (keyup.enter)="SearchProducts($event.target.value)"
                aria-label="Search">
       </form>
       <ngb-alert *ngIf="products?.length<=0">No products found</ngb-alert>
@@ -52,17 +52,17 @@
             <label class="custom-file-label" for="inputGroupFile01">Load from excel</label>
           </div>
         </div>
-        <app-editable-table (dataChanged)="handleDataChanged($event)" (fileUploaded)="handleUploadFile($event)"
+        <app-editable-table (dataChanged)="updateProduct($event)" (fileUploaded)="handleUploadImage($event)"
                             [hasFileUploading]="hasFileUploading"
                             [newElement]="getNewProduct()"
                             [Data]="products" [columnNames]="productHeaders" [fields]="productFields"
                             [batchEnabled]="batchEnable"
                             [selects]="categorySelects"
-                            (dataAdded)="handleDataAdded()"
-                            (dataDeleted)="handleDataDeleted($event)"
-                            (dataSorted)="handleDataSorted($event)"
-                            (UpdateAll)="handleUpdateAll($event)"
-                            (RemoveAll)="handleRemoveAll($event)"
+                            (dataAdded)="addNewProduct()"
+                            (dataDeleted)="removeProduct($event)"
+                            (dataSorted)="SortProduct($event)"
+                            (UpdateAll)="updateProducts($event)"
+                            (RemoveAll)="removeAllProducts($event)"
                             (SelectedElements)="handleSelectedElements($event)"
                             [errors]="errors"
         ></app-editable-table>

@@ -39,7 +39,7 @@
 
       <td class="p-1 align-middle">
       <span *ngIf="!batchEnabled" class="table-edit">
-        <button *ngIf="!el.isEditing" (click)="onViewChanged(el,$event)" type="button"
+        <button *ngIf="!el.isEditing" (click)="onViewChanged(el)" type="button"
                 class="btn btn-info btn-rounded btn-sm my-0">Update</button>
         <button *ngIf="el.isEditing" (click)="onSave(idx)" type="button"
                 class="btn btn-success btn-rounded btn-sm my-0">Save</button>
@@ -55,20 +55,20 @@
 
       </td>
 
-      <td *ngFor="let field of fields" (click)="onViewChanged(el,$event)" class="pt-3-half p-1 align-middle mw-200"
+      <td *ngFor="let field of fields" (click)="onViewChanged(el)" class="pt-3-half p-1 align-middle mw-200"
           [ngStyle]="el[field.name]?.length>100 && {minWidth: '200px'}"
           [ngClass]="(el?.dirty && batchEnabled && !el.hasError) && 'bgDirty'">
 
         <ng-container *ngIf="!el.isEditing && !batchEnabled">
          <span *ngIf="(!field.type || field.type !== 'image')">
-           {{getSting(el,field.name)}}</span>
+           {{getSting(el, field.name)}}</span>
           <img *ngIf="field.type === 'image' && !hasFileUploading[idx]" [src]="el[field.name]">
           <div *ngIf="field.type === 'image' && hasFileUploading[idx]" class="spinner-border" role="status">
             <span class="sr-only">Loading...</span>
           </div>
         </ng-container>
 
-        <ng-container *ngIf="el.isEditing || batchEnabled" >
+        <ng-container *ngIf="el.isEditing || batchEnabled">
           <input *ngIf="!field.type  &&  el[field.name].length<35" [(ngModel)]="el[field.name]" type="text"
                  class="form-control w-auto"
                  (input)="onValueChanged(idx,this.field)" (keyup.enter)="onSave(idx)">
@@ -76,7 +76,7 @@
                     [(ngModel)]="el[field.name]" type="text" class="form-control w-auto"
                     (input)="onValueChanged(idx,this.field)"></textarea>
           <div class="file-input" *ngIf="field.type === 'image'">
-            <input id="file" #file type="file" class="form-control file"  accept="image/*"
+            <input id="file" #file type="file" class="form-control file" accept="image/*"
                    (change)="processFile(idx,this.field.name,file)">
             <label for="file">Select file</label>
           </div>
@@ -94,10 +94,12 @@
             <label class="custom-control-label" for="customSwitches"></label>
           </div>
 
-          <select *ngIf="selects.get(field.name)" [compareWith]="byId" [(ngModel)]="el[field.name]"  (change)="onValueChanged(idx,this.field)"
+          <select *ngIf="selects.get(field.name)" [compareWith]="byId" [(ngModel)]="el[field.name]"
+                  (change)="onValueChanged(idx,this.field)"
                   class="browser-default custom-select w-auto">
             <option [ngValue]="null">Choose</option>
-            <option [ngValue]="op" *ngFor="let op of selects.get(field.name).options"  >{{op[selects.get(field.name).displayField]}}</option>
+            <option [ngValue]="op"
+                    *ngFor="let op of selects.get(field.name).options">{{op[selects.get(field.name).displayField]}}</option>
           </select>
           <span *ngIf="el.hasError && el.isEditing" class="text-danger">{{getError(field.name)}}</span>
         </ng-container>

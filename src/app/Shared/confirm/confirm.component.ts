@@ -3,7 +3,7 @@
 *
 */
 import {Component, Input, OnInit} from '@angular/core';
-import {ConfirmDialogService} from '../services/confirm-dialog.service';
+import {ConfirmDialogService} from '../../services/confirm-dialog.service';
 
 
 @Component({

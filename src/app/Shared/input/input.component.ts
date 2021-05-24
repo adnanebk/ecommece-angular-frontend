@@ -16,8 +16,6 @@ export class InputComponent {
   @Output() inputChanged = new EventEmitter<any>();
 
 
-
-
   showError() {
     const {dirty, touched, errors} = this.control;
     return (dirty && touched && errors);

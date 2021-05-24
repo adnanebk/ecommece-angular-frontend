@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {AppUser} from '../models/app-user';
 import {map} from 'rxjs/operators';
-import {BehaviorSubject, timer} from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
 import {HttpService} from './http.service';
 import {FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialUser} from 'angularx-social-login';
 import {ToastrService} from 'ngx-toastr';
@@ -13,7 +13,7 @@ export class AuthService {
   public userSubject = new BehaviorSubject<AppUser>(null);
   private currentUser: AppUser;
 
-  constructor(private httpService: HttpService, private socialAuthService: SocialAuthService,private toastrService: ToastrService) {
+  constructor(private httpService: HttpService, private socialAuthService: SocialAuthService, private toastrService: ToastrService) {
     const currentUserSt = localStorage.getItem('appUser');
     if (currentUserSt?.length > 0) {
       this.currentUser = JSON.parse(currentUserSt);
@@ -37,8 +37,9 @@ export class AuthService {
       })
     );
   }
+
   async getUserInfo() {
-     return  await this.httpService.getUserInfo().toPromise();
+    return await this.httpService.getUserInfo().toPromise();
   }
 
   logout() {
@@ -50,7 +51,7 @@ export class AuthService {
   private returnConnectedUser(response: { token: string; appUser: AppUser }) {
     localStorage.setItem('appUser', JSON.stringify(response.appUser));
     localStorage.setItem('token', response.token);
-    this.currentUser=response.appUser;
+    this.currentUser = response.appUser;
     this.verifyUser();
     this.userSubject.next(this.currentUser);
     return this.currentUser;
@@ -83,28 +84,29 @@ export class AuthService {
   }
 
   sendActivationMessage() {
-  return  this.httpService. sendActivationMessage(this.currentUser.email);
+    return this.httpService.sendActivationMessage(this.currentUser.email);
   }
 
   sendConfirmedWithSuccess() {
     this.toastrService.success('you have successfully verified your account');
-    this.currentUser.enabled=true;
+    this.currentUser.enabled = true;
     localStorage.setItem('appUser', JSON.stringify(this.currentUser));
 
   }
 
-   verifyUser() {
-    if(!this.currentUser.enabled)
+  verifyUser() {
+    if (!this.currentUser.enabled) {
       this.toastrService.info('Please complete your registration by activating your account in your email messages or click here te resend the activation code',
         'Activate your account', {
           timeOut: 10000,
           extendedTimeOut: 3000,
-        }).onTap.subscribe(v=> {
-          if(!this.currentUser.enabled)
-          this.sendActivationMessage().subscribe(
-            () => this.toastrService.info('We have just sent you a confirmation link,check your email messages'));
+        }).onTap.subscribe(v => {
+          if (!this.currentUser.enabled) {
+            this.sendActivationMessage().subscribe(
+              () => this.toastrService.info('We have just sent you a confirmation link,check your email messages'));
+          }
         }
-
       );
+    }
   }
 }
