@@ -13,7 +13,6 @@ export class EditableTableComponent implements OnChanges {
   @Input() selects = new Selects();
   @Input() batchEnabled = false;
   @Input() fields: Field[];
-  @Input() isFileUploading: boolean[];
   @Input() columnNames: string[];
   @Input() options: any;
   @Input() newElement: any;
@@ -22,10 +21,11 @@ export class EditableTableComponent implements OnChanges {
   @Output() dataAdded = new EventEmitter();
   @Output() dataDeleted = new EventEmitter<{ index: number, data: any }>();
   @Output() dataSorted = new EventEmitter<{ sort: string, direction: string }>();
-  @Output() fileUploaded = new EventEmitter<{ file: File, index: number }>();
+  @Output() fileUploaded = new EventEmitter<{ file: File, index: number,completionFunc: (index: number)=>void }>();
   @Output() UpdateAll = new EventEmitter<any[]>();
   @Output() RemoveAll = new EventEmitter<any[]>();
-  selectedSize=0;
+   isFileUploading: boolean[]=[];
+   selectedSize=0;
 
   fileNames: string[] = [];
 
@@ -102,8 +102,9 @@ export class EditableTableComponent implements OnChanges {
     const reader = new FileReader();
     reader.addEventListener('load', (event: any) => {
       this.Data[index].dirty = true;
-      this.isFileUploading[index] = true;
-      this.fileUploaded.emit({file, index});
+      //this.isFileUploading[index] = true;
+      this.isFileUploading[index]=true;
+      this.fileUploaded.emit({file, index,completionFunc:(idx =>this.onFileUploaded(idx) )});
       //this.editedElement[fieldName] = file.name;
       this.fileNames[index] = file.name;
     });
@@ -178,6 +179,9 @@ export class EditableTableComponent implements OnChanges {
   }
 
 
+   onFileUploaded= (idx: number)=> {
+    this.isFileUploading[idx]=false;
+  }
 }
 
 export class Selects extends Map<string, { title?: string, displayField: string, valueField: string, options: any[] }> {

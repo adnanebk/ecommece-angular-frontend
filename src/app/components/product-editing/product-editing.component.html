@@ -52,7 +52,6 @@
           </div>
         </div>
         <app-editable-table (dataUpdated)="updateProduct($event)" (fileUploaded)="handleUploadImage($event)"
-                            [isFileUploading]="isFileUploading"
                             [newElement]="getNewProduct()"
                             [Data]="products" [columnNames]="productHeaders" [fields]="productFields"
                             [batchEnabled]="batchEnable"
