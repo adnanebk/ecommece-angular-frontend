@@ -25,7 +25,7 @@ export class EditableTableComponent implements OnChanges {
   @Output() fileUploaded = new EventEmitter<{ file: File, index: number }>();
   @Output() UpdateAll = new EventEmitter<any[]>();
   @Output() RemoveAll = new EventEmitter<any[]>();
-  @Output() SelectedElements = new EventEmitter<any[]>();
+  selectedSize=0;
 
   fileNames: string[] = [];
 
@@ -33,7 +33,6 @@ export class EditableTableComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('changes',changes);
     if (changes.errors) {
       this.Data.map(e => {
         if (e.isEditing) {
@@ -52,16 +51,12 @@ export class EditableTableComponent implements OnChanges {
     this.Data[index].isNew ? this.dataAdded.emit() : this.dataUpdated.emit(index);
   }
 
-  insertToTable($event: MouseEvent) {
-    $event.stopPropagation();
-    this.Data[0].isEditing = true;
+  insertNewRow() {
     if (!this.Data[0].isNew) {
       this.Data.unshift({...this.newElement, isNew: true});
       this.Data[0].isEditing = true;
     }
   }
-
-
 
 
   remove(index: any) {
@@ -94,12 +89,10 @@ export class EditableTableComponent implements OnChanges {
     this.removeError(field.name);
   }
   onViewChanged(currentEl: any) {
-    console.log('view',currentEl);
      this.Data.map(el => {
         el.isEditing = (el === currentEl);
         return el;
       });
-    currentEl.hasError = false;
   }
 
 
@@ -134,30 +127,26 @@ export class EditableTableComponent implements OnChanges {
   }
 
 
-  onElSelected() {
-    this.SelectedElements.emit(this.Data.filter(e => e.selected));
-
-  }
-
-  getSelectedSize() {
-    return this.Data.filter(e => e.selected).length;
+  onElSelected(el: any) {
+   el.selected?this.selectedSize++:this.selectedSize--;
   }
 
   deleteAll() {
-    this.confirmDialogService.confirmThis(() => {
-      this.errors = [];
-      this.RemoveAll.emit(this.Data.filter(e => e.selected));
-    });
+    if(this.selectedSize>0)    {
+      this.confirmDialogService.confirmThis(() => {
+        this.errors = [];
+        this.RemoveAll.emit(this.Data.filter(e => e.selected));
+      });
+      this.selectedSize=0;
+
+    }
+
   }
 
-  saveAll($event?: MouseEvent) {
-    $event.stopPropagation();
+  saveAll() {
     this.errors = [];
-    this.UpdateAll.emit(this.Data.filter(e => e.dirty));
-  }
-
-  isDataDirty() {
-    return this.Data.find(el => el.dirty);
+    let data= this.Data.filter(e => e.dirty);
+    data.length && this.UpdateAll.emit(data);
   }
 
   getError(fieldName: string) {
@@ -172,8 +161,10 @@ export class EditableTableComponent implements OnChanges {
 
   onAllSelected(check: HTMLInputElement) {
     if (check.checked) {
+      this.selectedSize=this.Data.length;
       this.Data.map(e => e.selected = true);
     } else {
+      this.selectedSize=0;
       this.Data.map(e => e.selected = false);
     }
   }

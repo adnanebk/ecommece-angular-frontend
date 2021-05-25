@@ -26,7 +26,6 @@
 
 
       <ng-container *ngIf="products?.length>0">
-        -
         <div class="custom-control custom-switch">
           <input type="checkbox" class="custom-control-input" (change)="batchEnable=batch.checked" #batch
                  [checked]="batchEnable" id="sw">
@@ -63,7 +62,6 @@
                             (dataSorted)="SortProduct($event)"
                             (UpdateAll)="updateProducts($event)"
                             (RemoveAll)="removeAllProducts($event)"
-                            (SelectedElements)="handleSelectedElements($event)"
                             [errors]="errors"
         ></app-editable-table>
         <ngb-pagination (pageChange)="fetchProducts($event)"

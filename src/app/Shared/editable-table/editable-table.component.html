@@ -1,12 +1,12 @@
 <br>
-<span *ngIf="!batchEnabled" class="table-add  mb-3 mr-2"><a (click)="insertToTable($event)" class="text-success">Add<i
+<span *ngIf="!batchEnabled" class="table-add  mb-3 mr-2"><a (click)="insertNewRow()" class="text-success">Add<i
   class="fas fa-plus fa-2x" aria-hidden="true"></i></a></span>
 
 
 <div *ngIf="batchEnabled">
-  <div *ngIf="getSelectedSize()>0" class="alert alert-info">{{getSelectedSize()}} elements has been selected</div>
-  <button [disabled]="!isDataDirty()" (click)="saveAll($event)" class="btn btn-info">Save all</button>
-  <button [disabled]="getSelectedSize()<=0" (click)="deleteAll()" class="btn btn-danger">Remove all</button>
+  <div *ngIf="selectedSize>0" class="alert alert-info">{{selectedSize}} elements has been selected</div>
+  <button  (click)="saveAll()" class="btn btn-info">Save all</button>
+  <button [disabled]="selectedSize<=0" (click)="deleteAll()" class="btn btn-danger">Remove all</button>
 </div>
 <div class="table-responsive table-wrapper-scroll-y">
   <app-dialog text="Are you sure to delete ?"></app-dialog>
@@ -47,7 +47,7 @@
       </span>
         <span *ngIf="batchEnabled" class="select">
     <div class="custom-control custom-checkbox">
-    <input [(ngModel)]="el.selected" (change)="onElSelected()" #check type="checkbox"
+    <input [(ngModel)]="el.selected" (change)="onElSelected(el)" #check type="checkbox"
            class="custom-control-input" [id]="'selectCheck'+idx">
     <label class="custom-control-label" [for]="'selectCheck'+idx"></label>
     </div>
