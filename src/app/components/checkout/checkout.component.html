@@ -42,11 +42,10 @@
             <div class="col-md-2"><label>Country</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <app-input (inputChanged)="handleChange($event)"
+                <app-input (inputChanged)="handleChange()" [errors]="errors"
                            [control]="checkoutFormGroup.controls.shippingAddress.get('country')"
-                           type="select"
+                           type="select" name="country"
                            [valueData]="['Morocco','Algeria','France','China']"></app-input>
-                <span class="text-danger">{{getError('country')}}</span>
               </div>
             </div>
           </div>
@@ -55,10 +54,9 @@
             <div class="col-md-2"><label>Street</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <app-input (inputChanged)="handleChange($event)"
+                <app-input (inputChanged)="handleChange()" [errors]="errors"
                            [control]="checkoutFormGroup.controls.shippingAddress.get('street')"
-                           placeholder="Street"></app-input>
-                <span class="text-danger">{{getError('street')}}</span>
+                           placeholder="Street" name="street"></app-input>
               </div>
             </div>
           </div>
@@ -67,10 +65,9 @@
             <div class="col-md-2"><label>City</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <app-input (inputChanged)="handleChange($event)"
+                <app-input (inputChanged)="handleChange()" [errors]="errors"
                            [control]="checkoutFormGroup.controls.shippingAddress.get('city')"
-                           placeholder="City"></app-input>
-                <span class="text-danger">{{getError('city')}}</span>
+                           placeholder="City" name="city"></app-input>
               </div>
             </div>
           </div>
@@ -87,11 +84,10 @@
             <div class="col-md-9">
               <div class="input-space">
 
-                <app-input (inputChanged)="handleChange($event)"
+                <app-input (inputChanged)="handleChange()" [errors]="errors"
                            [control]="checkoutFormGroup.controls.creditCard.get('cardType')"
-                           type="select" [valueData]="['VISA','MASTERCARD']"
+                           type="select" name="cardType" [valueData]="['VISA','MASTERCARD']"
                            [displayData]="['Visa','Master card']"></app-input>
-                <span class="text-danger">{{getError('cardType')}}</span>
 
               </div>
             </div>
@@ -101,10 +97,9 @@
             <div class="col-md-2"><label>Expiration Date</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <app-input (inputChanged)="handleChange($event)"
+                <app-input (inputChanged)="handleChange()" [errors]="errors"
                            [control]="checkoutFormGroup.controls.creditCard.get('expirationDate')"
-                           placeholder="expiration Date (month/year)"></app-input>
-                <span class="text-danger">{{getError('expirationDate')}}</span>
+                           placeholder="expiration Date (month/year)" name="expirationDate"></app-input>
               </div>
             </div>
           </div>
@@ -113,10 +108,9 @@
             <div class="col-md-2"><label>Card number</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <app-input (inputChanged)="handleChange($event)"
+                <app-input (inputChanged)="handleChange()" [errors]="errors"
                            [control]="checkoutFormGroup.controls.creditCard.get('cardNumber')"
-                           placeholder="cardNumber"></app-input>
-                <span class="text-danger">{{getError('cardNumber')}}</span>
+                           placeholder="cardNumber" name="cardNumber"></app-input>
 
               </div>
             </div>

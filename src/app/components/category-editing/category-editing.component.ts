@@ -37,9 +37,9 @@ export class CategoryEditingComponent implements OnInit {
     );
   }
 
-  handleCategoryDeleted($event: any) {
-    this.httpService.removeCategory($event.data.id).subscribe();
-    this.categories.splice($event.index, 1);
+  handleCategoryDeleted({data,index}) {
+    this.httpService.removeCategory(data.id).subscribe();
+    this.categories.splice(index, 1);
   }
 
   getNewProductCategory() {

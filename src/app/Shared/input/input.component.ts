@@ -10,11 +10,13 @@ export class InputComponent {
 
   @Input() control: AbstractControl;
   @Input() type = 'text';
+  @Input() name: string;
   @Input() placeholder: string;
+  @Input() errors =[];
   @Input() valueData: [] = [];
   @Input() displayData: [] = [];
   @Output() inputChanged = new EventEmitter<any>();
-
+  apiError ='';
 
   showError() {
     const {dirty, touched, errors} = this.control;
@@ -23,6 +25,13 @@ export class InputComponent {
 
   onInputChange() {
     this.inputChanged.emit();
+  }
+
+  hasAnyApiError() {
+    let error = this.errors?.find(er => er.fieldName === this.name);
+    this.apiError= error && error.name + ' ' + error.message;
+    return this.apiError;
+
   }
 }
 

@@ -10,9 +10,8 @@
             <div class="col-md-2"><label>First Name</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <app-input (inputChanged)="handleChange($event)" [control]="form.controls.firstName"
-                           placeholder="First name"></app-input>
-                <span class="text-danger">{{getError('firstName')}}</span>
+                <app-input (inputChanged)="handleChange()" name="firstName" [control]="form.controls.firstName"
+                           placeholder="First name" [errors]="errors"></app-input>
               </div>
             </div>
           </div>
@@ -21,9 +20,8 @@
             <div class="col-md-2"><label>Last Name</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <app-input (inputChanged)="handleChange($event)" [control]="form.controls.lastName"
-                           placeholder="Last name"></app-input>
-                <span class="text-danger">{{getError('lastName')}}</span>
+                <app-input (inputChanged)="handleChange()" [control]="form.controls.lastName"
+                           placeholder="Last name" name="lastName" [errors]="errors"></app-input>
               </div>
             </div>
           </div>
@@ -32,9 +30,8 @@
             <div class="col-md-2"><label>User name</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <app-input (inputChanged)="handleChange($event)" [control]="form.controls.userName"
-                           placeholder="User name"></app-input>
-                <span class="text-danger">{{getError('userName')}}</span>
+                <app-input (inputChanged)="handleChange()" [control]="form.controls.userName"
+                           placeholder="User name" name="userName" [errors]="errors"></app-input>
               </div>
             </div>
           </div>
@@ -42,9 +39,8 @@
             <div class="col-md-2"><label>Email</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <app-input (inputChanged)="handleChange($event)" [control]="form.controls.email"
-                           placeholder="Email"></app-input>
-                <span class="text-danger">{{getError('email')}}</span>
+                <app-input (inputChanged)="handleChange()" [control]="form.controls.email"
+                           placeholder="Email" name="email" [errors]="errors"></app-input>
               </div>
             </div>
           </div>
@@ -52,9 +48,8 @@
             <div class="col-md-2"><label>Password</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <app-input (inputChanged)="handleChange($event)" type="password" [control]="form.controls.password"
-                           placeholder="Password"></app-input>
-                <span class="text-danger">{{getError('password')}}</span>
+                <app-input (inputChanged)="handleChange()" type="password" [control]="form.controls.password"
+                           placeholder="Password" name="password" [errors]="errors"></app-input>
               </div>
             </div>
           </div>
@@ -63,10 +58,10 @@
             <div class="col-md-2"><label>Confirm password</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <app-input (inputChanged)="handleChange($event)" type="password"
+                <app-input (inputChanged)="handleChange()" type="password"
                            [control]="form.controls.confirmPassword"
-                           placeholder="Confirm password"></app-input>
-                <span class="text-danger">{{getError('confirmPassword')}}</span>
+                           placeholder="Confirm password" name="confirmPassword" [errors]="errors">
+                </app-input>
               </div>
             </div>
           </div>

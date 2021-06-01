@@ -1,5 +1,5 @@
 <input (input)="onInputChange()" *ngIf="type!=='select'" [type]="type" [formControl]="control"
-       [placeholder]="placeholder">
+       [placeholder]="placeholder" class="form-control">
 <select (change)="onInputChange()" *ngIf="type==='select'" [formControl]="control">
   <option [ngValue]="el"
           *ngFor="let el of valueData; index as i">{{displayData.length > 0 ? displayData[i] : valueData[i]}}</option>
@@ -13,3 +13,5 @@
   Passwords must match </span>
   <br>
 </ng-container>
+<span class="text-danger" *ngIf="this.hasAnyApiError()">{{this.apiError}}</span>
+

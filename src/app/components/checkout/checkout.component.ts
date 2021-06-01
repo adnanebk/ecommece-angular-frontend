@@ -99,16 +99,10 @@ export class CheckoutComponent implements OnInit {
     this.saveOrder(myOrder);
   }
 
-  /*  getErrorMessage(input: AbstractControl)
-    {
-     return  this.validationService.getErrorMessage(input, this.checkoutFormGroup, this.clientErrorEnabled, this.errors);
-    }*/
-  getError(fieldName: string) {
-    const error = this.errors?.find(er => er.fieldName === fieldName);
-    return error && error.name + ' ' + error.message;
-  }
 
-  handleChange($event: any) {
+
+
+  handleChange() {
     this.errors = null;
   }
 }

@@ -89,10 +89,10 @@ export class ProductEditingComponent implements OnInit {
     );
   }
 
-  removeProduct($event: { index: number; data: any }) {
-    this.httpService.removeProduct($event.data.id).subscribe(() => {
+  removeProduct({ index, data }) {
+    this.httpService.removeProduct(data.id).subscribe(() => {
       this.toastrService.success('your operation has been successful');
-      this.products.splice($event.index, 1);
+      this.products.splice(index, 1);
     });
   }
 
@@ -103,27 +103,27 @@ export class ProductEditingComponent implements OnInit {
     });
   }
 
-  SortProduct($event: { sort: string; direction: string }) {
-    this.sort = $event.sort;
-    this.direction = $event.direction;
+  SortProduct({ sort, direction }) {
+    this.sort = sort;
+    this.direction = direction;
     this.fetchProducts();
   }
 
-  SearchProducts($event: string) {
-    this.search = $event;
+  SearchProducts(search: string) {
+    this.search = search;
     this.fetchProducts();
   }
 
-  handleUploadImage($event: { file: File; index: number,completionFunc: (index: number)=>void }) {
-    this.imageService.uploadImage($event.file).subscribe(
+  handleUploadImage({ file, index,completionFunc }) {
+    this.imageService.uploadImage(file).subscribe(
       (res: string) => {
-        if (this.products[$event.index].image !== $event.file.name) {
-          this.products[$event.index] = {...this.products[$event.index], image: res};
+        if (this.products[index].image !== file.name) {
+          this.products[index] = {...this.products[index], image: res};
         }
       },
       (err) => {
         this.errors = [err];
-      },()=> $event.completionFunc($event.index)
+      },()=> completionFunc(index)
   );
   }
 
