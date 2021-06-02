@@ -11,4 +11,5 @@ export const environment = {
   facebook: {
     clientId: '464555957988601'
   }
+
 };
