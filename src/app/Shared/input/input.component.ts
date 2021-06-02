@@ -28,7 +28,7 @@ export class InputComponent {
   }
 
   hasAnyApiError() {
-    let error = this.errors?.find(er => er.fieldName === this.name);
+    let error = Array.isArray(this.errors) && this.errors?.find(er => er.fieldName === this.name);
     this.apiError= error && error.name + ' ' + error.message;
     return this.apiError;
 

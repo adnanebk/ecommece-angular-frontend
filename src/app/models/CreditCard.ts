@@ -1,5 +1,6 @@
 export class CreditCard {
-  cardNumber: string;
-  cardType: string;
-  expirationDate: string;
+  id=0;
+  cardNumber: string='';
+  cardType: string='';
+  expirationDate: string='';
 }

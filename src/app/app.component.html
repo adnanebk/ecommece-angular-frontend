@@ -48,11 +48,16 @@
 
           <!-- Dropdown -->
           <app-product-category isMenu="true"></app-product-category>
-
-          <li class="nav-item" *ngIf="user">
+          <ng-container  *ngIf="user">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/user-info">
+              <b class="text-dark font-weight-bold">My profile</b></a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" routerLink="">
               <b class="text-dark font-weight-bold">Welcome {{user.userName}}!</b></a>
           </li>
+          </ng-container>
         </ul>
         <!-- Links -->
         <app-my-cart></app-my-cart>

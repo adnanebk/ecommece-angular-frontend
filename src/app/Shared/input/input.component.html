@@ -1,6 +1,6 @@
 <input (input)="onInputChange()" *ngIf="type!=='select'" [type]="type" [formControl]="control"
        [placeholder]="placeholder" class="form-control">
-<select (change)="onInputChange()" *ngIf="type==='select'" [formControl]="control">
+<select (change)="onInputChange()" *ngIf="type==='select'" [formControl]="control" class="form-control">
   <option [ngValue]="el"
           *ngFor="let el of valueData; index as i">{{displayData.length > 0 ? displayData[i] : valueData[i]}}</option>
 </select>

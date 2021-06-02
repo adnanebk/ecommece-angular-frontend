@@ -33,7 +33,7 @@ export class HttpService {
     const searchUrl = (theCategoryId > 0 && search === '') ?
       `${this.productUrl}/search/byCategory?id=${theCategoryId}&page=${page}`
       : (search !== '') ?
-        `${this.productUrl}/search/ByNameOrDescription?name=${search}&description=${search}&page=${page}`
+        `${this.productUrl}/search/byNameOrDescription?name=${search}&description=${search}&page=${page}`
         : this.productUrl + '?page=' + page;
     return this.httpClient.get<PagedResponse>(searchUrl + '&size=' + pageSize + '&sort=' + sort + ',' + direction)
       .pipe(timeout(this.timeOut), retry(this.retry), map(response => {
@@ -105,7 +105,8 @@ export class HttpService {
 
 
   getOrders(userName: string): Observable<Order[]> {
-    return this.httpClient.get<Order[]>(this.orderUrl + '/byUserName/' + userName,);
+    return this.httpClient.get<PagedResponse>(this.orderUrl + '/search/byUserName?userName=' + userName).pipe(
+      map(response => response._embedded.userOrders));
   }
 
   saveOrder(order: Order): Observable<Order> {
@@ -134,13 +135,29 @@ export class HttpService {
     return this.httpClient.post<AuthData>(this.baseUrl + 'facebook', data);
   }
 
-  getUserInfo() {
-    return this.httpClient.get<AppUser>(this.baseUrl + 'appUsers/info');
+  getUserInfo(userName: string) {
+    return this.httpClient.get<AppUser>(this.baseUrl + 'appUsers/search/byUserName?userName='+userName);
   }
 
+  updateUser(user: AppUser, id: number) {
+    return this.httpClient.patch<AppUser>(this.baseUrl+'appUsers/'+id, user);
+
+  }
   sendActivationMessage(email: string) {
     return this.httpClient.post<void>(this.baseUrl + 'appUsers/confirm', email);
   }
+
+
+  saveCreditCard(creditCard: CreditCard) {
+    return this.httpClient.post<CreditCard>(this.creditCardUrl, creditCard);
+  }
+  updateCreditCard(creditCard: CreditCard) {
+    return this.httpClient.patch<CreditCard>(this.creditCardUrl+'/'+creditCard.id, creditCard);
+  }
+  removeCreditCard(id: number) {
+    return this.httpClient.delete<void>(this.creditCardUrl+'/'+id);
+  }
+
 }
 
 interface PagedResponse {

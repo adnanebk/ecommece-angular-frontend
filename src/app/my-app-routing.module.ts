@@ -9,10 +9,12 @@ import {CartDetailsComponent} from './components/cart-details/cart-details.compo
 import {ProductDetailsComponent} from './components/product-details/product-details.component';
 import {ProductListComponent} from './components/product-list-grid/product-list-grid.component';
 import {ProductEditingComponent} from './components/product-editing/product-editing.component';
+import {UserInfoComponent} from './components/user-info/user-info.component';
 
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
+  {path: 'user-info', component: UserInfoComponent, canActivate: [AuthGuard]},
   {path: 'register', component: RegisterComponent},
   {path: 'orders', component: OrderComponent},
   {path: 'checkout', component: CheckoutComponent, canActivate: [AuthGuard]},

@@ -27,6 +27,7 @@ import {ToastrModule} from 'ngx-toastr';
 import {ConfirmComponent} from './Shared/confirm/confirm.component';
 import {MyAppRoutingModule} from './my-app-routing.module';
 import {AuthModule} from './components/login/auth.module';
+import { UserInfoComponent } from './components/user-info/user-info.component';
 
 
 @NgModule({
@@ -46,7 +47,8 @@ import {AuthModule} from './components/login/auth.module';
     InputComponent,
     EditableTableComponent,
     ProductEditingComponent,
-    CategoryEditingComponent
+    CategoryEditingComponent,
+    UserInfoComponent
   ],
   imports: [
     MyAppRoutingModule,

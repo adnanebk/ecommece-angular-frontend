@@ -40,6 +40,9 @@ export class CheckoutComponent implements OnInit {
     });
     this.httpService.getCreditCardInfo(this.user.userName).subscribe((cards) => {
       this.userCard = cards[0];
+      if(this.userCard?.cardNumber)
+      this.userCard.cardNumber = this.userCard.cardNumber.match(new RegExp('.{1,4}', 'g')).join('-');
+
       this.checkoutFormGroup = this.formBuilder.group({
         customer: this.formBuilder.group({
           fullName: [this.user?.firstName + ' ' + this.user?.lastName, [Validators.required, Validators.minLength(2)]],
@@ -51,6 +54,7 @@ export class CheckoutComponent implements OnInit {
           country: ['', Validators.required]
         }),
         creditCard: this.formBuilder.group({
+          id: [this.userCard?.id],
           cardType: [this.userCard?.cardType, [Validators.required]],
           cardNumber: new CardNumberFormControl(this.userCard?.cardNumber, [Validators.required]),
           expirationDate: new MonthYearFormControl(this.userCard?.expirationDate, [Validators.required])
