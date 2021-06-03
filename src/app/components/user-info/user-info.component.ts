@@ -22,13 +22,13 @@ export class UserInfoComponent implements OnInit {
   selectedCard: CreditCard;
   isUserModifying=false;
   isCardModifying=false;
-  private errors: MyError[];
+  errors: MyError[];
 
   constructor(private authService: AuthService,private httpService: HttpService,private formBuilder: FormBuilder) {
 
   }
 
- async ngOnInit(): void {
+  async ngOnInit() {
    this.user = await this.authService.getUserInfo();
     this.loadCreditCards();
     this.userForm = this.formBuilder.group({
@@ -52,7 +52,7 @@ export class UserInfoComponent implements OnInit {
     });
 }
 
-  private loadCreditCards() {
+   loadCreditCards() {
     this.selectedCard=new CreditCard();
     this.isCardModifying=false;
     this.httpService.getCreditCardInfo(this.user.userName).subscribe((cards) => {
@@ -95,7 +95,7 @@ this.httpService.updateUser(user,this.user.id).subscribe((resp)=>{
   submitUserCard() {
     let creditCard: CreditCard=this.cardForm.getRawValue();
     if(creditCard){
-      creditCard.cardNumber = creditCard?.cardNumber?.replaceAll('-', '');
+      creditCard.cardNumber = creditCard?.cardNumber?.replace(/\-/g, '');
       if (creditCard?.id > 0) {
         this.httpService.updateCreditCard(creditCard).subscribe(() =>{
           this.selectedCard=creditCard;
