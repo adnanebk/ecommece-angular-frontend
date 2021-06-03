@@ -77,13 +77,7 @@ export class ProductEditingComponent implements OnInit {
   updateProducts($products: Product[]) {
     this.httpService.updateProducts($products).subscribe(products => {
         this.toastrService.success('your operation has been successful');
-        this.products = this.products.map(prod => {
-          const pr = products.find(p => p.id === prod.id);
-          if (pr) {
-            return pr;
-          }
-          return prod;
-        });
+        this.products = this.products.map(prod =>products.find(p => p.id === prod.id) || prod);
       },
       errors => Array.isArray(errors) ? this.errors = errors : this.errors = [errors]
     );

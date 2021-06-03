@@ -35,15 +35,12 @@ export class EditableTableComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.errors) {
       this.Data.map(e => {
-        if (e.isEditing) {
+        if (e.isEditing)
           e.hasError = true;
-        }
         return e;
       });
-
     }
   }
-
 
   onSave(index: number) {
     this.errors = [];
@@ -112,16 +109,16 @@ export class EditableTableComponent implements OnChanges {
   }
 
 
-  sort(idx: number, ic: HTMLElement) {
+  sort(idx: number, element: HTMLElement) {
     let direction = '';
-    if (ic.classList.contains('fa-sort-up')) {
+    if (element.classList.contains('fa-sort-up')) {
       direction = 'desc';
-      ic.classList.replace('fa-sort-up', 'fa-sort-down');
-    } else if (ic.classList.contains('fa-sort-down')) {
-      ic.classList.replace('fa-sort-down', 'fa-sort-up');
+      element.classList.replace('fa-sort-up', 'fa-sort-down');
+    } else if (element.classList.contains('fa-sort-down')) {
+      element.classList.replace('fa-sort-down', 'fa-sort-up');
       direction = 'asc';
     } else {
-      ic.classList.add('fa-sort-up');
+      element.classList.add('fa-sort-up');
       direction = 'asc';
     }
     this.dataSorted.emit({sort: this.fields[idx].name, direction});
