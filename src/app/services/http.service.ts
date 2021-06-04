@@ -158,6 +158,9 @@ export class HttpService {
     return this.httpClient.delete<void>(this.creditCardUrl+'/'+id);
   }
 
+  activeCard(card: CreditCard) {
+    return this.httpClient.patch<CreditCard[]>(this.creditCardUrl+'/active',{id:card.id,active:card.active});
+  }
 }
 
 interface PagedResponse {

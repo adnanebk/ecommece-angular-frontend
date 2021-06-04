@@ -23,8 +23,8 @@ export class InputComponent {
     return (dirty && touched && errors);
   }
 
-  onInputChange() {
-    this.inputChanged.emit();
+  onInputChange(val?:any) {
+    this.inputChanged.emit(val);
   }
 
   hasAnyApiError() {

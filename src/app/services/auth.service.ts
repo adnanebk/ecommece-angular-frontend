@@ -49,12 +49,17 @@ export class AuthService {
   }
 
   private returnConnectedUser(response: { token: string; appUser: AppUser }) {
-    localStorage.setItem('appUser', JSON.stringify(response.appUser));
+    this.saveUserToLocal(response.appUser);
     localStorage.setItem('token', response.token);
-    this.currentUser = response.appUser;
     this.verifyUser();
-    this.userSubject.next(this.currentUser);
+
     return this.currentUser;
+  }
+
+  private saveUserToLocal(user: AppUser) {
+    localStorage.setItem('appUser', JSON.stringify(user));
+    this.userSubject.next(user);
+    this.currentUser=user;
   }
 
   async loginWithGoogle() {
@@ -90,8 +95,7 @@ export class AuthService {
   sendConfirmedWithSuccess() {
     this.toastrService.success('you have successfully verified your account');
     this.currentUser.enabled = true;
-    localStorage.setItem('appUser', JSON.stringify(this.currentUser));
-
+    this.saveUserToLocal(this.currentUser);
   }
 
   verifyUser() {
@@ -108,5 +112,9 @@ export class AuthService {
         }
       );
     }
+  }
+
+  reloadUser(resp: AppUser) {
+  this.saveUserToLocal(resp);
   }
 }

@@ -1,9 +1,14 @@
-<input (input)="onInputChange()" *ngIf="type!=='select'" [type]="type" [formControl]="control"
+<input (input)="onInputChange()" *ngIf="type!=='select' && type!='checkBox'" [type]="type" [formControl]="control"
        [placeholder]="placeholder" class="form-control">
 <select (change)="onInputChange()" *ngIf="type==='select'" [formControl]="control" class="form-control">
   <option [ngValue]="el"
           *ngFor="let el of valueData; index as i">{{displayData.length > 0 ? displayData[i] : valueData[i]}}</option>
 </select>
+
+<div *ngIf="type === 'checkBox'"  class="custom-control custom-switch">
+  <input type="checkbox" (change)="onInputChange(ch.checked)" #ch class="custom-control-input" id="sw" [formControl]="control" >
+  <label class="custom-control-label" for="sw">{{placeholder}}</label>
+</div>
 <ng-container *ngIf="showError()">
   <span class="text-danger" *ngIf="control.errors.required"> this field is required </span>
   <span class="text-danger" *ngIf="control.errors.email"> email must be in valid format </span>
