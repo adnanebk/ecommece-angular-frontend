@@ -180,9 +180,12 @@
             </ng-container>
             <span *ngIf="cards.length===0" class="alert alert-info">You have no card</span>
           </div>
+          <ng-container *ngIf="cards.length>0">
+          <hr>
+          <hr>
           <a class="prevBtn  btn btn-sm btn-success" (click)="previousCard()"><< Previous</a>
           <a class="nextBtn btn btn-sm btn-success" (click)="nextCard()">Next >></a>
-
+          </ng-container>
         </div>
 
         <form *ngIf="isCardModifying" class="card mb-3" (ngSubmit)="submitUserCard()" [formGroup]="cardForm">

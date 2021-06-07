@@ -55,25 +55,25 @@
 
       </td>
 
-      <td *ngFor="let field of fields" (click)="onViewChanged(el)" class="pt-3-half p-1 align-middle mw-200"
+      <td *ngFor="let field of fields" (click)="onViewChanged(el)" class="pt-3-half p-1 align-middle"
           [ngStyle]="el[field.name]?.length>100 && {minWidth: '200px'}"
           [ngClass]="(el?.dirty && batchEnabled && !el.hasError) && 'bgDirty'">
 
         <ng-container *ngIf="!el.isEditing && !batchEnabled">
          <span *ngIf="(!field.type || field.type !== 'image')">
-           {{getSting(el, field.name)}}</span>
+           {{getText(el, field.name)}}</span>
           <img *ngIf="field.type === 'image' && !isFileUploading[idx]" [src]="el[field.name]">
           <div *ngIf="field.type === 'image' && isFileUploading[idx]" class="spinner-border" role="status">
             <span class="sr-only">Loading...</span>
           </div>
         </ng-container>
 
-        <ng-container *ngIf="el.isEditing || batchEnabled">
+        <ng-container *ngIf="(el.isEditing || batchEnabled) && !field.readOnly">
           <input *ngIf="!field.type  &&  el[field.name].length<35" [(ngModel)]="el[field.name]" type="text"
                  class="form-control w-auto"
                  (input)="onValueChanged(idx,this.field)" (keyup.enter)="onSave(idx)">
-          <textarea (keyup.enter)="onSave(idx)" *ngIf="!field.type &&  el[field.name].length>=35"
-                    [(ngModel)]="el[field.name]" type="text" class="form-control w-auto"
+          <textarea *ngIf="!field.type &&  el[field.name].length>=35"
+                    [(ngModel)]="el[field.name]" type="text" class="form-control text-area"
                     (input)="onValueChanged(idx,this.field)"></textarea>
           <div class="file-input" *ngIf="field.type === 'image'">
             <input id="file" #file type="file" class="form-control file" accept="image/*"
@@ -85,7 +85,7 @@
           <input *ngIf="field.type === 'number'" #input [(ngModel)]="el[field.name]" class="form-control number-input"
                  (input)="onValueChanged(idx,this.field)" (keyup.enter)="onSave(idx)">
 
-          <input [disabled]="field.readOnly" *ngIf="field.type === 'date'" type="date"
+          <input *ngIf="field.type === 'date'" type="date"
                  [(ngModel)]="el[field.name]" class="form-control w-auto">
 
           <div *ngIf="field.type === 'bool'" class="custom-control custom-switch">

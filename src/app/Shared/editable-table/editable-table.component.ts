@@ -65,7 +65,7 @@ export class EditableTableComponent implements OnChanges {
     });
   }
 
-  getSting(el: any, name: any) {
+  getText(el: any, name: any) {
     let val = el[name];
     if (val?.length > 60) {
       return val.substring(0, 60);

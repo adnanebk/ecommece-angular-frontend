@@ -1,7 +1,15 @@
 .bgDirty {
   background-color: #f1e9be;
 }
-
+.text-area {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  resize: both;
+  min-height: 40px;
+  min-width: 100px;
+  line-height: 20px;
+}
 .max-content {
   width: max-content;
 }

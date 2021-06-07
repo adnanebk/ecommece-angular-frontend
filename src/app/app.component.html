@@ -26,12 +26,7 @@
           <li class="nav-item" routerLinkActive="active">
             <a class="nav-link" routerLink="/products/editing">Manage products</a>
           </li>
-          <ng-container *ngIf="user">
 
-            <li class="nav-item">
-              <a class="nav-link" routerLink="" (click)="logout()">Logout</a>
-            </li>
-          </ng-container>
           <ng-container *ngIf="!user">
 
             <li class="nav-item" routerLinkActive="active">
@@ -43,12 +38,15 @@
             </li>
           </ng-container>
           <li class="nav-item" routerLinkActive="active">
-            <a class="nav-link" [href]="getDocs()">Api documentation</a>
+            <a class="nav-link" [href]="getDocs()">Docs</a>
           </li>
 
           <!-- Dropdown -->
-          <app-product-category isMenu="true"></app-product-category>
+          <app-product-category  isMenu="true"></app-product-category>
           <ng-container  *ngIf="user">
+            <li class="nav-item">
+              <a class="nav-link text-warning" routerLink="" (click)="logout()">Logout</a>
+            </li>
           <li class="nav-item">
             <a class="nav-link" routerLink="/user-info">
               <b class="text-dark font-weight-bold">My profile</b></a>

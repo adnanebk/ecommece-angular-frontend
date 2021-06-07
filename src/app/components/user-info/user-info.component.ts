@@ -73,7 +73,6 @@ export class UserInfoComponent implements OnInit {
     this.httpService.updateUser(user, this.user.id).subscribe((resp) => {
       this.authService.reloadUser(resp);
       this.user = resp;
-      this.userForm.patchValue(resp);
       this.isUserModifying = false;
     });
   }
