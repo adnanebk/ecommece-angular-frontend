@@ -90,13 +90,14 @@ export class UserInfoComponent implements OnInit {
 
 
   submitUserCard() {
+    this.errors = [];
     let creditCard: CreditCard = this.cardForm.getRawValue();
     if (creditCard) {
       creditCard.cardNumber = creditCard?.cardNumber?.replace(/\-/g, '');
       if (creditCard?.id > 0) {
         this.httpService.updateCreditCard(creditCard).subscribe(() => {
        this.loadCreditCards();
-        });
+        }, errors => this.errors = errors);
       } else {
         this.httpService.saveCreditCard(creditCard).subscribe(() => {
             this.loadCreditCards();
