@@ -144,7 +144,7 @@
             <ng-container *ngIf="cards.length>0" >
 
               <div class="col-sm-12">
-                <app-input (inputChanged)="onCardActive($event)" type="checkBox" name="active" placeholder="Use it" [control]="cardForm.controls.active"></app-input>
+                <app-input (inputChanged)="onCardActive()" type="checkBox" name="active" placeholder="Use it" [control]="cardForm.controls.active"></app-input>
               </div>
             <div class="row">
               <div class="col-sm-3">

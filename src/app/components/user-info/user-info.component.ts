@@ -73,8 +73,9 @@ export class UserInfoComponent implements OnInit {
     this.httpService.updateUser(user, this.user.id).subscribe((resp) => {
       this.authService.reloadUser(resp);
       this.user = resp;
+      this.userForm.patchValue(this.user);
       this.isUserModifying = false;
-    });
+    },errors => this.errors=errors);
   }
 
   handleChange() {
@@ -83,6 +84,7 @@ export class UserInfoComponent implements OnInit {
 
 
   onAddNewCard() {
+    this.clearCardErrors();
     this.isCardModifying = true;
     this.selectedCard = new CreditCard();
     this.cardForm.patchValue(this.selectedCard);
@@ -90,7 +92,7 @@ export class UserInfoComponent implements OnInit {
 
 
   submitUserCard() {
-    this.errors = [];
+    this.clearCardErrors();
     let creditCard: CreditCard = this.cardForm.getRawValue();
     if (creditCard) {
       creditCard.cardNumber = creditCard?.cardNumber?.replace(/\-/g, '');
@@ -137,7 +139,7 @@ export class UserInfoComponent implements OnInit {
     });
   }
 
-  onCardActive(active: boolean) {
+  onCardActive() {
     this.httpService.activeCard(this.cardForm.getRawValue()).subscribe(cards=>{
       this.cards=cards;
       this.selectedCard=cards[0];
@@ -145,5 +147,9 @@ export class UserInfoComponent implements OnInit {
     });
   }
 
-
+clearCardErrors(){
+  this.cardForm.clearValidators();
+  this.cardForm.markAsPristine();
+  this.errors = [];
+}
 }
