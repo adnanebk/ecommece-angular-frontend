@@ -14,8 +14,6 @@ export class EditableTableComponent implements OnChanges {
   @Input() batchEnabled = false;
   @Input() fields: Field[];
   @Input() columnNames: string[];
-  @Input() options: any;
-  @Input() newElement: any;
   @Input() errors: any[];
   @Output() dataUpdated = new EventEmitter<number>();
   @Output() dataAdded = new EventEmitter();
@@ -50,7 +48,9 @@ export class EditableTableComponent implements OnChanges {
 
   insertNewRow() {
     if (!this.Data[0].isNew) {
-      this.Data.unshift({...this.newElement, isNew: true});
+      let newEl: any={};
+      newEl.isNew=true;
+      this.Data.unshift(newEl);
       this.Data[0].isEditing = true;
     }
   }
@@ -68,7 +68,7 @@ export class EditableTableComponent implements OnChanges {
   getText(el: any, name: any) {
     let val = el[name];
     if (val?.length > 60) {
-      return val.substring(0, 60);
+      return val.substring(0, 60)+'...';
     }
     if (Date.parse(val)) {
       return this.datePipe.transform(val, 'short');

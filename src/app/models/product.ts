@@ -7,7 +7,7 @@ export class Product {
     {name: 'category', type: 'select'}, {name: 'dateCreated', type: 'date', readOnly: true},
     {name: 'lastUpdated', type: 'date', readOnly: true}];
   static headers = ['sku', 'name', 'description', 'Price', 'image',
-    'active', 'units In Stock', 'category', 'date Created', 'date Updated'];
+    'active', 'Quantity', 'category', 'date Created', 'date Updated'];
 
 
   id = 0;
