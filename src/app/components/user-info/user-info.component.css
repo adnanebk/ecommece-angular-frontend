@@ -1,3 +1,13 @@
+.card-inputs{
+  border: 1px solid darkgray;
+  border-radius: 20px;
+  padding-right: 10px;
+  padding-top: 5px;
+  background-color: beige;
+}
+.card-body .col-sm-3{
+  align-self: center;
+}
 .main-body {
   padding: 15px;
 }

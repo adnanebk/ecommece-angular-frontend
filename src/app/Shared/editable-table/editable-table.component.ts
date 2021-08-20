@@ -24,6 +24,7 @@ export class EditableTableComponent implements OnChanges {
   @Output() RemoveAll = new EventEmitter<any[]>();
    isFileUploading: boolean[]=[];
    selectedSize=0;
+   prevElement: any={};
 
   fileNames: string[] = [];
 
@@ -50,33 +51,34 @@ export class EditableTableComponent implements OnChanges {
     if (!this.Data[0].isNew) {
       let newEl: any={};
       newEl.isNew=true;
+      newEl.isEditing = true;
       this.Data.unshift(newEl);
-      this.Data[0].isEditing = true;
     }
   }
 
 
   remove(index: any) {
+    if (this.Data[index].isNew)
+      this.Data.splice(index,1);
+    else
     this.confirmDialogService.confirmThis(() => {
-      if (!this.Data[index].isNew) {
         this.errors = [];
         this.dataDeleted.emit({index, data: this.Data[index]});
-      }
     });
   }
 
-  getText(el: any, name: any) {
+  getText(el: any, name: any,type:string) {
     let val = el[name];
     if (val?.length > 60) {
       return val.substring(0, 60)+'...';
     }
-    if (Date.parse(val)) {
+    if (type==='date') {
       return this.datePipe.transform(val, 'short');
     }
-    if (this.selects.get(name)) {
+    else if (type==='select') {
       return val[this.selects.get(name).displayField];
     }
-    if (typeof val === 'boolean') {
+    else if (type === 'bool') {
       return val ? 'Yes' : 'No';
     }
     return val;
@@ -86,10 +88,12 @@ export class EditableTableComponent implements OnChanges {
     this.removeError(field.name);
   }
   onViewChanged(currentEl: any) {
-     this.Data.map(el => {
-        el.isEditing = (el === currentEl);
-        return el;
-      });
+    console.log(this.Data);
+    if(currentEl!==this.Data[0] &&  this.Data[0].isNew)
+      this.Data.splice(0,1);
+    this.prevElement.isEditing=false;
+    currentEl.isEditing=true;
+    this.prevElement=currentEl;
   }
 
 
@@ -149,7 +153,7 @@ export class EditableTableComponent implements OnChanges {
 
   getError(fieldName: string) {
     const error = this.errors.find(er => er.fieldName === fieldName);
-    return error && error.name + ' ' + error.message;
+    return error &&  ('this field ' + error.message);
   }
 
   removeError(fieldName: string) {
@@ -167,8 +171,8 @@ export class EditableTableComponent implements OnChanges {
     }
   }
 
-  trackByFn(index: number, prop: any): string {
-    return prop.id;
+  trackByFn(index: number, item: any): string {
+    return item.id;
   }
 
   byId(item1, item2) {

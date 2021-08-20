@@ -12,12 +12,12 @@ import {ToastrService} from 'ngx-toastr';
 export class AuthService {
   public userSubject = new BehaviorSubject<AppUser>(null);
   private currentUser: AppUser;
+  private isToastOpened=false;
 
   constructor(private httpService: HttpService, private socialAuthService: SocialAuthService, private toastrService: ToastrService) {
     const currentUserSt = localStorage.getItem('appUser');
     if (currentUserSt?.length > 0) {
       this.currentUser = JSON.parse(currentUserSt);
-      this.verifyUser();
       this.userSubject.next(this.currentUser);
     }
   }
@@ -99,22 +99,30 @@ export class AuthService {
   }
 
   verifyUser() {
-    if (!this.currentUser.enabled) {
-      this.toastrService.info('Please complete your registration by activating your account in your email messages or click here te resend the activation code',
+    if (!this.currentUser.enabled && !this.isToastOpened) {
+      this.isToastOpened=true;
+      let toast=this.toastrService.info('Please complete your registration by activating your account in your email messages or click here te resend the activation code',
         'Activate your account', {
           timeOut: 10000,
           extendedTimeOut: 3000,
-        }).onTap.subscribe(v => {
+        });
+      toast.onTap.subscribe(v => {
           if (!this.currentUser.enabled) {
             this.sendActivationMessage().subscribe(
               () => this.toastrService.info('We have just sent you a confirmation link,check your email messages'));
           }
         }
       );
+      toast.onHidden.subscribe(()=>this.isToastOpened=false);
+
     }
   }
 
   reloadUser(resp: AppUser) {
   this.saveUserToLocal(resp);
+  }
+
+  updatePassword(userPasswords: any) {
+   return  this.httpService.updateUserPassword(userPasswords);
   }
 }

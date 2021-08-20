@@ -1,0 +1,45 @@
+
+<div *ngIf="type==='date'"  class="input-group">
+  <input  [id]="name"  type="text" class="form-control"
+          name="aDate" ngbDatepicker #aDate="ngbDatepicker" (dateSelect)="onInputChange($event)"   [formControl]="formControl" />
+
+          <span class="input-group-append">
+                  <button type="button" class="btn btn-secondary" (click)="aDate.toggle()">
+                    <i class="fas fa-calendar"></i>
+                  </button>
+                </span>
+</div>
+<input (change)="onInputChange($event.target)" [disabled]="isDisabled" *ngIf="type==='text'" type="text" class="{{disabled?'disabledInput':''}} form-control" [id]="name" [formControl]="formControl"
+       [placeholder]="placeholder"
+       />
+<input (change)="onInputChange($event.target)" [disabled]="isDisabled" *ngIf="type==='password'" type="password" class="{{disabled?'disabledInput':''}} form-control" [id]="name" [formControl]="formControl"
+       [placeholder]="placeholder"
+/>
+<input (change)="onInputChange($event.target)"  *ngIf="type==='number'" type="number" class="form-control" [id]="name" [formControl]="formControl"
+        [placeholder]="placeholder"
+/>
+<textarea (input)="onInputChange($event.target)" *ngIf="type==='textArea'"  class="form-control" [id]="name" [formControl]="formControl"
+        [placeholder]="placeholder"
+></textarea>
+<ng-select *ngIf="type==='select'" class="" [id]="name"
+           [formControl]="formControl"
+           [items]="items"
+           [placeholder]="placeholder"
+           (change)="onInputChange($event)"
+           [bindLabel]="selectLabel"
+           [bindValue]="selectValue"
+>
+</ng-select>
+<div *ngIf="type === 'checkBox'"  class="custom-control custom-switch">
+  <input type="checkbox" (change)="onInputChange(ch.checked)" #ch class="custom-control-input" [id]="name" [formControl]="formControl" >
+  <label class="custom-control-label" [for]="name">{{placeholder}}</label>
+</div>
+<ng-content></ng-content>
+<ng-container *ngIf="hasError()">
+  <span class="text-danger"   *ngIf="control?.errors?.required"> this field is required </span>
+  <span class="text-danger" *ngIf="control?.errors?.email"  > email must be in valid format </span>
+  <span class="text-danger" *ngIf="control?.errors?.minlength" >
+  The characters must be at least {{control?.errors?.minlength?.requiredLength}} </span>
+  <br>
+</ng-container>
+<span class="text-danger" *ngIf="this.hasAnyApiError()" >this field {{this.apiError.message}}</span>

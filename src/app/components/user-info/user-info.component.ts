@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {AppUser} from '../../models/app-user';
 import {HttpService} from '../../services/http.service';
 import {CreditCard} from '../../models/CreditCard';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {MustMatch} from '../../validators/mustMatch';
 import {MyError} from '../../models/my-error';
 import {CardNumberFormControl} from '../../Shared/card-number-form-control';
 import {MonthYearFormControl} from '../../Shared/month-year-form-control';
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-user-info',
@@ -23,9 +23,13 @@ export class UserInfoComponent implements OnInit {
   isUserModifying = false;
   isCardModifying = false;
   errors: MyError[];
+    cardNames =[{value:'VISA',label:'Visa'},{value:'MASTERCARD',label:'Master Card'}];
+  changePasswordForm=this.formBuilder.group({
+    currentPassword:  new FormControl('', [Validators.required]),
+    newPassword:  new FormControl('', [Validators.required])
+  });
 
-  constructor(private authService: AuthService, private httpService: HttpService, private formBuilder: FormBuilder) {
-
+  constructor(private authService: AuthService, private httpService: HttpService, private formBuilder: FormBuilder,private toastrService: ToastrService) {
   }
 
   async ngOnInit() {
@@ -42,12 +46,12 @@ export class UserInfoComponent implements OnInit {
         street: new FormControl(this.user?.street),
         password: new FormControl('', [Validators.required, Validators.minLength(2)]),
         confirmPassword: new FormControl('', [Validators.required, Validators.minLength(2)])
-      }, {validator: MustMatch('password', 'confirmPassword')}
+      }
     );
     this.cardForm = this.formBuilder.group({
       id: new FormControl(this.selectedCard?.id, [Validators.required]),
       active: new FormControl(this.selectedCard?.active),
-      cardType: new FormControl(this.selectedCard?.cardType, [Validators.required]),
+      cardType: new FormControl(null, [Validators.required]),
       cardNumber: new CardNumberFormControl(this.selectedCard?.cardNumber, [Validators.required]),
       expirationDate: new MonthYearFormControl(this.selectedCard?.expirationDate, [Validators.required]),
     });
@@ -152,4 +156,15 @@ clearCardErrors(){
   this.cardForm.markAsPristine();
   this.errors = [];
 }
+
+  updatePassword($event: any) {
+    $event.preventDefault();
+    this.errors=[];
+    let userPasswords = this.changePasswordForm.getRawValue();
+    this.changePasswordForm.reset();
+    this.authService.updatePassword(userPasswords).subscribe(()=>this.toastrService.success("you have successfully changed your password"),err=>{
+      this.errors=err;
+    });
+
+  }
 }

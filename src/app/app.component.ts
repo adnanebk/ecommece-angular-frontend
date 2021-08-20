@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
     this.authService.userSubject.subscribe((user) => {
       this.user = user;
       this.activatedRoute.queryParamMap.subscribe(async param => {
-        if (param.get('verified')) {
+        if (param.get('verified') && !this.user.enabled) {
           let user: AppUser = await this.authService.getUserInfo();
           if (user.enabled) {
             this.authService.sendConfirmedWithSuccess();

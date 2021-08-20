@@ -45,7 +45,7 @@
                 <app-input (inputChanged)="handleChange()" [errors]="errors"
                            [control]="checkoutFormGroup.controls.shippingAddress.get('country')"
                            type="select" name="country"
-                           [valueData]="['Morocco','Algeria','France','China']"></app-input>
+                           [items]="['Morocco','Algeria','France','China']"></app-input>
               </div>
             </div>
           </div>
@@ -85,8 +85,8 @@
               <div class="input-space">
                 <app-input (inputChanged)="handleChange()" [errors]="errors"
                            [control]="checkoutFormGroup.controls.creditCard.get('cardType')"
-                           type="select" name="cardType" [valueData]="['VISA','MASTERCARD']"
-                           [displayData]="['Visa','Master card']"></app-input>
+                           type="select" name="cardType" [items]="['VISA','MASTERCARD']">
+                </app-input>
 
               </div>
             </div>

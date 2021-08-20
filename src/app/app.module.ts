@@ -15,7 +15,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MyInterceptor} from './services/my.interceptor';
 import {OrderComponent} from './components/order/order.component';
-import {InputComponent} from './Shared/input/input.component';
+import {AppInputComponent} from './Shared/input/app-input.component';
 import {RegisterComponent} from './components/register/register.component';
 import {LoginComponent} from './components/login/login.component';
 import {AuthGuard} from './Shared/auth-guard';
@@ -27,7 +27,8 @@ import {ToastrModule} from 'ngx-toastr';
 import {ConfirmComponent} from './Shared/confirm/confirm.component';
 import {MyAppRoutingModule} from './my-app-routing.module';
 import {AuthModule} from './components/login/auth.module';
-import { UserInfoComponent } from './components/user-info/user-info.component';
+import {UserInfoComponent} from './components/user-info/user-info.component';
+import {NgSelectModule} from "@ng-select/ng-select";
 
 
 @NgModule({
@@ -44,7 +45,7 @@ import { UserInfoComponent } from './components/user-info/user-info.component';
     CartDetailsComponent,
     CheckoutComponent,
     OrderComponent,
-    InputComponent,
+    AppInputComponent,
     EditableTableComponent,
     ProductEditingComponent,
     CategoryEditingComponent,
@@ -60,7 +61,8 @@ import { UserInfoComponent } from './components/user-info/user-info.component';
     ReactiveFormsModule,
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot(), // ToastrModule added
-    AuthModule
+    AuthModule,
+    NgSelectModule
   ],
   providers: [HttpService, {provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true}, AuthGuard, DatePipe],
   bootstrap: [AppComponent]

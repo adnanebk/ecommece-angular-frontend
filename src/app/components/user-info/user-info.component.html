@@ -136,16 +136,37 @@
 
         </form>
 
+        <form  (ngSubmit)="updatePassword($event)" [formGroup]="changePasswordForm" class="card mb-3 d-block" >
+          <h2 class="text-center text-primary border-bottom border-primary text-title">Change password</h2>
+          <div class="card-body input-space ">
+            <hr>
+            <div class="row form-row">
+
+              <div class="col text-secondary">
+                <app-input type="password" (inputChanged)="handleChange()" [control]="changePasswordForm.controls.currentPassword"
+                           placeholder="Current Password" name="currentPassword" [errors]="errors"></app-input>
+              </div>
+              <div class="col text-secondary">
+                <app-input type="password" (inputChanged)="handleChange()" [control]="changePasswordForm.controls.newPassword"
+                           placeholder="New Password" name="newPassword" [errors]="errors"></app-input>
+              </div>
+            </div>
+
+          </div>
+          <button class="btn btn-success">Save</button>
+
+        </form>
+
         <div *ngIf="!isCardModifying" class="card mb-3">
           <h2 class="text-center text-primary border-bottom border-primary text-title">Payment information</h2>
           <button (click)="onAddNewCard()" class="btn btn-info submit-btn btn-sm">+ Add new card</button>
 
           <div class="card-body text-center">
-            <ng-container *ngIf="cards.length>0" >
-
+            <ng-container *ngIf="cards.length>0">
               <div class="col-sm-12">
-                <app-input (inputChanged)="onCardActive()" type="checkBox" name="active" placeholder="Use it" [control]="cardForm.controls.active"></app-input>
+                <app-input (inputChanged)="onCardActive()" type="checkBox" name="active" placeholder="make it primary" [control]="cardForm.controls.active"></app-input>
               </div>
+            <div class="card-inputs">
             <div class="row">
               <div class="col-sm-3">
                 <h6 class="mb-0">Card type</h6>
@@ -166,18 +187,19 @@
             <hr>
             <div class="row">
               <div class="col-sm-3">
-                <h6 class="mb-0">Card Expiration date</h6>
+                <h6 class="mb-0">Expiration date</h6>
               </div>
               <div class="col-sm-9 text-secondary">
                 {{selectedCard?.expirationDate}}
               </div>
             </div>
-            <hr>
-
+            <br>
+        </div>
               <button class="btn btn-info submit-btn btn-sm" (click)="isCardModifying=true">Modify</button>
               <button class="btn btn-danger submit-btn btn-sm" (click)="removeCard()">Remove</button>
-
             </ng-container>
+
+
             <span *ngIf="cards.length===0" class="alert alert-info">You have no card</span>
           </div>
           <ng-container *ngIf="cards.length>0">
@@ -190,8 +212,8 @@
 
         <form *ngIf="isCardModifying" class="card mb-3" (ngSubmit)="submitUserCard()" [formGroup]="cardForm">
           <h2 class="text-center text-primary border-bottom border-primary text-title">Payment information</h2>
-          <div class="card-body text-center">
-            <ng-container>
+          <div class="card-body text-center input-space">
+            <div class="card-inputs">
 
 <br>
               <div class="row">
@@ -201,8 +223,10 @@
                 <div class="col-sm-9 text-secondary">
                   <app-input (inputChanged)="handleChange()" name="cardType" [errors]="errors"
                              [control]="cardForm.controls.cardType"
-                             placeholder="Card type" type="select" [valueData]="['VISA','MASTERCARD']"
-                             [displayData]="['Visa','Master card']"></app-input>
+                             placeholder="card type"
+                              type="select" [items]="cardNames"
+                             selectValue="value" selectLabel="label" >
+                  </app-input>
                 </div>
               </div>
               <hr>
@@ -218,7 +242,7 @@
               <hr>
               <div class="row">
                 <div class="col-sm-3">
-                  <h6 class="mb-0">Card Expiration date</h6>
+                  <h6 class="mb-0">Expiration date</h6>
                 </div>
                 <div class="col-sm-9 text-secondary">
                   <app-input (inputChanged)="handleChange()" name="expirationDate" [errors]="errors"
@@ -226,12 +250,11 @@
                              placeholder="Expiration date  (month/year)"></app-input>
                 </div>
               </div>
-              <hr>
-
+              <br>
+            </div>
               <button class="btn btn-info submit-btn">{{!selectedCard.id?'Add':'Update'}}</button>
               <button (click)="loadCreditCards()" class="btn  submit-btn btn-warning">Close</button>
 
-            </ng-container>
             <span *ngIf="cards.length===0 && !isCardModifying">You have no card</span>
           </div>
 

@@ -143,6 +143,9 @@ export class HttpService {
     return this.httpClient.patch<AppUser>(this.baseUrl+'appUsers/'+id, user);
 
   }
+  updateUserPassword(userPasswords: any) {
+    return this.httpClient.post(this.baseUrl+'appUsers/change-password', userPasswords);
+  }
   sendActivationMessage(email: string) {
     return this.httpClient.post<void>(this.baseUrl + 'appUsers/confirm', email);
   }
@@ -161,6 +164,7 @@ export class HttpService {
   activeCard(card: CreditCard) {
     return this.httpClient.patch<CreditCard[]>(this.creditCardUrl+'/active',{id:card.id,active:card.active});
   }
+
 }
 
 interface PagedResponse {
