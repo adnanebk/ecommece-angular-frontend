@@ -134,7 +134,10 @@ export class HttpService {
   facebook(data: { appUser: AppUser, token: string }) {
     return this.httpClient.post<AuthData>(this.baseUrl + 'facebook', data);
   }
+  refreshMyToken(refreshToken: string) {
+    return this.httpClient.post<AuthData>(this.baseUrl + 'refresh-token', refreshToken);
 
+  }
   getUserInfo(userName: string) {
     return this.httpClient.get<AppUser>(this.baseUrl + 'appUsers/search/byUserName?userName='+userName);
   }
@@ -164,7 +167,6 @@ export class HttpService {
   activeCard(card: CreditCard) {
     return this.httpClient.patch<CreditCard[]>(this.creditCardUrl+'/active',{id:card.id,active:card.active});
   }
-
 }
 
 interface PagedResponse {
@@ -180,6 +182,7 @@ interface PagedResponse {
 interface AuthData {
   appUser: AppUser;
   token: string;
+  refreshToken: string;
 }
 
 interface GetResponseProductCategory {

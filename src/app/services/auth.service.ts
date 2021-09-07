@@ -18,7 +18,12 @@ export class AuthService {
     const currentUserSt = localStorage.getItem('appUser');
     if (currentUserSt?.length > 0) {
       this.currentUser = JSON.parse(currentUserSt);
+
       this.userSubject.next(this.currentUser);
+
+
+      console.log("currentUser",this.currentUser);
+
     }
   }
 
@@ -46,20 +51,21 @@ export class AuthService {
     this.userSubject.next(null);
     localStorage.removeItem('appUser');
     localStorage.removeItem('token');
+    window.location.reload();
   }
 
-  private returnConnectedUser(response: { token: string; appUser: AppUser }) {
-    this.saveUserToLocal(response.appUser);
-    localStorage.setItem('token', response.token);
+  private returnConnectedUser(response: { token: string;refreshToken: string; appUser: AppUser }) {
+    this.saveToLocalStorage(response.appUser,response.token,response.refreshToken);
     this.verifyUser();
-
     return this.currentUser;
   }
 
-  private saveUserToLocal(user: AppUser) {
-    localStorage.setItem('appUser', JSON.stringify(user));
-    this.userSubject.next(user);
-    this.currentUser=user;
+  private saveToLocalStorage(user: AppUser,token?: string,refreshToken?: string) {
+   token && localStorage.setItem('token', token);
+   refreshToken && localStorage.setItem('refreshToken', refreshToken);
+   localStorage.setItem('appUser', JSON.stringify(user));
+   this.userSubject.next(user);
+   this.currentUser=user;
   }
 
   async loginWithGoogle() {
@@ -95,9 +101,18 @@ export class AuthService {
   sendConfirmedWithSuccess() {
     this.toastrService.success('you have successfully verified your account');
     this.currentUser.enabled = true;
-    this.saveUserToLocal(this.currentUser);
+    this.saveToLocalStorage(this.currentUser);
   }
-
+verifyTokenExpiration(){
+  if(new Date()> new Date(this.currentUser.expirationDate)){
+    let refreshToken= localStorage.getItem('refreshToken');
+    this.httpService.refreshMyToken(refreshToken).subscribe(resp=>{
+        this.saveToLocalStorage(resp.appUser,resp.token,resp.refreshToken);
+        window.location.reload();
+      },err=>this.logout()
+    );
+  }
+}
   verifyUser() {
     if (!this.currentUser.enabled && !this.isToastOpened) {
       this.isToastOpened=true;
@@ -119,7 +134,7 @@ export class AuthService {
   }
 
   reloadUser(resp: AppUser) {
-  this.saveUserToLocal(resp);
+  this.saveToLocalStorage(resp);
   }
 
   updatePassword(userPasswords: any) {

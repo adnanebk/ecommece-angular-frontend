@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, Injector} from '@angular/core';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
@@ -8,7 +8,7 @@ import {AuthService} from './auth.service';
 @Injectable()
 export class MyInterceptor implements HttpInterceptor {
 
-  constructor(private toastrService: ToastrService, private authService: AuthService) {
+  constructor(private toastrService: ToastrService, private injector: Injector) {
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
@@ -32,6 +32,7 @@ export class MyInterceptor implements HttpInterceptor {
   }
 
   private handleError(resp) {
+    let authService=this.injector.get(AuthService);
     if (!(resp.error instanceof ErrorEvent)) {
       {
         if (resp.status === 400 || resp.status === 403) {
@@ -39,7 +40,8 @@ export class MyInterceptor implements HttpInterceptor {
             return throwError(resp.error.errors);
           } else if (resp.error?.message) {
             if (resp.status === 403) {
-              this.authService.verifyUser();
+              authService.verifyTokenExpiration();
+              authService.verifyUser();
             } else {
               this.toastrService.error(resp.error.message, 'Error', {
                 timeOut: 3000,

@@ -8,4 +8,5 @@ export class AppUser {
   country: string;
   street: string;
   enabled: Boolean;
+  expirationDate: Date;
 }
