@@ -136,7 +136,8 @@
 
         </form>
 
-        <form  (ngSubmit)="updatePassword($event)" [formGroup]="changePasswordForm" class="card mb-3 d-block" >
+        <form  (ngSubmit)="updatePassword($event)" [formGroup]="changePasswordForm" class="card mb-3 d-block"
+               *ngIf="!user.isSocial">
           <h2 class="text-center text-primary border-bottom border-primary text-title">Change password</h2>
           <div class="card-body input-space ">
             <hr>

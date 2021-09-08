@@ -8,5 +8,6 @@ export class AppUser {
   country: string;
   street: string;
   enabled: Boolean;
+  isSocial: Boolean;
   expirationDate: Date;
 }
