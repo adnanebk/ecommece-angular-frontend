@@ -43,8 +43,8 @@ export class AuthService {
     );
   }
 
-  async getUserInfo() {
-    return await this.httpService.getUserInfo(this.currentUser.userName).toPromise();
+   getUserInfo() {
+    return  this.httpService.getUserInfo(this.currentUser.userName);
   }
 
   logout() {

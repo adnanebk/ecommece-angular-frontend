@@ -49,7 +49,7 @@ import {NgSelectModule} from "@ng-select/ng-select";
     EditableTableComponent,
     ProductEditingComponent,
     CategoryEditingComponent,
-    UserInfoComponent
+    UserInfoComponent,
   ],
   imports: [
     MyAppRoutingModule,
@@ -64,7 +64,7 @@ import {NgSelectModule} from "@ng-select/ng-select";
     AuthModule,
     NgSelectModule
   ],
-  providers: [HttpService, {provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true}, AuthGuard, DatePipe],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true}, AuthGuard, DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule {

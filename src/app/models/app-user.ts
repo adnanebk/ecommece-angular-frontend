@@ -7,7 +7,7 @@ export class AppUser {
   city: string;
   country: string;
   street: string;
-  enabled: Boolean;
-  isSocial: Boolean;
+  enabled: boolean;
+  isSocial: boolean;
   expirationDate: Date;
 }

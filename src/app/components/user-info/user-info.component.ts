@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {AppUser} from '../../models/app-user';
 import {HttpService} from '../../services/http.service';
@@ -29,13 +29,15 @@ export class UserInfoComponent implements OnInit {
     newPassword:  new FormControl('', [Validators.required])
   });
 
-  constructor(private authService: AuthService, private httpService: HttpService, private formBuilder: FormBuilder,private toastrService: ToastrService) {
+  constructor(private authService: AuthService, private httpService: HttpService,
+              private formBuilder: FormBuilder,private toastrService: ToastrService) {
+
   }
 
-  async ngOnInit() {
-    this.user = await this.authService.getUserInfo();
-    this.loadCreditCards();
-    this.userForm = this.formBuilder.group({
+   ngOnInit() {
+     this.authService.getUserInfo().subscribe(user=>this.user=user);
+     this.loadCreditCards();
+     this.userForm = this.formBuilder.group({
         id: new FormControl(this.user?.id, [Validators.required]),
         firstName: new FormControl(this.user?.firstName, [Validators.required, Validators.minLength(2)]),
         lastName: new FormControl(this.user?.lastName, [Validators.required, Validators.minLength(2)]),
@@ -48,7 +50,7 @@ export class UserInfoComponent implements OnInit {
         confirmPassword: new FormControl('', [Validators.required, Validators.minLength(2)])
       }
     );
-    this.cardForm = this.formBuilder.group({
+     this.cardForm = this.formBuilder.group({
       id: new FormControl(this.selectedCard?.id, [Validators.required]),
       active: new FormControl(this.selectedCard?.active),
       cardType: new FormControl(null, [Validators.required]),
@@ -60,7 +62,7 @@ export class UserInfoComponent implements OnInit {
   loadCreditCards() {
     this.selectedCard = new CreditCard();
     this.isCardModifying = false;
-    this.httpService.getCreditCardInfo(this.user.userName).subscribe((cards) => {
+    this.httpService.getCreditCardInfo(this.user?.userName).subscribe((cards) => {
       this.cards = cards;
       this.selectedCard = cards.length > 0 && cards[0];
       this.reloadCardForm();
@@ -130,8 +132,9 @@ export class UserInfoComponent implements OnInit {
   }
 
   private reloadCardForm() {
-    if (this.selectedCard && !this.selectedCard.cardNumber?.includes('-'))
+    if (this.selectedCard && !this.selectedCard.cardNumber?.includes('-')) {
     this.selectedCard.cardNumber = this.selectedCard.cardNumber.match(new RegExp('.{1,4}', 'g')).join('-');
+    }
     this.cardForm.patchValue(this.selectedCard);
   }
 
@@ -162,7 +165,9 @@ clearCardErrors(){
     this.errors=[];
     let userPasswords = this.changePasswordForm.getRawValue();
     this.changePasswordForm.reset();
-    this.authService.updatePassword(userPasswords).subscribe(()=>this.toastrService.success("you have successfully changed your password"),err=>{
+    this.authService.updatePassword(userPasswords).subscribe(
+      ()=>this.toastrService.success("you have successfully changed your password"),
+       err=>{
       this.errors=err;
     });
 
