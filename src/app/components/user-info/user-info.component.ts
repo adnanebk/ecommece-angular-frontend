@@ -35,7 +35,9 @@ export class UserInfoComponent implements OnInit {
   }
 
    ngOnInit() {
-     this.authService.getUserInfo().subscribe(user=>this.user=user);
+     this.authService.userSubject.subscribe((user) => {
+       this.user = user;
+     });
      this.loadCreditCards();
      this.userForm = this.formBuilder.group({
         id: new FormControl(this.user?.id, [Validators.required]),

@@ -51,7 +51,6 @@ export class AuthService {
     this.userSubject.next(null);
     localStorage.removeItem('appUser');
     localStorage.removeItem('token');
-    window.location.reload();
   }
 
   private returnConnectedUser(response: { token: string;refreshToken: string; appUser: AppUser }) {
