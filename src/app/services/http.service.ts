@@ -150,7 +150,7 @@ export class HttpService {
     return this.httpClient.post(this.baseUrl+'appUsers/change-password', userPasswords);
   }
   sendActivationMessage(email: string) {
-    return this.httpClient.post<void>(this.baseUrl + 'appUsers/confirm', email);
+    return this.httpClient.post<void>(this.baseUrl + 'confirm', email);
   }
 
 
