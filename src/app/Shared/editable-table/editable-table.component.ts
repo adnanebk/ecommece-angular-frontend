@@ -67,12 +67,12 @@ export class EditableTableComponent implements OnChanges {
     });
   }
 
-  getText(el: any, name: any,type:string) {
+  getText(el: any, name: any,type: string) {
     let val = el[name];
     if (val?.length > 60) {
       return val.substring(0, 60)+'...';
     }
-    if (type==='date') {
+   else if (type==='date') {
       return this.datePipe.transform(val, 'short');
     }
     else if (type==='select') {
@@ -88,9 +88,6 @@ export class EditableTableComponent implements OnChanges {
     this.removeError(field.name);
   }
   onViewChanged(currentEl: any) {
-    console.log(this.Data);
-    if(currentEl!==this.Data[0] &&  this.Data[0].isNew)
-      this.Data.splice(0,1);
     this.prevElement.isEditing=false;
     currentEl.isEditing=true;
     this.prevElement=currentEl;
