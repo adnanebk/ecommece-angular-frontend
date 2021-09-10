@@ -55,7 +55,7 @@
 
       </td>
 
-      <td *ngFor="let field of fields" (click)="onViewChanged(el)" class=" p-1 align-middle"
+      <td *ngFor="let field of fields; let idxField=index" (click)="onViewChanged(el)" class=" p-1 align-middle"
           [class]="el.isEditing?'py-3':''"
           [ngStyle]="el[field.name]?.length>100 && {minWidth: '200px'}"
           [ngClass]="(el?.dirty && !el.hasError) && 'bgDirty'">
@@ -103,7 +103,7 @@
             <option [ngValue]="op"
                     *ngFor="let op of selects.get(field.name).options">{{op[selects.get(field.name).displayField]}}</option>
           </select>
-          <span *ngIf="el.hasError && el.isEditing" class="text-danger">{{getError(field.name)}}</span>
+          <span *ngIf="el.hasError && el.isEditing" class="text-danger">{{getError(idxField,field.name)}}</span>
         </ng-container>
       </td>
     </tr>

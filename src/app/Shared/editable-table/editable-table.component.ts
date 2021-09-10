@@ -148,9 +148,9 @@ export class EditableTableComponent implements OnChanges {
     data.length && this.UpdateAll.emit(data);
   }
 
-  getError(fieldName: string) {
+  getError(idx: number,fieldName: string) {
     const error = this.errors.find(er => er.fieldName === fieldName);
-    return error &&  ('this field ' + error.message);
+    return error &&  ('"'+this.columnNames[idx]+ '" ' + error.message);
   }
 
   removeError(fieldName: string) {
