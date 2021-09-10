@@ -70,10 +70,10 @@
         </ng-container>
 
         <ng-container *ngIf="(el.isEditing || batchEnabled) && !field.readOnly">
-          <input *ngIf="!field.type  &&  el[field.name]?.length<35" [(ngModel)]="el[field.name]" type="text"
+          <input *ngIf="!field.type" [(ngModel)]="el[field.name]" type="text"
                  class=" w-auto"
                  (input)="onValueChanged(idx,this.field)" (keyup.enter)="onSave(idx)">
-          <textarea *ngIf="!field.type &&  el[field.name]?.length>=35"
+          <textarea *ngIf="field.type==='textArea'"
                     [(ngModel)]="el[field.name]" type="text" class="text-area"
                     (input)="onValueChanged(idx,this.field)"></textarea>
           <div class="file-input" *ngIf="field.type === 'image'">

@@ -2,7 +2,7 @@ import {ProductCategory} from './product-category';
 import {Field} from '../Shared/editable-table/editable-table.component';
 
 export class Product {
-  static fields: Field[] = [{name: 'sku'}, {name: 'name'}, {name: 'description'}, {name: 'unitPrice', type: 'number'},
+  static fields: Field[] = [{name: 'sku'}, {name: 'name'}, {name: 'description',type: 'textArea'}, {name: 'unitPrice', type: 'number'},
     {name: 'image', type: 'image'}, {name: 'active', type: 'bool'}, {name: 'unitsInStock', type: 'number'},
     {name: 'category', type: 'select'}, {name: 'dateCreated', type: 'date', readOnly: true},
     {name: 'lastUpdated', type: 'date', readOnly: true}];
