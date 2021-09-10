@@ -42,4 +42,4 @@
   The characters must be at least {{control?.errors?.minlength?.requiredLength}} </span>
   <br>
 </ng-container>
-<span class="text-danger" *ngIf="this.hasAnyApiError()" >"{{this.apiError.fieldName}}" {{this.apiError.message}}</span>
+<span class="text-danger" *ngIf="this.hasAnyApiError()" >"{{this.apiError.name}}" {{this.apiError.message}}</span>
