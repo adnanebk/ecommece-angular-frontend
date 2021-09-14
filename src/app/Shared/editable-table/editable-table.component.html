@@ -84,9 +84,10 @@
           </div>
 
 
-          <input *ngIf="field.type === 'number'" type="text" #input [(ngModel)]="el[field.name]" class="number-input"
+          <input *ngIf="field.type === 'number'" type="number" #input [(ngModel)]="el[field.name]" class="number-input"
                  (input)="onValueChanged(idx,this.field)" (keyup.enter)="onSave(idx)">
-
+          <input *ngIf="field.type === 'decimal'" type="number" step="any" #input [(ngModel)]="el[field.name]" class="number-input"
+                 (input)="onValueChanged(idx,this.field)" (keyup.enter)="onSave(idx)">
           <input *ngIf="field.type === 'date'" type="date"
                  [(ngModel)]="el[field.name]" class="form-control w-auto">
 

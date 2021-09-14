@@ -69,16 +69,18 @@ export class EditableTableComponent implements OnChanges {
 
   getText(el: any, name: any,type: string) {
     let val = el[name];
-    if (val?.length > 60) {
+    if(el.isNew)
+      return val;
+     if (val?.length > 60) {
       return val.substring(0, 60)+'...';
     }
-   else if (type==='date') {
+    if (type==='date') {
       return this.datePipe.transform(val, 'short');
     }
-    else if (type==='select') {
-      return val[this.selects.get(name).displayField];
+     if (type==='select') {
+      return val[this.selects.get(name)?.displayField];
     }
-    else if (type === 'bool') {
+     if (type === 'bool') {
       return val ? 'Yes' : 'No';
     }
     return val;

@@ -27,8 +27,7 @@
            [placeholder]="placeholder"
            (change)="onInputChange($event)"
            [bindLabel]="selectLabel"
-           [bindValue]="selectValue"
->
+           [bindValue]="selectValue">
 </ng-select>
 <div *ngIf="type === 'checkBox'"  class="custom-control custom-switch">
   <input type="checkbox" (change)="onInputChange(ch.checked)" #ch class="custom-control-input" [id]="name" [formControl]="formControl" >
@@ -42,4 +41,5 @@
   The characters must be at least {{control?.errors?.minlength?.requiredLength}} </span>
   <br>
 </ng-container>
+
 <span class="text-danger" *ngIf="this.hasAnyApiError()" >"{{this.apiError.name}}" {{this.apiError.message}}</span>
