@@ -3,11 +3,13 @@
     <div class="container-fluid">
 
       <form (ngSubmit)="onSubmit()" [formGroup]="form">
-        <div class="form-area">
+        <div class="form-area bg-form">
+
+          <h3>Create a new account</h3>
 
 
           <div class="row">
-            <div class="col-md-2"><label>First Name</label></div>
+            <div class="col-md-3"><label>First Name</label></div>
             <div class="col-md-9">
               <div class="input-space">
                 <app-input (inputChanged)="handleChange()" name="firstName" [control]="form.controls.firstName"
@@ -17,7 +19,7 @@
           </div>
 
           <div class="row">
-            <div class="col-md-2"><label>Last Name</label></div>
+            <div class="col-md-3"><label>Last Name</label></div>
             <div class="col-md-9">
               <div class="input-space">
                 <app-input (inputChanged)="handleChange()" [control]="form.controls.lastName"
@@ -27,7 +29,7 @@
           </div>
 
           <div class="row">
-            <div class="col-md-2"><label>User name</label></div>
+            <div class="col-md-3"><label>User name</label></div>
             <div class="col-md-9">
               <div class="input-space">
                 <app-input (inputChanged)="handleChange()" [control]="form.controls.userName"
@@ -36,7 +38,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-md-2"><label>Email</label></div>
+            <div class="col-md-3"><label>Email</label></div>
             <div class="col-md-9">
               <div class="input-space">
                 <app-input (inputChanged)="handleChange()" [control]="form.controls.email"
@@ -45,7 +47,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-md-2"><label>Password</label></div>
+            <div class="col-md-3"><label>Password</label></div>
             <div class="col-md-9">
               <div class="input-space">
                 <app-input (inputChanged)="handleChange()" type="password" [control]="form.controls.password"
@@ -55,7 +57,7 @@
           </div>
 
           <div class="row">
-            <div class="col-md-2"><label>Confirm password</label></div>
+            <div class="col-md-3"><label>Confirm password</label></div>
             <div class="col-md-9">
               <div class="input-space">
                 <app-input (inputChanged)="handleChange()" type="password"
@@ -71,6 +73,7 @@
           <div class="text-center">
             <button type="submit" class="btn btn-info">Register</button>
           </div>
+          Already registered,<a routerLink="/login"  >Login now</a>
 
         </div>
 

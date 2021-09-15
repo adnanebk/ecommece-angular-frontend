@@ -3,22 +3,23 @@
     <div class="container-fluid">
 
       <form (ngSubmit)="onLogin()" #form="ngForm">
-        <div class="form-area text-center">
+        <div class="form-area text-center bg-form">
+          <h3>Sign in</h3>
 
           <span class="text-danger ">{{getError()}}</span>
           <div class="row">
-            <div class="col-md-2"><label>User name</label></div>
+            <div class="col-md-3"><label>User name</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <input name="userName" required class="form-control" type="text" [(ngModel)]="user.userName">
+                <input name="userName" placeholder="user name" required class="form-control" type="text" [(ngModel)]="user.userName">
               </div>
             </div>
           </div>
           <div class="row">
-            <div class="col-md-2"><label>Password</label></div>
+            <div class="col-md-3"><label>Password</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <input name="password" required class="form-control" type="password" [(ngModel)]="user.password"
+                <input name="password" placeholder="password" required class="form-control" type="password" [(ngModel)]="user.password"
                 >
               </div>
             </div>
@@ -31,19 +32,18 @@
             <br>
             <span class="label">Or sign in with:</span>
             <div id="gSignInWrapper" (click)="googleLogin()">
-              <div id="customBtn" class="customGPlusSignIn">
+              <div id="" class="customBtn customGPlusSignIn">
                 <img class="google-icon"
                      src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"/>
                 <span class="buttonText">Google</span>
               </div>
             </div>
-            <a id="fb-spinner" (click)="facebookLogin()">
+            <a id="fb-spinner" (click)="facebookLogin()" class="customBtn">
               <i class="fab fa-facebook-f"></i>
               Facebook
-
             </a>
             <br>
-            <a routerLink="" (click)="createAccount()"> Create new account</a>
+            Don't have an account,<a routerLink="/register"  >create a new one</a>
           </div>
 
         </div>

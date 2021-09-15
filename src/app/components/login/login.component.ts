@@ -40,13 +40,13 @@ export class LoginComponent implements OnInit {
     return this.error?.message;
   }
 
-  createAccount() {
+/*  createAccount() {
     this.router.navigate(['/register'], {
       queryParams: {
         return: this.returnUrl
       }, state: {...this.state}
     });
-  }
+  }*/
 
   async googleLogin() {
     (await this.authService.loginWithGoogle()).subscribe(user => this.router.navigateByUrl('/'));
