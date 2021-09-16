@@ -12,7 +12,8 @@ import {ToastrService} from "ngx-toastr";
 @Component({
   selector: 'app-user-info',
   templateUrl: './user-info.component.html',
-  styleUrls: ['./user-info.component.css']
+  styleUrls: ['./user-info.component.css'],
+
 })
 export class UserInfoComponent implements OnInit {
   userForm: FormGroup;
@@ -79,8 +80,11 @@ export class UserInfoComponent implements OnInit {
       (!user[key] || user[key] == this.user[key]) && delete user[key];
     }
     this.httpService.updateUser(user, this.user.id).subscribe((resp) => {
-      this.authService.reloadUser(resp);
-      this.user = resp;
+      for (var key in user) {
+      this.user[key]=user[key];
+      }
+      this.authService.reloadUser(this.user);
+      //this.user = resp;
       this.userForm.patchValue(this.user);
       this.isUserModifying = false;
     },errors => this.errors=errors);
