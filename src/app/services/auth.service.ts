@@ -89,7 +89,7 @@ export class AuthService {
     appUser.firstName = socialUser.firstName;
     appUser.lastName = socialUser.lastName;
     appUser.email = socialUser.email;
-    appUser.userName = socialUser.firstName + '-' + socialUser.lastName;
+    appUser.userName = socialUser.firstName;
     return appUser;
   }
 
