@@ -14,7 +14,7 @@ export class HttpErrorHandlerService {
    // let authService=this.injector.get(AuthService);
     if (!(resp.error instanceof ErrorEvent)) {
       {
-        if (resp.status.startsWith('4')) {
+        if (resp.status>=400 && resp.status<500) {
           if (resp.error.errors) {
             return throwError(resp.error.errors);
           } else if (resp.error?.message) {
