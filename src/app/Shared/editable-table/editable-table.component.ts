@@ -47,7 +47,8 @@ export class EditableTableComponent implements OnChanges {
     this.Data[index].isNew ? this.dataAdded.emit() : this.dataUpdated.emit(index);
   }
 
-  insertNewRow() {
+  insertNewRow(tableContent: HTMLDivElement) {
+        tableContent.scrollTop=0;
     if (!this.Data[0].isNew) {
       let newEl: any={};
       newEl.isNew=true;
