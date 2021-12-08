@@ -1,11 +1,11 @@
 
-<span *ngIf="!batchEnabled" class="table-add  mb-3 mr-2"><a (click)="insertNewRow()" ><i class="fas fa-plus-square"></i></a></span>
+<span *ngIf="!batchEnabled" class="table-add  mb-3 mr-2"><a (click)="insertNewRow(tableContent)" ><i class="fas fa-plus-square"></i></a></span>
 <div *ngIf="batchEnabled">
   <div *ngIf="selectedSize>0" class="alert alert-info">{{selectedSize}} elements has been selected</div>
   <button  (click)="saveAll()" class="btn btn-info">Update all</button>
   <button [disabled]="selectedSize<=0" (click)="deleteAll()" class="btn btn-danger">Remove all</button>
 </div>
-<div class="table-responsive table-wrapper-scroll-y">
+<div class="table-responsive table-wrapper-scroll-y" #tableContent >
 
   <app-dialog text="Are you sure to delete ?"></app-dialog>
   <table class="table table-bordered table-striped w-auto m-auto text-center table-fixed float-left" scrollY="true" maxHeight="200"
