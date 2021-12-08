@@ -1,4 +1,9 @@
 
+This is the front end side of the application.
+
+The back end side is here https://github.com/adnanebk/ecommerce-angular-backend
+
+
 # EcommeceApp
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.5.
