@@ -42,4 +42,4 @@
   <br>
 </ng-container>
 
-<span class="text-danger" *ngIf="this.hasAnyApiError()" >"{{this.apiError.name}}" {{this.apiError.message}}</span>
+<span class="text-danger" *ngIf="this.hasAnyApiError()" >"{{this.apiError.formattedName}}" {{this.apiError.message}}</span>
