@@ -17,9 +17,12 @@ export class LoginComponent implements OnInit {
 
   constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) {
     this.state = this.router.getCurrentNavigation().extras.state;
+
   }
 
   ngOnInit(): void {
+    this.authService.userSubject.subscribe((user)=> user && this.router.navigate(["/"]));
+
     this.route.queryParams.subscribe(params =>
       this.returnUrl = params.return);
     // this.router.getCurrentNavigation().extras.state?.products;
