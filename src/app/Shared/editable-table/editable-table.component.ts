@@ -24,7 +24,7 @@ export class EditableTableComponent implements OnChanges {
   @Output() RemoveAll = new EventEmitter<any[]>();
    isFileUploading: boolean[]=[];
    selectedSize=0;
-   prevElement: any={};
+   currentElement: any={};
 
   fileNames: string[] = [];
 
@@ -34,7 +34,7 @@ export class EditableTableComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.errors) {
       this.Data.map(e => {
-        if (e.isEditing)
+        if (this.isCurrentElement(e))
           e.hasError = true;
         return e;
       });
@@ -52,7 +52,8 @@ export class EditableTableComponent implements OnChanges {
     if (!this.Data[0].isNew) {
       let newEl: any={};
       newEl.isNew=true;
-      newEl.isEditing = true;
+      this.currentElement.hasError=false;
+      this.currentElement=newEl;
       this.Data.unshift(newEl);
     }
   }
@@ -91,9 +92,10 @@ export class EditableTableComponent implements OnChanges {
     this.removeError(field.name);
   }
   onViewChanged(currentEl: any) {
-    this.prevElement.isEditing=false;
-    currentEl.isEditing=true;
-    this.prevElement=currentEl;
+    if(!this.isCurrentElement(currentEl))
+    this.currentElement.hasError=false;
+    this.currentElement=currentEl;
+
   }
 
 
@@ -182,6 +184,10 @@ export class EditableTableComponent implements OnChanges {
 
    onFileUploaded= (idx: number)=> {
     this.isFileUploading[idx]=false;
+  }
+
+  isCurrentElement(element){
+   return element===this.currentElement;
   }
 }
 

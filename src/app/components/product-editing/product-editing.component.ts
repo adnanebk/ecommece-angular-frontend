@@ -79,7 +79,7 @@ export class ProductEditingComponent implements OnInit {
         this.toastrService.success('your operation has been successful');
         this.products = this.products.map(prod =>products.find(p => p.id === prod.id) || prod);
       },
-      errors => Array.isArray(errors) ?this.toastrService.error(errors[0].name +' '+errors[0].message,'Error')
+      errors => Array.isArray(errors) ?this.toastrService.error(errors[0].formattedName +' '+errors[0].message,'Error')
                                              : this.errors = [errors]
     );
   }

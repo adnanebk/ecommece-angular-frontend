@@ -36,13 +36,13 @@
 
       <td class="p-1 align-middle">
       <span *ngIf="!batchEnabled" class="table-edit">
-        <ng-container *ngIf="!el.isEditing">
+        <ng-container *ngIf="el!==currentElement">
         <button  (click)="onViewChanged(el)" type="button"
                 class="btn btn-info btn-rounded btn-sm my-0"><i class="fas fa-edit"></i></button>
         <button  (click)="remove(idx)" type="button" class="btn btn-danger btn-rounded  btn-sm my-1"><i class="fas fa-trash-alt"></i></button>
           </ng-container>
 
-        <button *ngIf="el.isEditing"  (click)="onSave(idx)" type="button"
+        <button *ngIf="isCurrentElement(el)"  (click)="onSave(idx)" type="button"
                 class="btn btn-success btn-rounded btn-sm my-0">Save</button>
       </span>
         <span *ngIf="batchEnabled" class="select">
@@ -56,11 +56,11 @@
       </td>
 
       <td *ngFor="let field of fields; let idxField=index" (click)="onViewChanged(el)" class=" p-1 align-middle"
-          [class]="el.isEditing?'py-3':''"
+          [class]="isCurrentElement(el)?'py-3':''"
           [ngStyle]="el[field.name]?.length>100 && {minWidth: '200px'}"
           [ngClass]="(el?.dirty && !el.hasError) && 'bgDirty'">
 
-        <ng-container *ngIf="!el.isEditing && !batchEnabled">
+        <ng-container *ngIf="!isCurrentElement(el) && !batchEnabled">
          <span *ngIf="(!field.type || field.type !== 'image')">
            {{getText(el, field.name,field.type)}}</span>
           <img *ngIf="field.type === 'image' && !isFileUploading[idx]" [src]="el[field.name]">
@@ -69,7 +69,7 @@
           </div>
         </ng-container>
 
-        <ng-container *ngIf="(el.isEditing || batchEnabled) && !field.readOnly">
+        <ng-container *ngIf="(isCurrentElement(el) || batchEnabled) && !field.readOnly">
           <input *ngIf="!field.type" [(ngModel)]="el[field.name]" type="text"
                  class=" w-auto"
                  (input)="onValueChanged(idx,this.field)" (keyup.enter)="onSave(idx)">
@@ -104,7 +104,7 @@
             <option [ngValue]="op"
                     *ngFor="let op of selects.get(field.name).options">{{op[selects.get(field.name).displayField]}}</option>
           </select>
-          <span *ngIf="el.hasError && el.isEditing" class="text-danger">{{getError(idxField,field.name)}}</span>
+          <span *ngIf="el.hasError && isCurrentElement(el)" class="text-danger">{{getError(idxField,field.name)}}</span>
         </ng-container>
       </td>
     </tr>
