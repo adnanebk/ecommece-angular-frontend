@@ -167,4 +167,9 @@ export class ProductEditingComponent implements OnInit {
   getNewProduct() {
     return new Product();
   }
+
+  switchBatch(isChecked: boolean) {
+    this.batchEnable=isChecked;
+    this.reloadData();
+  }
 }
