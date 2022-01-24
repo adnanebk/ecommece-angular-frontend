@@ -19,7 +19,7 @@ export class EditableTableComponent implements OnChanges {
   @Output() dataAdded = new EventEmitter();
   @Output() dataDeleted = new EventEmitter<{ index: number, data: any }>();
   @Output() dataSorted = new EventEmitter<{ sort: string, direction: string }>();
-  @Output() fileUploaded = new EventEmitter<{ file: File, index: number,completionFunc: (index: number)=>void }>();
+  @Output() fileUploaded = new EventEmitter<{ file: File, index: number,completionFunc: (index: number,value:any,propertyName:string)=>void }>();
   @Output() UpdateAll = new EventEmitter<any[]>();
   @Output() RemoveAll = new EventEmitter<any[]>();
    isFileUploading: boolean[]=[];
@@ -107,7 +107,7 @@ export class EditableTableComponent implements OnChanges {
       this.Data[index].dirty = true;
       //this.isFileUploading[index] = true;
       this.isFileUploading[index]=true;
-      this.fileUploaded.emit({file, index,completionFunc:(idx =>this.onFileUploaded(idx) )});
+      this.fileUploaded.emit({file, index,completionFunc:((idx,value,propertyName) =>this.onFileUploaded(idx,value,propertyName,file.name) )});
       //this.editedElement[fieldName] = file.name;
       this.fileNames[index] = file.name;
     });
@@ -182,8 +182,11 @@ export class EditableTableComponent implements OnChanges {
   }
 
 
-   onFileUploaded= (idx: number)=> {
-    this.isFileUploading[idx]=false;
+   onFileUploaded= (index:number,value: any, propertyName: string, fileName: string)=> {
+     if (this.Data[index][propertyName] !== fileName) {
+       this.Data[index][propertyName] = value;
+     }
+    this.isFileUploading[index]=false;
   }
 
   isCurrentElement(element){

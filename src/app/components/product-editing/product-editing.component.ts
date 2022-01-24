@@ -112,13 +112,11 @@ export class ProductEditingComponent implements OnInit {
   handleUploadImage({ file, index,completionFunc }) {
     this.imageService.uploadImage(file).subscribe(
       (res: string) => {
-        if (this.products[index].image !== file.name) {
-          this.products[index] = {...this.products[index], image: res};
-        }
+        completionFunc(index,res,"image")
       },
       (err) => {
         this.errors = [err];
-      },()=> completionFunc(index)
+      }
   );
   }
 
