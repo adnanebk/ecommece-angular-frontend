@@ -109,10 +109,10 @@ export class ProductEditingComponent implements OnInit {
     this.fetchProducts();
   }
 
-  handleUploadImage({ file, index,completionFunc }) {
+  handleUploadImage({ file,completionFunc }) {
     this.imageService.uploadImage(file).subscribe(
       (res: string) => {
-        completionFunc(index,res,"image")
+        completionFunc(res,"image")
       },
       (err) => {
         this.errors = [err];
