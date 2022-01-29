@@ -108,15 +108,17 @@ export class EditableTableComponent implements OnChanges {
     const file: File = input.files[0];
     const reader = new FileReader();
     reader.addEventListener('load', (event: any) => {
+
       this.Data[index].dirty = true;
       this.isFileUploading[index]=true;
+      this.Data[index][fieldName] = file.name;
       this.fileUploaded.emit({file,completionFunc:((value,propertyName) =>this.onFileUploaded(index,value,propertyName,file.name) )});
     });
     reader.readAsDataURL(file);
   }
 
   private onFileUploaded= (index:number,value: any, propertyName: string, fileName: string)=> {
-    if (this.Data[index][propertyName] !== fileName)
+    if (this.Data[index][propertyName] !== fileName && this.Data[index][propertyName].dirty)
       this.Data[index][propertyName] = value;
     this.isFileUploading[index]=false;
   }
