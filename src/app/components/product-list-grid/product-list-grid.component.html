@@ -27,21 +27,21 @@
         <ng-container *ngFor="let product of products">
           <div *ngIf="product.active" class="col-md-3 mb-4">
             <!-- Card -->
-            <div class="card">
+            <div class="card h-100">
 
               <div class="view zoom overlay rounded">
-                <img class="img-fluid w-100"
+                <img class="img-fluid w-auto  card-image"
                      [src]="product.image" alt="Sample">
                 <a routerLink="/product/{{product.id}}">
                   <div class="mask">
-                    <img class="img-fluid w-100"
+                    <img class="img-fluid w-100 card-image"
                          [src]="product.image">
                     <div class="mask"></div>
                   </div>
                 </a>
               </div>
 
-              <div class="text-center">
+              <div class="text-center mt-auto">
 
                 <a routerLink="/product/{{product.id}}"><h5>{{product.name}}</h5></a>
 

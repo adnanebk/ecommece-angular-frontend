@@ -25,8 +25,8 @@ export class EditableTableComponent implements OnChanges {
    isFileUploading: boolean[]=[];
    selectedSize=0;
    currentElement: any={};
+   originalElement: any={};
 
-  fileNames: string[] = [];
 
   constructor(private datePipe: DatePipe, private confirmDialogService: ConfirmDialogService) {
   }
@@ -43,7 +43,6 @@ export class EditableTableComponent implements OnChanges {
 
   onSave(index: number) {
     this.errors = [];
-    this.Data[index].hasError = false;
     this.Data[index].isNew ? this.dataAdded.emit() : this.dataUpdated.emit(index);
   }
 
@@ -52,7 +51,6 @@ export class EditableTableComponent implements OnChanges {
     if (!this.Data[0].isNew) {
       let newEl: any={};
       newEl.isNew=true;
-      this.currentElement.hasError=false;
       this.currentElement=newEl;
       this.Data.unshift(newEl);
     }
@@ -92,9 +90,15 @@ export class EditableTableComponent implements OnChanges {
     this.removeError(field.name);
   }
   onViewChanged(currentEl: any) {
-    if(!this.isCurrentElement(currentEl))
-    this.currentElement.hasError=false;
+    if(this.isCurrentElement(currentEl))
+      return;
+    if(this.currentElement.dirty) {
+      // roleback
+      this.isFileUploading[this.Data.indexOf(this.currentElement)]=false;
+      Object.assign(this.currentElement, this.originalElement);
+    }
     this.currentElement=currentEl;
+    this.originalElement= {...this.currentElement};
 
   }
 
@@ -105,15 +109,17 @@ export class EditableTableComponent implements OnChanges {
     const reader = new FileReader();
     reader.addEventListener('load', (event: any) => {
       this.Data[index].dirty = true;
-      //this.isFileUploading[index] = true;
       this.isFileUploading[index]=true;
       this.fileUploaded.emit({file,completionFunc:((value,propertyName) =>this.onFileUploaded(index,value,propertyName,file.name) )});
-      //this.editedElement[fieldName] = file.name;
-      this.fileNames[index] = file.name;
     });
     reader.readAsDataURL(file);
   }
 
+  private onFileUploaded= (index:number,value: any, propertyName: string, fileName: string)=> {
+    if (this.Data[index][propertyName] !== fileName)
+      this.Data[index][propertyName] = value;
+    this.isFileUploading[index]=false;
+  }
 
   sort(idx: number, element: HTMLElement) {
     let direction = '';
@@ -179,14 +185,6 @@ export class EditableTableComponent implements OnChanges {
 
   byId(item1, item2) {
     return ((item1 && item2) && item1.id === item2.id) || item1 === item2;
-  }
-
-
-   onFileUploaded= (index:number,value: any, propertyName: string, fileName: string)=> {
-     if (this.Data[index][propertyName] !== fileName) {
-       this.Data[index][propertyName] = value;
-     }
-     this.isFileUploading[index]=false;
   }
 
   isCurrentElement(element){

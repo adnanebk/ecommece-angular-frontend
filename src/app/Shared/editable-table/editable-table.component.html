@@ -32,7 +32,7 @@
     </thead>
     <tbody>
 
-    <tr *ngFor="let el of Data ; let idx= index;trackBy: trackByFn" [className]="el.hasError && errors.length>0?'error-warning':''">
+    <tr *ngFor="let el of Data ; let idx= index;trackBy: trackByFn" >
 
       <td class="p-1 align-middle">
       <span *ngIf="!batchEnabled" class="table-edit">
@@ -58,7 +58,7 @@
       <td *ngFor="let field of fields; let idxField=index" (click)="onViewChanged(el)" class=" p-1 align-middle"
           [class]="isCurrentElement(el)?'py-3':''"
           [ngStyle]="el[field.name]?.length>100 && {minWidth: '200px'}"
-          [ngClass]="(el?.dirty && !el.hasError) && 'bgDirty'">
+          [ngClass]="el?.isNew?'bg-light':''">
 
         <ng-container *ngIf="!isCurrentElement(el) && !batchEnabled">
          <span *ngIf="(!field.type || field.type !== 'image')">
