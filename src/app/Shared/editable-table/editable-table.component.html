@@ -104,7 +104,7 @@
             <option [ngValue]="op"
                     *ngFor="let op of selects.get(field.name).options">{{op[selects.get(field.name).displayField]}}</option>
           </select>
-          <span *ngIf="el.hasError && isCurrentElement(el)" class="text-danger">{{getError(idxField,field.name)}}</span>
+          <div *ngIf="el.hasError && isCurrentElement(el)" class="text-danger">{{getError(idxField,field.name)}}</div>
         </ng-container>
       </td>
     </tr>
