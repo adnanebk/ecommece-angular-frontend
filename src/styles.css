@@ -771,6 +771,11 @@ table.table.table-bordered th {
 .detail-section {
   margin-top: 60px
 }
+@media only screen and (min-width: 900px) {
+  .detail-img {
+    width: 60%;
+  }
+}
 
 
 /**/
