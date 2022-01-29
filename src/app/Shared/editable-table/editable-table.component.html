@@ -77,10 +77,9 @@
                     [(ngModel)]="el[field.name]" type="text" class="text-area"
                     (input)="onValueChanged(idx,this.field)"></textarea>
           <div class="file-input" *ngIf="field.type === 'image'">
-            <input id="file" #file type="file" class="form-control file" accept="image/*"
+            <input id="file" #file type="file" class="form-control file" multiple accept=".jpg, .jpeg, .png"
                    (change)="processFile(idx,this.field.name,file)">
             <label for="file"><i class="fas fa-upload"></i></label>
-            (Jpg,Png)
           </div>
 
 
