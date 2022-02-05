@@ -1,5 +1,9 @@
-.card-input{
-  margin: 3px;
+.item{
+  text-align: center;
+}
+.item>*{
+  width: 95%;
+  display: inline-block;
 }
 .card-inputs{
   border: 1px solid darkgray;
