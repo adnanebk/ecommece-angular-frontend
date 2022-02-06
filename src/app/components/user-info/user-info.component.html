@@ -238,7 +238,7 @@
 <br>
               <div class="item">
 
-                <div class="col-sm-9 text-secondary card-input">
+                <div class="text-secondary card-input">
                   <app-input (inputChanged)="handleChange()" name="cardType" [errors]="errors"
                              [control]="cardForm.controls.cardType"
                              placeholder="card type"
@@ -250,7 +250,7 @@
               <hr>
               <div class="item">
 
-                <div class="col-sm-9 text-secondary">
+                <div class="text-secondary">
                   <app-input (inputChanged)="handleChange()" name="cardNumber" [control]="cardForm.controls.cardNumber"
                              [errors]="errors" placeholder="Card number"></app-input>
                 </div>
@@ -258,7 +258,7 @@
               <hr>
               <div class="item">
 
-                <div class="col-sm-9 text-secondary">
+                <div class="text-secondary">
                   <app-input (inputChanged)="handleChange()" name="expirationDate" [errors]="errors"
                              [control]="cardForm.controls.expirationDate"
                              placeholder="Expiration date  (month/year)"></app-input>
