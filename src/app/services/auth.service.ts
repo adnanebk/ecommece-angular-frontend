@@ -103,7 +103,7 @@ export class AuthService {
     this.saveToLocalStorage(this.currentUser);
   }
 verifyTokenExpiration(){
-  if(new Date()> new Date(this.currentUser.expirationDate)){
+  if(new Date()> new Date(this.currentUser?.expirationDate)){
     let refreshToken= localStorage.getItem('refreshToken');
     this.httpService.refreshMyToken(refreshToken).subscribe(resp=>{
         this.saveToLocalStorage(resp.appUser,resp.token,resp.refreshToken);
