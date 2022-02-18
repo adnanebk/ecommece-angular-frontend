@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {HttpService} from '../../services/http.service';
 import {ProductCategory} from '../../models/product-category';
 import {ActivatedRoute} from '@angular/router';
+import {CategoryService} from "../../services/category.service";
 
 @Component({
   selector: 'app-product-category',
@@ -13,7 +13,7 @@ export class ProductCategoryComponent implements OnInit {
   params: {};
   @Input() isMenu: false;
 
-  constructor(private httpService: HttpService, private route: ActivatedRoute) {
+  constructor(private categoryService: CategoryService, private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
@@ -24,7 +24,7 @@ export class ProductCategoryComponent implements OnInit {
   }
 
   fetchData() {
-    this.httpService.getProductCategories().subscribe(
+    this.categoryService.getProductCategories().subscribe(
       data => {
         this.productCategories = data;
       }

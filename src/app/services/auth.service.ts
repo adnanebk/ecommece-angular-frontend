@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {AppUser} from '../models/app-user';
 import {map} from 'rxjs/operators';
 import {BehaviorSubject} from 'rxjs';
-import {HttpService} from './http.service';
+import {userService} from './user.service';
 import {FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialUser} from 'angularx-social-login';
 import {ToastrService} from 'ngx-toastr';
 
@@ -14,7 +14,7 @@ export class AuthService {
   private currentUser: AppUser;
   private isToastOpened=false;
 
-  constructor(private httpService: HttpService, private socialAuthService: SocialAuthService, private toastrService: ToastrService) {
+  constructor(private httpService: userService, private socialAuthService: SocialAuthService, private toastrService: ToastrService) {
     const currentUserSt = localStorage.getItem('appUser');
     if (currentUserSt?.length > 0) {
       this.currentUser = JSON.parse(currentUserSt);

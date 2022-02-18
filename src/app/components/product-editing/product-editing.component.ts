@@ -1,11 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpService} from '../../services/http.service';
 import {Product} from '../../models/product';
 import {ProductCategory} from '../../models/product-category';
 import {ImageService} from '../../services/image.service';
 import {saveAs} from 'file-saver';
 import {ToastrService} from 'ngx-toastr';
 import {Selects} from '../../Shared/editable-table/editable-table.component';
+import {ProductService} from "../../services/product.service";
+import {CategoryService} from "../../services/category.service";
 
 @Component({
   selector: 'app-product-editing',
@@ -31,7 +32,8 @@ export class ProductEditingComponent implements OnInit {
   categorySelects = new Selects();
 
 
-  constructor(private httpService: HttpService, private imageService: ImageService, private toastrService: ToastrService) {
+  constructor(private productService: ProductService,private categoryService: CategoryService, private imageService: ImageService,
+              private toastrService: ToastrService) {
 
   }
 
@@ -40,7 +42,7 @@ export class ProductEditingComponent implements OnInit {
     this.productHeaders = [...Product.headers];
 
     this.fetchProducts(this.page);
-    this.httpService.getProductCategories().subscribe(resp => {
+    this.categoryService.getProductCategories().subscribe(resp => {
       this.categoryNames = resp.map(c => c.name);
       this.categories = resp;
       this.categorySelects.set('category', {valueField: 'id', displayField: 'name', options: resp});
@@ -48,7 +50,7 @@ export class ProductEditingComponent implements OnInit {
   }
 
   fetchProducts(page?: number) {
-    this.httpService.gePagedProducts
+    this.productService.gePagedProducts
     (page - 1, this.pageSize, this.sort, this.search, this.direction).subscribe(resp => {
       this.products = [...resp.data];
       this.size = resp.page.totalElements;
@@ -56,7 +58,7 @@ export class ProductEditingComponent implements OnInit {
   }
 
   addNewProduct() {
-    this.httpService.saveProduct(this.products[0]).subscribe(resp => {
+    this.productService.saveProduct(this.products[0]).subscribe(resp => {
         this.products[0] = {...resp};
         this.toastrService.success('your operation has been successful');
 
@@ -66,7 +68,7 @@ export class ProductEditingComponent implements OnInit {
   }
 
   updateProduct(index: number) {
-    this.httpService.updateProduct(this.products[index]).subscribe(resp => {
+    this.productService.updateProduct(this.products[index]).subscribe(resp => {
         this.products[index] = {...resp};
         this.toastrService.success('your operation has been successful');
       },
@@ -75,7 +77,7 @@ export class ProductEditingComponent implements OnInit {
   }
 
   updateProducts($products: Product[]) {
-    this.httpService.updateProducts($products).subscribe(products => {
+    this.productService.updateProducts($products).subscribe(products => {
         this.toastrService.success('your operation has been successful');
         this.products = this.products.map(prod =>products.find(p => p.id === prod.id) || prod);
       },
@@ -85,7 +87,7 @@ export class ProductEditingComponent implements OnInit {
   }
 
   removeProduct({ index, data }) {
-    this.httpService.removeProduct(data.id).subscribe(() => {
+    this.productService.removeProduct(data.id).subscribe(() => {
       this.toastrService.success('your operation has been successful');
       this.products.splice(index, 1);
     });
@@ -93,7 +95,7 @@ export class ProductEditingComponent implements OnInit {
 
   removeAllProducts($products: Product[]) {
     this.toastrService.success('your operation has been successful');
-    this.httpService.deleteProducts($products.map(pr => pr.id)).subscribe(() => {
+    this.productService.deleteProducts($products.map(pr => pr.id)).subscribe(() => {
       this.products = this.products.filter(p => !$products.includes(p));
     });
   }
@@ -112,7 +114,7 @@ export class ProductEditingComponent implements OnInit {
   handleUploadImage({ file,completionFunc }) {
     this.imageService.uploadImage(file).subscribe(
       (res: string) => {
-        completionFunc(res,"image")
+        completionFunc(res,"image");
       },
       (err) => {
         this.errors = [err];
@@ -137,7 +139,7 @@ export class ProductEditingComponent implements OnInit {
   }
 
   saveToExcel() {
-    this.httpService.saveProductsToExcel(this.SelectedProducts.length > 0 ? this.SelectedProducts : this.products)
+    this.productService.saveProductsToExcel(this.SelectedProducts.length > 0 ? this.SelectedProducts : this.products)
       .subscribe(resp => {
         this.toastrService.success('your operation has been successful');
         const blob = new Blob([resp], {type: 'application/vnd.ms.excel'});
@@ -150,7 +152,7 @@ export class ProductEditingComponent implements OnInit {
   loadFromExcel($input: HTMLInputElement) {
     this.errors = [];
     const file: File = $input.files[0];
-    this.httpService.saveProductsFromExcel(file).subscribe(products => {
+    this.productService.saveProductsFromExcel(file).subscribe(products => {
         this.toastrService.success('your operation has been successful');
         products.forEach(p => this.products.unshift(p));
         $input.value = '';

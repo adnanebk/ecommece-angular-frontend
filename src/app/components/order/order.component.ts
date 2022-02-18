@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Order} from '../../models/order';
-import {HttpService} from '../../services/http.service';
 import {AuthService} from '../../services/auth.service';
 import {AppUser} from '../../models/app-user';
+import {OrderService} from "../../services/order.service";
 
 
 @Component({
@@ -14,7 +14,7 @@ export class OrderComponent implements OnInit {
   orders: Order[];
   user: AppUser;
 
-  constructor(private httpService: HttpService, private authService: AuthService) {
+  constructor(private orderService: OrderService, private authService: AuthService) {
   }
 
   ngOnInit(): void {
@@ -27,7 +27,7 @@ export class OrderComponent implements OnInit {
   getUserOrders() {
 
     if (this.user) {
-      this.httpService.getOrders(this.user.userName).subscribe(orders => this.orders = orders.reverse());
+      this.orderService.getOrders(this.user.userName).subscribe(orders => this.orders = orders.reverse());
     }
   }
 }

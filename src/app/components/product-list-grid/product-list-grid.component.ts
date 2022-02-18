@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpService} from 'src/app/services/http.service';
 import {Product} from 'src/app/models/product';
 import {ActivatedRoute} from '@angular/router';
 import {CartService} from '../../services/cart.service';
 import {CartItem} from '../../models/cart-item';
+import {ProductService} from "../../services/product.service";
 
 @Component({
   selector: 'app-product-list',
@@ -22,7 +22,7 @@ export class ProductListComponent implements OnInit {
   isLoaded = false;
   direction = 'asc';
 
-  constructor(private httpService: HttpService, private route: ActivatedRoute, private cartService: CartService) {
+  constructor(private productService: ProductService, private route: ActivatedRoute, private cartService: CartService) {
   }
 
   ngOnInit() {
@@ -37,7 +37,9 @@ export class ProductListComponent implements OnInit {
   }
 
   getPagedProducts() {
-    this.httpService.gePagedProducts((this.page - 1), this.pageSize, this.sort, this.searchValue, this.direction, this.currentCategoryId).subscribe(
+    this.productService
+      .gePagedProducts((this.page - 1), this.pageSize, this.sort, this.searchValue, this.direction, this.currentCategoryId)
+      .subscribe(
       resp => {
         this.mapDataFromResponse(resp);
       }

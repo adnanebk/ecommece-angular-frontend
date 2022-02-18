@@ -2,7 +2,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {AppComponent} from './app.component';
 import {ProductListComponent} from './components/product-list-grid/product-list-grid.component';
-import {HttpService} from './services/http.service';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {ProductCategoryComponent} from './components/product-category/product-category.component';
 import {ProductSearchComponent} from './components/product-search/product-search.component';

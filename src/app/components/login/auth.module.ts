@@ -1,10 +1,5 @@
 import {NgModule} from '@angular/core';
-import {
-  FacebookLoginProvider,
-  GoogleLoginProvider,
-  SocialAuthServiceConfig,
-  SocialLoginModule
-} from 'angularx-social-login';
+import {FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule} from 'angularx-social-login';
 import {environment} from '../../../environments/environment.prod';
 
 

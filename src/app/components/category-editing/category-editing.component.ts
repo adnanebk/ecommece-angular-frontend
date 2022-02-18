@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ProductCategory} from '../../models/product-category';
-import {HttpService} from '../../services/http.service';
+import {CategoryService} from "../../services/category.service";
 
 @Component({
   selector: 'app-category-editing',
@@ -13,7 +13,7 @@ export class CategoryEditingComponent implements OnInit {
   @Input() categories: ProductCategory[];
   errors: any[] = [];
 
-  constructor(private httpService: HttpService) {
+  constructor(private categoryService: CategoryService) {
   }
 
   ngOnInit(): void {
@@ -22,7 +22,7 @@ export class CategoryEditingComponent implements OnInit {
   }
 
   handleCategoryAdded() {
-    this.httpService.saveCategory(this.categories[0]).subscribe(resp => {
+    this.categoryService.saveCategory(this.categories[0]).subscribe(resp => {
         this.categories[0] = resp;
       },
       errors => Array.isArray(errors) ? this.errors = errors : this.errors = [errors]
@@ -30,7 +30,7 @@ export class CategoryEditingComponent implements OnInit {
   }
 
   handleCategoryChanged(index: number) {
-    this.httpService.updateCategory(this.categories[index]).subscribe(resp => {
+    this.categoryService.updateCategory(this.categories[index]).subscribe(resp => {
         this.categories[index] = resp;
       },
       errors => Array.isArray(errors) ? this.errors = errors : this.errors = [errors]
@@ -38,7 +38,7 @@ export class CategoryEditingComponent implements OnInit {
   }
 
   handleCategoryDeleted({data,index}) {
-    this.httpService.removeCategory(data.id).subscribe();
+    this.categoryService.removeCategory(data.id).subscribe();
     this.categories.splice(index, 1);
   }
 

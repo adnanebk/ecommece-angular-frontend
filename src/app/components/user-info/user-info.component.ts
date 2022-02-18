@@ -1,13 +1,14 @@
-import { Component, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {AppUser} from '../../models/app-user';
-import {HttpService} from '../../services/http.service';
+import {userService} from '../../services/user.service';
 import {CreditCard} from '../../models/CreditCard';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MyError} from '../../models/my-error';
 import {CardNumberFormControl} from '../../Shared/card-number-form-control';
 import {MonthYearFormControl} from '../../Shared/month-year-form-control';
 import {ToastrService} from "ngx-toastr";
+import {CreditCardService} from "../../services/credit-card.service";
 
 @Component({
   selector: 'app-user-info',
@@ -30,7 +31,7 @@ export class UserInfoComponent implements OnInit {
     newPassword:  new FormControl('', [Validators.required])
   });
 
-  constructor(private authService: AuthService, private httpService: HttpService,
+  constructor(private authService: AuthService, private creditCardService: CreditCardService,private httpService: userService,
               private formBuilder: FormBuilder,private toastrService: ToastrService) {
 
   }
@@ -65,7 +66,7 @@ export class UserInfoComponent implements OnInit {
   loadCreditCards() {
     this.selectedCard = new CreditCard();
     this.isCardModifying = false;
-    this.httpService.getCreditCardInfo(this.user?.userName).subscribe((cards) => {
+    this.creditCardService.getCreditCardInfo(this.user?.userName).subscribe((cards) => {
       this.cards = cards;
       this.selectedCard = cards.length > 0 && cards[0];
       this.reloadCardForm();
@@ -107,11 +108,11 @@ export class UserInfoComponent implements OnInit {
     if (creditCard) {
       creditCard.cardNumber = creditCard?.cardNumber?.replace(/\-/g, '');
       if (creditCard?.id > 0) {
-        this.httpService.updateCreditCard(creditCard).subscribe(() => {
+        this.creditCardService.updateCreditCard(creditCard).subscribe(() => {
        this.loadCreditCards();
         }, errors => this.errors = errors);
       } else {
-        this.httpService.saveCreditCard(creditCard).subscribe(() => {
+        this.creditCardService.saveCreditCard(creditCard).subscribe(() => {
             this.loadCreditCards();
           }
           , errors => this.errors = errors);
@@ -143,7 +144,7 @@ export class UserInfoComponent implements OnInit {
   }
 
   removeCard() {
-    this.httpService.removeCreditCard(this.selectedCard.id).subscribe(() => {
+    this.creditCardService.removeCreditCard(this.selectedCard.id).subscribe(() => {
       this.cards.splice(this.cards.indexOf(this.selectedCard), 1);
       this.selectedCard = this.cards[0];
       this.reloadCardForm();
@@ -151,7 +152,7 @@ export class UserInfoComponent implements OnInit {
   }
 
   onCardActive() {
-    this.httpService.activeCard(this.cardForm.getRawValue()).subscribe(cards=>{
+    this.creditCardService.activeCard(this.cardForm.getRawValue()).subscribe(cards=>{
       this.cards=cards;
       this.selectedCard=cards[0];
       this.reloadCardForm();

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {AuthService} from "./auth.service";
 import {throwError} from "rxjs";
 import {ToastrService} from "ngx-toastr";

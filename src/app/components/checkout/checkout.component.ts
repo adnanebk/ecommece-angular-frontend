@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CartService} from '../../services/cart.service';
-import {HttpService} from '../../services/http.service';
 import {Order} from '../../models/order';
 import {MyError} from '../../models/my-error';
 import {Router} from '@angular/router';
@@ -11,6 +10,8 @@ import {AppUser} from '../../models/app-user';
 import {MonthYearFormControl} from '../../Shared/month-year-form-control';
 import {CardNumberFormControl} from '../../Shared/card-number-form-control';
 import {CreditCard} from '../../models/CreditCard';
+import {OrderService} from "../../services/order.service";
+import {CreditCardService} from "../../services/credit-card.service";
 
 
 @Component({
@@ -30,7 +31,8 @@ export class CheckoutComponent implements OnInit {
   userCard: CreditCard;
 
   constructor(private formBuilder: FormBuilder, private cartService: CartService,
-              private httpService: HttpService, private router: Router, private authService: AuthService) {
+              private orderService: OrderService,private creditCardService: CreditCardService,
+              private router: Router, private authService: AuthService) {
     this.cartItems = this.router.getCurrentNavigation().extras.state?.products;
   }
 
@@ -38,7 +40,7 @@ export class CheckoutComponent implements OnInit {
     this.authService.userSubject.subscribe((user) => {
       this.user = user;
     });
-    this.httpService.getCreditCardInfo(this.user.userName).subscribe((cards) => {
+    this.creditCardService.getCreditCardInfo(this.user.userName).subscribe((cards) => {
       this.userCard = cards[0];
       if(this.userCard?.cardNumber)
       this.userCard.cardNumber = this.userCard.cardNumber.match(new RegExp('.{1,4}', 'g')).join('-');
@@ -79,7 +81,7 @@ export class CheckoutComponent implements OnInit {
     order.quantity = this.totalQuantity;
     order.id = 0;
     order.totalPrice = this.totalPrice;
-    this.httpService.saveOrder(order).subscribe(next => {
+    this.orderService.saveOrder(order).subscribe(next => {
       this.router.navigateByUrl('/orders');
     }, (errors => {
       if (Array.isArray(errors)) {
