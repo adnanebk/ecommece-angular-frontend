@@ -84,6 +84,7 @@ export class UserInfoComponent implements OnInit {
       for (var key in user) {
         this.user[key] = user[key];
       }
+      this.userForm.patchValue(this.user);
       this.authService.reloadUser(this.user);
       this.isUserModifying = false;
     }, errors => this.errors = errors);
