@@ -19,13 +19,13 @@ export class EditableTableComponent implements OnChanges {
   @Output() dataAdded = new EventEmitter();
   @Output() dataDeleted = new EventEmitter<{ index: number, data: any }>();
   @Output() dataSorted = new EventEmitter<{ sort: string, direction: string }>();
-  @Output() fileUploaded = new EventEmitter<{ file: File,completionFunc: (value:any,propertyName:string)=>void }>();
+  @Output() fileUploaded = new EventEmitter<{ file: File, completionFunc: (value: any, propertyName: string) => void }>();
   @Output() UpdateAll = new EventEmitter<any[]>();
   @Output() RemoveAll = new EventEmitter<any[]>();
-   isFileUploading: boolean[]=[];
-   selectedSize=0;
-   currentElement: any={};
-   originalElement: any={};
+  isFileUploading: boolean[] = [];
+  selectedSize = 0;
+  currentElement: any = {};
+  originalElement: any = {};
 
 
   constructor(private datePipe: DatePipe, private confirmDialogService: ConfirmDialogService) {
@@ -34,8 +34,9 @@ export class EditableTableComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.errors) {
       this.Data.map(e => {
-        if (this.isCurrentElement(e))
+        if (this.isCurrentElement(e)) {
           e.hasError = true;
+        }
         return e;
       });
     }
@@ -47,58 +48,63 @@ export class EditableTableComponent implements OnChanges {
   }
 
   insertNewRow(tableContent: HTMLDivElement) {
-        tableContent.scrollTop=0;
+    tableContent.scrollTop = 0;
     if (!this.Data[0].isNew) {
-      let newEl: any={};
-      newEl.isNew=true;
-      this.currentElement=newEl;
+      let newEl: any = {};
+      newEl.isNew = true;
+      this.currentElement = newEl;
       this.Data.unshift(newEl);
     }
   }
 
 
   remove(index: any) {
-    if (this.Data[index].isNew)
-      this.Data.splice(index,1);
-    else
-    this.confirmDialogService.confirmThis(() => {
+    if (this.Data[index].isNew) {
+      this.Data.splice(index, 1);
+    } else {
+      this.confirmDialogService.confirmThis(() => {
         this.errors = [];
         this.dataDeleted.emit({index, data: this.Data[index]});
-    });
+      });
+    }
   }
 
-  getText(el: any, name: any,type: string) {
+  getText(el: any, name: any, type: string) {
     let val = el[name];
-    if(el.isNew)
+    if (el.isNew) {
       return val;
-     if (val?.length > 60) {
-      return val.substring(0, 60)+'...';
     }
-    if (type==='date') {
+    if (val?.length > 60) {
+      return val.substring(0, 60) + '...';
+    }
+    if (type === 'date') {
       return this.datePipe.transform(val, 'short');
     }
-     if (type==='select') {
+    if (type === 'select') {
       return val[this.selects.get(name)?.displayField];
     }
-     if (type === 'bool') {
+    if (type === 'bool') {
       return val ? 'Yes' : 'No';
     }
     return val;
   }
+
   onValueChanged(index: number, field: any) {
     this.Data[index].dirty = true;
     this.removeError(field.name);
   }
+
   onViewChanged(currentEl: any) {
-    if(this.isCurrentElement(currentEl))
+    if (this.isCurrentElement(currentEl)) {
       return;
-    if(this.currentElement.dirty) {
+    }
+    if (this.currentElement.dirty) {
       // roleback
-      this.isFileUploading[this.Data.indexOf(this.currentElement)]=false;
+      this.isFileUploading[this.Data.indexOf(this.currentElement)] = false;
       Object.assign(this.currentElement, this.originalElement);
     }
-    this.currentElement=currentEl;
-    this.originalElement= {...this.currentElement};
+    this.currentElement = currentEl;
+    this.originalElement = {...this.currentElement};
 
   }
 
@@ -110,18 +116,19 @@ export class EditableTableComponent implements OnChanges {
     reader.addEventListener('load', (event: any) => {
 
       this.Data[index].dirty = true;
-      this.isFileUploading[index]=true;
+      this.isFileUploading[index] = true;
       this.Data[index][fieldName] = file.name;
-      this.fileUploaded.emit({file,completionFunc:((value,propertyName) =>this.onFileUploaded(index,value,propertyName,file.name) )});
+      this.fileUploaded.emit({file, completionFunc: ((value, propertyName) => this.onFileUploaded(index, value, propertyName, file.name))});
     });
     reader.readAsDataURL(file);
   }
 
-  private onFileUploaded= (index:number,value: any, propertyName: string, fileName: string)=> {
-    if (this.Data[index][propertyName] !== fileName && this.Data[index][propertyName].dirty)
+  private onFileUploaded = (index: number, value: any, propertyName: string, fileName: string) => {
+    if (this.Data[index][propertyName] !== fileName && this.Data[index][propertyName].dirty) {
       this.Data[index][propertyName] = value;
-    this.isFileUploading[index]=false;
-  }
+    }
+    this.isFileUploading[index] = false;
+  };
 
   sort(idx: number, element: HTMLElement) {
     let direction = '';
@@ -140,16 +147,16 @@ export class EditableTableComponent implements OnChanges {
 
 
   onElSelected(el: any) {
-   el.selected?this.selectedSize++:this.selectedSize--;
+    el.selected ? this.selectedSize++ : this.selectedSize--;
   }
 
   deleteAll() {
-    if(this.selectedSize>0)    {
+    if (this.selectedSize > 0) {
       this.confirmDialogService.confirmThis(() => {
         this.errors = [];
         this.RemoveAll.emit(this.Data.filter(e => e.selected));
       });
-      this.selectedSize=0;
+      this.selectedSize = 0;
 
     }
 
@@ -157,13 +164,13 @@ export class EditableTableComponent implements OnChanges {
 
   saveAll() {
     this.errors = [];
-    let data= this.Data.filter(e => e.dirty);
+    let data = this.Data.filter(e => e.dirty);
     data.length && this.UpdateAll.emit(data);
   }
 
-  getError(idx: number,fieldName: string) {
+  getError(idx: number, fieldName: string) {
     const error = this.errors.find(er => er.fieldName === fieldName);
-    return error &&  ('"'+this.columnNames[idx]+ '" ' + error.message);
+    return error && ('"' + this.columnNames[idx] + '" ' + error.message);
   }
 
   removeError(fieldName: string) {
@@ -173,10 +180,10 @@ export class EditableTableComponent implements OnChanges {
 
   onAllSelected(check: HTMLInputElement) {
     if (check.checked) {
-      this.selectedSize=this.Data.length;
+      this.selectedSize = this.Data.length;
       this.Data.map(e => e.selected = true);
     } else {
-      this.selectedSize=0;
+      this.selectedSize = 0;
       this.Data.map(e => e.selected = false);
     }
   }
@@ -189,8 +196,8 @@ export class EditableTableComponent implements OnChanges {
     return ((item1 && item2) && item1.id === item2.id) || item1 === item2;
   }
 
-  isCurrentElement(element){
-   return element===this.currentElement;
+  isCurrentElement(element) {
+    return element === this.currentElement;
   }
 }
 

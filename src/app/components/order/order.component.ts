@@ -25,9 +25,8 @@ export class OrderComponent implements OnInit {
   }
 
   getUserOrders() {
-
     if (this.user) {
-      this.orderService.getOrders(this.user.userName).subscribe(orders => this.orders = orders.reverse());
+      this.orderService.getOrders().subscribe(orders => this.orders = orders.reverse());
     }
   }
 }

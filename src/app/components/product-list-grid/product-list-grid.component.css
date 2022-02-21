@@ -19,6 +19,7 @@
 .card {
   background: transparent;
 }
-.card-image{
+
+.card-image {
   max-height: 220px;
 }

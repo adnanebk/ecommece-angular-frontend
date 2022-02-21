@@ -1,14 +1,15 @@
-
-<span *ngIf="!batchEnabled" class="table-add  mb-3 mr-2"><a (click)="insertNewRow(tableContent)" ><i class="fas fa-plus-square"></i></a></span>
+<span *ngIf="!batchEnabled" class="table-add  mb-3 mr-2"><a (click)="insertNewRow(tableContent)"><i
+  class="fas fa-plus-square"></i></a></span>
 <div *ngIf="batchEnabled">
   <div *ngIf="selectedSize>0" class="alert alert-info">{{selectedSize}} elements has been selected</div>
-  <button  (click)="saveAll()" class="btn btn-info">Update all</button>
+  <button (click)="saveAll()" class="btn btn-info">Update all</button>
   <button [disabled]="selectedSize<=0" (click)="deleteAll()" class="btn btn-danger">Remove all</button>
 </div>
-<div class="table-responsive table-wrapper-scroll-y" #tableContent >
+<div class="table-responsive table-wrapper-scroll-y" #tableContent>
 
   <app-dialog text="Are you sure to delete ?"></app-dialog>
-  <table class="table table-bordered table-striped w-auto m-auto text-center table-fixed float-left" scrollY="true" maxHeight="200"
+  <table class="table table-bordered table-striped w-auto m-auto text-center table-fixed float-left" scrollY="true"
+         maxHeight="200"
          cellspacing="0"
          width="100%">
     <thead>
@@ -32,17 +33,18 @@
     </thead>
     <tbody>
 
-    <tr *ngFor="let el of Data ; let idx= index;trackBy: trackByFn" >
+    <tr *ngFor="let el of Data ; let idx= index;trackBy: trackByFn">
 
       <td class="p-1 align-middle">
       <span *ngIf="!batchEnabled" class="table-edit">
         <ng-container *ngIf="el!==currentElement">
-        <button  (click)="onViewChanged(el)" type="button"
+        <button (click)="onViewChanged(el)" type="button"
                 class="btn btn-info btn-rounded btn-sm my-0"><i class="fas fa-edit"></i></button>
-        <button  (click)="remove(idx)" type="button" class="btn btn-danger btn-rounded  btn-sm my-1"><i class="fas fa-trash-alt"></i></button>
+        <button (click)="remove(idx)" type="button" class="btn btn-danger btn-rounded  btn-sm my-1"><i
+          class="fas fa-trash-alt"></i></button>
           </ng-container>
 
-        <button *ngIf="isCurrentElement(el)"  (click)="onSave(idx)" type="button"
+        <button *ngIf="isCurrentElement(el)" (click)="onSave(idx)" type="button"
                 class="btn btn-success btn-rounded btn-sm my-0">Save</button>
       </span>
         <span *ngIf="batchEnabled" class="select">
@@ -62,7 +64,7 @@
 
         <ng-container *ngIf="!isCurrentElement(el) && !batchEnabled">
          <span *ngIf="(!field.type || field.type !== 'image')">
-           {{getText(el, field.name,field.type)}}</span>
+           {{getText(el, field.name, field.type)}}</span>
           <img *ngIf="field.type === 'image' && !isFileUploading[idx]" [src]="el[field.name]">
           <div *ngIf="field.type === 'image' && isFileUploading[idx]" class="spinner-border" role="status">
             <span class="sr-only">Loading...</span>
@@ -85,7 +87,8 @@
 
           <input *ngIf="field.type === 'number'" type="number" #input [(ngModel)]="el[field.name]" class="number-input"
                  (input)="onValueChanged(idx,this.field)" (keyup.enter)="onSave(idx)">
-          <input *ngIf="field.type === 'decimal'" type="number" step="any" #input [(ngModel)]="el[field.name]" class="number-input"
+          <input *ngIf="field.type === 'decimal'" type="number" step="any" #input [(ngModel)]="el[field.name]"
+                 class="number-input"
                  (input)="onValueChanged(idx,this.field)" (keyup.enter)="onSave(idx)">
           <input *ngIf="field.type === 'date'" type="date"
                  [(ngModel)]="el[field.name]" class="form-control w-auto">
@@ -103,7 +106,7 @@
             <option [ngValue]="op"
                     *ngFor="let op of selects.get(field.name).options">{{op[selects.get(field.name).displayField]}}</option>
           </select>
-          <div *ngIf="el.hasError && isCurrentElement(el)" class="text-danger">{{getError(idxField,field.name)}}</div>
+          <div *ngIf="el.hasError && isCurrentElement(el)" class="text-danger">{{getError(idxField, field.name)}}</div>
         </ng-container>
       </td>
     </tr>

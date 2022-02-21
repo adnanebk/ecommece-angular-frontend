@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
       this.activatedRoute.queryParamMap.subscribe(async param => {
         if (param.get('verified') && !this.user.enabled) {
           this.authService.getUserInfo()
-              .subscribe(user=>user.enabled && this.authService.sendConfirmedWithSuccess());
+            .subscribe(user => user.enabled && this.authService.sendConfirmedWithSuccess());
         }
       });
     });

@@ -32,7 +32,7 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authService.userSubject.subscribe((user)=> user && this.router.navigate(["/"]));
+    this.authService.userSubject.subscribe((user) => user && this.router.navigate(["/"]));
   }
 
   onSubmit() {

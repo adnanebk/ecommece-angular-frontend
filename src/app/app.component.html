@@ -42,19 +42,19 @@
           </li>
 
           <!-- Dropdown -->
-          <app-product-category  isMenu="true"></app-product-category>
-          <ng-container  *ngIf="user">
+          <app-product-category isMenu="true"></app-product-category>
+          <ng-container *ngIf="user">
             <li class="nav-item">
               <a class="nav-link text-warning" routerLink="" (click)="logout()">Logout</a>
             </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/user-info">
-              <b class="text-dark font-weight-bold">My profile</b></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/user-info">
-              <b class="text-dark font-weight-bold">Welcome {{user.userName}} !</b></a>
-          </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/user-info">
+                <b class="text-dark font-weight-bold">My profile</b></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/user-info">
+                <b class="text-dark font-weight-bold">Welcome {{user.userName}} !</b></a>
+            </li>
           </ng-container>
         </ul>
         <!-- Links -->

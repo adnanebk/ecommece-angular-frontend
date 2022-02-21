@@ -8,19 +8,19 @@ import {ToastrService} from "ngx-toastr";
 })
 export class HttpErrorHandlerService {
 
-  constructor(private authService: AuthService,private toastrService: ToastrService) { }
+  constructor(private authService: AuthService, private toastrService: ToastrService) {
+  }
 
-   handleError(resp) {
-   // let authService=this.injector.get(AuthService);
+  handleError(resp) {
+    // let authService=this.injector.get(AuthService);
     if (!(resp.error instanceof ErrorEvent)) {
       {
-        this.authService.verifyTokenExpiration();
-
-        if (resp.status>=400 && resp.status<500) {
+        if (resp.status >= 400 && resp.status < 500) {
           if (resp.error.errors) {
             return throwError(resp.error.errors);
           } else if (resp.error?.message) {
             if (resp.status === 403) {
+              this.authService.verifyTokenExpiration();
               this.authService.verifyUser();
             } else {
               this.toastrService.error(resp.error.message, 'Error', {

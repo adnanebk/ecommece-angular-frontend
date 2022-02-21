@@ -17,7 +17,6 @@ export class userService {
   }
 
 
-
   register(user: any) {
     return this.httpClient.post<AuthData>(this.baseUrl + 'register', user);
   }
@@ -27,35 +26,37 @@ export class userService {
   }
 
   googleLogin(data: { appUser: AppUser, token: string }) {
-    return this.httpClient.post<AuthData>(this.baseUrl + 'google', data);
+    return this.httpClient.post<AuthData>(this.baseUrl + 'login/google', data);
   }
 
   facebook(data: { appUser: AppUser, token: string }) {
-    return this.httpClient.post<AuthData>(this.baseUrl + 'facebook', data);
+    return this.httpClient.post<AuthData>(this.baseUrl + 'login/facebook', data);
   }
+
   refreshMyToken(refreshToken: string) {
-    return this.httpClient.post<AuthData>(this.baseUrl + 'refresh-token', refreshToken);
+    return this.httpClient.post<AuthData>(this.baseUrl + 'appUsers/refresh-token', refreshToken);
 
   }
+
   getUserInfo(userName: string) {
-    return this.httpClient.get<AppUser>(this.baseUrl + 'appUsers/search/byUserName?userName='+userName);
+    return this.httpClient.get<AppUser>(this.baseUrl + 'appUsers/search/byUserName?userName=' + userName);
   }
 
   updateUser(user: AppUser, id: number) {
-    return this.httpClient.patch<AppUser>(this.baseUrl+'appUsers/'+id, user);
+    return this.httpClient.patch<AppUser>(this.baseUrl + 'appUsers/' + id, user);
 
   }
+
   updateUserPassword(userPasswords: any) {
-    return this.httpClient.post(this.baseUrl+'appUsers/change-password', userPasswords);
-  }
-  sendActivationMessage(email: string) {
-    return this.httpClient.post<void>(this.baseUrl + 'confirm', email);
+    return this.httpClient.post(this.baseUrl + 'appUsers/change-password', userPasswords);
   }
 
+  sendActivationMessage(email: string) {
+    return this.httpClient.post<void>(this.baseUrl + 'appUsers/confirm', email);
+  }
 
 
 }
-
 
 
 interface AuthData {

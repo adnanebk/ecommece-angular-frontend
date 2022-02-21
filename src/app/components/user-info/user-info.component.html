@@ -3,113 +3,123 @@
     <div class="container-fluid">
       <div class="col-md-8">
 
-  <div class="card mb-3"  >
-    <h2 class="text-center text-primary border-bottom border-primary text-title">Profile information</h2>
-    <form  (ngSubmit)="updateUserInfo($event)" [formGroup]="userForm" class="card mb-3 d-block" >
+        <div class="card mb-3">
+          <h2 class="text-center text-primary border-bottom border-primary text-title">Profile information</h2>
+          <form (ngSubmit)="updateUserInfo($event)" [formGroup]="userForm" class="card mb-3 d-block">
 
-    <div class="card-body  input-space">
-      <hr>
-      <div class="row">
-        <div class="col-sm-3">
-          <h6 class="mb-0">First name</h6>
-        </div>
-        <div  class="col-sm-9 text-secondary">
-            {{!isUserModifying ? user?.firstName : ""}}
+            <div class="card-body  input-space">
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <h6 class="mb-0">First name</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  {{!isUserModifying ? user?.firstName : ""}}
 
-          <app-input *ngIf="isUserModifying"  (inputChanged)="handleChange()" [control]="userForm.controls.firstName"
-                     placeholder="First name" name="firstName" [errors]="errors"></app-input>
-        </div>
-      </div>
-      <hr>
-      <div class="row">
-        <div class="col-sm-3">
-          <h6 class="mb-0">Last name</h6>
-        </div>
-        <div class="col-sm-9 text-secondary">
-          {{!isUserModifying ? user?.lastName : ""}}
-          <app-input *ngIf="isUserModifying" (inputChanged)="handleChange()" [control]="userForm.controls.lastName"
-                     placeholder="Last name" name="lastName" [errors]="errors"></app-input>
-        </div>
-      </div>
-      <hr>
-      <div class="row" *ngIf="user?.social===false">
-        <div class="col-sm-3">
-          <h6 class="mb-0">User name</h6>
-        </div>
-        <div class="col-sm-9 text-secondary">
-          {{!isUserModifying ? user?.userName : ""}}
-          <app-input *ngIf="isUserModifying" (inputChanged)="handleChange()" [control]="userForm.controls.userName"
-                     placeholder="User name" name="userName" [errors]="errors"></app-input>
-        </div>
-      </div>
-      <hr>
+                  <app-input *ngIf="isUserModifying" (inputChanged)="handleChange()"
+                             [control]="userForm.controls.firstName"
+                             placeholder="First name" name="firstName" [errors]="errors"></app-input>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <h6 class="mb-0">Last name</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  {{!isUserModifying ? user?.lastName : ""}}
+                  <app-input *ngIf="isUserModifying" (inputChanged)="handleChange()"
+                             [control]="userForm.controls.lastName"
+                             placeholder="Last name" name="lastName" [errors]="errors"></app-input>
+                </div>
+              </div>
+              <hr>
+              <div class="row" *ngIf="user?.social===false">
+                <div class="col-sm-3">
+                  <h6 class="mb-0">User name</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  {{!isUserModifying ? user?.userName : ""}}
+                  <app-input *ngIf="isUserModifying" (inputChanged)="handleChange()"
+                             [control]="userForm.controls.userName"
+                             placeholder="User name" name="userName" [errors]="errors"></app-input>
+                </div>
+              </div>
+              <hr>
 
-      <div class="row">
-        <div class="col-sm-3">
-          <h6 class="mb-0">Email</h6>
-        </div>
-        <div class="col-sm-9 text-secondary">
-          {{!isUserModifying ? user?.email : ""}}
-          <app-input *ngIf="isUserModifying" (inputChanged)="handleChange()" [control]="userForm.controls.email"
-                     placeholder="Email" name="email" [errors]="errors"></app-input>
-        </div>
-      </div>
-      <hr>
-      <div class="row">
-        <div class="col-sm-3">
-          <h6 class="mb-0">Country</h6>
-        </div>
-        <div class="col-sm-9 text-secondary">
-          {{!isUserModifying ? user?.country ||'Not yet provided' : ""}}
-          <app-input *ngIf="isUserModifying" (inputChanged)="handleChange()" [control]="userForm.controls.country"
-                     placeholder="Country" name="country" [errors]="errors"></app-input>
-        </div>
-      </div>
-      <hr>
-      <div class="row">
-        <div class="col-sm-3">
-          <h6 class="mb-0">City </h6>
-        </div>
-        <div class="col-sm-9 text-secondary">
-          {{!isUserModifying ? user?.city  ||'Not yet provided' : ""}}
-          <app-input *ngIf="isUserModifying" (inputChanged)="handleChange()" [control]="userForm.controls.city"
-                     placeholder="City" name="city" [errors]="errors"></app-input>
-        </div>
-      </div>
-      <hr>
-      <div class="row">
-        <div class="col-sm-3">
-          <h6 class="mb-0">Street</h6>
-        </div>
-        <div class="col-sm-9 text-secondary">
-          {{!isUserModifying ? user?.street  ||'Not yet provided' : ""}}
-          <app-input *ngIf="isUserModifying" (inputChanged)="handleChange()" [control]="userForm.controls.street"
-                     placeholder="Street" name="street" [errors]="errors"></app-input>
-        </div>
-      </div>
-    </div>
-      <button *ngIf="isUserModifying" class="btn btn-success">Save</button>
-      <button *ngIf="isUserModifying" class="btn btn-warning" (click)="isUserModifying=false">Close</button>
+              <div class="row">
+                <div class="col-sm-3">
+                  <h6 class="mb-0">Email</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  {{!isUserModifying ? user?.email : ""}}
+                  <app-input *ngIf="isUserModifying" (inputChanged)="handleChange()" [control]="userForm.controls.email"
+                             placeholder="Email" name="email" [errors]="errors"></app-input>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <h6 class="mb-0">Country</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  {{!isUserModifying ? user?.country || 'Not yet provided' : ""}}
+                  <app-input *ngIf="isUserModifying" (inputChanged)="handleChange()"
+                             [control]="userForm.controls.country"
+                             placeholder="Country" name="country" [errors]="errors"></app-input>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <h6 class="mb-0">City </h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  {{!isUserModifying ? user?.city || 'Not yet provided' : ""}}
+                  <app-input *ngIf="isUserModifying" (inputChanged)="handleChange()" [control]="userForm.controls.city"
+                             placeholder="City" name="city" [errors]="errors"></app-input>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <h6 class="mb-0">Street</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  {{!isUserModifying ? user?.street || 'Not yet provided' : ""}}
+                  <app-input *ngIf="isUserModifying" (inputChanged)="handleChange()"
+                             [control]="userForm.controls.street"
+                             placeholder="Street" name="street" [errors]="errors"></app-input>
+                </div>
+              </div>
+            </div>
+            <button *ngIf="isUserModifying" class="btn btn-success">Save</button>
+            <button *ngIf="isUserModifying" class="btn btn-warning" (click)="isUserModifying=false">Close</button>
 
-    </form>
+          </form>
 
-    <button *ngIf="!isUserModifying"  class="btn btn-info width-1 submit-btn " (click)="isUserModifying=true">Modify</button>
+          <button *ngIf="!isUserModifying" class="btn btn-info width-1 submit-btn " (click)="isUserModifying=true">
+            Modify
+          </button>
 
-  </div>
+        </div>
 
 
-        <form *ngIf="user.social==false" (ngSubmit)="updatePassword($event)" [formGroup]="changePasswordForm" class="card mb-3 d-block">
+        <form *ngIf="user.social==false" (ngSubmit)="updatePassword($event)" [formGroup]="changePasswordForm"
+              class="card mb-3 d-block">
           <h2 class="text-center text-primary border-bottom border-primary text-title">Change password</h2>
           <div class="card-body input-space ">
             <hr>
             <div class="row form-row">
 
               <div class="col text-secondary">
-                <app-input type="password" (inputChanged)="handleChange()" [control]="changePasswordForm.controls.currentPassword"
+                <app-input type="password" (inputChanged)="handleChange()"
+                           [control]="changePasswordForm.controls.currentPassword"
                            placeholder="Current Password" name="currentPassword" [errors]="errors"></app-input>
               </div>
               <div class="col text-secondary">
-                <app-input type="password" (inputChanged)="handleChange()" [control]="changePasswordForm.controls.newPassword"
+                <app-input type="password" (inputChanged)="handleChange()"
+                           [control]="changePasswordForm.controls.newPassword"
                            placeholder="New Password" name="newPassword" [errors]="errors"></app-input>
               </div>
             </div>
@@ -120,44 +130,47 @@
         </form>
 
 
-        <form  class="card mb-3" (ngSubmit)="submitUserCard()" [formGroup]="cardForm">
+        <form class="card mb-3" (ngSubmit)="submitUserCard()" [formGroup]="cardForm">
           <h2 class="text-center text-primary border-bottom border-primary text-title">Payment information</h2>
           <div class="card-body text-center input-space">
             <ngb-alert *ngIf="cards.length===0 && !isCardModifying">You have no card</ngb-alert>
-            <button (click)="onAddNewCard()"  class="btn btn-info "  >Add new one</button>
+            <button (click)="onAddNewCard()" class="btn btn-info ">Add new one</button>
 
-            <h4 *ngIf="cards.length>0 " >MAke it primary</h4>
-            <app-input *ngIf="cards.length>0 "  (inputChanged)="onCardActive()" type="checkBox" name="active" [control]="cardForm.controls.active"></app-input>
-            <div class="card-inputs" *ngIf="cards.length>0 || isCardModifying"  >
+            <h4 *ngIf="cards.length>0 ">MAke it primary</h4>
+            <app-input *ngIf="cards.length>0 " (inputChanged)="onCardActive()" type="checkBox" name="active"
+                       [control]="cardForm.controls.active"></app-input>
+            <div class="card-inputs" *ngIf="cards.length>0 || isCardModifying">
               <br>
               <div class="item">
-                <h4  *ngIf="!isCardModifying"  class="mb-0">Card type</h4>
+                <h4 *ngIf="!isCardModifying" class="mb-0">Card type</h4>
                 <div class="text-secondary card-input">
-                  <h4  *ngIf="!isCardModifying"  class="mb-0 text-info">{{selectedCard?.cardType }}</h4>
+                  <h4 *ngIf="!isCardModifying" class="mb-0 text-info">{{selectedCard?.cardType }}</h4>
                   <app-input *ngIf="isCardModifying" (inputChanged)="handleChange()" name="cardType" [errors]="errors"
                              [control]="cardForm.controls.cardType"
                              placeholder="card type"
-                              type="select" [items]="cardNames"
-                             selectValue="value" selectLabel="label" >
+                             type="select" [items]="cardNames"
+                             selectValue="value" selectLabel="label">
                   </app-input>
                 </div>
               </div>
               <hr>
               <div class="item">
-                <h4  *ngIf="!isCardModifying"  class="mb-0">Card number</h4>
+                <h4 *ngIf="!isCardModifying" class="mb-0">Card number</h4>
                 <div class="text-secondary">
-                  <h4  *ngIf="!isCardModifying"  class="mb-0 text-info">{{selectedCard?.cardNumber }}</h4>
+                  <h4 *ngIf="!isCardModifying" class="mb-0 text-info">{{selectedCard?.cardNumber }}</h4>
 
-                  <app-input *ngIf="isCardModifying" (inputChanged)="handleChange()" name="cardNumber" [control]="cardForm.controls.cardNumber"
+                  <app-input *ngIf="isCardModifying" (inputChanged)="handleChange()" name="cardNumber"
+                             [control]="cardForm.controls.cardNumber"
                              [errors]="errors" placeholder="Card number"></app-input>
                 </div>
               </div>
               <hr>
               <div class="item">
-                <h4  *ngIf="!isCardModifying"  class="mb-0">Expiration date</h4>
+                <h4 *ngIf="!isCardModifying" class="mb-0">Expiration date</h4>
                 <div class="text-secondary">
-                  <h4  *ngIf="!isCardModifying"  class="mb-0 text-info">{{selectedCard?.expirationDate }}</h4>
-                  <app-input *ngIf="isCardModifying" (inputChanged)="handleChange()" name="expirationDate" [errors]="errors"
+                  <h4 *ngIf="!isCardModifying" class="mb-0 text-info">{{selectedCard?.expirationDate }}</h4>
+                  <app-input *ngIf="isCardModifying" (inputChanged)="handleChange()" name="expirationDate"
+                             [errors]="errors"
                              [control]="cardForm.controls.expirationDate"
                              placeholder="Expiration date  (month/year)"></app-input>
                 </div>
@@ -165,14 +178,14 @@
               <br>
             </div>
             <ng-container *ngIf="isCardModifying">
-              <button  class="btn btn-info submit-btn">{{!selectedCard.id?'Add':'Update'}}</button>
+              <button class="btn btn-info submit-btn">{{!selectedCard.id ? 'Add' : 'Update'}}</button>
               <button (click)="loadCreditCards()" class="btn  submit-btn btn-warning">Close</button>
             </ng-container>
             <ng-container *ngIf="!isCardModifying && cards.length>0">
-                <a class="prevBtn  btn btn-sm btn-success" (click)="previousCard()"><< Previous</a>
-                <a class="nextBtn btn btn-sm btn-success" (click)="nextCard()">Next >></a>
-                <button class="btn btn-danger submit-btn btn-sm" (click)="removeCard()">Remove</button>
-                <button class="btn btn-info submit-btn btn-sm" (click)="isCardModifying=true" >Modify</button>
+              <a class="prevBtn  btn btn-sm btn-success" (click)="previousCard()"><< Previous</a>
+              <a class="nextBtn btn btn-sm btn-success" (click)="nextCard()">Next >></a>
+              <button class="btn btn-danger submit-btn btn-sm" (click)="removeCard()">Remove</button>
+              <button class="btn btn-info submit-btn btn-sm" (click)="isCardModifying=true">Modify</button>
 
             </ng-container>
 

@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authService.userSubject.subscribe((user)=> user && this.router.navigate(["/"]));
+    this.authService.userSubject.subscribe((user) => user && this.router.navigate(["/"]));
 
     this.route.queryParams.subscribe(params =>
       this.returnUrl = params.return);
@@ -43,13 +43,13 @@ export class LoginComponent implements OnInit {
     return this.error?.message;
   }
 
-/*  createAccount() {
-    this.router.navigate(['/register'], {
-      queryParams: {
-        return: this.returnUrl
-      }, state: {...this.state}
-    });
-  }*/
+  /*  createAccount() {
+      this.router.navigate(['/register'], {
+        queryParams: {
+          return: this.returnUrl
+        }, state: {...this.state}
+      });
+    }*/
 
   async googleLogin() {
     (await this.authService.loginWithGoogle()).subscribe(user => this.router.navigateByUrl('/'));

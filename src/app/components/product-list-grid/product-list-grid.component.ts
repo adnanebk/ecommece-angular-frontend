@@ -40,10 +40,10 @@ export class ProductListComponent implements OnInit {
     this.productService
       .gePagedProducts((this.page - 1), this.pageSize, this.sort, this.searchValue, this.direction, this.currentCategoryId)
       .subscribe(
-      resp => {
-        this.mapDataFromResponse(resp);
-      }
-    );
+        resp => {
+          this.mapDataFromResponse(resp);
+        }
+      );
   }
 
 

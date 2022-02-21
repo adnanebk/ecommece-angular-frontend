@@ -21,9 +21,11 @@
   padding: 6px;
   cursor: pointer;
 }
+
 .customBtn:last-child {
   font-size: large;
 }
+
 #customBtn:hover {
   cursor: pointer;
 }
@@ -58,6 +60,7 @@ span.buttonText {
   width: 18px;
   height: 18px;
 }
-.bg-form{
+
+.bg-form {
   background-color: lightgray;
 }

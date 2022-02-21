@@ -12,7 +12,7 @@ import {ToastrService} from 'ngx-toastr';
 export class AuthService {
   public userSubject = new BehaviorSubject<AppUser>(null);
   private currentUser: AppUser;
-  private isToastOpened=false;
+  private isToastOpened = false;
 
   constructor(private httpService: userService, private socialAuthService: SocialAuthService, private toastrService: ToastrService) {
     const currentUserSt = localStorage.getItem('appUser');
@@ -22,7 +22,7 @@ export class AuthService {
       this.userSubject.next(this.currentUser);
 
 
-      console.log("currentUser",this.currentUser);
+      console.log("currentUser", this.currentUser);
 
     }
   }
@@ -43,8 +43,8 @@ export class AuthService {
     );
   }
 
-   getUserInfo() {
-    return  this.httpService.getUserInfo(this.currentUser.userName);
+  getUserInfo() {
+    return this.httpService.getUserInfo(this.currentUser.userName);
   }
 
   logout() {
@@ -53,18 +53,18 @@ export class AuthService {
     localStorage.removeItem('token');
   }
 
-  private returnConnectedUser(response: { token: string;refreshToken: string; appUser: AppUser }) {
-    this.saveToLocalStorage(response.appUser,response.token,response.refreshToken);
+  private returnConnectedUser(response: { token: string; refreshToken: string; appUser: AppUser }) {
+    this.saveToLocalStorage(response.appUser, response.token, response.refreshToken);
     this.verifyUser();
     return this.currentUser;
   }
 
-  private saveToLocalStorage(user: AppUser,token?: string,refreshToken?: string) {
-   token && localStorage.setItem('token', token);
-   refreshToken && localStorage.setItem('refreshToken', refreshToken);
-   localStorage.setItem('appUser', JSON.stringify(user));
-   this.userSubject.next(user);
-   this.currentUser=user;
+  private saveToLocalStorage(user: AppUser, token?: string, refreshToken?: string) {
+    token && localStorage.setItem('token', token);
+    refreshToken && localStorage.setItem('refreshToken', refreshToken);
+    localStorage.setItem('appUser', JSON.stringify(user));
+    this.userSubject.next(user);
+    this.currentUser = user;
   }
 
   async loginWithGoogle() {
@@ -102,20 +102,22 @@ export class AuthService {
     this.currentUser.enabled = true;
     this.saveToLocalStorage(this.currentUser);
   }
-verifyTokenExpiration(){
-  if(new Date()> new Date(this.currentUser?.expirationDate)){
-    let refreshToken= localStorage.getItem('refreshToken');
-    this.httpService.refreshMyToken(refreshToken).subscribe(resp=>{
-        this.saveToLocalStorage(resp.appUser,resp.token,resp.refreshToken);
-        window.location.reload();
-      },err=>this.logout()
-    );
+
+  verifyTokenExpiration() {
+    if (new Date() > new Date(this.currentUser?.expirationDate)) {
+      let refreshToken = localStorage.getItem('refreshToken');
+      this.httpService.refreshMyToken(refreshToken).subscribe(resp => {
+          this.saveToLocalStorage(resp.appUser, resp.token, resp.refreshToken);
+          window.location.reload();
+        }, err => this.logout()
+      );
+    }
   }
-}
+
   verifyUser() {
     if (!this.currentUser.enabled && !this.isToastOpened) {
-      this.isToastOpened=true;
-      let toast=this.toastrService.info('Please complete your registration by activating your account in your email messages or click here te resend the activation code',
+      this.isToastOpened = true;
+      let toast = this.toastrService.info('Please complete your registration by activating your account in your email messages or click here te resend the activation code',
         'Activate your account', {
           timeOut: 10000,
           extendedTimeOut: 3000,
@@ -127,16 +129,16 @@ verifyTokenExpiration(){
           }
         }
       );
-      toast.onHidden.subscribe(()=>this.isToastOpened=false);
+      toast.onHidden.subscribe(() => this.isToastOpened = false);
 
     }
   }
 
   reloadUser(resp: AppUser) {
-  this.saveToLocalStorage(resp);
+    this.saveToLocalStorage(resp);
   }
 
   updatePassword(userPasswords: any) {
-   return  this.httpService.updateUserPassword(userPasswords);
+    return this.httpService.updateUserPassword(userPasswords);
   }
 }

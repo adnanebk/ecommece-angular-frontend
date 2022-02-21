@@ -1,21 +1,25 @@
 .custom-file-label {
   width: 250px;
 }
-.container-radios{
+
+.container-radios {
   width: fit-content;
 }
-.radioGroup{
+
+.radioGroup {
   padding-left: 14px;
-  border:1px solid dimgray;
+  border: 1px solid dimgray;
   border-radius: 5px;
 }
-.input-group{
+
+.input-group {
   text-align: start;
   width: max-content;
   display: inline-block;
 
 }
-.container-fluid{
+
+.container-fluid {
   text-align: start;
 }
 

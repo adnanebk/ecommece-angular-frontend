@@ -1,22 +1,21 @@
 <div class="main-content">
   <div class="section-content section-content text-center">
     <div class="container container-radios">
-    <div class="radioGroup">
-    <div class="custom-control custom-radio custom-control-inline">
-      <input (change)="switchToProducts(true)" checked type="radio" class="custom-control-input" id="defaultInline1"
-             name="inlineDefaultRadiosExample">
-      <label class="custom-control-label" for="defaultInline1"><b>manage products</b></label>
-    </div>
-    <div class="custom-control custom-radio custom-control-inline ">
-      <input (change)="switchToProducts(false)" type="radio" class="custom-control-input" id="defaultInline2"
-             name="inlineDefaultRadiosExample">
-      <label class="custom-control-label" for="defaultInline2"><b>manage categories</b></label>
-    </div>
-    </div>
+      <div class="radioGroup">
+        <div class="custom-control custom-radio custom-control-inline">
+          <input (change)="switchToProducts(true)" checked type="radio" class="custom-control-input" id="defaultInline1"
+                 name="inlineDefaultRadiosExample">
+          <label class="custom-control-label" for="defaultInline1"><b>manage products</b></label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline ">
+          <input (change)="switchToProducts(false)" type="radio" class="custom-control-input" id="defaultInline2"
+                 name="inlineDefaultRadiosExample">
+          <label class="custom-control-label" for="defaultInline2"><b>manage categories</b></label>
+        </div>
+      </div>
     </div>
     <div *ngIf="isProductSwitched" class="container-fluid">
       <h3 class="card-headchangeProductswitcher text-center font-weight-bold text-uppercase py-4">Manage products</h3>
-
 
 
       <ngb-alert *ngIf="products?.length<=0">No products found</ngb-alert>
@@ -41,20 +40,21 @@
           <label class="custom-control-label float-left" for="sw"><b>Batch operations</b></label>
         </div>
         <div class="displayed-elements float-left">
-        Display <select class="browser-default custom-select w-auto" (change)="fetchProducts()" [(ngModel)]="pageSize">
-        <option>10</option>
-        <option>20</option>
-        <option>30</option>
-      </select> elements
+          Display <select class="browser-default custom-select w-auto" (change)="fetchProducts()"
+                          [(ngModel)]="pageSize">
+          <option>10</option>
+          <option>20</option>
+          <option>30</option>
+        </select> elements
         </div>
       </ng-container>
       <form class="form-inline d-flex justify-content-center md-form form-sm mt-0">
-          <i class="fas fa-search" aria-hidden="true"></i>
-          <input class="form-control form-control-sm ml-3 w-75" type="text"
-                 placeholder="Search By product name or description"
-                 (keyup.enter)="SearchProducts($event.target.value)"
-                 aria-label="Search">
-        </form>
+        <i class="fas fa-search" aria-hidden="true"></i>
+        <input class="form-control form-control-sm ml-3 w-75" type="text"
+               placeholder="Search By product name or description"
+               (keyup.enter)="SearchProducts($event.target.value)"
+               aria-label="Search">
+      </form>
       <ng-container *ngIf="products?.length>0">
         <a class="mx-4" (click)="reloadData()"><i class="fas fa-sync fa-2x"></i></a>
         <app-editable-table (dataUpdated)="updateProduct($event)" (fileUploaded)="handleUploadImage($event)"
@@ -72,7 +72,7 @@
                         [(page)]="page"
                         [pageSize]="pageSize"
                         [collectionSize]="size"
-                        [boundaryLinks]="true" >
+                        [boundaryLinks]="true">
         </ngb-pagination>
 
       </ng-container>

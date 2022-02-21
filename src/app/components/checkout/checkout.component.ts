@@ -31,7 +31,7 @@ export class CheckoutComponent implements OnInit {
   userCard: CreditCard;
 
   constructor(private formBuilder: FormBuilder, private cartService: CartService,
-              private orderService: OrderService,private creditCardService: CreditCardService,
+              private orderService: OrderService, private creditCardService: CreditCardService,
               private router: Router, private authService: AuthService) {
     this.cartItems = this.router.getCurrentNavigation().extras.state?.products;
   }
@@ -42,8 +42,9 @@ export class CheckoutComponent implements OnInit {
     });
     this.creditCardService.getCreditCardInfo(this.user.userName).subscribe((cards) => {
       this.userCard = cards[0];
-      if(this.userCard?.cardNumber)
-      this.userCard.cardNumber = this.userCard.cardNumber.match(new RegExp('.{1,4}', 'g')).join('-');
+      if (this.userCard?.cardNumber) {
+        this.userCard.cardNumber = this.userCard.cardNumber.match(new RegExp('.{1,4}', 'g')).join('-');
+      }
 
       this.checkoutFormGroup = this.formBuilder.group({
         customer: this.formBuilder.group({
@@ -104,8 +105,6 @@ export class CheckoutComponent implements OnInit {
 
     this.saveOrder(myOrder);
   }
-
-
 
 
   handleChange() {

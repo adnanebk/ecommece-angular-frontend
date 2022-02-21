@@ -25,23 +25,23 @@ export class UserInfoComponent implements OnInit {
   isUserModifying = false;
   isCardModifying = false;
   errors: MyError[];
-    cardNames =[{value:'VISA',label:'Visa'},{value:'MASTERCARD',label:'Master Card'}];
-  changePasswordForm=this.formBuilder.group({
-    currentPassword:  new FormControl('', [Validators.required]),
-    newPassword:  new FormControl('', [Validators.required])
+  cardNames = [{value: 'VISA', label: 'Visa'}, {value: 'MASTERCARD', label: 'Master Card'}];
+  changePasswordForm = this.formBuilder.group({
+    currentPassword: new FormControl('', [Validators.required]),
+    newPassword: new FormControl('', [Validators.required])
   });
 
-  constructor(private authService: AuthService, private creditCardService: CreditCardService,private httpService: userService,
-              private formBuilder: FormBuilder,private toastrService: ToastrService) {
+  constructor(private authService: AuthService, private creditCardService: CreditCardService, private httpService: userService,
+              private formBuilder: FormBuilder, private toastrService: ToastrService) {
 
   }
 
-   ngOnInit() {
-     this.authService.userSubject.subscribe((user) => {
-       this.user = user;
-     });
-     this.loadCreditCards();
-     this.userForm = this.formBuilder.group({
+  ngOnInit() {
+    this.authService.userSubject.subscribe((user) => {
+      this.user = user;
+    });
+    this.loadCreditCards();
+    this.userForm = this.formBuilder.group({
         id: new FormControl(this.user?.id, [Validators.required]),
         firstName: new FormControl(this.user?.firstName, [Validators.required, Validators.minLength(2)]),
         lastName: new FormControl(this.user?.lastName, [Validators.required, Validators.minLength(2)]),
@@ -54,7 +54,7 @@ export class UserInfoComponent implements OnInit {
         confirmPassword: new FormControl('', [Validators.required, Validators.minLength(2)])
       }
     );
-     this.cardForm = this.formBuilder.group({
+    this.cardForm = this.formBuilder.group({
       id: new FormControl(this.selectedCard?.id, [Validators.required]),
       active: new FormControl(this.selectedCard?.active),
       cardType: new FormControl(null, [Validators.required]),
@@ -82,11 +82,11 @@ export class UserInfoComponent implements OnInit {
     }
     this.httpService.updateUser(user, this.user.id).subscribe((resp) => {
       for (var key in user) {
-      this.user[key]=user[key];
+        this.user[key] = user[key];
       }
       this.authService.reloadUser(this.user);
       this.isUserModifying = false;
-    },errors => this.errors=errors);
+    }, errors => this.errors = errors);
   }
 
   handleChange() {
@@ -109,7 +109,7 @@ export class UserInfoComponent implements OnInit {
       creditCard.cardNumber = creditCard?.cardNumber?.replace(/\-/g, '');
       if (creditCard?.id > 0) {
         this.creditCardService.updateCreditCard(creditCard).subscribe(() => {
-       this.loadCreditCards();
+          this.loadCreditCards();
         }, errors => this.errors = errors);
       } else {
         this.creditCardService.saveCreditCard(creditCard).subscribe(() => {
@@ -138,7 +138,7 @@ export class UserInfoComponent implements OnInit {
 
   private reloadCardForm() {
     if (this.selectedCard && !this.selectedCard.cardNumber?.includes('-')) {
-    this.selectedCard.cardNumber = this.selectedCard.cardNumber.match(new RegExp('.{1,4}', 'g')).join('-');
+      this.selectedCard.cardNumber = this.selectedCard.cardNumber.match(new RegExp('.{1,4}', 'g')).join('-');
     }
     this.cardForm.patchValue(this.selectedCard);
   }
@@ -152,29 +152,29 @@ export class UserInfoComponent implements OnInit {
   }
 
   onCardActive() {
-    this.creditCardService.activeCard(this.cardForm.getRawValue()).subscribe(cards=>{
-      this.cards=cards;
-      this.selectedCard=cards[0];
+    this.creditCardService.activeCard(this.cardForm.getRawValue()).subscribe(cards => {
+      this.cards = cards;
+      this.selectedCard = cards[0];
       this.reloadCardForm();
     });
   }
 
-clearCardErrors(){
-  this.cardForm.clearValidators();
-  this.cardForm.markAsPristine();
-  this.errors = [];
-}
+  clearCardErrors() {
+    this.cardForm.clearValidators();
+    this.cardForm.markAsPristine();
+    this.errors = [];
+  }
 
   updatePassword($event: any) {
     $event.preventDefault();
-    this.errors=[];
+    this.errors = [];
     let userPasswords = this.changePasswordForm.getRawValue();
     this.changePasswordForm.reset();
     this.authService.updatePassword(userPasswords).subscribe(
-      ()=>this.toastrService.success("you have successfully changed your password"),
-       err=>{
-      this.errors=err;
-    });
+      () => this.toastrService.success("you have successfully changed your password"),
+      err => {
+        this.errors = err;
+      });
 
   }
 }

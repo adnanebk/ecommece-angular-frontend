@@ -4,19 +4,19 @@ import {ProductCategory} from "../models/product-category";
 import {map, retry, timeout} from "rxjs/operators";
 import {environment} from "../../environments/environment.prod";
 import {HttpClient} from "@angular/common/http";
+import {PagedResponse} from "./pagedResponse";
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
 
-  private categoryUrl = environment.path + 'product-category';
+  private categoryUrl = environment.path + 'product-categories';
   private timeOut = 100000;
   private retry = 4;
 
   constructor(private httpClient: HttpClient) {
   }
-
 
 
   getProductCategories(): Observable<ProductCategory[]> {
@@ -37,13 +37,4 @@ export class CategoryService {
   removeCategory(id: number) {
     return this.httpClient.delete(this.categoryUrl + '/' + id);
   }
-}
-interface PagedResponse {
-  _embedded: any;
-  page: {
-    size: number,
-    totalElements: number,
-    totalPages: number,
-    number: number
-  };
 }

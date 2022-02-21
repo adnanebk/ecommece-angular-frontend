@@ -14,7 +14,7 @@ import {CategoryService} from "../../services/category.service";
   styleUrls: ['./product-editing.component.css']
 })
 export class ProductEditingComponent implements OnInit {
-  products: Product[];
+  products: Product[] = [];
   productHeaders: string[];
   productFields: any[];
   categoryNames: string[];
@@ -32,7 +32,7 @@ export class ProductEditingComponent implements OnInit {
   categorySelects = new Selects();
 
 
-  constructor(private productService: ProductService,private categoryService: CategoryService, private imageService: ImageService,
+  constructor(private productService: ProductService, private categoryService: CategoryService, private imageService: ImageService,
               private toastrService: ToastrService) {
 
   }
@@ -79,14 +79,14 @@ export class ProductEditingComponent implements OnInit {
   updateProducts($products: Product[]) {
     this.productService.updateProducts($products).subscribe(products => {
         this.toastrService.success('your operation has been successful');
-        this.products = this.products.map(prod =>products.find(p => p.id === prod.id) || prod);
+        this.products = this.products.map(prod => products.find(p => p.id === prod.id) || prod);
       },
-      errors => Array.isArray(errors) ?this.toastrService.error(errors[0].formattedName +' '+errors[0].message,'Error')
-                                             : this.errors = [errors]
+      errors => Array.isArray(errors) ? this.toastrService.error(errors[0].formattedName + ' ' + errors[0].message, 'Error')
+        : this.errors = [errors]
     );
   }
 
-  removeProduct({ index, data }) {
+  removeProduct({index, data}) {
     this.productService.removeProduct(data.id).subscribe(() => {
       this.toastrService.success('your operation has been successful');
       this.products.splice(index, 1);
@@ -100,7 +100,7 @@ export class ProductEditingComponent implements OnInit {
     });
   }
 
-  SortProduct({ sort, direction }) {
+  SortProduct({sort, direction}) {
     this.sort = sort;
     this.direction = direction;
     this.fetchProducts();
@@ -111,15 +111,15 @@ export class ProductEditingComponent implements OnInit {
     this.fetchProducts();
   }
 
-  handleUploadImage({ file,completionFunc }) {
+  handleUploadImage({file, completionFunc}) {
     this.imageService.uploadImage(file).subscribe(
       (res: string) => {
-        completionFunc(res,"image");
+        completionFunc(res, "image");
       },
       (err) => {
         this.errors = [err];
       }
-  );
+    );
   }
 
 
@@ -169,7 +169,7 @@ export class ProductEditingComponent implements OnInit {
   }
 
   switchBatch(isChecked: boolean) {
-    this.batchEnable=isChecked;
+    this.batchEnable = isChecked;
     this.reloadData();
   }
 }

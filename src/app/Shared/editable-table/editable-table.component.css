@@ -1,6 +1,7 @@
 .bgDirty {
   background-color: #f1e9be;
 }
+
 .text-area {
   display: block;
   width: 100%;
@@ -10,6 +11,7 @@
   min-width: 100px;
   line-height: 20px;
 }
+
 .max-content {
   width: max-content;
 }
@@ -97,9 +99,11 @@ th {
   cursor: pointer;
   transition: transform .2s ease-out;
 }
-.table{
+
+.table {
 }
-input[type=text],input[type=number],textarea,select{
+
+input[type=text], input[type=number], textarea, select {
   border: none;
   border-radius: 5px;
   background-color: inherit;
@@ -107,10 +111,12 @@ input[type=text],input[type=number],textarea,select{
   height: 30px;
   border-bottom: 1px solid dimgray;
 }
-td{
+
+td {
   font-size: 12px;
 }
-input[type=text]:focus,input[type=number]:focus,textarea:focus,select:focus {
+
+input[type=text]:focus, input[type=number]:focus, textarea:focus, select:focus {
   border: none;
   border-radius: 5px;
   background-color: rgba(211, 211, 211, 0.34);
@@ -119,9 +125,11 @@ input[type=text]:focus,input[type=number]:focus,textarea:focus,select:focus {
   border-bottom: 1px solid dodgerblue;
 
 }
-.fa-plus-square{
+
+.fa-plus-square {
   font-size: xx-large;
 }
-.error-warning{
-background-color:  #ffaead !important;
+
+.error-warning {
+  background-color: #ffaead !important;
 }

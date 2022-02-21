@@ -37,7 +37,7 @@ export class CategoryEditingComponent implements OnInit {
     );
   }
 
-  handleCategoryDeleted({data,index}) {
+  handleCategoryDeleted({data, index}) {
     this.categoryService.removeCategory(data.id).subscribe();
     this.categories.splice(index, 1);
   }

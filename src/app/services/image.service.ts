@@ -12,6 +12,8 @@ export class ImageService {
   constructor(private http: HttpClient) {
   }
 
+  url = environment.path + 'products/v2/images';
+
   uploadImage(file: File) {
     const type = file.type.toLowerCase();
     if (!type.endsWith('jpeg') && !type.endsWith('jpg') && !type.endsWith('png')) {
@@ -21,7 +23,7 @@ export class ImageService {
 
     formData.append('image', file);
 
-    return this.http.post(environment.path + 'products/images', formData, {responseType: 'text'})
-      .pipe(map(res => environment.path + 'products/images/' + res));
+    return this.http.post(this.url, formData, {responseType: 'text'})
+      .pipe(map(res => this.url + '/' + res));
   }
 }
