@@ -16,11 +16,12 @@ export class HttpErrorHandlerService {
     if (!(resp.error instanceof ErrorEvent)) {
       {
         if (resp.status >= 400 && resp.status < 500) {
+          this.authService.verifyTokenExpiration();
+
           if (resp.error.errors) {
             return throwError(resp.error.errors);
           } else if (resp.error?.message) {
-            if (resp.status === 403) {
-              this.authService.verifyTokenExpiration();
+            if (resp.status === 403){
               this.authService.verifyUser();
             } else {
               this.toastrService.error(resp.error.message, 'Error', {
