@@ -1,0 +1,61 @@
+<div class="container" fxLayout="row" fxLayoutAlign="center none">
+
+    <div fxFlex="95%">
+        <div class="container" fxLayout="row" fxLayoutAlign="center none">
+
+            <h2>Products page</h2>
+
+        </div>
+
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="row">
+                        <mat-form-field appearance="fill"  >
+                            <mat-label><b>Search</b></mat-label>
+                            <input [(ngModel)]="productPage.searchValue" matInput placeholder="search..." (keyup.enter)="getPagedProducts()">
+                            <mat-icon (click)="getPagedProducts()" role="button"  matSuffix>search</mat-icon>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" class="w-auto" >
+                            <mat-label><b>Categories</b></mat-label>
+                            <mat-select [(ngModel)]="productPage.categoryId" name="category" (selectionChange)="getPagedProducts()" >
+                                <mat-option *ngFor="let op of categoryOptions"  [value]="op.value">
+                                    {{op.display}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" class="w-auto" >
+                            <mat-label><b>Sort by</b></mat-label>
+                            <mat-select [(ngModel)]="productPage.sort" name="sort" (selectionChange)="getPagedProducts()" >
+                                <mat-option *ngFor="let op of sortOptions"  [value]="op.value">
+                                    {{op.display}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                    </div>
+                    <div class="row">
+                        <div  class="col-md-3" *ngFor="let product of products
+                        | paginate: { itemsPerPage: productPage.pageSize, currentPage: productPage.pageNum,totalItems:this.productPage.totalSize }">
+                        <app-product [product]="product"></app-product>
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+                        <div class="pagination pagination-lg justify-content-start">
+                            <pagination-controls
+                                                  (pageChange)="pageChanged($event)"
+                                                  (pageBoundsCorrection)="pageChanged($event)"
+                                                  [autoHide]="true"
+                                                  [responsive]="true"
+                                                  previousLabel="Previous"
+                                                  nextLabel="Next">
+                            </pagination-controls>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>    </div>
+</div>
