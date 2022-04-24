@@ -1,0 +1,50 @@
+<mat-form-field class="full-width" [appearance]="appearance">
+    <mat-label>{{label}}</mat-label>
+
+   <ng-container  *ngIf="inputType==='text' ||inputType==='number' " >
+
+       <input #inp matInput  [readonly]="readonly" [formControl]="formControl" [placeholder]="placeHolder"
+              [required]="formControl.hasError('required')" type="{{inputType}}" (change)="onInputChange(inp.value)" />
+   </ng-container>
+    <ng-container  *ngIf="inputType==='textArea'" >
+        <textarea autosize #inp [formControl]="formControl" matInput (change)="onInputChange(inp.value)"> </textarea>
+   </ng-container>
+    <ng-container  *ngIf="inputType==='decimal' " >
+
+        <input #inp matInput [readonly]="readonly" [formControl]="formControl" step="any"
+               [required]="formControl.hasError('required')" type="{{inputType}}" (change)="onInputChange(inp.value)" />
+    </ng-container>
+    <ng-container *ngIf="inputType==='password'" >
+        <input #inp matInput [type]="hidePassword ? 'password' : 'text'" [formControl]="formControl"  (change)="onInputChange(inp.value)" />
+    </ng-container>
+    <mat-icon matSuffix *ngIf="inputType!=='password' && matIcon">
+        {{matIcon}}
+    </mat-icon>
+    <mat-icon *ngIf="inputType==='password'" matSuffix (click)="hidePassword = !hidePassword">
+        {{hidePassword ? 'visibility' : 'visibility_off'}}
+    </mat-icon>
+
+
+    <ng-container *ngIf="inputType==='date'">
+        <input #inp matInput [matDatepicker]="picker" (change)="onInputChange(inp.value)" />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </ng-container>
+
+    <ng-container *ngIf="hasError()">
+        <span class="error" *ngIf="formControl.hasError('required')"> this field is required </span>
+        <span class="error" *ngIf="formControl.hasError('email')"> email must be in valid format </span>
+        <span class="error" *ngIf="formControl.hasError('mustMatch')">{{formControl.getError('mustMatch')}}</span>
+        <span  class="error"  *ngIf="formControl.hasError('minlength')">The characters must be at least
+            {{formControl.getError('minlength')!['requiredLength']}} </span>
+    </ng-container>
+
+    <span *ngIf="!formControl.touched || formControl.valid">
+            <ng-content ></ng-content>
+    </span>
+
+</mat-form-field>
+
+
+
+

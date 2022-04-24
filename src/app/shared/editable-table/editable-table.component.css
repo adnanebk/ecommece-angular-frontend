@@ -1,0 +1,117 @@
+.bgDirty {
+  background-color: #f1e9be;
+}
+.select-size{
+  width: 10px;
+}
+.text-area {
+  resize: both;
+  width: 100%;
+  min-width: 200px;
+}
+
+.max-content {
+  width: max-content;
+}
+
+img {
+  width: 80px;
+}
+
+.number-input {
+  width: 80px !important;
+}
+
+
+.my-custom-scrollbar {
+
+}
+
+button {
+  padding: 7px !important;
+}
+
+.table-wrapper-scroll-y {
+  position: relative;
+  height: 600px;
+  overflow: auto;
+  display: block;
+}
+
+.row-error {
+  background-color: #f8bdbd;
+}
+
+table {
+  text-align: left;
+  position: relative;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 0.25rem;
+}
+
+tr.red th {
+  background: red;
+  color: white;
+}
+
+tr.green th {
+  background: green;
+  color: white;
+}
+
+tr.purple th {
+  background: purple;
+  color: white;
+}
+
+table thead {
+  background: white;
+  position: sticky;
+  top: 0; /* Don't forget this, required for the stickiness */
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+  z-index: 2;
+}
+.tfoot {
+  background: whitesmoke;
+  position: sticky;
+  bottom: 0; /* Don't forget this, required for the stickiness */
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+
+.table {
+}
+
+/*input[type=text], input[type=number], textarea, select {
+  border: none;
+  !*border-radius: 5px;*!
+  background-color: inherit;
+  outline: 0;
+  height: 30px;
+  border-bottom: 2px solid mediumslateblue;
+}*/
+
+td {
+  font-size: 12px;
+}
+
+/*
+input[type=text]:focus, input[type=number]:focus, textarea:focus, select:focus {
+  background-color: transparent;
+
+}
+*/
+:host ::ng-deep .mat-form-field-wrapper{
+  margin: 0 !important;
+  padding: 0;
+}
+.fa-plus-square {
+  font-size: xx-large;
+}
+
+.error-warning {
+  background-color: #ffaead !important;
+}

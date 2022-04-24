@@ -1,0 +1,45 @@
+<div class="container-fluid">
+    <div class="section-content section-content text-center">
+        <div  class="container-fluid">
+            <h3 class="card-headchangeProductswitcher text-center font-weight-bold text-uppercase py-4">Manage products</h3>
+
+            <ngb-alert *ngIf="!dataSource.data?.length">No products found</ngb-alert>
+
+            <ng-container *ngIf="dataSource.data.length">
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label><b>Search</b></mat-label>
+                    <input [(ngModel)]="productPage.searchValue" matInput placeholder="search..." (keyup.enter)="fetchProducts()">
+                    <mat-icon (click)="fetchProducts()" role="button" matSuffix>search</mat-icon>
+                </mat-form-field>
+                <button (click)="saveToExcel()" class="btn btn-secondary btn-lg mx-5">save to excel</button>
+                <div class="input-group mx-3">
+                    <b for="formFile" class="fs-5" >Insert from excel</b>
+                    <div >
+                        <input #file class="form-control" accept=".xlsx,.xls" (change)="insertFromExcel(file)" type="file" id="formFile">
+                    </div>
+                </div>
+
+                <button class=" btn btn-primary btn-lg " (click)="fetchProducts()">Refresh<i class=" mx-2 fas fa-sync "></i></button>
+
+                <app-editable-table (dataUpdated)="updateProduct($event)"
+                                    [datasource]="dataSource"
+                                    (dataAdded)="addProduct($event)"
+                                    (dataPaged)="onPageChanged($event)"
+                                    (dataDeleted)="removeProduct($event)"
+                                    (dataSorted)="sortProducts($event)"
+                                    (UpdateAll)="updateProducts($event)"
+                                    (RemoveAll)="removeAllProducts($event)"
+                ></app-editable-table>
+                <br>
+                <br>
+
+            </ng-container>
+
+        </div>
+
+
+    </div>
+</div>
+
+
+

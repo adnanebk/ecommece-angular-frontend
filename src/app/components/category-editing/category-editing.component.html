@@ -1,9 +1,0 @@
-<ngb-alert *ngIf="categories?.length<=0">No categories found</ngb-alert>
-<h3 class="card-header text-center font-weight-bold text-uppercase py-4">Manage Categories</h3>
-<app-editable-table *ngIf="categories?.length>0"
-                    [Data]="categories" [columnNames]="categoryHeaders" [fields]="categoryFields"
-                    (dataAdded)="handleCategoryAdded()"
-                    (dataDeleted)="handleCategoryDeleted($event)"
-                    (dataUpdated)="handleCategoryChanged($event)"
-                    [errors]="errors"
-></app-editable-table>

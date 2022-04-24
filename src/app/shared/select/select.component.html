@@ -1,0 +1,13 @@
+
+<mat-form-field [appearance]="appearance" class="w-100"  >
+    <mat-label>{{placeholder}}</mat-label>
+    <mat-select [required]="formControl.hasError('required')" #inp [formControl]="formControl"  >
+        <mat-option *ngFor="let item of items" [value]="item[selectValue]">
+            {{item[selectLabel]}}
+        </mat-option>
+    </mat-select>
+<mat-error *ngIf="formControl.hasError('required')" >please select an option</mat-error>
+    <span *ngIf="!formControl.touched && !formControl.dirty">
+            <ng-content ></ng-content>
+    </span>
+</mat-form-field>

@@ -1,0 +1,12 @@
+.profile-card {
+    text-align: center;
+}
+.max-width{
+    max-width: 100px;
+}
+.circle{
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+}
