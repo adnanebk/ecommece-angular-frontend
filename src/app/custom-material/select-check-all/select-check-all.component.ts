@@ -1,6 +1,6 @@
-import { Component, Input, ViewEncapsulation } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { MatCheckboxChange } from '@angular/material/checkbox';
+import {Component, Input, ViewEncapsulation} from '@angular/core';
+import {FormControl} from '@angular/forms';
+import {MatCheckboxChange} from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-select-check-all',

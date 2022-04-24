@@ -3,10 +3,6 @@ import {DatePipe} from '@angular/common';
 import {Subject, Subscription} from "rxjs";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ConfirmComponent} from "../confirm-dialogue/confirm.component";
-import {PageEvent} from "@angular/material/paginator";
-
-
-
 
 
 @Component({

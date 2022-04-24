@@ -1,12 +1,10 @@
 import {Injectable} from '@angular/core';
-import {map, retry, tap} from 'rxjs/operators';
-import {BehaviorSubject, lastValueFrom} from 'rxjs';
+import {tap} from 'rxjs/operators';
+import {BehaviorSubject} from 'rxjs';
 import {FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialUser} from 'angularx-social-login';
 import {AppUser} from "../models/app-user";
 import {AuthData, UserService} from "./user.service";
 import {ToastrService} from "ngx-toastr";
-import {Router} from "@angular/router";
-import * as moment from "moment";
 
 @Injectable({
   providedIn: 'root'

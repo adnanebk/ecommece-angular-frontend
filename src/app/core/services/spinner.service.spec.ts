@@ -1,5 +1,5 @@
-import { SpinnerConsumer } from '../../shared/mocks/spinner-consumer';
-import { SpinnerService } from './spinner.service';
+import {SpinnerConsumer} from '../../shared/mocks/spinner-consumer';
+import {SpinnerService} from './spinner.service';
 
 describe('BusyIndicatorService', () => {
     let component: SpinnerService;

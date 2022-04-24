@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {CreditCard} from "../models/CreditCard";
-import {map, timeout} from "rxjs/operators";
+import {map} from "rxjs/operators";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment.prod";
 import {PagedResponse} from "../models/pagedResponse";

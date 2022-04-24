@@ -4,7 +4,6 @@ import {HttpClient} from '@angular/common/http';
 import {AppUser} from '../models/app-user';
 import {environment} from "../../../environments/environment.prod";
 import {UserProfile} from "../models/userProfile";
-import {Product} from "../models/product";
 
 
 @Injectable({

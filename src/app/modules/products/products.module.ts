@@ -1,15 +1,12 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ProductsComponent } from './products.component';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {ProductsComponent} from './products.component';
 import {RouterModule, Routes} from "@angular/router";
-import {MatGridListModule} from "@angular/material/grid-list";
 import {SharedModule} from "../../shared/shared.module";
 import {LayoutComponent} from "../../shared/layout/layout.component";
 import {ProductDetailsComponent} from "./product-details/product-details.component";
 import {ProductComponent} from "./product/product.component";
-import {NgbAlertModule, NgbPaginationModule} from "@ng-bootstrap/ng-bootstrap";
-import {AuthGuard} from "../../core/guards/auth.guard";
-import {AdminAuthGuard} from "../../core/guards/admin-auth.guard";
+import {NgbPaginationModule} from "@ng-bootstrap/ng-bootstrap";
 
 
 const routes: Routes = [

@@ -1,4 +1,4 @@
-import { LimitToPipe } from './limit-to.pipe';
+import {LimitToPipe} from './limit-to.pipe';
 
 describe('LimitToPipe', () => {
   it('create an instance', () => {

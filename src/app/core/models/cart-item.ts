@@ -1,5 +1,3 @@
-import {Product} from './product';
-
 export interface CartItem {
   id: number;
   name: string;

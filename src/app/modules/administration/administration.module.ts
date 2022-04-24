@@ -1,9 +1,9 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {RouterModule, Routes} from "@angular/router";
 import {SharedModule} from "../../shared/shared.module";
 import {LayoutComponent} from "../../shared/layout/layout.component";
-import { ProductsEditingComponent } from '../administration/products-editing/products-editing.component';
+import {ProductsEditingComponent} from '../administration/products-editing/products-editing.component';
 import {NgbAlertModule} from "@ng-bootstrap/ng-bootstrap";
 
 

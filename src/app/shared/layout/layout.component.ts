@@ -1,9 +1,8 @@
-import { Component, OnInit, ChangeDetectorRef, OnDestroy, AfterViewInit } from '@angular/core';
-import { MediaMatcher } from '@angular/cdk/layout';
-import { timer } from 'rxjs';
-import { Subscription } from 'rxjs';
+import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {MediaMatcher} from '@angular/cdk/layout';
+import {Subscription} from 'rxjs';
 
-import { SpinnerService } from '../../core/services/spinner.service';
+import {SpinnerService} from '../../core/services/spinner.service';
 import {AuthService} from "../../core/services/auth.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {CartService} from "../../core/services/cart.service";

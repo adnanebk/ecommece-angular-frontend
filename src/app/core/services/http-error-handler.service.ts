@@ -1,9 +1,7 @@
 import {Injectable} from '@angular/core';
 import {AuthService} from "./auth.service";
-import {catchError, Observable, of, switchMap, switchMapTo, take, throwError} from "rxjs";
-import {ToastrService} from "ngx-toastr";
-import {retry} from "rxjs/operators";
-import {HttpEvent, HttpHandler, HttpRequest} from "@angular/common/http";
+import {switchMap, throwError} from "rxjs";
+import {HttpHandler, HttpRequest} from "@angular/common/http";
 import {AuthInterceptor} from "../interceptors/auth.interceptor";
 
 @Injectable({

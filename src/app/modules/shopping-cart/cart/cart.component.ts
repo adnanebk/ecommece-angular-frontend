@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CartItem} from "../../../core/models/cart-item";
 import {ActivatedRoute, Router} from "@angular/router";
 import {CartService} from "../../../core/services/cart.service";

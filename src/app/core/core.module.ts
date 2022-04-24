@@ -1,17 +1,17 @@
-import { NgModule, Optional, SkipSelf, ErrorHandler } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { MediaMatcher } from '@angular/cdk/layout';
-import { NGXLogger } from 'ngx-logger';
-import { AuthInterceptor } from './interceptors/auth.interceptor';
-import { SpinnerInterceptor } from './interceptors/spinner.interceptor';
-import { AuthGuard } from './guards/auth.guard';
-import { throwIfAlreadyLoaded } from './guards/module-import.guard';
+import {ErrorHandler, NgModule, Optional, SkipSelf} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {MediaMatcher} from '@angular/cdk/layout';
+import {NGXLogger} from 'ngx-logger';
+import {AuthInterceptor} from './interceptors/auth.interceptor';
+import {SpinnerInterceptor} from './interceptors/spinner.interceptor';
+import {AuthGuard} from './guards/auth.guard';
+import {throwIfAlreadyLoaded} from './guards/module-import.guard';
 import {
-  FacebookLoginProvider,
-  GoogleLoginProvider,
-  SocialAuthServiceConfig,
-  SocialLoginModule
+    FacebookLoginProvider,
+    GoogleLoginProvider,
+    SocialAuthServiceConfig,
+    SocialLoginModule
 } from "angularx-social-login";
 import {environment} from "../../environments/environment.prod";
 import {ToastrModule} from "ngx-toastr";

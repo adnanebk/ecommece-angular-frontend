@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
-import {concatMap, flatMap, map, mergeMap, retry, switchAll, switchMap, timeout} from "rxjs/operators";
+import {map, retry, timeout} from "rxjs/operators";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {Observable, Subject, Subscription, throwError} from "rxjs";
 import {environment} from "../../../environments/environment.prod";
 import {PagedResponse} from "../models/pagedResponse";
 import {Product} from "../models/product";
