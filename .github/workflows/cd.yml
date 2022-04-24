@@ -1,6 +1,7 @@
 # .github/workflows/netlify.yml
 name: Build and Deploy to Netlify
 on:
+  workflow_dispatch:
   push:
   pull_request:
 jobs:
