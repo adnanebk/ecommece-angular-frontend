@@ -1,0 +1,123 @@
+
+  <div class="m-2">
+    <div  class="custom-control custom-switch">
+      <div class="form-check form-switch fs-4">
+        enable multi editing
+        <input (ngModelChange)="pageChanged(page,pageSize)"  class="form-check-input" type="checkbox" role="switch"  checked
+                [(ngModel)]="isBatchEnabled"/>
+      </div>
+    </div>
+
+
+    <div *ngIf="isBatchEnabled" class="d-inline">pageChanged
+      <button (click)="updateAll()" class="btn btn-info m-2">Update all</button>
+      <button [disabled]="!selectedSize" (click)="removeAll()" class="btn btn-danger">Remove selected rows</button>
+    </div>
+
+  </div>
+  <div class="table-responsive table-wrapper-scroll-y" #tableContent>
+
+  <table class="table table-bordered  table-secondary  m-auto text-center  float-start "
+      >
+    <thead>
+    <tr>
+      <th *ngIf="!isBatchEnabled" class="text-center text-primary align-middle  bg-secondary "><h3>
+          <button  role="button" *ngIf="!isBatchEnabled" class="btn btn-light"
+                   (click)="insertNewRow(tableContent)">
+              <i class="fas fa-plus-square"></i></button></h3></th>
+      <th *ngIf="isBatchEnabled" class="text-center align-middle bg-secondary text-dark">
+        Select all
+        <h4>
+            <mat-checkbox class="example-margin" (change)="onAllSelected($event.checked)"  ></mat-checkbox>
+        </h4>
+      </th>
+      <ng-container *ngFor="let field of fields; let idx = index" >
+        <th *ngIf="!isColHide(field)" (click)="sort(field.name,ic)" class="text-center  align-middle bg-secondary border-secondary" role='button'>
+          <a class="max-content mx-2 text-dark fa-lg fw-bold  text-decoration-none"><strong>{{field.display}}</strong></a>
+          <i #ic class="fa fa-sort" aria-hidden="true"></i>
+        </th>
+      </ng-container>
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let el of data; let idx= index;trackBy: trackByFn">
+
+      <td class="p-1 align-middle"  [class]="isDirty(el)?'bgDirty':''" >
+      <span *ngIf="!isBatchEnabled" class="table-edit">
+        <ng-container *ngIf="el!==currentElement">
+        <button (click)="onViewChanged(el)" type="button"
+                class="btn btn-rounded btn-sm my-0"><i class="fas fa-edit text-info"></i></button>
+        <button (click)="remove(el)" type="button" class="btn btn-rounded  btn-sm  mx-2"><i
+                class="fas fa-trash-alt text-danger"></i></button>
+          </ng-container>
+
+        <button [disabled]="isSaving(el)" *ngIf="isCurrentElement(el)" (click)="onSave(el)" type="button"
+                class="btn btn-success btn-rounded btn-sm my-0">
+                    <span *ngIf="isSaving(el)" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+
+          Save</button>
+          <button *ngIf="isCurrentElement(el)" (click)="cancelChange()" class="btn m-1 btn-warning btn-sm">cancel</button>
+
+      </span>
+        <div *ngIf="isBatchEnabled" class="select">
+            <mat-checkbox class="example-margin" [(ngModel)]="el.selected" (change)="onElementSelected(el)"  ></mat-checkbox>
+
+        </div>
+
+      </td>
+ <ng-container  *ngFor="let field of fields">
+   <td  *ngIf="!isColHide(field)" (click)="onViewChanged(el)" class="align-middle" [class]="isDirty(el)?'bgDirty':''">
+
+     <ng-container *ngIf="!isCurrentElement(el) && !isBatchEnabled">
+       <strong *ngIf="(!field.type) || field.type!=='image'">
+         {{getText(el, field)}}</strong>
+       <img *ngIf="field.type === 'image'" [src]="el[field.name]">
+     </ng-container>
+
+     <div class="py-2 text-center" *ngIf="(isCurrentElement(el) || isBatchEnabled) && !field.readOnly"   >
+
+         <input *ngIf="!field.type"  [(ngModel)]="el[field.name]" (input)="onValueChanged(el,this.field)"  class="form-control bg-transparent"  />
+         <input *ngIf="field.type==='number'" type="number" [(ngModel)]="el[field.name]"   (input)="onValueChanged(el,this.field)"  class="form-control bg-transparent"   />
+         <input *ngIf="field.type==='decimal'"  [(ngModel)]="el[field.name]"    (input)="onValueChanged(el,this.field)"  class="form-control bg-transparent"   />
+         <input *ngIf="field.type==='date'" type="date" [(ngModel)]="el[field.name]"   (input)="onValueChanged(el,this.field)"   class="form-control bg-transparent"  />
+         <textarea [autosize]="hasFocus(inp)" #inp *ngIf="field.type==='textArea'"  [(ngModel)]="el[field.name]"    (input)="onValueChanged(el,this.field)"   class="form-control bg-transparent text-area" ></textarea>
+         <input *ngIf="field.type==='date'" type="date" [(ngModel)]="el[field.name]"  (input)="onValueChanged(el,this.field)"  class="form-control bg-transparent"  />
+         <div *ngIf="field.type === 'bool'" class="form-check form-switch text-center fa-xl w-auto">
+             <input class="form-check-input" type="checkbox"  [(ngModel)]="el[field.name]"   (input)="onValueChanged(el,this.field)" >
+         </div>
+         <select *ngIf="field.type==='select'"  [name]="field.name"  [compareWith]="compareWith" [(ngModel)]="el[field.name]"
+                 (selectionchange)="onValueChanged(idx,this.field)"
+                 class="w-auto form-select bg-transparent">
+             <option [ngValue]="op"
+                     *ngFor="let op of selects.get(field.name)!.options">{{op[selects.get(field.name)!.displayField]}}</option>
+         </select>
+         <app-file-input (upload)="uploadFile(idx,this.field.name,$event)" *ngIf="field.type === 'image' "></app-file-input>
+
+         <div *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</div>
+     </div>
+   </td>
+ </ng-container>
+    </tr>
+
+    </tbody>
+    <tfoot *ngIf="totalSize && totalSize>pageSize" >
+     <tr>
+       <td [colSpan]="fields.length+1" class="tfoot bg-secondary text-dark">
+         <mat-paginator [length]="totalSize" class="float-start fs-6 bg-secondary text-dark fw-bold"
+                        (page)="pageChanged($event.pageIndex+1,$event.pageSize)"
+                        [pageIndex]="page-1"
+                        [pageSize]="pageSize"
+                        [pageSizeOptions]="[5, 10, 25,50,100]"
+                        aria-label="Select page">
+         </mat-paginator>
+
+       </td>
+     </tr>
+    </tfoot>
+
+  </table>
+
+</div>
+
+

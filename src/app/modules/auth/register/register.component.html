@@ -1,0 +1,33 @@
+<div class="container register-container" fxLayout="row" fxLayoutAlign="center center">
+    <form [formGroup]="registerForm" fxFlex="50%" fxFlex.sm="50%" fxFlex.xs="90%" (submit)="onSubmit()" class="myform" >
+        <mat-card class="formCard">
+            <mat-card-title>Register</mat-card-title>
+            <mat-card-subtitle><a routerLink="/auth/login"><b>Click if already have an account</b></a></mat-card-subtitle>
+            <mat-card-content>
+                <app-input  matIcon="face" label="First name" [control]="registerForm.controls['firstName']" >
+                    <mat-error>{{this.getApiError('firstName')}}</mat-error>
+                </app-input>
+                <app-input  matIcon="face" label="Last name" [control]="registerForm.controls['lastName']" >
+                    <mat-error>{{this.getApiError('lastName')}}</mat-error>
+                </app-input>
+
+                <app-input  matIcon="email" label="Email address" [control]="registerForm.controls['email']" >
+                    <mat-error>{{this.getApiError('email')}}</mat-error>
+                </app-input>
+
+                <app-input label="Password" inputType="password" [control]="registerForm.controls['password']" >
+                    <mat-error>{{this.getApiError('password')}}</mat-error>
+                </app-input>
+                <app-input label="Confirmed password" inputType="password" [control]="registerForm.controls['confirmPassword']" ></app-input>
+
+            </mat-card-content>
+
+            <mat-card-actions class="login-actions text-center">
+
+                <button type="submit"  class="btn btn-lg btn-primary btn-rounded w-responsive "  [disabled]="registerForm.invalid || !registerForm.touched"  >
+                    create my account</button>
+            </mat-card-actions>
+        </mat-card>
+
+    </form>
+</div>

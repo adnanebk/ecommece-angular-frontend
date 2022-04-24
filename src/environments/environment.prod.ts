@@ -1,5 +1,9 @@
+import { NgxLoggerLevel } from 'ngx-logger';
+
 export const environment = {
   production: true,
+  logLevel: NgxLoggerLevel.OFF,
+  serverLogLevel: NgxLoggerLevel.ERROR,
   path :    'https://ang-shop.herokuapp.com/api/',
   //path: 'http://localhost:8080/api/',
 
@@ -11,5 +15,4 @@ export const environment = {
   facebook: {
     clientId: '464555957988601'
   }
-
 };
