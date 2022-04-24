@@ -4,8 +4,8 @@ export const environment = {
   production: true,
   logLevel: NgxLoggerLevel.OFF,
   serverLogLevel: NgxLoggerLevel.ERROR,
-  //path :    'https://ang-shop.herokuapp.com/api/',
-  path: 'http://localhost:8080/api/',
+  path :    'https://ang-shop.herokuapp.com/api/',
+  //path: 'http://localhost:8080/api/',
 
   pathDoc: 'https://ang-shop.herokuapp.com/swagger-ui/',
   //pathDoc: 'http://localhost:8080/swagger-ui/',
