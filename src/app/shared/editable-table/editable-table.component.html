@@ -80,7 +80,7 @@
 
      <div class="py-2 text-center" *ngIf="(isCurrentElement(el) || isBatchEnabled) && !field.readOnly"   >
 
-         <input *ngIf="field.type==='text'"  [(ngModel)]="el[field.name]" (input)="onValueChanged(el,this.field)"  class="w-auto form-control bg-transparent"  />
+         <input *ngIf="field.type==='text'" type="text" [(ngModel)]="el[field.name]" (input)="onValueChanged(el,this.field)"  class="w-auto form-control bg-transparent"  />
          <input *ngIf="field.type==='number'" type="number" [(ngModel)]="el[field.name]"   (input)="onValueChanged(el,this.field)"  class="form-control bg-transparent"   />
          <input *ngIf="field.type==='decimal'"  [(ngModel)]="el[field.name]"    (input)="onValueChanged(el,this.field)"  class="form-control bg-transparent"   />
          <input *ngIf="field.type==='date'" type="date" [(ngModel)]="el[field.name]"   (input)="onValueChanged(el,this.field)"   class="form-control bg-transparent"  />
