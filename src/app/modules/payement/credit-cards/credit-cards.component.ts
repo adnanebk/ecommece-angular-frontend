@@ -8,7 +8,6 @@ import {CreditCardService} from "../../../core/services/credit-card.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ConfirmComponent} from "../../../shared/confirm-dialogue/confirm.component";
 import {ApiError} from "../../../core/models/api-error";
-import {AuthService} from "../../../core/services/auth.service";
 
 @Component({
   selector: 'app-credit-cards',
@@ -20,7 +19,7 @@ export class CreditCardsComponent implements OnInit {
 
   cardNames: any[] = [];
   errors: ApiError[]=[];
-  constructor(public dialog: MatDialog,private creditCardService:CreditCardService, private modalService:NgbModal,private authService: AuthService) {
+  constructor(public dialog: MatDialog,private creditCardService:CreditCardService, private modalService:NgbModal) {
     this.cardNames=this.creditCardService.getCardNames();
   }
   @ViewChild('cardEdit') cardEditingModal!:TemplateRef<any>
@@ -110,10 +109,7 @@ export class CreditCardsComponent implements OnInit {
 
 
   private getCurrenCreditCards() {
-    this.authService.getAuthenticatedUser().subscribe(user=>{
-      user && this.creditCardService.getCreditCards(user.email).subscribe(cards=>this.creditCards=cards);
-
-    })
+     this.creditCardService.getCreditCards().subscribe(cards=>this.creditCards=cards);
   }
 }
 

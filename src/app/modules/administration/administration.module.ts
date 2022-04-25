@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 import {RouterModule, Routes} from "@angular/router";
 import {SharedModule} from "../../shared/shared.module";
 import {LayoutComponent} from "../../shared/layout/layout.component";
@@ -22,7 +22,7 @@ const routes: Routes = [
     declarations: [
         ProductsEditingComponent
     ],
-
+    providers : [DatePipe],
     imports: [
         CommonModule,
         SharedModule,

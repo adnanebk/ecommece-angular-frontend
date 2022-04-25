@@ -46,7 +46,7 @@ export class CheckoutComponent implements OnInit {
     this.authService.getAuthenticatedUser().subscribe((user) => {
       if(user){
         this.customerForm.patchValue({...user,fullName:(user.firstName+ ' '+(user.lastName || '')).trim()});
-        this.creditCardService.getCreditCards(user!.email).subscribe((cards) => {
+        this.creditCardService.getCreditCards().subscribe((cards) => {
           if(cards?.length){
             const defaultCard = cards.find(card => card.active);
             this.creditCardForm.patchValue({...defaultCard});
