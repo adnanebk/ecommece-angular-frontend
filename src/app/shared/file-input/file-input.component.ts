@@ -8,20 +8,20 @@ import {Component, EventEmitter, Output} from '@angular/core';
 export class FileInputComponent  {
 
   @Output() upload=new EventEmitter<File>();
-  constructor() { }
 
 
 
     uploadFile(input: HTMLInputElement) {
-    if(!input.files)
-      return;
+    if(input?.files?.length){
       const file = input.files[0];
 
       const reader = new FileReader();
-      reader.addEventListener('load', (event: any) => {
-       this.upload.emit(file);
+      reader.addEventListener('load', () => {
+        this.upload.emit(file);
       });
       reader.readAsDataURL(file);
+    }
+
 
     }
 }

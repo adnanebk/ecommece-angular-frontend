@@ -67,7 +67,7 @@ export class EditableTableComponent implements OnInit,OnDestroy{
        const index = this.data.findIndex(r=>r[this.identifier]===row[this.identifier]);
        this.data.splice(index,1);
      });
-      this.subscriptions[i++] =this.datasource.onRowsRemoved.subscribe(rows=>{
+      this.subscriptions[i] =this.datasource.onRowsRemoved.subscribe(rows=>{
       rows.forEach(row=>{
         const index = this.data.findIndex(r=>r[this.identifier]===row[this.identifier]);
         this.data.splice(index,1);
@@ -94,7 +94,7 @@ export class EditableTableComponent implements OnInit,OnDestroy{
   }
 
   remove(element: any) {
-    this.modalService.open(ConfirmComponent.setTitle('Confirm').setContent('Are you sure to remove this row ?')).closed.subscribe((resp)=> {
+    this.modalService.open(ConfirmComponent.setTitle('Confirm').setContent('Are you sure to remove this row ?')).closed.subscribe(()=> {
       if (!element[this.identifier]) {
         this.data.splice(0, 1);
       } else {
@@ -105,7 +105,7 @@ export class EditableTableComponent implements OnInit,OnDestroy{
   }
 
   removeAll() {
-    this.modalService.open(ConfirmComponent.setContent(this.selectedSize+' row/rows selected, Are you sure to remove them all ?')).closed.subscribe((resp)=> {
+    this.modalService.open(ConfirmComponent.setContent(this.selectedSize+' row/rows selected, Are you sure to remove them all ?')).closed.subscribe(()=> {
       if (this.selectedSize > 0) {
         this.errors = [];
         this.RemoveAll.emit(this.data.filter(e => e.selected));
@@ -172,16 +172,6 @@ export class EditableTableComponent implements OnInit,OnDestroy{
     this.dataSorted.emit({sort, direction});
   }
 
-
-
-  getText(el: any, field: Field) {
-
-    let val = el[field.name];
-    return  val?.length > 60?val.substring(0, 60) + '...':field.type === 'date'?this.datePipe.transform(val, 'short')
-        :(field.type  === 'select' && this.selects.get(field.name))?val[this.selects.get(field.name)!.displayField]:field.type  === 'bool'?(val ? 'Yes' : 'No'):val ;
-
-  }
-
   onElementSelected(el: DataType) {
     el.selected ? this.selectedSize++ : this.selectedSize--;
   }
@@ -212,7 +202,7 @@ export class EditableTableComponent implements OnInit,OnDestroy{
     hasFocus(element:HTMLElement){
       return element===document.activeElement;
     }
-  trackByFn(index: number, item: any): string {
+  trackByFn( item: any): string {
     return item[this.identifier];
   }
   compareWith(item1:any, item2:any): boolean {
@@ -235,7 +225,7 @@ export class EditableTableComponent implements OnInit,OnDestroy{
     return this.datasource.nestedObjects;
   }
   get data(): DataType[]{
-    return this.datasource.data as  DataType[] ;
+    return this.datasource.data;
   }
     get identifier(){
         return this.datasource.identifier;
@@ -258,17 +248,12 @@ export class EditableTableComponent implements OnInit,OnDestroy{
 
 
 export declare type InputType = 'text' | 'number' | 'decimal' | 'bool' | 'date' | 'textArea' | 'image' | 'select';
-export interface Field {
-  name: string;
-  display: string;
-  type?: InputType;
-  readOnly?: boolean;
+export class Field {
+    constructor(public name: string, public display: string, public type: InputType='text', public  readOnly=false) {
+    }
+
 }
 
-export interface FileData {
-  file: File;
-  index: number;
-}
 export interface ApiError{
   message: string;
   fieldName: string;
@@ -291,7 +276,7 @@ export class DataSource<Type> {
 
 }
 
-type DataType = any & {
+type DataType = any | {
    dirty: boolean;
    isSaving: boolean;
    selected: boolean;

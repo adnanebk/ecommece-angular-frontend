@@ -36,18 +36,29 @@ export class CreditCardsComponent implements OnInit {
   handleRemove(card: CreditCard,index:number) {
     this.modalService.open(ConfirmComponent.setTitle('confirmation').setContent('Are you sure to delete ?')).closed.subscribe(()=>{
       this.creditCards.splice(index, 1);
-      this.creditCardService.removeCreditCard(card.id).subscribe(()=>{}, () => this.creditCards.splice(index, 0, card));
+      this.creditCardService.removeCreditCard(card.id).subscribe(undefined, () => this.creditCards.splice(index, 0, card));
     })
   }
+  handleActive(creditCard: CreditCard) {
+    this.creditCardService.activeCard(creditCard.id).subscribe(()=>{
+      this.creditCards.forEach(card=>card.active= false);
+      creditCard.active=true;
+    },()=>creditCard.active=false)
+  }
+  handleSubmit() {
+    this.errors=[];
+    this.isNewCard?this.save():this.update();
+  }
 
-  handleSave() {
+  save() {
     const _card = this.cardForm.getRawValue();
         this.creditCardService.saveCreditCard(_card).subscribe(card=> {
              this.creditCards.push(card);
              this.dialog.closeAll();
            },error => this.errors= Array.from(error));
   }
-  handleUpdate() {
+
+  update() {
       const _card = this.cardForm.getRawValue();
       this.creditCardService.updateCreditCard(_card).subscribe(card=>{
       const  index =this.creditCards.findIndex(c=>c.id===card.id);
@@ -55,32 +66,19 @@ export class CreditCardsComponent implements OnInit {
       this.dialog.closeAll();
     },error => this.errors= Array.from(error));
   }
-
-  edit(creditCard: CreditCard) {
-    this.errors=[];
-    this.isNewCard=false;
-    const dialogRef = this.openDialog();
-    dialogRef.afterOpened().subscribe(result => {
-      this.cardForm.patchValue(creditCard);
-    });
-  }
-
-  handleActive($event: boolean, creditCard: CreditCard) {
-    this.creditCardService.activeCard(creditCard.id).subscribe(()=>{
-      this.creditCards =this.creditCards.map(card=>{
-        card.active= card.active && false;
-        return card;
-      });
-      creditCard.active=true;
-    },()=>creditCard.active=false)
-  }
-
   addNew() {
     this.errors=[];
     this.isNewCard=true;
     this.createForm();
     const dialogRef = this.openDialog();
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe();
+  }
+  edit(creditCard: CreditCard) {
+    this.errors=[];
+    this.isNewCard=false;
+    const dialogRef = this.openDialog();
+    dialogRef.afterOpened().subscribe(() => {
+      this.cardForm.patchValue(creditCard);
     });
   }
 
@@ -102,11 +100,6 @@ export class CreditCardsComponent implements OnInit {
     const apiError =  this.errors.find(err => err.fieldName ===fieldName);
     return apiError?.message;
   }
-  handleSubmit() {
-    this.errors=[];
-    this.isNewCard?this.handleSave():this.handleUpdate();
-  }
-
 
   private getCurrenCreditCards() {
      this.creditCardService.getCreditCards().subscribe(cards=>this.creditCards=cards);

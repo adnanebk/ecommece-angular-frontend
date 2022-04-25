@@ -12,29 +12,24 @@ export class HttpErrorHandlerService {
   }
 
 
-  handleError(resp: { error: { errors: any; message: string | undefined; code: string }; status: number }, originalRequest: HttpRequest<unknown>, next: HttpHandler) {
-    if (!(resp.error instanceof ErrorEvent)) {
+  handleError(resp: { error: { errors: any[]; message: string | undefined; code: string }; status: number }, originalRequest: HttpRequest<unknown>, next: HttpHandler) {
+     const {error,status}= resp;
+      if (!(error instanceof ErrorEvent)) {
       {
-        if (resp.status >= 400 && resp.status < 500) {
-          if (resp?.error?.errors) {
-            if(resp.status===401 && resp.error.code==='jwt.expired')
+        if (status >= 400 && status < 500) {
+            if(status===401 && error?.code==='jwt.expired')
                {
                 if(this.authService.isTokenExpired)
                   this.authService.logout();
-                  else
                 return this.authService.refreshJwtToken().pipe(
-                    switchMap((resp) => next.handle(AuthInterceptor.createRequestWithToken(originalRequest, resp.token))),
+                    switchMap((authData) => next.handle(AuthInterceptor.createRequestWithToken(originalRequest, authData.token))),
                      );
               }
-            else if(resp.status===403 && resp.error.code==='user.not.enabled')
+             if(status===403 && error?.code==='user.not.enabled')
               this.authService.sendCompleteRegistrationNotification();
-
-            return throwError(resp.error.errors?.length ? resp.error.errors : [resp.error]);
-          }
         }
       }
     }
-    // this.authService.refreshJwtToken();
-      return throwError([resp.error]);
+      return throwError(error?.errors.length?error.errors:[error]);
   }
 }

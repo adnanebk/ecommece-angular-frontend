@@ -7,11 +7,12 @@ import {DataSource, Field} from "../../../shared/editable-table/editable-table.c
 import {ProductPage} from "../../../core/models/productPage";
 import {saveAs} from 'file-saver';
 
-const fields: Field[] = [{name: 'sku',display:'Sku'}, {name: 'name',display:'Name'}, {name: 'description', type: 'textArea',display:'Description'},
-    {name: 'unitPrice', type: 'decimal',display:'Price'}, {name: 'image', type: 'image',display:'Image'}, {name: 'active', type: 'bool',display:'Enable'},
-    {name: 'unitsInStock', type: 'number',display:'Quantity'}, {name: 'category', type: 'select',display:'Category'},
-    {name: 'dateCreated', type: 'date', readOnly: true,display:'Newest'}, {name: 'lastUpdated', type: 'date', readOnly: true,display:'Last updated'}];
-
+const fields: Field[] = [new Field('sku','Sku'), new Field('name','Name'),
+    new Field('description','Description','textArea'), new Field('unitPrice','Price','decimal'),
+    new Field('image','Image','image'), new Field('active','Enable','bool'),
+    new Field('unitsInStock','Quantity','number'),new Field('category','Category','select'),
+    new Field('dateCreated','Newest','date',true),new Field('lastUpdated','Last updated','date',true)
+    ]
 @Component({
   selector: 'app-products-editing',
   templateUrl: './products-editing.component.html',

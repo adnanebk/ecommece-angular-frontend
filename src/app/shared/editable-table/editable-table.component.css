@@ -6,10 +6,13 @@
 }
 .text-area {
   resize: both;
-  width: 100%;
-  min-width: 200px;
+  min-width: 300px;
 }
-
+.text-max-width{
+}
+.td-width{
+  min-width: 100px;
+}
 .max-content {
   width: max-content;
 }
@@ -98,12 +101,11 @@ td {
   font-size: 12px;
 }
 
-/*
-input[type=text]:focus, input[type=number]:focus, textarea:focus, select:focus {
-  background-color: transparent;
 
+input[type=text], textarea, select {
+font-size: small;
 }
-*/
+
 :host ::ng-deep .mat-form-field-wrapper{
   margin: 0 !important;
   padding: 0;

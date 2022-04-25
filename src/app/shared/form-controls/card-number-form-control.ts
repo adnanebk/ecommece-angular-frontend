@@ -2,13 +2,12 @@ import {FormControl} from '@angular/forms';
 
 export class CardNumberFormControl extends FormControl {
 
-  override setValue(value: string, options?: { onlySelf?: boolean; emitEvent?: boolean; emitModelToViewChange?: boolean; emitViewToModelChange?: boolean }) {
+  override setValue(value: string) {
 
       if(!value)
           return;
 
       super.setValue(CardNumberFormControl.toCardFormat(value));
-      return;
 
   }
 

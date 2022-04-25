@@ -23,7 +23,7 @@ export class ChangePasswordComponent implements OnInit {
       this.form = new FormGroup({
           currentPassword: new FormControl(null, Validators.required),
           newPassword: new FormControl(null, Validators.required),
-          newPasswordConfirm: new FormControl(null, [Validators.required, MustMatch('newPassword', 'password not match', 'mustMatch')]),
+          newPasswordConfirm: new FormControl(null, [Validators.required, MustMatch('newPassword', 'mustMatch','password not match')]),
       });
   }
 

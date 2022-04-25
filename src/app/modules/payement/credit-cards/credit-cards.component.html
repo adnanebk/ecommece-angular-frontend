@@ -36,7 +36,7 @@
         <ngb-alert *ngIf="!creditCards.length" type="secondary" class="w-100 mt-4 "> You have no credit cards </ngb-alert>
         <div class="row row-cols-xl-3 row-cols-lg-2  mt-4" >
             <div  *ngFor="let card of creditCards, let idx = index"  >
-                <app-credit-card [creditCard]="card" (remove)="handleRemove($event,idx)" (edit)="edit($event)" (active)="handleActive($event,card)" ></app-credit-card>
+                <app-credit-card [creditCard]="card" (remove)="handleRemove($event,idx)" (edit)="edit($event)" (active)="handleActive(card)" ></app-credit-card>
             </div>
         </div>
 

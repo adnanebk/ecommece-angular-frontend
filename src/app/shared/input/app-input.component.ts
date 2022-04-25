@@ -29,12 +29,6 @@ export class AppInputComponent  {
 
 
 
-  constructor() {
-  }
-
-
-
-
   hasError() {
     if (this.formControl) {
       const {dirty, touched, errors} = this.formControl;
@@ -43,15 +37,7 @@ export class AppInputComponent  {
     return false;
   }
 
-  onInputChange(val?: any) {
-   // this.valueChange.emit(val);
-  }
 
-
-  private checkRequiredInputs() {
-    if (!this.formControl)
-      throw new Error("the attribute 'control' is required");
-  }
 
 
 

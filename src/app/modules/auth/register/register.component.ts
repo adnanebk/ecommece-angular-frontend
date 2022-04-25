@@ -51,7 +51,7 @@ export class RegisterComponent implements OnInit {
           email: new FormControl(null, [Validators.required, Validators.email]),
           password: new FormControl(null, [Validators.required, Validators.minLength(2)]),
           confirmPassword: new FormControl(null, [Validators.required, Validators.minLength(2)
-            ,MustMatch( 'password','password not match','mustMatch')]),
+            ,MustMatch( 'password','mustMatch','password not match')]),
         },
 
     );

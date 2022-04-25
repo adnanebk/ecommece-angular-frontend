@@ -67,23 +67,26 @@
 
       </td>
  <ng-container  *ngFor="let field of fields">
-   <td  *ngIf="!isColHide(field)" (click)="onViewChanged(el)" class="align-middle" [class]="isDirty(el)?'bgDirty':''">
+   <td  *ngIf="!isColHide(field)" (click)="onViewChanged(el)" class="align-middle td-width"  [class]="{'bgDirty':isDirty(el)}">
 
-     <ng-container *ngIf="!isCurrentElement(el) && !isBatchEnabled">
-       <strong *ngIf="(!field.type) || field.type!=='image'">
-         {{getText(el, field)}}</strong>
-       <img *ngIf="field.type === 'image'" [src]="el[field.name]">
-     </ng-container>
+     <div *ngIf="!isCurrentElement(el) && !isBatchEnabled"  class=" text-max-width" >
+       <strong *ngIf="field.type==='number' || field.type==='decimal' || field.type==='text'"> {{el[field.name]}}</strong>
+       <strong *ngIf="field.type==='textArea'"> {{el[field.name] | limitTo :'60'}}</strong>
+       <strong *ngIf="field.type==='date'"> {{el[field.name] | date :'short'}}</strong>
+       <strong *ngIf="field.type==='bool'"> {{el[field.name]?'Yes':'No'}}</strong>
+       <strong *ngIf="field.type==='select'"> {{el[field.name][selects.get(field.name)!.displayField]}}</strong>
+       <img *ngIf="field.type === 'image'" [src]="el[field.name]" alt=""/>
+     </div>
 
      <div class="py-2 text-center" *ngIf="(isCurrentElement(el) || isBatchEnabled) && !field.readOnly"   >
 
-         <input *ngIf="!field.type"  [(ngModel)]="el[field.name]" (input)="onValueChanged(el,this.field)"  class="form-control bg-transparent"  />
+         <input *ngIf="field.type==='text'"  [(ngModel)]="el[field.name]" (input)="onValueChanged(el,this.field)"  class="w-auto form-control bg-transparent"  />
          <input *ngIf="field.type==='number'" type="number" [(ngModel)]="el[field.name]"   (input)="onValueChanged(el,this.field)"  class="form-control bg-transparent"   />
          <input *ngIf="field.type==='decimal'"  [(ngModel)]="el[field.name]"    (input)="onValueChanged(el,this.field)"  class="form-control bg-transparent"   />
          <input *ngIf="field.type==='date'" type="date" [(ngModel)]="el[field.name]"   (input)="onValueChanged(el,this.field)"   class="form-control bg-transparent"  />
-         <textarea [autosize]="hasFocus(inp)" #inp *ngIf="field.type==='textArea'"  [(ngModel)]="el[field.name]"    (input)="onValueChanged(el,this.field)"   class="form-control bg-transparent text-area" ></textarea>
-         <input *ngIf="field.type==='date'" type="date" [(ngModel)]="el[field.name]"  (input)="onValueChanged(el,this.field)"  class="form-control bg-transparent"  />
-         <div *ngIf="field.type === 'bool'" class="form-check form-switch text-center fa-xl w-auto">
+         <textarea [autosize]="hasFocus(inp)" #inp *ngIf="field.type==='textArea'"  [(ngModel)]="el[field.name]"    (input)="onValueChanged(el,this.field)"
+                   class="form-control bg-transparent text-area" ></textarea>
+         <div *ngIf="field.type === 'bool'" class="form-check form-switch  fa-xl w-auto d-flex justify-content-center">
              <input class="form-check-input" type="checkbox"  [(ngModel)]="el[field.name]"   (input)="onValueChanged(el,this.field)" >
          </div>
          <select *ngIf="field.type==='select'"  [name]="field.name"  [compareWith]="compareWith" [(ngModel)]="el[field.name]"
