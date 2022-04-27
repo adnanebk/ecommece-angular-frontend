@@ -24,7 +24,7 @@ export class EditableTableComponent implements OnInit,OnDestroy{
   isBatchEnabled = false;
   selectedSize = 0;
   selectedElements = 0;
-  currentElement: any = {};
+  currentElement: DataType = {};
   originalElement: any = {};
   errors: {fieldName:string,message:string}[] = [];
   page = 1;
@@ -139,9 +139,13 @@ export class EditableTableComponent implements OnInit,OnDestroy{
          this.data.splice(0,1);
         return;
     }
+
+
     this.currentElement.dirty=false;
-    // rollback
-    Object.assign(this.currentElement, this.originalElement);
+      if(!this.currentElement.isSaving){
+          // rollback
+          Object.assign(this.currentElement, this.originalElement);
+      }
 
     this.currentElement = element;
     this.originalElement = {...element};

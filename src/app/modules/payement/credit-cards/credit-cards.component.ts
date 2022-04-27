@@ -41,7 +41,8 @@ export class CreditCardsComponent implements OnInit {
   }
   handleActive(creditCard: CreditCard) {
     this.creditCardService.activeCard(creditCard.id).subscribe(()=>{
-      this.creditCards.forEach(card=>card.active= false);
+      const activateCard = this.creditCards.find(card=>card.active);
+      activateCard!.active=false;
       creditCard.active=true;
     },()=>creditCard.active=false)
   }

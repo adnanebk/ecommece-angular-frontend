@@ -57,7 +57,7 @@
                     <span *ngIf="isSaving(el)" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
 
           Save</button>
-          <button *ngIf="isCurrentElement(el)" (click)="cancelChange()" class="btn m-1 btn-warning btn-sm">cancel</button>
+          <button *ngIf="isCurrentElement(el) && !isSaving(el)" (click)="cancelChange()" class="btn m-1 btn-warning btn-sm">cancel</button>
 
       </span>
         <div *ngIf="isBatchEnabled" class="select">
