@@ -17,28 +17,28 @@ export class UserService {
   }
 
   register(user: any) {
-    return this.httpClient.post<AuthData>(this.baseUrl + 'register', user);
+    return this.httpClient.post<AuthData>(this.baseUrl + 'auth/register', user);
   }
 
   login(user: any) {
-    return this.httpClient.post<AuthData>(this.baseUrl + 'login', user);
+    return this.httpClient.post<AuthData>(this.baseUrl + 'auth/login', user);
   }
 
   googleLogin(data: { appUser: AppUser, token: string }) {
-    return this.httpClient.post<AuthData>(this.baseUrl + 'login/google', data);
+    return this.httpClient.post<AuthData>(this.baseUrl + 'auth/login/google', data);
   }
 
   facebookLogin(data: { appUser: AppUser, token: string }) {
-    return this.httpClient.post<AuthData>(this.baseUrl + 'login/facebook', data);
+    return this.httpClient.post<AuthData>(this.baseUrl + 'auth/login/facebook', data);
   }
 
   refreshMyToken(refreshToken: string) {
-    return this.httpClient.post<AuthData>(this.baseUrl + 'refresh-token', refreshToken);
+    return this.httpClient.post<AuthData>(this.baseUrl + 'auth/refresh-token', refreshToken);
 
   }
 
   getByEmail(email: string) {
-    return this.httpClient.get<AppUser>(this.baseUrl + 'users/search/email?email=' + email);
+    return this.httpClient.get<AppUser>(this.baseUrl + 'user/email/' + email);
   }
 
   updateUserProfile(profile: UserProfile, id: number) {
