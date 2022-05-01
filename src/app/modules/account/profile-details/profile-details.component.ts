@@ -40,6 +40,7 @@ export class ProfileDetailsComponent  implements OnInit {
     this.profileForm.markAsPristine();
     this.errors = [];
     const updatedProfile = this.profileForm.getRawValue();
+        Object.keys(updatedProfile).forEach((k) =>  updatedProfile[k]= updatedProfile[k] ===''?null:updatedProfile[k]);
     this.userService.updateUserProfile(updatedProfile,this.user.id!).subscribe(() => {
           this.toastrService.success('your profile has been updated successfully');
           this.authService.updateUserInformation(Object.assign(this.user,updatedProfile));

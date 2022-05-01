@@ -36,22 +36,23 @@ export class UserService {
     return this.httpClient.post<AuthData>(this.baseUrl + 'auth/refresh-token', refreshToken);
 
   }
+  sendActivationMessage(email: string) {
+    return this.httpClient.patch<void>(this.baseUrl + 'auth/confirm', email);
+  }
 
   getByEmail(email: string) {
     return this.httpClient.get<AppUser>(this.baseUrl + 'user/email/' + email);
   }
 
+
   updateUserProfile(profile: UserProfile, id: number) {
-    return this.httpClient.patch<AppUser>(this.baseUrl + 'users/' + id, profile);
+    return this.httpClient.patch<AppUser>(this.baseUrl + 'user/' + id, profile);
   }
 
   updateUserPassword(changePassword:ChangePassword) {
     return this.httpClient.post(this.baseUrl + 'user/change-password', changePassword);
   }
 
-  sendActivationMessage(email: string) {
-    return this.httpClient.patch<void>(this.baseUrl + 'user/confirm', email);
-  }
 
     updateImage(file: File) {
       const formData = new FormData();
