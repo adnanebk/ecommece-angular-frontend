@@ -34,7 +34,7 @@
       <ng-container *ngFor="let field of fields; let idx = index" >
         <th *ngIf="!isColHide(field)" (click)="sort(field.name,ic)" class="text-center  align-middle bg-secondary border-secondary" role='button'>
           <a class="max-content mx-2 text-dark fa-lg fw-bold  text-decoration-none"><strong>{{field.display}}</strong></a>
-          <i #ic class="fa fa-sort" aria-hidden="true"></i>
+          <em #ic class="fa fa-sort" aria-hidden="true"></em>
         </th>
       </ng-container>
 
@@ -47,9 +47,9 @@
       <span *ngIf="!isBatchEnabled" class="table-edit">
         <ng-container *ngIf="el!==currentElement">
         <button (click)="onViewChanged(el)" type="button"
-                class="btn btn-rounded btn-sm my-0"><i class="fas fa-edit text-info"></i></button>
-        <button (click)="remove(el)" type="button" class="btn btn-rounded  btn-sm  mx-2"><i
-                class="fas fa-trash-alt text-danger"></i></button>
+                class="btn btn-rounded btn-sm my-0"><em class="fas fa-edit text-info"></em></button>
+        <button (click)="remove(el)" type="button" class="btn btn-rounded  btn-sm  mx-2">
+            <em class="fas fa-trash-alt text-danger"></em></button>
           </ng-container>
 
         <button [disabled]="isSaving(el)" *ngIf="isCurrentElement(el)" (click)="onSave(el)" type="button"
