@@ -26,10 +26,8 @@ export class MonthYearFormControl extends FormControl {
        }
        if (value.length>this.value.length)
            super.setValue(value + '/', {...options, emitModelToViewChange: true});
-   }
-
-       else if(value.length===3)
-       super.setValue(prevValue+'/'+lastCharacter, {...options, emitModelToViewChange: true});
+   } else if (value.length === 3)
+       super.setValue(prevValue + '/' + lastCharacter, {...options, emitModelToViewChange: true});
 
 
    else

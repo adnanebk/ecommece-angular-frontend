@@ -6,7 +6,6 @@ import {Product} from "../../../core/models/product";
 import {DataSource, Field} from "../../../shared/editable-table/editable-table.component";
 import {ProductPage} from "../../../core/models/productPage";
 import {saveAs} from 'file-saver';
-import {firstValueFrom, lastValueFrom} from "rxjs";
 
 const fields: Field[] = [new Field('sku','Sku'), new Field('name','Name'),
     new Field('description','Description','textArea'), new Field('unitPrice','Price','decimal'),

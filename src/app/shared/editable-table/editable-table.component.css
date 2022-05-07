@@ -8,8 +8,7 @@
   resize: both;
   min-width: 300px;
 }
-.text-max-width{
-}
+
 .td-width{
   min-width: 100px;
 }
@@ -26,9 +25,6 @@ img {
 }
 
 
-.my-custom-scrollbar {
-
-}
 
 button {
   padding: 7px !important;
@@ -85,8 +81,7 @@ table thead {
   z-index: 1;
 }
 
-.table {
-}
+
 
 /*input[type=text], input[type=number], textarea, select {
   border: none;

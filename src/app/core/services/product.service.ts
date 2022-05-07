@@ -33,17 +33,18 @@ export class ProductService {
         })
       );
   }
- // to do (rename id to categoryId)
+
   private createUrl(productPage: ProductPage) {
     let {page, pageSize, direction, sort = 'dateCreated', categoryId, searchValue} = productPage;
     if (!direction)
       direction = sort === 'dateCreated' ? 'desc' : 'asc';
-    //return this.productUrl+'/search?page=' + (page-1)+'&categoryId='+categoryId+'&name='+searchValue+'&description='+searchValue;
-   return this.productUrl+ ((categoryId && searchValue) ?
-        `/search/categoryAndNameOrDescription?name=${searchValue}&description=${searchValue}&categoryId=${categoryId}`
-        : categoryId ?  `/search/category?categoryId=${categoryId}`
-        : searchValue ? `/search/nameOrDescription?name=${searchValue}&description=${searchValue}`:'?')
-        + `&page=${page-1}&size=${pageSize}&sort=${sort},${direction}`;
+    if (categoryId && searchValue) {
+      return this.productUrl + `/search/categoryAndNameOrDescription?name=${searchValue}&description=${searchValue}&categoryId=${categoryId}`
+          + `&page=${page - 1}&size=${pageSize}&sort=${sort},${direction}`;
+    }
+    return this.productUrl + categoryId ? `/search/category?categoryId=${categoryId}`
+        : searchValue ? `/search/nameOrDescription?name=${searchValue}&description=${searchValue}` : '?'
+            + `&page=${page - 1}&size=${pageSize}&sort=${sort},${direction}`;
   }
 
   getProduct(sku: string) {
