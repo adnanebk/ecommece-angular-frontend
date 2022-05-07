@@ -1,11 +1,11 @@
 <mat-card-title class="text-center mt-4 " >Profile Information</mat-card-title>
-<div class="m-4 d-lg-flex  gap-5 " >
-    <div class="d-flex flex-column align-items-center w-25  " >
+<div class="d-lg-flex  gap-5 " >
+    <div class="d-flex flex-column image-width" >
 
          <img *ngIf="user.imageUrl" [src]="user.imageUrl"  referrerpolicy="no-referrer" class="circle " alt="You have no image">
          <img *ngIf="!user.imageUrl" src="assets/images/user.png" class="circle" alt="You have no image">
 
-     <app-file-input class="w-100 mt-2" *ngIf="!isImageUploading" (upload)="handleFileUpload($event)"></app-file-input>
+     <app-file-input [accepts]="['.jpg','.jpeg','.png']" class="w-50 mt-2 align-self-center" *ngIf="!isImageUploading" (upload)="handleFileUpload($event)"></app-file-input>
         <div *ngIf="isImageUploading"  class="spinner-border text-primary" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>

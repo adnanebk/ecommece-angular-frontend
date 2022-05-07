@@ -1,6 +1,6 @@
 <div class="file-input">
-<input  id="file" #file  type="file" class="form-control file" accept=".jpg, .jpeg, .png"
+<input  id="file" #file  type="file" class="form-control file" [accept]="[accepts].join(',')"
         (change)="uploadFile(file)">
-<label for="file"><i class="fas fa-upload"></i></label>
+<label for="file">{{text}}<em class="fas fa-upload"></em></label>
 
 </div>

@@ -6,6 +6,7 @@ import {Product} from "../../../core/models/product";
 import {DataSource, Field} from "../../../shared/editable-table/editable-table.component";
 import {ProductPage} from "../../../core/models/productPage";
 import {saveAs} from 'file-saver';
+import {firstValueFrom, lastValueFrom} from "rxjs";
 
 const fields: Field[] = [new Field('sku','Sku'), new Field('name','Name'),
     new Field('description','Description','textArea'), new Field('unitPrice','Price','decimal'),
@@ -99,10 +100,8 @@ export class ProductsEditingComponent  implements OnInit {
 
 
 
-  saveToExcel() {
-    this.productService.saveProductsToExcel(this.dataSource.data)
-        .subscribe(resp => {
-            this.toastrService.success('your operation has been successful');
+   saveToExcel() {
+      this.productService.downloadProductsAsExcel(this.dataSource.data).subscribe(resp => {
           const blob = new Blob([resp], {type: 'application/vnd.ms.excel'});
           const file = new File([blob], 'products-' + new Date().toLocaleDateString() + '.xlsx',
               {type: 'application/vnd.ms.excel'});
@@ -112,17 +111,12 @@ export class ProductsEditingComponent  implements OnInit {
 
 
 
-    insertFromExcel($input: HTMLInputElement) {
-    const file: File = $input.files![0];
+    insertFromExcel(file: File) {
     this.productService.saveProductsFromExcel(file).subscribe(products => {
           this.toastrService.success('your operation has been successful');
           this.dataSource.onRowsAdded.next(products);
-          $input.value = '';
         },
-        errors => {
-          $input.value = '';
-            this.toastrService.error(errors[0].message, 'Error');
-        }, () => $input.value = ''
+        errors => errors[0] && this.toastrService.error(errors[0].message, 'Error')
     );
   }
 

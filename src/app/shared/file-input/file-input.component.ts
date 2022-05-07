@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 @Component({
   selector: 'app-file-input',
@@ -8,10 +8,11 @@ import {Component, EventEmitter, Output} from '@angular/core';
 export class FileInputComponent  {
 
   @Output() upload=new EventEmitter<File>();
+  @Input() accepts: string[] = [];
+  @Input() text =  '';
 
 
-
-    uploadFile(input: HTMLInputElement) {
+  uploadFile(input: HTMLInputElement) {
     if(input?.files?.length){
       const file = input.files[0];
 

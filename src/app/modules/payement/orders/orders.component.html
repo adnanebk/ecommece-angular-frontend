@@ -29,7 +29,7 @@
                                         <div class="media">
                                             <div class="sq align-self-center "><img
                                                     class="img-fluid my-auto align-self-center mr-2 mr-md-4 pl-0 p-0 m-0" src="{{ item.image}}"
-                                                    width="135" height="135"/></div>
+                                                    width="135" height="135" alt="item image"/></div>
                                             <div class="media-body my-auto text-right">
                                                 <div class="row my-auto flex-column flex-md-row">
                                                     <div class="col-auto my-auto ">
@@ -45,8 +45,8 @@
                                         </div>
                                         <hr class="my-3 ">
                                         <div class="row ">
-                                            <div class="col-md-3 mb-3"><small> Track Order <span><i class=" ml-2 fa fa-refresh"
-                                                                                                    aria-hidden="true"></i></span></small>
+                                            <div class="col-md-3 mb-3"><small> Track Order <span><em class=" ml-2 fa fa-refresh"
+                                                                                                    aria-hidden="true"></em></span></small>
                                             </div>
                                             <div class="col mt-auto">
                                                 <div class="progress">
@@ -54,13 +54,13 @@
                                                          aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
                                                 <div class="media row justify-content-between ">
-                                                    <div class="col-auto text-right"><span> <small class="text-right mr-sm-2"></small> <i
-                                                            class="fa fa-circle active"></i> </span></div>
-                                                    <div class="flex-col"><span> <small class="text-right mr-sm-2">Out for delivary</small><i
-                                                            class="fa fa-circle"></i></span></div>
+                                                    <div class="col-auto text-right"><span> <small class="text-right mr-sm-2"></small> <em
+                                                            class="fa fa-circle active"></em> </span></div>
+                                                    <div class="flex-col"><span> <small class="text-right mr-sm-2">Out for delivary</small><em
+                                                            class="fa fa-circle"></em></span></div>
                                                     <div class="col-auto flex-col-auto">
-                                                        <small class="text-right mr-sm-2">Delivered</small><span> <i
-                                                            class="fa fa-circle"></i></span>
+                                                        <small class="text-right mr-sm-2">Delivered</small><span> <em
+                                                            class="fa fa-circle"></em></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -75,7 +75,7 @@
                             <div class="col">
                                 <div class="row justify-content-between">
                                     <div class="flex-sm-col text-right col">
-                                        <p class="mb-1"><b>Total</b></p>
+                                        <p class="mb-1"><strong>Total</strong></p>
                                     </div>
                                     <div class="flex-sm-col col-auto">
                                         <p class="mb-1">{{order.totalPrice | currency : 'USD'}}</p>
@@ -83,7 +83,7 @@
                                 </div>
                                 <div class="row justify-content-between">
                                     <div class="flex-sm-col text-right col">
-                                        <p class="mb-1"><b>Total Quantity</b></p>
+                                        <p class="mb-1"><strong>Total Quantity</strong></p>
                                     </div>
                                     <div class="flex-sm-col col-auto">
                                         <p class="mb-1">{{order.quantity}}</p>

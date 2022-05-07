@@ -80,8 +80,11 @@ export class ProductService {
     return this.httpClient.delete(this.productUrlV2, {params});
   }
 
-  saveProductsToExcel(products: Product[]) {
-    return this.httpClient.post<any>(this.productUrlV2 + '/excel/download', products);
+  downloadProductsAsExcel(products: Product[]) {
+    const httpOptions = {
+      responseType: 'blob' as 'json'
+  };
+    return this.httpClient.get<any>(this.productUrlV2 + '/excel/download/'+products.map(product=>product.id).join(','),httpOptions);
   }
 
   saveProductsFromExcel(file: File) {

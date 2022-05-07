@@ -53,7 +53,7 @@
             <div>
                 <strong *ngIf="errors.length" class="text-danger">Please go back and fixe the errors below</strong>
                 <ul>
-                    <li *ngFor="let error of errors"><b class="text-danger">{{error.message}}</b></li>
+                    <li *ngFor="let error of errors"><strong class="text-danger">{{error.message}}</strong></li>
                 </ul>
                 <button mat-raised-button color="accent" (click)="stepper.previous()">Back</button>
                 <button mat-raised-button class="mx-2" color="primary" (click)="onSubmit()" >Complete</button>

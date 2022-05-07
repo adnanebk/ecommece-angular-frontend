@@ -17,9 +17,9 @@
   </div>
   <div class="table-responsive table-wrapper-scroll-y" #tableContent>
 
-  <table class="table table-bordered  table-secondary  m-auto text-center  float-start "
-      >
-    <thead>
+  <table class="table table-bordered  table-secondary  m-auto text-center  float-start ">
+      <caption>Editable table</caption>
+      <thead>
     <tr>
       <th *ngIf="!isBatchEnabled" class="text-center text-primary align-middle  bg-secondary "><h3>
           <button  role="button" *ngIf="!isBatchEnabled" class="btn btn-light"
@@ -95,7 +95,7 @@
              <option [ngValue]="op"
                      *ngFor="let op of selects.get(field.name)!.options">{{op[selects.get(field.name)!.displayField]}}</option>
          </select>
-         <app-file-input (upload)="uploadFile(idx,this.field.name,$event)" *ngIf="field.type === 'image' "></app-file-input>
+         <app-file-input  (upload)="uploadFile(idx,this.field.name,$event)" *ngIf="field.type === 'image' "></app-file-input>
 
          <div *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</div>
      </div>

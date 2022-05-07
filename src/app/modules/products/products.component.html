@@ -1,6 +1,6 @@
 <div class="container" fxLayout="row" fxLayoutAlign="center none">
 
-    <div fxFlex="95%">
+    <div fxFlex="100%">
         <div class="container" fxLayout="row" fxLayoutAlign="center none">
 
             <h2>Shopping page</h2>
@@ -12,12 +12,12 @@
                 <div class="col-lg-12">
                     <div class="row">
                         <mat-form-field appearance="fill"  >
-                            <mat-label><b>Search</b></mat-label>
+                            <mat-label><strong>Search</strong></mat-label>
                             <input [(ngModel)]="productPage.searchValue" matInput placeholder="search..." (keyup.enter)="getPagedProducts()">
                             <mat-icon (click)="getPagedProducts()" role="button"  matSuffix>search</mat-icon>
                         </mat-form-field>
                         <mat-form-field appearance="fill" class="w-auto" >
-                            <mat-label><b>Categories</b></mat-label>
+                            <mat-label><strong>Categories</strong></mat-label>
                             <mat-select [(ngModel)]="productPage.categoryId" name="category" (selectionChange)="getPagedProducts()" >
                                 <mat-option *ngFor="let op of categoryOptions"  [value]="op.value">
                                     {{op.display}}
@@ -25,7 +25,7 @@
                             </mat-select>
                         </mat-form-field>
                         <mat-form-field appearance="fill" class="w-auto" >
-                            <mat-label><b>Sort by</b></mat-label>
+                            <mat-label><strong>Sort by</strong></mat-label>
                             <mat-select [(ngModel)]="productPage.sort" name="sort" (selectionChange)="getPagedProducts()" >
                                 <mat-option *ngFor="let op of sortOptions"  [value]="op.value">
                                     {{op.display}}
