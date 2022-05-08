@@ -46,9 +46,9 @@
 
                     </div>
                     <div class="row">
-                        <div class="pagination pagination-lg justify-content-start  ">
+                        <div class="justify-content-start  ">
 
-                            <ngb-pagination  [collectionSize]="productPage.totalSize ?? products.length" [(page)]="productPage.page"
+                            <ngb-pagination  [collectionSize]="productPage.totalSize ?? products.length" [(page)]="productPage.page" size="lg"
                                             [pageSize]="productPage.pageSize"  [maxSize]="4" [boundaryLinks]="true"
                                             (pageChange)="getPagedProducts($event)"
                             ></ngb-pagination>

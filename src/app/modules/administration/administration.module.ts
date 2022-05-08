@@ -25,9 +25,9 @@ const routes: Routes = [
     providers : [DatePipe],
     imports: [
         CommonModule,
-        SharedModule,
         RouterModule.forChild(routes),
         NgbAlertModule,
+        SharedModule,
 
     ]
 })

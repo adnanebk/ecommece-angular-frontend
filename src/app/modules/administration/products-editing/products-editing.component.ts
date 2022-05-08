@@ -110,14 +110,19 @@ export class ProductsEditingComponent  implements OnInit {
 
 
 
-    insertFromExcel(file: File) {
-    this.productService.saveProductsFromExcel(file).subscribe(products => {
-          this.toastrService.success('your operation has been successful');
-          this.dataSource.onRowsAdded.next(products);
-        },
-        errors => errors[0] && this.toastrService.error(errors[0].message, 'Error')
-    );
-  }
+    insertFromExcel($input: HTMLInputElement) {
+        const file: File = $input.files![0];
+        this.productService.saveProductsFromExcel(file).subscribe(products => {
+                this.toastrService.success('your operation has been successful');
+                this.dataSource.onRowsAdded.next(products);
+                $input.value = '';
+            },
+            errors => {
+                $input.value = '';
+                this.toastrService.error(errors[0].message, 'Error');
+            }, () => $input.value = ''
+        );
+    }
 
     onPageChanged(pageData: {page:number,pageSize:number}) {
         this.productPage.page=pageData.page;

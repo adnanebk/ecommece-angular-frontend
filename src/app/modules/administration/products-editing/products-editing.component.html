@@ -6,17 +6,18 @@
             <ngb-alert *ngIf="!dataSource.data?.length">No products found</ngb-alert>
 
             <ng-container *ngIf="dataSource.data.length">
+                <button (click)="saveToExcel()" class="btn btn-primary rounded my-2 mx-5">download excel</button>
+                <div class="input-group mx-3">
+                    <b for="formFile" class="fs-5" >Insert from excel</b>
+                    <div >
+                        <input #file class="form-control" accept=".xlsx,.xls" (change)="insertFromExcel(file)" type="file" id="formFile">
+                    </div>
+                </div>
                 <mat-form-field appearance="fill" class="w-100">
                     <mat-label><strong>Search</strong></mat-label>
                     <input [(ngModel)]="productPage.searchValue" matInput placeholder="search..." (keyup.enter)="fetchProducts()">
                     <mat-icon (click)="fetchProducts()" role="button" matSuffix>search</mat-icon>
                 </mat-form-field>
-                <button (click)="saveToExcel()" class="btn btn-primary rounded my-2 mx-5">download excel</button>
-                <div class="input-group mx-3">
-                    <div >
-                        <app-file-input  text="Insert products from excel"   (upload)="insertFromExcel($event)"></app-file-input>
-                    </div>
-                </div>
 
                 <app-editable-table (dataUpdated)="updateProduct($event)"
                                     [datasource]="dataSource"

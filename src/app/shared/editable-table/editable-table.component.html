@@ -95,7 +95,10 @@
              <option [ngValue]="op"
                      *ngFor="let op of selects.get(field.name)!.options">{{op[selects.get(field.name)!.displayField]}}</option>
          </select>
-         <app-file-input  (upload)="uploadFile(idx,this.field.name,$event)" *ngIf="field.type === 'image' "></app-file-input>
+
+         <app-file-input  [accepts]="['.jpg','.jpeg','.png']" (upload)="uploadFile(el,this.field.name,$event)" *ngIf="field.type === 'image' ">
+
+         </app-file-input>
 
          <div *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</div>
      </div>

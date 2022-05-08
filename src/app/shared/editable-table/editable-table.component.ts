@@ -153,10 +153,10 @@ export class EditableTableComponent implements OnInit,OnDestroy{
   }
 
 
-  uploadFile(index: number, fieldName: string, file: File) {
+  uploadFile(element:DataType, fieldName: string, file: File) {
     this.errors = [];
-    this.data[index].dirty = true;
-    this.data[index][fieldName] = file.name;
+    element.dirty = true;
+    element[fieldName] = file.name;
     this.datasource.uploadedFiles.set(fieldName,file);
   }
 
