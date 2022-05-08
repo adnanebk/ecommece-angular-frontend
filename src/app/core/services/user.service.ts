@@ -50,7 +50,7 @@ export class UserService {
   }
 
   updateUserPassword(changePassword:ChangePassword) {
-    return this.httpClient.post(this.baseUrl + 'user/change-password', changePassword);
+    return this.httpClient.patch(this.baseUrl + 'user/change-password', changePassword);
   }
 
 

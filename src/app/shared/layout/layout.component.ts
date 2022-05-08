@@ -6,6 +6,7 @@ import {SpinnerService} from '../../core/services/spinner.service';
 import {AuthService} from "../../core/services/auth.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {CartService} from "../../core/services/cart.service";
+import {environment} from "../../../environments/environment.prod";
 
 @Component({
     selector: 'app-layout',
@@ -21,6 +22,7 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
     isAdmin: boolean = false;
 
     private autoLogoutSubscription: Subscription = new Subscription;
+    docUrl = environment.pathDoc;
 
     constructor(private changeDetectorRef: ChangeDetectorRef,private cartService:CartService,
         private media: MediaMatcher,

@@ -26,7 +26,7 @@ export class CreditCardService {
 
   updateCreditCard(creditCard: CreditCard) {
     creditCard.cardNumber = creditCard.cardNumber?.replace(/-/g,'');
-    return this.httpClient.put<CreditCard>(this.creditCardUrl + '/' + creditCard.id, creditCard);
+    return this.httpClient.put<void>(this.creditCardUrl + '/' + creditCard.id, creditCard);
   }
 
   removeCreditCard(id: number) {

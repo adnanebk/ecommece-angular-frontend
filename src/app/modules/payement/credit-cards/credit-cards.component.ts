@@ -61,9 +61,9 @@ export class CreditCardsComponent implements OnInit {
 
   update() {
       const _card = this.cardForm.getRawValue();
-      this.creditCardService.updateCreditCard(_card).subscribe(card=>{
-      const  index =this.creditCards.findIndex(c=>c.id===card.id);
-      this.creditCards[index]=card;
+      this.creditCardService.updateCreditCard(_card).subscribe(()=>{
+      const  index =this.creditCards.findIndex(c=>c.id===_card.id);
+      this.creditCards[index]=_card;
       this.dialog.closeAll();
     },error => this.errors= Array.from(error));
   }

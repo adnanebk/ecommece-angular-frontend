@@ -25,26 +25,30 @@ export class ProductService {
   }
 
   gePagedProducts(productPage: ProductPage) {
-    let searchUrl = this.createUrl(productPage);
+    const url = this.getUrl(productPage);
 
-    return this.httpClient.get<PagedResponse>(searchUrl)
+    return this.httpClient.get<PagedResponse>(url)
       .pipe(timeout(this.timeOut), retry(this.retry), map((response) => {
           return {data: response._embedded.products, page: response.page};
         })
       );
   }
 
-  private createUrl(productPage: ProductPage) {
+  private getUrl(productPage: ProductPage) {
     let {page, pageSize, direction, sort = 'dateCreated', categoryId, searchValue} = productPage;
     if (!direction)
       direction = sort === 'dateCreated' ? 'desc' : 'asc';
+    const pagePath=`page=${page - 1}&size=${pageSize}&sort=${sort},${direction}`;
     if (categoryId && searchValue) {
-      return this.productUrl + `/search/categoryAndNameOrDescription?name=${searchValue}&description=${searchValue}&categoryId=${categoryId}`
-          + `&page=${page - 1}&size=${pageSize}&sort=${sort},${direction}`;
+      return this.productUrl + `/search/categoryAndNameOrDescription?name=${searchValue}&description=${searchValue}&categoryId=${categoryId}&` +pagePath ;
     }
-    return this.productUrl + categoryId ? `/search/category?categoryId=${categoryId}`
-        : searchValue ? `/search/nameOrDescription?name=${searchValue}&description=${searchValue}` : '?'
-            + `&page=${page - 1}&size=${pageSize}&sort=${sort},${direction}`;
+    if (categoryId) {
+      return this.productUrl+`/search/category?categoryId=${categoryId}&`+pagePath;
+    }
+    if(searchValue) {
+      return this.productUrl+ `/search/nameOrDescription?name=${searchValue}&description=${searchValue}&`+ pagePath;
+    }
+    return  this.productUrl+'?'+pagePath;
   }
 
   getProduct(sku: string) {
