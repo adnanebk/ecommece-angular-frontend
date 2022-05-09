@@ -15,6 +15,9 @@
   color: dodgerblue;
   border: 1px solid  dodgerblue;
 }
+.pagination{
+  flex-wrap: wrap;
+}
 
 body {
   margin: 0;
