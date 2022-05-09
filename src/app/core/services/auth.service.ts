@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {tap} from 'rxjs/operators';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, lastValueFrom} from 'rxjs';
 import {FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialUser} from 'angularx-social-login';
 import {AppUser} from "../models/app-user";
 import {AuthData, UserService} from "./user.service";
@@ -56,26 +56,28 @@ export class AuthService {
   async loginWithGoogle() {
     const socialUser = await this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
     let appUser = this.mapUser(socialUser);
-     await this.userService.googleLogin({appUser, token: socialUser.idToken}).pipe(tap(response => {
+     await lastValueFrom(this.userService.googleLogin({appUser, token: socialUser.idToken}).pipe(tap(response => {
        this.saveAuthDataToStorage(response);
-     })).toPromise();
+     })));
   }
 
   async loginWithFacebook() {
     const socialUser = await this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID);
     let appUser = this.mapUser(socialUser);
-    await this.userService.facebookLogin({appUser, token: socialUser.authToken}).pipe(tap(response => {
+    await lastValueFrom(this.userService.facebookLogin({appUser, token: socialUser.authToken}).pipe(tap(response => {
       this.saveAuthDataToStorage(response);
-    })).toPromise();
+    })));
   }
 
   updateUserInformation(user: AppUser) {
      const authData =  this.getAuthDataFromStorage();
-     if(authData){
-         authData.appUser=user;
-         this.saveAuthDataToStorage(authData);
+     if(!authData){
+         this.logout();
+         return;
      }
-     else this.logout();
+     authData.appUser=user;
+     this.saveAuthDataToStorage(authData);
+
 
   }
 
@@ -98,7 +100,11 @@ export class AuthService {
 
   refreshJwtToken() {
       this.isTokenExpired=true;
-      const token = this.getAuthDataFromStorage()?.refreshToken ?? '';
+      const token = this.getAuthDataFromStorage()?.refreshToken ;
+      if(!token){
+          this.logout();
+          return;
+      }
       return this.userService.refreshMyToken(token).pipe(
          tap(resp => {
           this.saveAuthDataToStorage(resp);
@@ -130,8 +136,11 @@ export class AuthService {
         return this.getCurrentUser()?.social;
     }
 
+    isAdminUser() {
+        return this.getCurrentUser()?.roles?.some(role=>role.name.includes('ADMIN'));
+    }
+
   private mapUser(socialUser: SocialUser):AppUser {
-      console.log('social-',socialUser)
     const {firstName,lastName,email,photoUrl} = socialUser;
     return {firstName,lastName,email,imageUrl:photoUrl} ;
   }
@@ -155,9 +164,4 @@ export class AuthService {
   private sendActivationMessage() {
     return this.userService.sendActivationMessage(this.getCurrentUser()!.email);
   }
-
-
-    isAdminUser() {
-        return this.getCurrentUser()?.roles?.some(role=>role.name.includes('ADMIN'));
-    }
 }
