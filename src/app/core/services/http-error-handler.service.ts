@@ -16,7 +16,6 @@ export class HttpErrorHandlerService {
      const {error,status}= resp;
       if (!(error instanceof ErrorEvent)) {
       {
-        if (status >= 400 && status < 500) {
             if(status===401 && error?.code==='jwt.expired')
                {
                 if(this.authService.isTokenExpired)
@@ -28,7 +27,6 @@ export class HttpErrorHandlerService {
               }
              if(status===403 && error?.code==='user.not.enabled')
               this.authService.sendCompleteRegistrationNotification();
-        }
       }
     }
       return throwError(error?.errors.length?error.errors:[error]);
