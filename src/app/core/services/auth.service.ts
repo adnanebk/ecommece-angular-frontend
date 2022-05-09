@@ -100,10 +100,9 @@ export class AuthService {
 
   refreshJwtToken() {
       this.isTokenExpired=true;
-      const token = this.getAuthDataFromStorage()?.refreshToken ;
+      const token = this.getAuthDataFromStorage()?.refreshToken ?? '' ;
       if(!token){
           this.logout();
-          return;
       }
       return this.userService.refreshMyToken(token).pipe(
          tap(resp => {
