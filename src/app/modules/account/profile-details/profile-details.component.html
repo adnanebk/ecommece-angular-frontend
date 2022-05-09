@@ -23,7 +23,7 @@
                     <app-input  appearance="standard"  matIcon="face" label="Last name" [control]="profileForm.controls['lastName']" >
                         <mat-error>{{this.getApiError('lastName')}}</mat-error>
                     </app-input>
-                    <app-input *ngIf="!user.social" appearance="standard"   matIcon="email" label="Email address" [control]="profileForm.controls['email']" >
+                    <app-input [readonly]="user?.social!" appearance="standard"   matIcon="email" label="Email address" [control]="profileForm.controls['email']" >
                         <mat-error>{{this.getApiError('email')}}</mat-error>
                     </app-input>
                     <app-select appearance="standard" placeholder="Select a country"  [items]="['Morocco','Egypt','Algeria','Tunisia']"   [control]="profileForm.controls['country']" >
