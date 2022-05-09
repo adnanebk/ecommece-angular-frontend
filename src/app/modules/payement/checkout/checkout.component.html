@@ -14,9 +14,8 @@
                 <app-input     matIcon="email" label="Email address" [control]="customerForm.controls['email']" >
                     <mat-error>{{this.getApiError('email')}}</mat-error>
                 </app-input>
-                <app-input     matIcon="location_on" label="Country" [control]="customerForm.controls['country']" >
-                    <mat-error>{{this.getApiError('country')}}</mat-error>
-                </app-input>
+                <app-select placeholder="Select a country"  [items]="['Morocco','Egypt','Algeria','Tunisia']"   [control]="customerForm.controls['country']" >
+                </app-select>
                 <app-input   matIcon="location_on" label="City" [control]="customerForm.controls['city']" >
                     <mat-error>{{this.getApiError('city')}}</mat-error>
                 </app-input>
@@ -62,11 +61,16 @@
     </mat-stepper>
 
       <mat-card class="col-lg-2 h-25">
-          <h5 class="d-inline-block">Total price :</h5>
-          <strong class="float-end">{{totalPrice | currency : '$'}}</strong>
+          <div class="d-flex justify-content-around">
+              <h5>Total price :</h5>
+              <strong >{{totalPrice | currency : '$'}}</strong>
+          </div>
 
-          <h5 class="d-inline-block">Total quantity :</h5>
-          <strong class="float-end">{{totalQuantity}}</strong>
+        <div class="d-flex justify-content-around">
+            <h5>Total quantity :</h5>
+            <strong class="">{{totalQuantity}}</strong>
+        </div>
+
 
       </mat-card>
 

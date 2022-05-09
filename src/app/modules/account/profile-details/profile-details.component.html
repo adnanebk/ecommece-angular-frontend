@@ -26,9 +26,8 @@
                     <app-input *ngIf="!user.social" appearance="standard"   matIcon="email" label="Email address" [control]="profileForm.controls['email']" >
                         <mat-error>{{this.getApiError('email')}}</mat-error>
                     </app-input>
-                    <app-input  appearance="standard"   matIcon="location_on" label="Contry" [control]="profileForm.controls['country']" >
-                        <mat-error>{{this.getApiError('country')}}</mat-error>
-                    </app-input>
+                    <app-select appearance="standard" placeholder="Select a country"  [items]="['Morocco','Egypt','Algeria','Tunisia']"   [control]="profileForm.controls['country']" >
+                    </app-select>
                     <app-input  appearance="standard" matIcon="location_on" label="City" [control]="profileForm.controls['city']" >
                         <mat-error>{{this.getApiError('city')}}</mat-error>
                     </app-input>
