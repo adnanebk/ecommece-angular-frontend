@@ -9,7 +9,7 @@
     </div>
 
 
-    <div *ngIf="isBatchEnabled" class="d-inline">pageChanged
+    <div *ngIf="isBatchEnabled" class="d-inline">
       <button (click)="updateAll()" class="btn btn-info m-2">Update all</button>
       <button [disabled]="!selectedSize" (click)="removeAll()" class="btn btn-danger">Remove selected rows</button>
     </div>
