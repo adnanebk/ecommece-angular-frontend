@@ -22,7 +22,7 @@ export class HttpErrorHandlerService {
                   this.authService.logout();
                 return this.authService.refreshJwtToken().pipe(
                     switchMap((authData) => next.handle(AuthInterceptor.createRequestWithToken(originalRequest, authData.token))),
-                    catchError((resp) => this.handleError(resp,originalRequest,next))
+                    catchError((err) => this.handleError(err,originalRequest,next))
                      );
               }
              if(status===403 && error?.code==='user.not.enabled')

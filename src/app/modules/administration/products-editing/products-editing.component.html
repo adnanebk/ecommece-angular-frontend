@@ -8,7 +8,7 @@
             <ng-container *ngIf="dataSource.data.length">
                 <button (click)="saveToExcel()" class="btn btn-primary rounded my-2 mx-5">download excel</button>
                 <div class="input-group mx-3">
-                    <b for="formFile" class="fs-5" >Insert from excel</b>
+                    <strong for="formFile" class="fs-5" >Insert from excel</strong>
                     <div >
                         <input #file class="form-control" accept=".xlsx,.xls" (change)="insertFromExcel(file)" type="file" id="formFile">
                     </div>
