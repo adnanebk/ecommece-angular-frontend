@@ -1,5 +1,5 @@
 
-  <div class="m-2">
+  <div class="m-2" *ngIf="enableMultiEditing">
     <div  class="custom-control custom-switch">
       <div class="form-check form-switch fs-4">
         enable multi editing
@@ -43,7 +43,7 @@
     <tbody>
     <tr *ngFor="let el of data; let idx= index;trackBy: trackByFn">
 
-      <td class="p-1 align-middle"  [class]="isDirty(el)?'bgDirty':''" >
+      <td class="p-1 align-middle actions" [class]="isDirty(el)?'bgDirty':''" >
       <span *ngIf="!isBatchEnabled" class="table-edit">
         <ng-container *ngIf="el!==currentElement">
         <button (click)="onViewChanged(el)" type="button"
@@ -80,7 +80,7 @@
 
      <div class="py-2 text-center" *ngIf="(isCurrentElement(el) || isBatchEnabled) && !field.readOnly"   >
 
-         <input *ngIf="field.type==='text'" type="text" [(ngModel)]="el[field.name]" (input)="onValueChanged(el,this.field)"  class="w-auto form-control bg-transparent"  />
+         <input *ngIf="field.type==='text'" type="text" [(ngModel)]="el[field.name]" (input)="onValueChanged(el,this.field)"  class=" form-control bg-transparent"  />
          <input *ngIf="field.type==='number'" type="number" [(ngModel)]="el[field.name]"   (input)="onValueChanged(el,this.field)"  class="form-control bg-transparent"   />
          <input *ngIf="field.type==='decimal'"  [(ngModel)]="el[field.name]"    (input)="onValueChanged(el,this.field)"  class="form-control bg-transparent"   />
          <input *ngIf="field.type==='date'" type="date" [(ngModel)]="el[field.name]"   (input)="onValueChanged(el,this.field)"   class="form-control bg-transparent"  />

@@ -19,7 +19,7 @@ export class CategoryService {
   }
 
 
-  getProductCategories(): Observable<Category[]> {
+  getCategories(): Observable<Category[]> {
 
     return this.httpClient.get<PagedResponse>(this.categoryUrl).pipe(
       timeout(this.timeOut), retry(this.retry), map(response => response._embedded.productCategory)

@@ -4,7 +4,7 @@ import {CategoryService} from "../../../core/services/category.service";
 import {ProductService} from "../../../core/services/product.service";
 import {Product} from "../../../core/models/product";
 import {DataSource, Field} from "../../../shared/editable-table/editable-table.component";
-import {ProductPage} from "../../../core/models/productPage";
+import {DataPage} from "../../../core/models/dataPage";
 import {saveAs} from 'file-saver';
 
 const fields: Field[] = [new Field('sku','Sku'), new Field('name','Name'),
@@ -20,7 +20,7 @@ const fields: Field[] = [new Field('sku','Sku'), new Field('name','Name'),
 })
 export class ProductsEditingComponent  implements OnInit {
 
-  productPage: ProductPage = {pageSize:8,page:1,sort:'lastUpdated',direction:'desc'};
+  productPage: DataPage = {pageSize:8,page:1,sort:'lastUpdated',direction:'desc'};
   dataSource =  new DataSource<Product>();
 
   constructor(private productService: ProductService, private categoryService: CategoryService, private toastrService: ToastrService,
@@ -35,14 +35,14 @@ export class ProductsEditingComponent  implements OnInit {
   }
 
   private fetchCategories() {
-    this.categoryService.getProductCategories().subscribe(resp => {
+    this.categoryService.getCategories().subscribe(resp => {
             this.dataSource.nestedObjects.set('category', {valueField: 'id', displayField: 'name', options: resp});
         }
     );
   }
 
   fetchProducts() {
-    this.productService.gePagedProducts(this.productPage).subscribe(resp => {
+    this.productService.getPagedProducts(this.productPage).subscribe(resp => {
         this.productPage.totalSize = resp.page.totalElements;
         this.dataSource.data=resp.data;
         this.dataSource.totalSize=this.productPage.totalSize;

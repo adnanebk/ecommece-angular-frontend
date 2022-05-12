@@ -18,12 +18,12 @@
                         </mat-form-field>
                         <mat-form-field appearance="fill" class="w-auto" >
                             <mat-label><strong>Categories</strong></mat-label>
-                            <mat-select [(ngModel)]="productPage.categoryId" name="category" (selectionChange)="getPagedProducts()" >
+                            <mat-select [(ngModel)]="selectedCategoryId" name="category" (selectionChange)="getPagedProducts()" >
                                 <mat-option [value]="">
                                     All
                                 </mat-option>
-                                <mat-option *ngFor="let op of categoryOptions"  [value]="op.value">
-                                    {{op.display}}
+                                <mat-option *ngFor="let op of categories"  [value]="op.id">
+                                    {{op.name}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>

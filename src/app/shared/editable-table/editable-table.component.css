@@ -8,7 +8,10 @@
   resize: both;
   min-width: 300px;
 }
-
+.actions{
+  width: 90px;
+  margin: auto;
+}
 .td-width{
   min-width: 100px;
 }
@@ -19,7 +22,6 @@
 img {
   width: 80px;
 }
-
 .number-input {
   width: 80px !important;
 }
