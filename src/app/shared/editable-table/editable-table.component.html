@@ -74,7 +74,7 @@
        <strong *ngIf="field.type==='textArea'"> {{el[field.name] | limitTo :'60'}}</strong>
        <strong *ngIf="field.type==='date'"> {{el[field.name] | date :'short'}}</strong>
        <strong *ngIf="field.type==='bool'"> {{el[field.name]?'Yes':'No'}}</strong>
-       <strong *ngIf="field.type==='select'"> {{el[field.name][selects.get(field.name)!.displayField]}}</strong>
+       <strong *ngIf="field.type==='select'"> {{el[field.name][selects.get(field.name)?.displayField || '']}}</strong>
        <img *ngIf="field.type === 'image'" [src]="el[field.name]" alt=""/>
      </div>
 

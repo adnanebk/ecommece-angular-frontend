@@ -125,6 +125,11 @@ export class EditableTableComponent implements OnInit,OnDestroy{
     this.removeError(field.name);
   }
     cancelChange(){
+        if(this.isNew(this.currentElement))
+        {
+            this.data.splice(0,1);
+            return;
+        }
         Object.assign(this.currentElement, this.originalElement);
         this.currentElement={};
     }
