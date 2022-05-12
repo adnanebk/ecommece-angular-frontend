@@ -4,7 +4,7 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../environments/environment.prod";
 import {PagedResponse} from "../models/pagedResponse";
 import {Product} from "../models/product";
-import {ProductPage} from "../models/productPage";
+import {DataPage} from "../models/dataPage";
 
 @Injectable({
   providedIn: 'root'
@@ -24,8 +24,8 @@ export class ProductService {
     return [{value:'name',display:'Name'},{value:'dateCreated',display:'Newest'},{value:'unitPrice',display:'Price'}];
   }
 
-  gePagedProducts(productPage: ProductPage) {
-    const url = this.getUrl(productPage);
+  getPagedProducts(productPage: DataPage, categoryId?: number) {
+    const url = this.getUrl(productPage,categoryId);
 
     return this.httpClient.get<PagedResponse>(url)
       .pipe(timeout(this.timeOut), retry(this.retry), map((response) => {
@@ -34,8 +34,8 @@ export class ProductService {
       );
   }
 
-  private getUrl(productPage: ProductPage) {
-    let {page, pageSize, direction, sort = 'dateCreated', categoryId, searchValue} = productPage;
+  private getUrl(productPage: DataPage,categoryId?: number) {
+    let {page, pageSize, direction, sort = 'dateCreated', searchValue} = productPage;
     if (!direction)
       direction = sort === 'dateCreated' ? 'desc' : 'asc';
     const pagePath=`page=${page - 1}&size=${pageSize}&sort=${sort},${direction}`;

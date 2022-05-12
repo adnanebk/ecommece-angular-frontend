@@ -2,8 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {Product} from "../../core/models/product";
 import {Option, ProductService} from "../../core/services/product.service";
 import {ActivatedRoute} from "@angular/router";
-import {ProductPage} from "../../core/models/productPage";
+import {DataPage} from "../../core/models/dataPage";
 import {CategoryService} from "../../core/services/category.service";
+import {Category} from "../../core/models/category";
 
 @Component({
     selector: 'app-products',
@@ -13,12 +14,13 @@ import {CategoryService} from "../../core/services/category.service";
 export class ProductsComponent implements OnInit {
 
     products: Product[] = [];
+    selectedCategoryId?:number;
 
-    productPage: ProductPage = {pageSize:16,page:1};
+    productPage: DataPage = {pageSize:16,page:1};
     isLoaded = false;
 
     sortOptions:  Option[]=[];
-    categoryOptions: Option[]=[];
+    categories: Category[]=[];
 
     constructor(private productService: ProductService, private route: ActivatedRoute, private categoryService: CategoryService) {
     }
@@ -34,7 +36,7 @@ export class ProductsComponent implements OnInit {
     getPagedProducts(page=1) {
         this.productPage.page=page;
         this.productService
-            .gePagedProducts(this.productPage)
+            .getPagedProducts(this.productPage,this.selectedCategoryId)
             .subscribe(
                 resp => {
                     this.mapDataFromResponse(resp);
@@ -51,8 +53,8 @@ export class ProductsComponent implements OnInit {
 
 
     private getCategories() {
-        this.categoryService.getProductCategories()
-            .subscribe(categories => this.categoryOptions = categories.map(category =>  ({value:category.id,display:category.name})));
+        this.categoryService.getCategories()
+            .subscribe(categories => this.categories = categories);
     }
 
 }

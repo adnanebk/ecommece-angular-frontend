@@ -1,5 +1,4 @@
-export interface ProductPage {
-    categoryId?: number;
+export interface DataPage {
     searchValue?: string;
     page : number;
     pageSize : number;

@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="">
     <div class="section-content section-content text-center">
         <div  class="container-fluid">
             <h3 class="card-headchangeProductswitcher text-center font-weight-bold text-uppercase py-4">Manage products</h3>
@@ -21,6 +21,7 @@
 
                 <app-editable-table (dataUpdated)="updateProduct($event)"
                                     [datasource]="dataSource"
+                                    [enableMultiEditing]="true"
                                     (dataAdded)="addProduct($event)"
                                     (dataPaged)="onPageChanged($event)"
                                     (dataDeleted)="removeProduct($event)"

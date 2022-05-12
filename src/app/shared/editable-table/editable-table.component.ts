@@ -11,13 +11,13 @@ import {ConfirmComponent} from "../confirm-dialogue/confirm.component";
   styleUrls: ['./editable-table.component.css']
 })
 export class EditableTableComponent implements OnInit,OnDestroy{
-
   @Output() dataUpdated = new EventEmitter<any>();
   @Output() dataAdded = new EventEmitter<any>();
   @Output() dataDeleted = new EventEmitter<any>();
   @Output() dataSorted = new EventEmitter<{ sort: string, direction: string }>();
   @Output() dataPaged = new EventEmitter<{page:number,pageSize:number}>();
   @Input() datasource!: DataSource<any>;
+  @Input() enableMultiEditing = false;
   @Output() UpdateAll = new EventEmitter<any[]>();
   @Output() RemoveAll = new EventEmitter<any[]>();
 

@@ -5,6 +5,8 @@ import {SharedModule} from "../../shared/shared.module";
 import {LayoutComponent} from "../../shared/layout/layout.component";
 import {ProductsEditingComponent} from '../administration/products-editing/products-editing.component';
 import {NgbAlertModule} from "@ng-bootstrap/ng-bootstrap";
+import {AdministrationComponent} from './administration/administration.component';
+import {CategoriesEditingComponent} from './categories-editing/categories-editing.component';
 
 
 const routes: Routes = [
@@ -12,7 +14,7 @@ const routes: Routes = [
     path: '',
     component: LayoutComponent,
     children: [
-      { path: 'admin/products-editing', component: ProductsEditingComponent }
+      { path: 'admin/products-editing', component: AdministrationComponent }
     ]
   }
 ];
@@ -20,7 +22,9 @@ const routes: Routes = [
 
 @NgModule({
     declarations: [
-        ProductsEditingComponent
+        ProductsEditingComponent,
+        AdministrationComponent,
+        CategoriesEditingComponent
     ],
     providers : [DatePipe],
     imports: [
