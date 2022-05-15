@@ -84,7 +84,7 @@ export class AuthService {
    enableUser() {
       let localUser = this.getCurrentUser();
       if(localUser && !localUser.enabled){
-        this.userService.getByEmail(localUser.email).subscribe(user=>{
+        this.userService.getCurrentAuthUser().subscribe(user=>{
             if(user.enabled)
             {
                 this.toastrService.success('you have successfully verified your account');

@@ -37,11 +37,11 @@ export class UserService {
 
   }
   sendActivationMessage(email: string) {
-    return this.httpClient.patch<void>(this.baseUrl + 'auth/confirm', email);
+    return this.httpClient.patch<void>(this.baseUrl + 'auth/send-confirmation', email);
   }
 
-  getByEmail(email: string) {
-    return this.httpClient.get<AppUser>(this.baseUrl + 'user/email/' + email);
+  getCurrentAuthUser() {
+    return this.httpClient.get<AppUser>(this.baseUrl + 'auth/current-user');
   }
 
 

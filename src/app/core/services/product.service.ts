@@ -61,7 +61,7 @@ export class ProductService {
   }
 
    updateProduct(product: Product) {
-     return this.httpClient.put<Product>(this.productUrlV2,this.getFormData(product));
+     return this.httpClient.put<Product>(this.productUrlV2+'/'+product.id,this.getFormData(product));
 
   }
   private  getFormData(product:Product) {
