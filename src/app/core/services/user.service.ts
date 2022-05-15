@@ -37,11 +37,11 @@ export class UserService {
 
   }
   sendActivationMessage(email: string) {
-    return this.httpClient.patch<void>(this.baseUrl + 'auth/send-confirmation', email);
+    return this.httpClient.patch<void>(this.baseUrl + 'auth/user/send-confirmation', email);
   }
 
   getCurrentAuthUser() {
-    return this.httpClient.get<AppUser>(this.baseUrl + 'auth/current-user');
+    return this.httpClient.get<AppUser>(this.baseUrl + 'auth/user');
   }
 
 
@@ -50,7 +50,7 @@ export class UserService {
   }
 
   updateUserPassword(changePassword:ChangePassword) {
-    return this.httpClient.patch(this.baseUrl + 'user/change-password', changePassword);
+    return this.httpClient.patch(this.baseUrl + 'auth/user/change-password', changePassword);
   }
 
 
