@@ -106,7 +106,7 @@ export class AuthService {
       }
       return this.userService.refreshMyToken(token).pipe(
          tap(resp => {
-          resp = {...resp,appUser:this.getCurrentUser()}
+          resp = {...resp,appUser:this.getCurrentUser()!};
           this.saveAuthDataToStorage(resp);
           this.toastrService.info("new token has been requested");
         })
