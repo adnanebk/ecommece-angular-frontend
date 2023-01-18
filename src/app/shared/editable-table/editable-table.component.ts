@@ -23,7 +23,6 @@ export class EditableTableComponent implements OnInit,OnDestroy{
 
   isBatchEnabled = false;
   selectedSize = 0;
-  selectedElements = 0;
   currentElement: DataType = {};
   originalElement: any = {};
   errors: {fieldName:string,message:string}[] = [];
@@ -46,6 +45,7 @@ export class EditableTableComponent implements OnInit,OnDestroy{
     let i = 0;
    this.subscriptions[i++] = this.datasource.onRowAdded.subscribe(row=> {
       this.data[0]=row;
+      this.currentElement.isNew=false;
       this.complete(0);
     });
       this.subscriptions[i++] =this.datasource.onRowUpdated.subscribe(row=>{
@@ -54,10 +54,13 @@ export class EditableTableComponent implements OnInit,OnDestroy{
       this.complete(index);
     });
       this.subscriptions[i++] =this.datasource.onRowsAdded.subscribe(rows=>{
-       this.data.unshift(rows);
+          console.log(rows)
+       rows.forEach(r=>this.datasource.data.unshift(r));
     })
       this.subscriptions[i++] =this.datasource.onRowsUpdated.subscribe(rows=>{
+          console.log(rows);
       this.datasource.data= this.data.map(row=>rows.find(r=>r[this.identifier]===row[this.identifier]) || row);
+          console.log(this.datasource.data);
     });
       this.subscriptions[i++] =this.datasource.onRowErrors.subscribe(resp=>{
       this.errors= resp;
@@ -81,16 +84,17 @@ export class EditableTableComponent implements OnInit,OnDestroy{
 
   insertNewRow(tableContent: HTMLDivElement) {
       tableContent.scrollTop = 0;
-    if (!this.isNew(this.data[0])) {
+    if (!this.data[0].isNew) {
         Object.assign(this.currentElement, this.originalElement);
-        this.currentElement = {};
+        this.currentElement = {isNew:true};
+        this.fields.forEach(field=>this.currentElement[field.name]=undefined)
       this.data.unshift(this.currentElement);
     }
   }
   onSave(element:DataType) {
     this.errors = [];
     element.isSaving=true;
-    this.isNew(element) ? this.dataAdded.emit(element) : this.dataUpdated.emit(element);
+    element.isNew ? this.dataAdded.emit(element) : this.dataUpdated.emit(element);
   }
 
   remove(element: any) {
@@ -125,7 +129,7 @@ export class EditableTableComponent implements OnInit,OnDestroy{
     this.removeError(field.name);
   }
     cancelChange(){
-        if(this.isNew(this.currentElement))
+        if(this.currentElement.isNew)
         {
             this.data.splice(0,1);
             return;
@@ -134,16 +138,15 @@ export class EditableTableComponent implements OnInit,OnDestroy{
         this.currentElement={};
     }
   onViewChanged(element: any) {
-      this.datasource.uploadedFiles.clear();
-    if (this.isCurrentElement(element) || this.isBatchEnabled ) {
+    if (this.isCurrentElement(element) || this.isBatchEnabled )
       return;
-    }
+
       this.errors = [];
-    if(this.isNew(this.currentElement))
-    {
+      console.log(this.currentElement);
+      console.log('new-',this.currentElement);
+    if(this.currentElement.isNew)
          this.data.splice(0,1);
-        return;
-    }
+
 
 
     this.currentElement.dirty=false;
@@ -158,25 +161,26 @@ export class EditableTableComponent implements OnInit,OnDestroy{
   }
 
 
-  uploadFile(element:DataType, fieldName: string, file: File) {
+  uploadFile(element:DataType, property: string, file: File) {
+      console.log('file--',property);
     this.errors = [];
     element.dirty = true;
-    element[fieldName] = file.name;
-    this.datasource.uploadedFiles.set(fieldName,file);
+    element[property] = file.name;
+    this.datasource.uploadedFiles.push({property, file});
   }
 
 
   sort(sort: string, icon: HTMLElement) {
     let direction = '';
     if (icon.classList.contains('fa-sort-up')) {
-      direction = 'desc';
+      direction = 'DESC';
       icon.classList.replace('fa-sort-up', 'fa-sort-down');
     } else if (icon.classList.contains('fa-sort-down')) {
       icon.classList.replace('fa-sort-down', 'fa-sort-up');
-      direction = 'asc';
+      direction = 'ASC';
     } else {
       icon.classList.add('fa-sort-up');
-      direction = 'asc';
+      direction = 'ASC';
     }
     this.dataSorted.emit({sort, direction});
   }
@@ -218,9 +222,7 @@ export class EditableTableComponent implements OnInit,OnDestroy{
     return ((item1 && item2) && item1.id === item2.id) || item1 === item2;
   }
 
-  isNew(el: any) {
-    return el===this.data[0] && !el[this.identifier];
-  }
+
   isDirty(el: DataType) {
     return el.dirty && (this.isCurrentElement(el) || this.isBatchEnabled);
   }
@@ -280,13 +282,14 @@ export class DataSource<Type> {
   onRowsRemoved = new  Subject<Type[]>();
   identifier='id'
   totalSize=0;
-  uploadedFiles = new Map<string,File>();
+  uploadedFiles: {property:string,file:File}[]=[];
   nestedObjects=new Map<string, {displayField: string; valueField: string; options: any[]}>();
 
 }
 
 type DataType = any | {
    dirty: boolean;
+   isNew: boolean;
    isSaving: boolean;
    selected: boolean;
 }

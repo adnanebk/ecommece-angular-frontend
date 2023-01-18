@@ -12,7 +12,7 @@ import {ToastrService} from "ngx-toastr";
 })
 export class CategoriesEditingComponent implements OnInit {
 
-  dataPage: DataPage = {pageSize:8,page:1};
+  dataPage: DataPage = {size:8,number:1};
   dataSource =  new DataSource<Category>();
 
   constructor( private categoryService: CategoryService, private toastrService: ToastrService,
@@ -62,8 +62,8 @@ export class CategoriesEditingComponent implements OnInit {
 
 
   sortCategorys({sort, direction}:any) {
-    this.dataPage.sort = sort;
-    this.dataPage.direction = direction;
+    this.dataPage.sortProperty = sort;
+    this.dataPage.sortDirection = direction;
     this.fetchCategories();
   }
 

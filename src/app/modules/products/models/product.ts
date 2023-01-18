@@ -1,4 +1,4 @@
-import {Category} from "./category";
+import {Category} from "../../../core/models/category";
 
 export interface Product {
   id: number;
@@ -12,7 +12,7 @@ export interface Product {
   category: Category;
   dateCreated: Date;
   lastUpdated: Date;
-  file?: File;
+  imageFile?: any;
 }
 
 

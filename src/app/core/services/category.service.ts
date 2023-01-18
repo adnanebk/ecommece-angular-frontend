@@ -11,7 +11,7 @@ import {PagedResponse} from "../models/pagedResponse";
 })
 export class CategoryService {
 
-  private categoryUrl = environment.path + 'product-categories';
+  private categoryUrl = environment.path + 'categories';
   private timeOut = 100000;
   private retry = 4;
 
@@ -21,9 +21,8 @@ export class CategoryService {
 
   getCategories(): Observable<Category[]> {
 
-    return this.httpClient.get<PagedResponse>(this.categoryUrl).pipe(
-      timeout(this.timeOut), retry(this.retry), map(response => response._embedded.productCategory)
-    );
+    return this.httpClient.get<Category[]>(this.categoryUrl).pipe(
+      timeout(this.timeOut), retry(this.retry));
   }
 
   saveCategory(productCategory: Category): Observable<Category> {

@@ -1,8 +1,8 @@
 export interface DataPage {
-    searchValue?: string;
-    page : number;
-    pageSize : number;
+    search?: string;
+    number : number;
+    size : number;
     totalSize? : number;
-    sort? : string;
-    direction?: string;
+    sortProperty? : string;
+    sortDirection?: 'ASC' | 'DESC';
 }

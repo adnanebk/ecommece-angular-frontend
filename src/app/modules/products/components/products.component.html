@@ -7,38 +7,38 @@
 
         </div>
 
-        <div class="container py-5">
+        <div class="container py-5" *ngIf="pagedProducts$ | async as pagedProducts" >
             <div class="row">
                 <div class="col-lg-12">
                     <div class="row">
                         <mat-form-field appearance="fill"  >
                             <mat-label><strong>Search</strong></mat-label>
-                            <input [(ngModel)]="productPage.searchValue" matInput placeholder="search..." (keyup.enter)="getPagedProducts()">
-                            <mat-icon (click)="getPagedProducts()" role="button"  matSuffix>search</mat-icon>
+                            <input [(ngModel)]="productPage.search" matInput placeholder="search..." (keyup.enter)="getProductsInPage()">
+                            <mat-icon (click)="searchProducts()" role="button"  matSuffix>search</mat-icon>
                         </mat-form-field>
-                        <mat-form-field appearance="fill" class="w-auto" >
+                        <mat-form-field *ngIf="categories$ | async as categories" appearance="fill" class="w-auto" >
                             <mat-label><strong>Categories</strong></mat-label>
-                            <mat-select [(ngModel)]="selectedCategoryId" name="category" (selectionChange)="getPagedProducts()" >
+                            <mat-select [(ngModel)]="selectedCategoryName" name="category" (selectionChange)="getProductsInPage()" >
                                 <mat-option [value]="">
                                     All
                                 </mat-option>
-                                <mat-option *ngFor="let op of categories"  [value]="op.id">
+                                <mat-option *ngFor="let op of categories"  [value]="op.name">
                                     {{op.name}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
                         <mat-form-field appearance="fill" class="w-auto" >
                             <mat-label><strong>Sort by</strong></mat-label>
-                            <mat-select [(ngModel)]="productPage.sort" name="sort" (selectionChange)="getPagedProducts()" >
-                                <mat-option *ngFor="let op of sortOptions"  [value]="op.value">
-                                    {{op.display}}
+                            <mat-select name="sort" [(ngModel)]="selectedFilter" (selectionChange)="getProductsByFilter()" >
+                                <mat-option *ngFor="let filter of filters"  [value]="filter">
+                                    {{filter.display}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
 
                     </div>
-                    <div class="row">
-                        <div  class="col-md-3" *ngFor="let product of products ">
+                    <div class="row" >
+                        <div  class="col-md-3" *ngFor="let product of pagedProducts.content ">
 
                         <app-product [product]="product"></app-product>
                         </div>
@@ -48,9 +48,9 @@
                     <div class="row">
                         <div class="justify-content-start  ">
 
-                            <ngb-pagination  [collectionSize]="productPage.totalSize ?? products.length" [(page)]="productPage.page" size="lg"
-                                            [pageSize]="productPage.pageSize"  [maxSize]="4" [boundaryLinks]="true"
-                                            (pageChange)="getPagedProducts($event)"
+                            <ngb-pagination [collectionSize]="pagedProducts.totalElements" [(page)]="productPage.number" size="lg"
+                                            [pageSize]="productPage.size" [maxSize]="4" [boundaryLinks]="true"
+                                            (pageChange)="getProductsInPage()"
                             ></ngb-pagination>
                         </div>
                     </div>

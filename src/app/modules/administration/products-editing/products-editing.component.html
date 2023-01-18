@@ -8,14 +8,14 @@
             <ng-container *ngIf="dataSource.data.length">
                 <button (click)="saveToExcel()" class="btn btn-primary rounded my-2 mx-5">download excel</button>
                 <div class="input-group mx-3">
-                    <strong for="formFile" class="fs-5" >Insert from excel</strong>
-                    <div >
-                        <input #file class="form-control" accept=".xlsx,.xls" (change)="insertFromExcel(file)" type="file" id="formFile">
+                    <strong for="formFile" class="fs-5" >Add/Update from excel</strong>
+                    <div>
+                        <input #file class="form-control" accept=".xlsx,.xls" (change)="addOrUpdateFromExcel(file)" type="file" id="formFile">
                     </div>
                 </div>
                 <mat-form-field appearance="fill" class="w-100">
                     <mat-label><strong>Search</strong></mat-label>
-                    <input [(ngModel)]="productPage.searchValue" matInput placeholder="search..." (keyup.enter)="fetchProducts()">
+                    <input [(ngModel)]="productPage.search" matInput placeholder="search..." (keyup.enter)="fetchProducts()">
                     <mat-icon (click)="fetchProducts()" role="button" matSuffix>search</mat-icon>
                 </mat-form-field>
 

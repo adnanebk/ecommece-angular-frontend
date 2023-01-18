@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ToastrService} from "ngx-toastr";
 import {CategoryService} from "../../../core/services/category.service";
-import {ProductService} from "../../../core/services/product.service";
-import {Product} from "../../../core/models/product";
+import {ProductService} from "../../products/services/product.service";
+import {Product} from "../../products/models/product";
 import {DataSource, Field} from "../../../shared/editable-table/editable-table.component";
 import {DataPage} from "../../../core/models/dataPage";
 import {saveAs} from 'file-saver';
@@ -20,7 +20,7 @@ const fields: Field[] = [new Field('sku','Sku'), new Field('name','Name'),
 })
 export class ProductsEditingComponent  implements OnInit {
 
-  productPage: DataPage = {pageSize:8,page:1,sort:'lastUpdated',direction:'desc'};
+  productPage: DataPage = {size:8,number:1,sortProperty:'lastUpdated',sortDirection:'DESC'};
   dataSource =  new DataSource<Product>();
 
   constructor(private productService: ProductService, private categoryService: CategoryService, private toastrService: ToastrService,
@@ -42,23 +42,23 @@ export class ProductsEditingComponent  implements OnInit {
   }
 
   fetchProducts() {
-    this.productService.getPagedProducts(this.productPage).subscribe(resp => {
-        this.productPage.totalSize = resp.page.totalElements;
-        this.dataSource.data=resp.data;
-        this.dataSource.totalSize=this.productPage.totalSize;
+      this.productService.getProductsInPage(this.productPage).subscribe(resp => {
+        this.dataSource.totalSize=this.productPage.totalSize = resp.totalElements;
+        this.dataSource.data=resp.content;
     });
   }
 
   addProduct(product:Product) {
-      product.file=this.dataSource.uploadedFiles.get('image');
-    this.productService.saveProduct(product).subscribe(resp => {
+      this.setProductImageFile(product);
+      this.productService.saveProduct(product).subscribe(resp => {
           this.dataSource.onRowAdded.next(resp);
            this.successAlert();
         }, errors => this.dataSource.onRowErrors.next(Array.from(errors)));
   }
 
-  updateProduct(product:Product) {
-      product.file=this.dataSource.uploadedFiles.get('image');
+
+    updateProduct(product:Product) {
+      this.setProductImageFile(product);
       this.productService.updateProduct(product).subscribe(resp => {
           this.dataSource.onRowUpdated.next(resp);
           this.successAlert();
@@ -86,14 +86,14 @@ export class ProductsEditingComponent  implements OnInit {
       this.successAlert();
     this.productService.deleteProducts($products.map(pr => pr.id)).subscribe(() => {
       this.dataSource.onRowsRemoved.next($products);
-      this.productPage.page++;
+      this.productPage.number++;
       this.fetchProducts();
     });
   }
 
   sortProducts({sort, direction}:any) {
-    this.productPage.sort = sort;
-    this.productPage.direction = direction;
+    this.productPage.sortProperty = sort;
+    this.productPage.sortDirection = direction;
     this.fetchProducts();
   }
 
@@ -110,11 +110,12 @@ export class ProductsEditingComponent  implements OnInit {
 
 
 
-    insertFromExcel($input: HTMLInputElement) {
+    addOrUpdateFromExcel($input: HTMLInputElement) {
         const file: File = $input.files![0];
-        this.productService.saveProductsFromExcel(file).subscribe(products => {
+        this.productService.addOrUpdateProductsFromExcel(file).subscribe(products => {
                 this.toastrService.success('your operation has been successful');
-                this.dataSource.onRowsAdded.next(products);
+                this.dataSource.onRowsUpdated.next(products.filter(pr=>this.dataSource.data.some(p=>p.id===pr.id)));
+                this.dataSource.onRowsAdded.next(products.filter(pr=>this.dataSource.data.some(p=>p.id!==pr.id)));
                 $input.value = '';
             },
             errors => {
@@ -124,9 +125,12 @@ export class ProductsEditingComponent  implements OnInit {
         );
     }
 
+    private setProductImageFile(product: Product) {
+        product.imageFile = this.dataSource.uploadedFiles.find(upFile => upFile.property === 'image')?.file;
+    }
     onPageChanged(pageData: {page:number,pageSize:number}) {
-        this.productPage.page=pageData.page;
-        this.productPage.pageSize=pageData.pageSize;
+        this.productPage.number=pageData.page;
+        this.productPage.size=pageData.pageSize;
         this.fetchProducts()
     }
 
