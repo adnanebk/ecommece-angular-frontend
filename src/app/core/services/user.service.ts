@@ -4,6 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {AppUser} from '../models/app-user';
 import {environment} from "../../../environments/environment.prod";
 import {UserProfile} from "../models/userProfile";
+import {SocialUserLogin} from "../models/socialUserLogin";
 
 
 @Injectable({
@@ -24,12 +25,12 @@ export class UserService {
     return this.httpClient.post<AuthData>(this.baseUrl + 'auth/login', user);
   }
 
-  googleLogin(data: { appUser: AppUser, token: string }) {
-    return this.httpClient.post<AuthData>(this.baseUrl + 'auth/login/google', data);
+  googleLogin(socialUserLogin: SocialUserLogin) {
+    return this.httpClient.post<AuthData>(this.baseUrl + 'auth/login/google', socialUserLogin);
   }
 
-  facebookLogin(data: { appUser: AppUser, token: string }) {
-    return this.httpClient.post<AuthData>(this.baseUrl + 'auth/login/facebook', data);
+  facebookLogin(socialUserLogin: SocialUserLogin) {
+    return this.httpClient.post<AuthData>(this.baseUrl + 'auth/login/facebook', socialUserLogin);
   }
 
   refreshMyToken(refreshToken: string) {

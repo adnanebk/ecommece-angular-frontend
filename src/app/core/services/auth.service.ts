@@ -5,6 +5,7 @@ import {FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialUse
 import {AppUser} from "../models/app-user";
 import {AuthData, UserService} from "./user.service";
 import {ToastrService} from "ngx-toastr";
+import {SocialUserLogin} from "../models/socialUserLogin";
 
 @Injectable({
   providedIn: 'root'
@@ -55,16 +56,16 @@ export class AuthService {
 
   async loginWithGoogle() {
     const socialUser = await this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
-    let appUser = this.mapUser(socialUser);
-     await lastValueFrom(this.userService.googleLogin({appUser, token: socialUser.idToken}).pipe(tap(response => {
-       this.saveAuthDataToStorage(response);
+     await lastValueFrom(this.userService.googleLogin(this.mapUser(socialUser))
+         .pipe(tap(response => {
+             this.saveAuthDataToStorage(response);
      })));
   }
 
   async loginWithFacebook() {
     const socialUser = await this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID);
-    let appUser = this.mapUser(socialUser);
-    await lastValueFrom(this.userService.facebookLogin({appUser, token: socialUser.authToken}).pipe(tap(response => {
+    await lastValueFrom(this.userService.facebookLogin(this.mapUser(socialUser))
+     .pipe(tap(response => {
       this.saveAuthDataToStorage(response);
     })));
   }
@@ -108,7 +109,7 @@ export class AuthService {
          tap(resp => {
           resp = {...resp,appUser:this.getCurrentUser()!};
           this.saveAuthDataToStorage(resp);
-          this.toastrService.info("new token has been requested");
+          this.toastrService.info("token has just been refreshed")
         })
       );
   }
@@ -140,9 +141,9 @@ export class AuthService {
         return this.getCurrentUser()?.roles?.some(role=>role.name.includes('ADMIN'));
     }
 
-  private mapUser(socialUser: SocialUser):AppUser {
-    const {firstName,lastName,email,photoUrl} = socialUser;
-    return {firstName,lastName,email,imageUrl:photoUrl} ;
+  private mapUser(socialUser: SocialUser):SocialUserLogin {
+    const {firstName,lastName,email,photoUrl,provider,authToken,idToken} = socialUser;
+    return {firstName,lastName,email,image:photoUrl,token: provider==='GOOGLE'?idToken:authToken} ;
   }
 
   private saveAuthDataToStorage(authData:AuthData) {
