@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {ApiError} from "../../../core/models/api-error";
-import {AuthService} from "../../../core/services/auth.service";
-import {UserService} from "../../../core/services/user.service";
+import {ApiError} from "../../../../core/models/api-error";
+import {AuthService} from "../../../../core/services/auth.service";
+import {UserService} from "../../../../core/services/user.service";
 import {ToastrService} from "ngx-toastr";
-import {AppUser} from "../../../core/models/app-user";
+import {AppUser} from "../../../../core/models/app-user";
 
 @Component({
   selector: 'app-profile-details',

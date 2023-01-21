@@ -3,10 +3,10 @@ import {CommonModule, DatePipe} from '@angular/common';
 import {RouterModule, Routes} from "@angular/router";
 import {SharedModule} from "../../shared/shared.module";
 import {LayoutComponent} from "../../shared/layout/layout.component";
-import {ProductsEditingComponent} from '../administration/products-editing/products-editing.component';
+import {ProductsEditingComponent} from './components/products-editing/products-editing.component';
 import {NgbAlertModule} from "@ng-bootstrap/ng-bootstrap";
-import {AdministrationComponent} from './administration/administration.component';
-import {CategoriesEditingComponent} from './categories-editing/categories-editing.component';
+import {AdministrationComponent} from './components/administration.component';
+import {CategoriesEditingComponent} from './components/categories-editing/categories-editing.component';
 
 
 const routes: Routes = [

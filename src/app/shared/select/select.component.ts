@@ -16,7 +16,6 @@ export class SelectComponent implements OnInit {
   @Input() placeholder = '';
   @Input() appearance : MatFormFieldAppearance ='outline' ;
 
-  constructor() { }
 
   get formControl(): FormControl {
     return this.control as FormControl;

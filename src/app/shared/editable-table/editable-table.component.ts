@@ -141,14 +141,10 @@ export class EditableTableComponent implements OnInit,OnDestroy{
     if (this.isCurrentElement(element) || this.isBatchEnabled )
       return;
 
-      this.errors = [];
-      console.log(this.currentElement);
-      console.log('new-',this.currentElement);
+    this.errors = [];
+
     if(this.currentElement.isNew)
          this.data.splice(0,1);
-
-
-
     this.currentElement.dirty=false;
       if(!this.currentElement.isSaving){
           // rollback

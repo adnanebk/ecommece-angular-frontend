@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {DataPage} from "../../../core/models/dataPage";
-import {DataSource, Field} from "../../../shared/editable-table/editable-table.component";
-import {Category} from "../../../core/models/category";
-import {CategoryService} from "../../../core/services/category.service";
+import {DataPage} from "../../../../core/models/dataPage";
+import {DataSource, Field} from "../../../../shared/editable-table/editable-table.component";
+import {Category} from "../../../../core/models/category";
+import {CategoryService} from "../../../../core/services/category.service";
 import {ToastrService} from "ngx-toastr";
 
 @Component({

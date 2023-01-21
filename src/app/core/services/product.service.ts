@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {retry, timeout} from "rxjs/operators";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {environment} from "../../../../environments/environment.prod";
-import {PagedResponse} from "../../../core/models/pagedResponse";
+import {environment} from "../../../environments/environment.prod";
+import {PagedResponse} from "../models/pagedResponse";
 import {Product} from "../models/product";
-import {DataPage} from "../../../core/models/dataPage";
+import {DataPage} from "../models/dataPage";
 
 @Injectable({
   providedIn: 'root'

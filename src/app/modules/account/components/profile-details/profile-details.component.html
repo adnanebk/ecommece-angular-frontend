@@ -3,7 +3,7 @@
     <div class="d-flex flex-column align-items-center image-width" >
 
          <img *ngIf="user.imageUrl" [src]="user.imageUrl"  referrerpolicy="no-referrer" class="circle " alt="You have no image">
-         <img *ngIf="!user.imageUrl" src="assets/images/user.png" class="circle" alt="You have no image">
+         <img *ngIf="!user.imageUrl" src="../../../../../assets/images/user.png" class="circle" alt="You have no image">
 
      <app-file-input [accepts]="['.jpg','.jpeg','.png']" class="input-file" *ngIf="!isImageUploading" (upload)="handleFileUpload($event)"></app-file-input>
         <div *ngIf="isImageUploading"  class="spinner-border text-primary align-self-center " role="status">

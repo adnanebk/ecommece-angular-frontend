@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {Product} from "../models/product";
-import {ProductService} from "../services/product.service";
+import {Product} from "../../../core/models/product";
+import {ProductService} from "../../../core/services/product.service";
 import {ActivatedRoute} from "@angular/router";
 import {DataPage} from "../../../core/models/dataPage";
 import {CategoryService} from "../../../core/services/category.service";

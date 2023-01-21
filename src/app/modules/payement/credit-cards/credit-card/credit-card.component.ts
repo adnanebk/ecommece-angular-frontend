@@ -14,7 +14,6 @@ export class CreditCardComponent {
   @Output() edit = new EventEmitter<CreditCard>();
   @Output() remove = new EventEmitter<CreditCard>();
   @Output() active = new EventEmitter<boolean>();
-  constructor() { }
 
 
 

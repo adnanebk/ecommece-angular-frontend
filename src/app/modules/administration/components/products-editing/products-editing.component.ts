@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {ToastrService} from "ngx-toastr";
-import {CategoryService} from "../../../core/services/category.service";
-import {ProductService} from "../../products/services/product.service";
-import {Product} from "../../products/models/product";
-import {DataSource, Field} from "../../../shared/editable-table/editable-table.component";
-import {DataPage} from "../../../core/models/dataPage";
+import {CategoryService} from "../../../../core/services/category.service";
+import {ProductService} from "../../../../core/services/product.service";
+import {Product} from "../../../../core/models/product";
+import {DataSource, Field} from "../../../../shared/editable-table/editable-table.component";
+import {DataPage} from "../../../../core/models/dataPage";
 import {saveAs} from 'file-saver';
 
 const fields: Field[] = [new Field('sku','Sku'), new Field('name','Name'),

@@ -1,10 +1,10 @@
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Component, OnInit} from '@angular/core';
-import {MustMatch} from "../../../shared/validators/mustMatch";
+import {MustMatch} from "../../../../shared/validators/mustMatch";
 import {ToastrService} from "ngx-toastr";
-import {AppUser} from "../../../core/models/app-user";
-import {ApiError} from "../../../shared/editable-table/editable-table.component";
-import {UserService} from "../../../core/services/user.service";
+import {AppUser} from "../../../../core/models/app-user";
+import {ApiError} from "../../../../shared/editable-table/editable-table.component";
+import {UserService} from "../../../../core/services/user.service";
 
 @Component({
   selector: 'app-change-password',
