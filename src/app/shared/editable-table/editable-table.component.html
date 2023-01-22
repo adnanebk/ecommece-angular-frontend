@@ -96,7 +96,7 @@
                      *ngFor="let op of selects.get(field.name)!.options">{{op[selects.get(field.name)!.displayField]}}</option>
          </select>
 
-         <app-file-input  [accepts]="['.jpg','.jpeg','.png']" (upload)="uploadFile(el,this.field.name,$event)" *ngIf="field.type === 'image' ">
+         <app-file-input [text]="el[field.name]"  [accepts]="['.jpg','.jpeg','.png']" (upload)="uploadFile(el,this.field.name,$event)" *ngIf="field.type === 'image' ">
 
          </app-file-input>
 

@@ -1,4 +1,4 @@
-import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {MatDialog} from "@angular/material/dialog";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {CreditCard} from "../../../core/models/CreditCard";
@@ -16,7 +16,7 @@ import {ApiError} from "../../../core/models/api-error";
 })
 export class CreditCardsComponent implements OnInit {
   cardForm!: FormGroup;
-
+  isEnableEditing = false;
   cardNames: any[] = [];
   errors: ApiError[]=[];
   constructor(public dialog: MatDialog,private creditCardService:CreditCardService, private modalService:NgbModal) {
@@ -60,10 +60,11 @@ export class CreditCardsComponent implements OnInit {
   }
 
   update() {
-      const _card = this.cardForm.getRawValue();
+      const _card = this.cardForm.getRawValue() as CreditCard;
       this.creditCardService.updateCreditCard(_card).subscribe(()=>{
       const  index =this.creditCards.findIndex(c=>c.id===_card.id);
-      this.creditCards[index]=_card;
+      const {cardNumber,cardType,expirationDate}=_card;
+      this.creditCards[index]={...this.creditCards[index],cardNumber,cardType,expirationDate};
       this.dialog.closeAll();
     },error => this.errors= Array.from(error));
   }
@@ -104,6 +105,10 @@ export class CreditCardsComponent implements OnInit {
 
   private getCurrenCreditCards() {
      this.creditCardService.getCreditCards().subscribe(cards=>this.creditCards=cards);
+  }
+
+  onCreditCardChange(cardNumber: any) {
+      this.isEnableEditing=!this.creditCards.some(card=>card.cardNumber===cardNumber?.replaceAll('-',''));
   }
 }
 

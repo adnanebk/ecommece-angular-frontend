@@ -30,13 +30,13 @@
         <mat-step [stepControl]="creditCardForm" label="Fill out payment information">
             <form [formGroup]="creditCardForm">
 
-                <app-select  [items]="cardNames"  selectValue="cardType" selectLabel="name" placeholder="Card type" [control]="creditCardForm.controls['cardType']">
+                <app-select [readonly]="!isEnableCardEditing" appearance="fill" [items]="cardNames" selectValue="cardType" selectLabel="name" placeholder="Card type" [control]="creditCardForm.controls['cardType']">
                     <mat-error>{{this.getApiError('cardType')}}</mat-error>
                 </app-select>
-                <app-input  matIcon="credit_card" label="Card number" [control]="creditCardForm.controls['cardNumber']">
+                <app-input (changeValue)="onCreditCardChange($event)"  matIcon="credit_card" label="Card number" [control]="creditCardForm.controls['cardNumber']">
                     <mat-error>{{this.getApiError('cardNumber')}}</mat-error>
                 </app-input>
-                <app-input  label="Expiration date" [control]="creditCardForm.controls['expirationDate']" >
+                <app-input [readonly]="!isEnableCardEditing" label="Expiration date" [control]="creditCardForm.controls['expirationDate']" >
                     <mat-error>{{this.getApiError('expirationDate')}}</mat-error>
                 </app-input>
 

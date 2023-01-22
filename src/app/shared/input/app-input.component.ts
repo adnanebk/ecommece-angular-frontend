@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {AbstractControl, FormControl} from "@angular/forms";
 import {MatFormFieldAppearance} from "@angular/material/form-field/form-field";
 
@@ -16,11 +16,8 @@ export class AppInputComponent  {
   @Input() matIcon = '';
   @Input() readonly = false;
   hidePassword = true;
-
-
-  hide= true;
-   controlName?: string;
   @Input() appearance: MatFormFieldAppearance='outline';
+  @Output() changeValue = new EventEmitter<any>();
 
 
   get formControl(): FormControl {
@@ -38,11 +35,9 @@ export class AppInputComponent  {
   }
 
 
-
-
-
-
-
+  onChange(value: any) {
+    this.changeValue.emit(value);
+  }
 }
 
 

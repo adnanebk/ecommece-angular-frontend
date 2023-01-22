@@ -1,7 +1,7 @@
 
 <mat-form-field [appearance]="appearance" class="w-100"  >
     <mat-label>{{placeholder}}</mat-label>
-    <mat-select [required]="formControl.hasError('required')" #inp [formControl]="formControl"  >
+    <mat-select   [disabled]="readonly" [required]="formControl.hasError('required')" #inp [formControl]="formControl"  >
         <mat-option *ngFor="let item of items" [value]="selectLabel?item[selectValue]:item">
             {{selectLabel?item[selectLabel]:item}}
         </mat-option>

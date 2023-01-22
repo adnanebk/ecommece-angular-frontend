@@ -6,7 +6,7 @@ import {SharedModule} from "../../shared/shared.module";
 import {LayoutComponent} from "../../shared/layout/layout.component";
 import {ProductDetailsComponent} from "./components/product-details/product-details.component";
 import {ProductComponent} from "./components/product/product.component";
-import {NgbPaginationModule} from "@ng-bootstrap/ng-bootstrap";
+import {NgbAlertModule, NgbPaginationModule} from "@ng-bootstrap/ng-bootstrap";
 
 
 const routes: Routes = [
@@ -34,6 +34,7 @@ const routes: Routes = [
         SharedModule,
         RouterModule.forChild(routes),
         NgbPaginationModule,
+        NgbAlertModule,
 
     ]
 })

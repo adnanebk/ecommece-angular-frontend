@@ -50,9 +50,15 @@ export class ProductsComponent implements OnInit {
 
     getProductsByFilter() {
         if(this.selectedFilter){
+            this.productPage.number=1;
             this.productPage.sortProperty=this.selectedFilter.property;
             this.productPage.sortDirection=this.selectedFilter.direction;
             this.getProductsInPage();
         }
+    }
+
+    getProductsBySelectedCategory() {
+        this.productPage.number=1;
+        this.getProductsInPage();
     }
 }

@@ -14,13 +14,13 @@
              <h1 mat-dialog-title>{{isNewCard?'Add new credit card':'Updating credit card'}}</h1>
 
              <div mat-dialog-content >
-                     <app-select appearance="fill"  [items]="cardNames"  selectValue="cardType" selectLabel="name" placeholder="Card type" [control]="cardForm.controls['cardType']">
+                     <app-select [readonly]="!isEnableEditing && !isNewCard" appearance="fill"  [items]="cardNames"  selectValue="cardType" selectLabel="name" placeholder="Card type" [control]="cardForm.controls['cardType']">
                          <mat-error>{{this.getApiError('cardType')}}</mat-error>
                      </app-select>
-                     <app-input appearance="fill" matIcon="credit_card" label="Card number" [control]="cardForm.controls['cardNumber']">
+                     <app-input (changeValue)="onCreditCardChange($event)" appearance="fill" matIcon="credit_card" label="Card number" [control]="cardForm.controls['cardNumber']" >
                          <mat-error>{{this.getApiError('cardNumber')}}</mat-error>
                      </app-input>
-                     <app-input appearance="fill" placeHolder="month/year, ex: mm/yy,10/30"  label="Expiration date" [control]="cardForm.controls['expirationDate']" >
+                     <app-input [readonly]="!isEnableEditing  && !isNewCard" appearance="fill" placeHolder="month/year, ex: mm/yy,10/30"  label="Expiration date" [control]="cardForm.controls['expirationDate']" >
                          <mat-error>{{this.getApiError('expirationDate')}}</mat-error>
                      </app-input>
              </div>

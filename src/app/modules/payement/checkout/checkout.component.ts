@@ -10,6 +10,7 @@ import {CardNumberFormControl} from "../../../shared/form-controls/card-number-f
 import {MonthYearFormControl} from "../../../shared/form-controls/month-year-form-control";
 import {Order} from "../../../core/models/order";
 import {OrderService} from "../../../core/services/order.service";
+import {CreditCard} from "../../../core/models/CreditCard";
 
 @Component({
   selector: 'app-checkout',
@@ -27,6 +28,8 @@ export class CheckoutComponent implements OnInit {
    totalQuantity: number=0;
    totalPrice: number=0;
    cardNames:any[]=[];
+   isEnableCardEditing = false;
+   defaultCard?: CreditCard;
 
   constructor(public formBuilder: FormBuilder, private cartService: CartService,
               private orderService: OrderService, private creditCardService: CreditCardService,
@@ -48,8 +51,8 @@ export class CheckoutComponent implements OnInit {
         this.customerForm.patchValue({...user,fullName:(user.firstName+ ' '+(user.lastName || '')).trim()});
         this.creditCardService.getCreditCards().subscribe((cards) => {
           if(cards?.length){
-            const defaultCard = cards.find(card => card.active);
-            this.creditCardForm.patchValue({...defaultCard});
+             this.defaultCard = cards.find(card => card.active);
+            this.creditCardForm.patchValue({...this.defaultCard});
           }
         });
       }
@@ -108,7 +111,10 @@ export class CheckoutComponent implements OnInit {
     const apiError = this.errors.find(err => err.fieldName ===fieldName);
     return apiError?.message;
   }
-  handleChange() {
-    this.errors = [];
-  }
+
+
+    onCreditCardChange(cardNumber: any) {
+      this.isEnableCardEditing=this.defaultCard?.cardNumber!==cardNumber?.replaceAll('-','');
+    }
+
 }

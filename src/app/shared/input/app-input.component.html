@@ -3,19 +3,19 @@
 
    <ng-container  *ngIf="inputType==='text' ||inputType==='number' " >
 
-       <input #inp matInput  [readonly]="readonly" [formControl]="formControl" [placeholder]="placeHolder"
+       <input [class.disabledInput]="readonly" (input)="onChange(inp.value)" #inp matInput  [readonly]="readonly" [formControl]="formControl" [placeholder]="placeHolder"
               [required]="formControl.hasError('required')" type="{{inputType}}" />
    </ng-container>
     <ng-container  *ngIf="inputType==='textArea'" >
-        <textarea autosize #inp [formControl]="formControl" matInput > </textarea>
+        <textarea (input)="onChange(inp.value)" autosize #inp [formControl]="formControl" matInput > </textarea>
    </ng-container>
     <ng-container  *ngIf="inputType==='decimal' " >
 
-        <input #inp matInput [readonly]="readonly" [formControl]="formControl" step="any"
+        <input (input)="onChange(inp.value)"  #inp matInput [readonly]="readonly" [formControl]="formControl" step="any"
                [required]="formControl.hasError('required')" type="{{inputType}}" />
     </ng-container>
     <ng-container *ngIf="inputType==='password'" >
-        <input #inp matInput [type]="hidePassword ? 'password' : 'text'" [formControl]="formControl" />
+        <input (input)="onChange(inp.value)" #inp matInput [type]="hidePassword ? 'password' : 'text'" [formControl]="formControl" />
     </ng-container>
     <mat-icon matSuffix *ngIf="inputType!=='password' && matIcon">
         {{matIcon}}
@@ -26,7 +26,7 @@
 
 
     <ng-container *ngIf="inputType==='date'">
-        <input #inp matInput [matDatepicker]="picker"  />
+        <input (input)="onChange(inp.value)" #inp matInput [matDatepicker]="picker"  />
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
     </ng-container>

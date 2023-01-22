@@ -18,6 +18,7 @@ export class FileInputComponent  {
 
       const reader = new FileReader();
       reader.addEventListener('load', () => {
+        console.log('---',file.name);
         this.upload.emit(file);
       });
       reader.readAsDataURL(file);

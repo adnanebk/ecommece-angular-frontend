@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AbstractControl, FormControl} from "@angular/forms";
 import {MatFormFieldAppearance} from "@angular/material/form-field/form-field";
 
@@ -11,11 +11,11 @@ export class SelectComponent implements OnInit {
 
   @Input()  control: AbstractControl=new FormControl();
   @Input() selectLabel = '';
+  @Input() readonly = false;
   @Input() selectValue = 'id';
   @Input() items: any[] = [];
   @Input() placeholder = '';
   @Input() appearance : MatFormFieldAppearance ='outline' ;
-
 
   get formControl(): FormControl {
     return this.control as FormControl;
@@ -34,6 +34,4 @@ export class SelectComponent implements OnInit {
     }
 
   }
-
-
 }
