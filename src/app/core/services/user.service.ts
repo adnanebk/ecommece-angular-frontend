@@ -46,8 +46,8 @@ export class UserService {
   }
 
 
-  updateUserProfile(profile: UserProfile, id: number) {
-    return this.httpClient.patch<AppUser>(this.baseUrl + 'user/' + id, profile);
+  updateUserProfile(profile: UserProfile, id?: number) {
+    return this.httpClient.patch<AppUser>(this.baseUrl + 'users/current', profile);
   }
 
   updateUserPassword(changePassword:ChangePassword) {
@@ -58,7 +58,7 @@ export class UserService {
     updateImage(file: File) {
       const formData = new FormData();
       formData.append('image', file);
-      return this.httpClient.patch<any>(this.baseUrl + 'user/upload-image',formData);
+      return this.httpClient.patch<any>(this.baseUrl + 'users/current/upload-image',formData);
 
     }
 
