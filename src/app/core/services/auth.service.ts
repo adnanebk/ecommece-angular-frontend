@@ -110,7 +110,8 @@ export class AuthService {
          tap(resp => {
           resp = {...resp,appUser:this.getCurrentUser()!};
           this.saveAuthDataToStorage(resp);
-          this.toastrService.info("token has just been refreshed")
+             this.isTokenExpired=false;
+             this.toastrService.info("token has just been refreshed")
         })
       );
   }
@@ -150,7 +151,6 @@ export class AuthService {
   private saveAuthDataToStorage(authData:AuthData) {
           localStorage.setItem('auth-data', JSON.stringify(authData));
           this.userSubject.next(authData.appUser);
-          this.isTokenExpired=false;
       }
 
 
