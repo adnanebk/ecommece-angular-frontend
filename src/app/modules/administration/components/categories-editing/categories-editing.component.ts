@@ -61,7 +61,7 @@ export class CategoriesEditingComponent implements OnInit {
 
 
 
-  sortCategorys({sort, direction}:any) {
+  sortCategories({sort, direction}:any) {
     this.dataPage.sortProperty = sort;
     this.dataPage.sortDirection = direction;
     this.fetchCategories();
