@@ -87,7 +87,9 @@ export class EditableTableComponent implements OnInit,OnDestroy{
     if (!this.data[0].isNew) {
         Object.assign(this.currentElement, this.originalElement);
         this.currentElement = {isNew:true};
-        this.fields.forEach(field=>this.currentElement[field.name]=undefined)
+        this.fields.forEach(field=>this.currentElement[field.name]=null)
+        this.errors = [];
+        console.log('----',this.currentElement);
       this.data.unshift(this.currentElement);
     }
   }

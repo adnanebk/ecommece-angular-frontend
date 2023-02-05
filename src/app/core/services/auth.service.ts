@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {tap} from 'rxjs/operators';
-import {BehaviorSubject, lastValueFrom} from 'rxjs';
+import {BehaviorSubject, catchError, lastValueFrom} from 'rxjs';
 import {FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialUser} from 'angularx-social-login';
 import {AppUser} from "../models/app-user";
 import {AuthData, UserService} from "./user.service";
@@ -13,7 +13,7 @@ import {SocialUserLogin} from "../models/socialUserLogin";
 export class AuthService {
   private userSubject = new BehaviorSubject<AppUser | null>(null);
   private isToastOpened = false;
-    public isTokenExpired = false;
+  public isTokenExpired = false;
 
 
   constructor(private userService: UserService, private socialAuthService: SocialAuthService, private toastrService: ToastrService) {
@@ -112,8 +112,12 @@ export class AuthService {
           this.saveAuthDataToStorage(resp);
              this.isTokenExpired=false;
              this.toastrService.info("token has just been refreshed")
-        })
-      );
+        }),
+          catchError( async er => {
+          this.logout();
+          return er;
+      }
+      ))
   }
 
   sendCompleteRegistrationNotification() {
