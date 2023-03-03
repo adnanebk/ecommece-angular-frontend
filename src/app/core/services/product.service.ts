@@ -80,7 +80,7 @@ export class ProductService {
   addOrUpdateProductsFromExcel(file: File) {
     const formData = new FormData();
     formData.append('file', file);
-    return this.httpClient.post<Product[]>(this.productUrl + '/excel', formData);
+    return this.httpClient.post<{ ADDED:Product[],UPDATED:Product[]}>(this.productUrl + '/excel', formData);
 
   }
 

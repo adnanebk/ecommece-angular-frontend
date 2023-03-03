@@ -114,8 +114,8 @@ export class ProductsEditingComponent  implements OnInit {
         const file: File = $input.files![0];
         this.productService.addOrUpdateProductsFromExcel(file).subscribe(products => {
                 this.toastrService.success('your operation has been successful');
-                this.dataSource.onRowsUpdated.next(products.filter(pr=>this.dataSource.data.some(p=>p.id===pr.id)));
-                this.dataSource.onRowsAdded.next(products.filter(pr=>this.dataSource.data.some(p=>p.id!==pr.id)));
+                this.dataSource.onRowsAdded.next(products?.ADDED);
+                this.dataSource.onRowsUpdated.next(products?.UPDATED);
                 $input.value = '';
             },
             errors => {
