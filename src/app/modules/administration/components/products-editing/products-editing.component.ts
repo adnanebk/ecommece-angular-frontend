@@ -36,7 +36,7 @@ export class ProductsEditingComponent  implements OnInit {
 
   private fetchCategories() {
     this.categoryService.getCategories().subscribe(resp => {
-            this.dataSource.nestedObjects.set('category', {valueField: 'id', displayField: 'name', options: resp});
+        this.dataSource.nestedObjects.push({property:'category',valueField: 'id', displayField: 'name', options: resp});
         }
     );
   }
@@ -51,7 +51,7 @@ export class ProductsEditingComponent  implements OnInit {
   addProduct(product:Product) {
       this.setProductImageFile(product);
       this.productService.saveProduct(product).subscribe(resp => {
-          this.dataSource.onRowAdded.next(resp);
+          this.dataSource.onDataChanged.next({type:'add',data:resp});
            this.successAlert();
         }, errors => this.dataSource.onRowErrors.next(Array.from(errors)));
   }
@@ -60,7 +60,7 @@ export class ProductsEditingComponent  implements OnInit {
     updateProduct(product:Product) {
       this.setProductImageFile(product);
       this.productService.updateProduct(product).subscribe(resp => {
-          this.dataSource.onRowUpdated.next(resp);
+          this.dataSource.onDataChanged.next({type:'update',data:resp});
           this.successAlert();
     }, errors =>   this.dataSource.onRowErrors.next(Array.from(errors)));
   }
@@ -68,7 +68,7 @@ export class ProductsEditingComponent  implements OnInit {
 
     updateProducts($products: Product[]) {
     this.productService.updateProducts($products).subscribe(products => {
-        this.dataSource.onRowsUpdated.next(products);
+        this.dataSource.onDataChanged.next({type:'updateAll',data:products});
             this.successAlert();
         },
         errors => Array.from(errors).length && this.toastrService.error(errors[0].message, 'Error'));
@@ -77,15 +77,15 @@ export class ProductsEditingComponent  implements OnInit {
   removeProduct(product:Product) {
               this.productService.removeProduct(product.id).subscribe(() => {
                   this.successAlert();
-                  this.dataSource.onRowRemoved.next(product);
+                  this.dataSource.onDataChanged.next({type:'delete',data:product});
           }
       )
   }
 
-  removeAllProducts($products: Product[]) {
-      this.successAlert();
-    this.productService.deleteProducts($products.map(pr => pr.id)).subscribe(() => {
-      this.dataSource.onRowsRemoved.next($products);
+  removeAllProducts(products: Product[]) {
+      this.successAlert(products.length+" items has been removed");
+    this.productService.deleteProducts(products.map(pr => pr.id)).subscribe(() => {
+      this.dataSource.onDataChanged.next({type:'deleteAll',data:products});
       this.productPage.number++;
       this.fetchProducts();
     });
@@ -113,9 +113,9 @@ export class ProductsEditingComponent  implements OnInit {
     addOrUpdateFromExcel($input: HTMLInputElement) {
         const file: File = $input.files![0];
         this.productService.addOrUpdateProductsFromExcel(file).subscribe(products => {
-                this.toastrService.success('your operation has been successful');
-                this.dataSource.onRowsAdded.next(products?.ADDED);
-                this.dataSource.onRowsUpdated.next(products?.UPDATED);
+                this.successAlert(products?.ADDED.length +" items has been added and "+products?.UPDATED.length+" items has been removed");
+                this.dataSource.onDataChanged.next({type:'addAll',data:products?.ADDED});
+                this.dataSource.onDataChanged.next({type: 'updateAll', data: products?.UPDATED});
                 $input.value = '';
             },
             errors => {
@@ -136,8 +136,8 @@ export class ProductsEditingComponent  implements OnInit {
 
 
 
-    private successAlert() {
-        this.toastrService.success('your operation has been successful');
+    private successAlert(msg='') {
+        this.toastrService.success('your operation has been successful '+msg);
     }
 
 }

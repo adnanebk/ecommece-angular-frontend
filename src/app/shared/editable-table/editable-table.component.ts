@@ -43,44 +43,41 @@ export class EditableTableComponent implements OnInit,OnDestroy{
 
     private handleDatasourceChanges() {
     let i = 0;
-   this.subscriptions[i++] = this.datasource.onRowAdded.subscribe(row=> {
-      this.data[0]=row;
-      this.currentElement.isNew=false;
-      this.complete(0);
+   this.subscriptions[i++] = this.datasource.onDataChanged.subscribe(resp=> {
+       const {data,type} = resp;
+       switch (type) {
+           case 'add':
+               this.data[0] = data;
+               this.currentElement.isNew = false;
+               break;
+           case 'delete':
+               this.datasource.data.splice(this.data.findIndex(r => r[this.identifier] === data[this.identifier]), 1);
+               break;
+           case 'update':
+               const index = this.data.findIndex(r => r[this.identifier] === data[this.identifier]);
+               this.data[index] = data;
+               this.data[index].isSaving=false;
+               break;
+           case 'deleteAll':
+               this.data.splice(this.data.findIndex(r => r[this.identifier] === data[this.identifier]), 1);
+               break;
+           case 'addAll':
+               data.forEach((r: any) => this.datasource.data.unshift(r))
+               break;
+           case 'updateAll':
+               this.datasource.data = data.map((row: any) => data.find((r: any) => r[this.identifier] === row[this.identifier]) || row);
+               break;
+       }
     });
-      this.subscriptions[i++] =this.datasource.onRowUpdated.subscribe(row=>{
-      const index = this.data.findIndex(r=>r[this.identifier]===row[this.identifier]);
-      this.data[index]=row;
-      this.complete(index);
-    });
-      this.subscriptions[i++] =this.datasource.onRowsAdded.subscribe(rows=>{
-          console.log(rows)
-       rows.forEach(r=>this.datasource.data.unshift(r));
-    })
-      this.subscriptions[i++] =this.datasource.onRowsUpdated.subscribe(rows=>{
-          console.log(rows);
-      this.datasource.data= this.data.map(row=>rows.find(r=>r[this.identifier]===row[this.identifier]) || row);
-          console.log(this.datasource.data);
-    });
+
       this.subscriptions[i++] =this.datasource.onRowErrors.subscribe(resp=>{
       this.errors= resp;
-      this.complete(this.data.indexOf(this.currentElement));
+          this.data[this.data.indexOf(this.currentElement)].isSaving=false;
     });
-      this.subscriptions[i++] =this.datasource.onRowRemoved.subscribe(row=>{
-       const index = this.data.findIndex(r=>r[this.identifier]===row[this.identifier]);
-       this.data.splice(index,1);
-     });
-      this.subscriptions[i] =this.datasource.onRowsRemoved.subscribe(rows=>{
-      rows.forEach(row=>{
-        const index = this.data.findIndex(r=>r[this.identifier]===row[this.identifier]);
-        this.data.splice(index,1);
-      })
-    })
+
   }
 
-  private complete(index:number){
-    this.data[index].isSaving=false;
-  }
+
 
   insertNewRow(tableContent: HTMLDivElement) {
       tableContent.scrollTop = 0;
@@ -254,6 +251,10 @@ export class EditableTableComponent implements OnInit,OnDestroy{
     isSaving(el: DataType) {
         return el.isSaving;
     }
+
+    getSelectedItem(fieldName: string) {
+        return this.selects.find(sl=>sl.property===fieldName);
+    }
 }
 
 
@@ -273,17 +274,11 @@ export class DataSource<Type> {
   fields:Field[]=[];
   data :Type[]= [];
   onRowErrors = new Subject<ApiError[]>();
-  onRowAdded = new Subject<Type>();
-  onRowsAdded = new Subject<Type[]>();
-  onRowUpdated = new  Subject<Type>();
-  onRowsUpdated = new  Subject<Type[]>();
-  onRowRemoved = new  Subject<Type>();
-  onRowsRemoved = new  Subject<Type[]>();
+  onDataChanged = new Subject<{type:'add' | 'update' | 'delete' | 'deleteAll' | 'addAll' | 'updateAll' ,data?: Type | Type[] }>();
   identifier='id'
   totalSize=0;
   uploadedFiles: {property:string,file:File}[]=[];
-  nestedObjects=new Map<string, {displayField: string; valueField: string; options: any[]}>();
-
+  nestedObjects: { property:string,displayField: string, valueField: string, options: any[]} []=[];
 }
 
 type DataType = any | {

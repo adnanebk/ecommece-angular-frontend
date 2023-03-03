@@ -74,7 +74,7 @@
        <strong *ngIf="field.type==='textArea'"> {{el[field.name] | limitTo :'60'}}</strong>
        <strong *ngIf="field.type==='date'"> {{el[field.name] | date :'short'}}</strong>
        <strong *ngIf="field.type==='bool'"> {{el[field.name]?'Yes':'No'}}</strong>
-       <strong *ngIf="field.type==='select'"> {{el[field.name][selects.get(field.name)?.displayField || '']}}</strong>
+       <strong *ngIf="field.type==='select'"> {{el[field.name][getSelectedItem(field.name)!.displayField]}}</strong>
        <img *ngIf="field.type === 'image'" [src]="el[field.name]" alt=""/>
      </div>
 
@@ -93,7 +93,7 @@
                  (selectionchange)="onValueChanged(idx,this.field)"
                  class="w-auto form-select bg-transparent">
              <option [ngValue]="op"
-                     *ngFor="let op of selects.get(field.name)!.options">{{op[selects.get(field.name)!.displayField]}}</option>
+                     *ngFor="let op of getSelectedItem(field.name)!.options">{{op[getSelectedItem(field.name)!.displayField]}}</option>
          </select>
 
          <app-file-input [text]="el[field.name]"  [accepts]="['.jpg','.jpeg','.png']" (upload)="uploadFile(el,this.field.name,$event)" *ngIf="field.type === 'image' ">
