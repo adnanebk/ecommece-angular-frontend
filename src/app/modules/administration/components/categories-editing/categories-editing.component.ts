@@ -36,7 +36,7 @@ export class CategoriesEditingComponent implements OnInit {
 
   addCategory(category:Category) {
     this.categoryService.saveCategory(category).subscribe(resp => {
-      this.dataSource.onDataChanged.next({type:'add',data:resp});
+      this.dataSource.onRowAdded.next(resp);
       this.successAlert();
     }, errors => this.dataSource.onRowErrors.next(Array.from(errors)));
   }
@@ -46,7 +46,7 @@ export class CategoriesEditingComponent implements OnInit {
 
   updateCategory(category:Category) {
     this.categoryService.updateCategory(category).subscribe(resp => {
-      this.dataSource.onDataChanged.next({type:'update',data:resp});
+      this.dataSource.onRowUpdated.next(resp);
       this.successAlert();
     }, errors =>   this.dataSource.onRowErrors.next(Array.from(errors)));
   }
@@ -54,7 +54,7 @@ export class CategoriesEditingComponent implements OnInit {
   removeCategory(category:Category) {
     this.categoryService.removeCategory(category.id).subscribe(() => {
           this.successAlert();
-          this.dataSource.onDataChanged.next({type:'delete',data:category});
+          this.dataSource.onRowRemoved.next(category);
         }
     )
   }

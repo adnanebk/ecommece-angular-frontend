@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {DatePipe} from '@angular/common';
-import {Subject, Subscription} from "rxjs";
+import {findIndex, Subject, Subscription} from "rxjs";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ConfirmComponent} from "../confirm-dialogue/confirm.component";
 
@@ -42,43 +42,64 @@ export class EditableTableComponent implements OnInit,OnDestroy{
   }
 
     private handleDatasourceChanges() {
-    let i = 0;
-   this.subscriptions[i++] = this.datasource.onDataChanged.subscribe(resp=> {
-       const {data,type} = resp;
-       switch (type) {
-           case 'add':
-               this.data[0] = data;
-               this.currentElement.isNew = false;
-               break;
-           case 'delete':
-               this.datasource.data.splice(this.data.findIndex(r => r[this.identifier] === data[this.identifier]), 1);
-               break;
-           case 'update':
-               const index = this.data.findIndex(r => r[this.identifier] === data[this.identifier]);
-               this.data[index] = data;
-               this.data[index].isSaving=false;
-               break;
-           case 'deleteAll':
-               this.data.splice(this.data.findIndex(r => r[this.identifier] === data[this.identifier]), 1);
-               break;
-           case 'addAll':
-               data.forEach((r: any) => this.datasource.data.unshift(r))
-               break;
-           case 'updateAll':
-               this.datasource.data = data.map((row: any) => data.find((r: any) => r[this.identifier] === row[this.identifier]) || row);
-               break;
-       }
-    });
+        this.handleRowAdded();
+        this.handleRowRemoved();
+        this.handleRowsRemoved();
+        this.handleRowUpdated();
+        this.handleRowsAdded();
+        this.handleRowsUpdated();
+        this.handleError();
+    }
 
-      this.subscriptions[i++] =this.datasource.onRowErrors.subscribe(resp=>{
-      this.errors= resp;
-          this.data[this.data.indexOf(this.currentElement)].isSaving=false;
-    });
+    private handleRowAdded() {
+        this.subscriptions.push(this.datasource.onRowAdded.subscribe(row => {
+            this.data[0] = row;
+            this.data[0].isSaving = false;
+            this.currentElement.isNew = false;
+        }));
+    }
 
-  }
+    private handleRowUpdated() {
+        this.subscriptions.push(this.datasource.onRowUpdated.subscribe(row => {
+            const index = this.findIndex(row);
+            this.data[index] = row;
+            this.data[index].isSaving = false;
+        }));
+    }
+    private handleRowRemoved() {
+        this.subscriptions.push(this.datasource.onRowRemoved.subscribe(row => {
+            this.data.splice(this.findIndex(row), 1);
+        }));
+    }
 
+    private handleRowsAdded() {
+        this.subscriptions.push(this.datasource.onRowsAdded.subscribe(rows => {
+            rows.forEach(r => this.datasource.data.unshift(r));
+        }));
+    }
 
+    private handleRowsUpdated() {
+        this.subscriptions.push(this.datasource.onRowsUpdated.subscribe(rows => {
+            this.datasource.data = this.data.map(row => rows[this.findIndex(row)] || row);
+        }));
+    }
+    private handleRowsRemoved(){
+        this.subscriptions.push(this.datasource.onRowsRemoved.subscribe(rows=>{
+            rows.forEach(row=>{
+                this.data.splice(this.findIndex(row),1);
+            })
+        }));
+    }
+    handleError(){
+         this.subscriptions.push(this.datasource.onRowErrors.subscribe(resp=>{
+             this.errors= resp;
+             this.data[this.data.indexOf(this.currentElement)].isSaving=false;
+         }));
+     }
 
+    private findIndex(row: any) {
+        return this.data.findIndex(r => r[this.identifier] === row[this.identifier]);
+    }
   insertNewRow(tableContent: HTMLDivElement) {
       tableContent.scrollTop = 0;
     if (!this.data[0].isNew) {
@@ -274,7 +295,12 @@ export class DataSource<Type> {
   fields:Field[]=[];
   data :Type[]= [];
   onRowErrors = new Subject<ApiError[]>();
-  onDataChanged = new Subject<{type:'add' | 'update' | 'delete' | 'deleteAll' | 'addAll' | 'updateAll' ,data?: Type | Type[] }>();
+  onRowAdded = new Subject<Type>();
+  onRowsAdded = new Subject<Type[]>();
+  onRowUpdated = new  Subject<Type>();
+  onRowsUpdated = new  Subject<Type[]>();
+  onRowRemoved = new  Subject<Type>();
+  onRowsRemoved = new  Subject<Type[]>();
   identifier='id'
   totalSize=0;
   uploadedFiles: {property:string,file:File}[]=[];
