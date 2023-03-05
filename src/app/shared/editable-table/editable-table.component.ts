@@ -301,7 +301,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
     addNewItem() {
         this.errors = [];
         this.isNewItem = true;
-        this.currentElement = {isNew: true};
+        this.currentElement = {};
         this.myForm.reset({});
         const dialogRef = this.openDialog();
         dialogRef.afterClosed().subscribe(() => this.currentElement = {});
@@ -312,6 +312,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
     }
 
     handleEdit(el: any) {
+        this.errors=[];
         this.currentElement = el;
         this.isNewItem = false;
         const dialogRef = this.openDialog();
