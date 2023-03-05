@@ -1,5 +1,5 @@
 export interface ApiError {
-  fieldName: string;
-  name: string;
-  message: string;
+    fieldName: string;
+    name: string;
+    message: string;
 }

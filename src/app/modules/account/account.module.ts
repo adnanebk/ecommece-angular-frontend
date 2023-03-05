@@ -13,7 +13,8 @@ import {ProfileDetailsComponent} from './components/profile-details/profile-deta
         SharedModule,
         AccountRoutingModule,
     ],
-  declarations: [ProfileComponent, ChangePasswordComponent, ProfileDetailsComponent],
-  exports: [ProfileComponent]
+    declarations: [ProfileComponent, ChangePasswordComponent, ProfileDetailsComponent],
+    exports: [ProfileComponent]
 })
-export class AccountModule { }
+export class AccountModule {
+}

@@ -8,7 +8,8 @@ import {SpinnerService} from '../services/spinner.service';
 @Injectable()
 export class SpinnerInterceptor implements HttpInterceptor {
 
-    constructor(private spinnerService: SpinnerService) { }
+    constructor(private spinnerService: SpinnerService) {
+    }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 

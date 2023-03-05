@@ -2,32 +2,37 @@
     <form fxFlex="40%" fxFlex.sm="50%" fxFlex.xs="90%">
         <mat-card class="mycard">
             <mat-card-title>Login</mat-card-title>
-            <mat-card-subtitle><a routerLink="/auth/register"><strong>Don't have an account, create a one</strong></a></mat-card-subtitle>
+            <mat-card-subtitle><a routerLink="/auth/register"><strong>Don't have an account, create a one</strong></a>
+            </mat-card-subtitle>
             <mat-card-content>
-                <mat-error *ngIf="hasError()" >
+                <mat-error *ngIf="hasError()">
                     <strong>{{getErrorMessage()}}</strong>
                 </mat-error>
-                    <app-input  matIcon="email"  label="Email" [control]="loginForm.controls['email']"></app-input>
+                <app-input matIcon="email" label="Email" [control]="loginForm.controls['email']"></app-input>
 
-                    <app-input label="Password" inputType="password" [control]="loginForm.controls['password']"></app-input>
+                <app-input label="Password" inputType="password" [control]="loginForm.controls['password']"></app-input>
 
             </mat-card-content>
 
             <mat-card-actions class="login-actions text-center">
 
-                <button  (click)="login()" class="btn  btn-lg btn-primary btn-rounded w-responsive" [disabled]="loginForm.invalid || loading">
-                    Login</button>
+                <button (click)="login()" class="btn  btn-lg btn-primary btn-rounded w-responsive"
+                        [disabled]="loginForm.invalid || loading">
+                    Login
+                </button>
 
                 <br>
                 <br>
                 <span><strong>Or continuer with</strong></span>
                 <br>
                 <br>
-                <button type="button" class="btn btn-primary btn-lg  mx-2 btn-rounded" style="background-color: #3b5998;" (click)="facebookLogin()">
+                <button type="button" class="btn btn-primary btn-lg  mx-2 btn-rounded"
+                        style="background-color: #3b5998;" (click)="facebookLogin()">
                     Fcebook <em class="fab fa-facebook-f"></em>
                 </button>
-                <button  type="button" class="btn btn-primary btn-lg btn-rounded " style="background-color: #dd4b39;" (click)="googleLogin()" >
-                     Google <em class="fab fa-google"></em>
+                <button type="button" class="btn btn-primary btn-lg btn-rounded " style="background-color: #dd4b39;"
+                        (click)="googleLogin()">
+                    Google <em class="fab fa-google"></em>
                 </button>
             </mat-card-actions>
 

@@ -10,15 +10,15 @@ import {NgbAlertModule, NgbPaginationModule} from "@ng-bootstrap/ng-bootstrap";
 
 
 const routes: Routes = [
-  {
-    path: '',
-    component: LayoutComponent,
-    children: [
-      { path: 'products', component: ProductsComponent },
-      { path: '',redirectTo : 'products' },
-      { path: 'product/details/:sku',component: ProductDetailsComponent},
-    ]
-  }
+    {
+        path: '',
+        component: LayoutComponent,
+        children: [
+            {path: 'products', component: ProductsComponent},
+            {path: '', redirectTo: 'products'},
+            {path: 'product/details/:sku', component: ProductDetailsComponent},
+        ]
+    }
 ];
 
 
@@ -38,4 +38,5 @@ const routes: Routes = [
 
     ]
 })
-export class ProductsModule { }
+export class ProductsModule {
+}

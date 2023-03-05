@@ -1,88 +1,93 @@
 .bgDirty {
-  background-color: #f1e9be;
+    background-color: #f1e9be;
 }
-.select-size{
-  width: 10px;
+
+.select-size {
+    width: 10px;
 }
+
 .text-area {
-  resize: both;
-  min-width: 300px;
+    resize: both;
+    min-width: 300px;
 }
-.actions{
-  width: 90px;
-  margin: auto;
+
+.actions {
+    width: 90px;
+    margin: auto;
 }
-.td-width{
-  min-width: 100px;
+
+.td-width {
+    min-width: 100px;
 }
+
 .max-content {
-  width: max-content;
+    width: max-content;
 }
 
 img {
-  width: 80px;
-}
-.number-input {
-  width: 80px !important;
+    width: 80px;
 }
 
+.number-input {
+    width: 80px !important;
+}
 
 
 button {
-  padding: 7px !important;
+    padding: 7px !important;
 }
 
 .table-wrapper-scroll-y {
-  position: relative;
-  height: 600px;
-  overflow: auto;
-  display: block;
+    position: relative;
+    height: 600px;
+    overflow: auto;
+    display: block;
 }
 
 .row-error {
-  background-color: #f8bdbd;
+    background-color: #f8bdbd;
 }
 
 table {
-  text-align: left;
-  position: relative;
-  border-collapse: collapse;
+    text-align: left;
+    position: relative;
+    border-collapse: collapse;
 }
 
 th, td {
-  padding: 0.25rem;
+    padding: 0.25rem;
 }
 
 tr.red th {
-  background: red;
-  color: white;
+    background: red;
+    color: white;
 }
 
 tr.green th {
-  background: green;
-  color: white;
+    background: green;
+    color: white;
 }
 
 tr.purple th {
-  background: purple;
-  color: white;
+    background: purple;
+    color: white;
 }
 
 table thead {
-  background: white;
-  position: sticky;
-  top: 0; /* Don't forget this, required for the stickiness */
-  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
-  z-index: 2;
-}
-.tfoot {
-  background: whitesmoke;
-  position: sticky;
-  bottom: 0; /* Don't forget this, required for the stickiness */
-  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
-  z-index: 1;
+    background: white;
+    position: sticky;
+    top: 0; /* Don't forget this, required for the stickiness */
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+    z-index: 2;
 }
 
+.tfoot {
+    background: whitesmoke;
+    position: sticky;
+    bottom: 0; /* Don't forget this, required for the stickiness */
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+    z-index: 1;
+}
 
 
 /*input[type=text], input[type=number], textarea, select {
@@ -95,22 +100,23 @@ table thead {
 }*/
 
 td {
-  font-size: 12px;
+    font-size: 12px;
 }
 
 
 input[type=text], textarea, select {
-font-size: small;
+    font-size: small;
 }
 
-:host ::ng-deep .mat-form-field-wrapper{
-  margin: 0 !important;
-  padding: 0;
+:host ::ng-deep .mat-form-field-wrapper {
+    margin: 0 !important;
+    padding: 0;
 }
+
 .fa-plus-square {
-  font-size: xx-large;
+    font-size: xx-large;
 }
 
 .error-warning {
-  background-color: #ffaead !important;
+    background-color: #ffaead !important;
 }

@@ -46,7 +46,7 @@ describe('AuthGuard', () => {
     });
 
     it('redirects to login if user session has expired', () => {
-        const user = { expiration: moment().add(-1, 'minutes') };
+        const user = {expiration: moment().add(-1, 'minutes')};
         authService.getCurrentUser.and.returnValue(user);
         const guard = new AuthGuard(router, notificationService, authService);
 
@@ -56,7 +56,7 @@ describe('AuthGuard', () => {
     });
 
     it('displays notification if user session has expired', () => {
-        const user = { expiration: moment().add(-1, 'seconds') };
+        const user = {expiration: moment().add(-1, 'seconds')};
         authService.getCurrentUser.and.returnValue(user);
         const guard = new AuthGuard(router, notificationService, authService);
 
@@ -67,7 +67,7 @@ describe('AuthGuard', () => {
     });
 
     it('returns true if user session is valid', () => {
-        const user = { expiration: moment().add(1, 'minutes') };
+        const user = {expiration: moment().add(1, 'minutes')};
         authService.getCurrentUser.and.returnValue(user);
         const guard = new AuthGuard(router, notificationService, authService);
 

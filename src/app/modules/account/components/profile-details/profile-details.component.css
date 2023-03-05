@@ -1,15 +1,18 @@
 .profile-card {
     text-align: center;
 }
-.max-width{
+
+.max-width {
     max-width: 100px;
 }
-.circle{
+
+.circle {
     border-radius: 50%;
     width: 120px;
     height: 120px;
     object-fit: cover;
 }
-.input-file{
+
+.input-file {
     width: 120px;
 }

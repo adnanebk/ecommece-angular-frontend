@@ -13,6 +13,7 @@ import {CartItem} from "../../../../core/models/cart-item";
 export class ProductDetailsComponent implements OnInit {
     product!: Product;
     quantity = 1;
+
     constructor(private activatedRoute: ActivatedRoute, private productService: ProductService, private cartService: CartService, private route: Router) {
     }
 
@@ -22,7 +23,7 @@ export class ProductDetailsComponent implements OnInit {
 
     loadProduct() {
         const sku = this.activatedRoute.snapshot.paramMap.get('sku');
-        if(sku) {
+        if (sku) {
             this.productService.getProduct(sku)
                 .subscribe(product => this.product = product);
         }
@@ -34,18 +35,17 @@ export class ProductDetailsComponent implements OnInit {
     }
 
 
-
     increment() {
-        this.quantity<this.product.unitsInStock && this.quantity++;
+        this.quantity < this.product.unitsInStock && this.quantity++;
     }
 
     decrement() {
-        this.quantity>1 && this.quantity --;
+        this.quantity > 1 && this.quantity--;
     }
 
     checkout() {
-        const cartItem:CartItem={...this.product,quantity:this.quantity}
-        this.route.navigate(['/checkout'], {state: {cartItems:[cartItem]}});
+        const cartItem: CartItem = {...this.product, quantity: this.quantity}
+        this.route.navigate(['/checkout'], {state: {cartItems: [cartItem]}});
     }
 
 }

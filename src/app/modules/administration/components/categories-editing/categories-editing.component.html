@@ -1,10 +1,10 @@
 <div class="container">
     <h3 class="card-headchangeProductswitcher text-center font-weight-bold text-uppercase py-4">Manage categories</h3>
 
-    <app-editable-table (dataUpdated)="updateCategory($event)"
-                    [datasource]="dataSource"
-                    (dataAdded)="addCategory($event)"
-                    (dataDeleted)="removeCategory($event)"
-                    (dataSorted)="sortCategories($event)"
-></app-editable-table>
+    <app-editable-table [myForm]="categoryForm" (dataUpdated)="updateCategory($event)"
+                        [datasource]="dataSource"
+                        (dataAdded)="addCategory($event)"
+                        (dataDeleted)="removeCategory($event)"
+                        (dataSorted)="sortCategories($event)"
+    ></app-editable-table>
 </div>

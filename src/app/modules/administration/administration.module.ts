@@ -10,13 +10,13 @@ import {CategoriesEditingComponent} from './components/categories-editing/catego
 
 
 const routes: Routes = [
-  {
-    path: '',
-    component: LayoutComponent,
-    children: [
-      { path: 'admin/products-editing', component: AdministrationComponent }
-    ]
-  }
+    {
+        path: '',
+        component: LayoutComponent,
+        children: [
+            {path: 'admin/products-editing', component: AdministrationComponent}
+        ]
+    }
 ];
 
 
@@ -26,7 +26,7 @@ const routes: Routes = [
         AdministrationComponent,
         CategoriesEditingComponent
     ],
-    providers : [DatePipe],
+    providers: [DatePipe],
     imports: [
         CommonModule,
         RouterModule.forChild(routes),
@@ -35,4 +35,5 @@ const routes: Routes = [
 
     ]
 })
-export class AdministrationModule { }
+export class AdministrationModule {
+}

@@ -1,79 +1,84 @@
-<div class="container" >
-  <div class="row">
+<div class="container">
+    <div class="row">
 
 
-    <mat-stepper [linear]="true" #stepper class="col-lg-10">
-        <mat-step [stepControl]="customerForm">
-            <form [formGroup]="customerForm">
-                <ng-template matStepLabel>Fill out your shipping information</ng-template>
+        <mat-stepper [linear]="true" #stepper class="col-lg-10">
+            <mat-step [stepControl]="customerForm">
+                <form [formGroup]="customerForm">
+                    <ng-template matStepLabel>Fill out your shipping information</ng-template>
 
 
-                <app-input  matIcon="face" label="Full name" [control]="customerForm.controls['fullName']" >
-                    <mat-error>{{this.getApiError('fullName')}}</mat-error>
-                </app-input>
-                <app-input     matIcon="email" label="Email address" [control]="customerForm.controls['email']" >
-                    <mat-error>{{this.getApiError('email')}}</mat-error>
-                </app-input>
-                <app-select placeholder="Select a country"  [items]="['Morocco','Egypt','Algeria','Tunisia']"   [control]="customerForm.controls['country']" >
-                </app-select>
-                <app-input   matIcon="location_on" label="City" [control]="customerForm.controls['city']" >
-                    <mat-error>{{this.getApiError('city')}}</mat-error>
-                </app-input>
-                <app-input     matIcon="location_on" label="Street" [control]="customerForm.controls['street']" >
-                    <mat-error>{{this.getApiError('street')}}</mat-error>
-                </app-input>
+                    <app-input matIcon="face" label="Full name" [control]="customerForm.controls['fullName']">
+                        <mat-error>{{this.getApiError('fullName')}}</mat-error>
+                    </app-input>
+                    <app-input matIcon="email" label="Email address" [control]="customerForm.controls['email']">
+                        <mat-error>{{this.getApiError('email')}}</mat-error>
+                    </app-input>
+                    <app-select placeholder="Select a country" [items]="['Morocco','Egypt','Algeria','Tunisia']"
+                                [control]="customerForm.controls['country']">
+                    </app-select>
+                    <app-input matIcon="location_on" label="City" [control]="customerForm.controls['city']">
+                        <mat-error>{{this.getApiError('city')}}</mat-error>
+                    </app-input>
+                    <app-input matIcon="location_on" label="Street" [control]="customerForm.controls['street']">
+                        <mat-error>{{this.getApiError('street')}}</mat-error>
+                    </app-input>
+                    <div>
+                        <button mat-raised-button color="primary" matStepperNext>Next</button>
+                    </div>
+                </form>
+            </mat-step>
+            <mat-step [stepControl]="creditCardForm" label="Fill out payment information">
+                <form [formGroup]="creditCardForm">
+
+                    <app-select [readonly]="!isEnableCardEditing" appearance="fill" [items]="cardNames"
+                                selectValue="cardType" selectLabel="name" placeholder="Card type"
+                                [control]="creditCardForm.controls['cardType']">
+                        <mat-error>{{this.getApiError('cardType')}}</mat-error>
+                    </app-select>
+                    <app-input (changeValue)="onCreditCardChange($event)" matIcon="credit_card" label="Card number"
+                               [control]="creditCardForm.controls['cardNumber']">
+                        <mat-error>{{this.getApiError('cardNumber')}}</mat-error>
+                    </app-input>
+                    <app-input [readonly]="!isEnableCardEditing" label="Expiration date"
+                               [control]="creditCardForm.controls['expirationDate']">
+                        <mat-error>{{this.getApiError('expirationDate')}}</mat-error>
+                    </app-input>
+
+                    <div>
+                        <button mat-raised-button color="accent" matStepperPrevious>Back</button>
+                        <button mat-raised-button class="mx-2" color="primary" matStepperNext>Next</button>
+                    </div>
+                </form>
+            </mat-step>
+            <mat-step>
+                <ng-template matStepLabel>Done</ng-template>
+                <p>You are now done.</p>
                 <div>
-                    <button  mat-raised-button color="primary" matStepperNext>Next</button>
+                    <strong *ngIf="errors.length" class="text-danger">Please go back and fixe the errors below</strong>
+                    <ul>
+                        <li *ngFor="let error of errors"><strong class="text-danger">{{error.message}}</strong></li>
+                    </ul>
+                    <button mat-raised-button color="accent" (click)="stepper.previous()">Back</button>
+                    <button mat-raised-button class="mx-2" color="primary" (click)="onSubmit()">Complete</button>
                 </div>
-            </form>
-        </mat-step>
-        <mat-step [stepControl]="creditCardForm" label="Fill out payment information">
-            <form [formGroup]="creditCardForm">
+            </mat-step>
+        </mat-stepper>
 
-                <app-select [readonly]="!isEnableCardEditing" appearance="fill" [items]="cardNames" selectValue="cardType" selectLabel="name" placeholder="Card type" [control]="creditCardForm.controls['cardType']">
-                    <mat-error>{{this.getApiError('cardType')}}</mat-error>
-                </app-select>
-                <app-input (changeValue)="onCreditCardChange($event)"  matIcon="credit_card" label="Card number" [control]="creditCardForm.controls['cardNumber']">
-                    <mat-error>{{this.getApiError('cardNumber')}}</mat-error>
-                </app-input>
-                <app-input [readonly]="!isEnableCardEditing" label="Expiration date" [control]="creditCardForm.controls['expirationDate']" >
-                    <mat-error>{{this.getApiError('expirationDate')}}</mat-error>
-                </app-input>
-
-                <div>
-                    <button mat-raised-button color="accent" matStepperPrevious>Back</button>
-                    <button mat-raised-button class="mx-2" color="primary" matStepperNext>Next</button>
-                </div>
-            </form>
-        </mat-step>
-        <mat-step>
-            <ng-template  matStepLabel>Done</ng-template>
-            <p>You are now done.</p>
-            <div>
-                <strong *ngIf="errors.length" class="text-danger">Please go back and fixe the errors below</strong>
-                <ul>
-                    <li *ngFor="let error of errors"><strong class="text-danger">{{error.message}}</strong></li>
-                </ul>
-                <button mat-raised-button color="accent" (click)="stepper.previous()">Back</button>
-                <button mat-raised-button class="mx-2" color="primary" (click)="onSubmit()" >Complete</button>
+        <mat-card class="col-lg-2 h-25">
+            <div class="d-flex justify-content-around">
+                <h5>Total price :</h5>
+                <strong>{{totalPrice | currency : '$'}}</strong>
             </div>
-        </mat-step>
-    </mat-stepper>
 
-      <mat-card class="col-lg-2 h-25">
-          <div class="d-flex justify-content-around">
-              <h5>Total price :</h5>
-              <strong >{{totalPrice | currency : '$'}}</strong>
-          </div>
-
-        <div class="d-flex justify-content-around">
-            <h5>Total quantity :</h5>
-            <strong class="">{{totalQuantity}}</strong>
-        </div>
+            <div class="d-flex justify-content-around">
+                <h5>Total quantity :</h5>
+                <strong class="">{{totalQuantity}}</strong>
+            </div>
 
 
-      </mat-card>
+        </mat-card>
 
-</div>
+    </div>
 
 </div>

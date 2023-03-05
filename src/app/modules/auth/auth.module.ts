@@ -8,25 +8,26 @@ import {RegisterComponent} from './register/register.component';
 
 
 const routes: Routes = [
-  {
-    path: '',
-    component: LayoutComponent,
-    children: [
-      { path: 'login', component: LoginComponent },
-      { path: 'register', component: RegisterComponent }
-    ]
-  }
+    {
+        path: '',
+        component: LayoutComponent,
+        children: [
+            {path: 'login', component: LoginComponent},
+            {path: 'register', component: RegisterComponent}
+        ]
+    }
 
 ];
 
 @NgModule({
-  declarations: [LoginComponent, RegisterComponent],
-  imports: [
-    CommonModule,
-    SharedModule,
-    RouterModule.forChild(routes),
-  ],
+    declarations: [LoginComponent, RegisterComponent],
+    imports: [
+        CommonModule,
+        SharedModule,
+        RouterModule.forChild(routes),
+    ],
 
 
 })
-export class AuthModule { }
+export class AuthModule {
+}

@@ -8,19 +8,19 @@ import {LayoutComponent} from "../../shared/layout/layout.component";
 
 
 const routes: Routes = [
-  {
-    path: '',
-    component: LayoutComponent,
-    children: [
-      { path: '', component: CartComponent },
-    ]
-  }
+    {
+        path: '',
+        component: LayoutComponent,
+        children: [
+            {path: '', component: CartComponent},
+        ]
+    }
 ];
 
 @NgModule({
-  declarations: [
-    CartComponent
-  ],
+    declarations: [
+        CartComponent
+    ],
     imports: [
         CommonModule,
         SharedModule,
@@ -28,4 +28,5 @@ const routes: Routes = [
 
     ]
 })
-export class ShoppingCartModule { }
+export class ShoppingCartModule {
+}

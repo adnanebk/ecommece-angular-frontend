@@ -4,11 +4,13 @@
   height: 0.1px;
   position: absolute;
 }
-.file-input{
+
+.file-input {
   text-align: center;
-  margin: auto;
+  max-width: 200px;
   padding-left: 2px;
 }
+
 .file-input label {
   padding: 5px;
   height: 30px;
@@ -18,7 +20,7 @@
   box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   color: #fff;
   font-weight: bold;
   cursor: pointer;

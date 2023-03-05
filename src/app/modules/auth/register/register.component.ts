@@ -6,20 +6,21 @@ import {MustMatch} from "../../../shared/validators/mustMatch";
 import {ApiError} from "../../../core/models/api-error";
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+    selector: 'app-register',
+    templateUrl: './register.component.html',
+    styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-  registerForm!: FormGroup;
-  state?: any;
-  errors: ApiError[]=[];
+    registerForm!: FormGroup;
+    state?: any;
+    errors: ApiError[] = [];
 
 
-  constructor(private authService: AuthService, private router: Router) {
-    this.createForm();
+    constructor(private authService: AuthService, private router: Router) {
+        this.createForm();
 
-  }
+    }
+
     ngOnInit(): void {
         this.redirectIfUserLoggedIn();
         this.createForm();
@@ -44,28 +45,29 @@ export class RegisterComponent implements OnInit {
     }
 
 
-  private createForm() {
-    this.registerForm = new FormGroup({
-          firstName: new FormControl(null, [Validators.required, Validators.minLength(2)]),
-          lastName: new FormControl(null, []),
-          email: new FormControl(null, [Validators.required, Validators.email]),
-          password: new FormControl(null, [Validators.required, Validators.minLength(2)]),
-          confirmPassword: new FormControl(null, [Validators.required, Validators.minLength(2)
-            ,MustMatch( 'password','mustMatch','password not match')]),
-        },
+    private createForm() {
+        this.registerForm = new FormGroup({
+                firstName: new FormControl(null, [Validators.required, Validators.minLength(2)]),
+                lastName: new FormControl(null, []),
+                email: new FormControl(null, [Validators.required, Validators.email]),
+                password: new FormControl(null, [Validators.required, Validators.minLength(2)]),
+                confirmPassword: new FormControl(null, [Validators.required, Validators.minLength(2)
+                    , MustMatch('password', 'mustMatch', 'password not match')]),
+            },
+        );
+    }
 
-    );
-  }
     private redirectIfUserLoggedIn() {
-        this.authService.isUserAuthenticated() &&  this.redirect();
-    }
-    private async redirect() {
-         await this.router.navigateByUrl('/');
+        this.authService.isUserAuthenticated() && this.redirect();
     }
 
-    getApiError(fieldName:string) {
-        const apiError =  this.errors.find(err => err.fieldName ===fieldName);
-         return apiError?.message;
+    private async redirect() {
+        await this.router.navigateByUrl('/');
+    }
+
+    getApiError(fieldName: string) {
+        const apiError = this.errors.find(err => err.fieldName === fieldName);
+        return apiError?.message;
     }
 
 

@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {MatDialog} from "@angular/material/dialog";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {CreditCard} from "../../../core/models/CreditCard";
@@ -10,105 +10,117 @@ import {ConfirmComponent} from "../../../shared/confirm-dialogue/confirm.compone
 import {ApiError} from "../../../core/models/api-error";
 
 @Component({
-  selector: 'app-credit-cards',
-  templateUrl: './credit-cards.component.html',
-  styleUrls: ['./credit-cards.component.scss']
+    selector: 'app-credit-cards',
+    templateUrl: './credit-cards.component.html',
+    styleUrls: ['./credit-cards.component.scss']
 })
 export class CreditCardsComponent implements OnInit {
-  cardForm!: FormGroup;
-  isEnableEditing = false;
-  cardNames: any[] = [];
-  errors: ApiError[]=[];
-  constructor(public dialog: MatDialog,private creditCardService:CreditCardService, private modalService:NgbModal) {
-    this.cardNames=this.creditCardService.getCardNames();
-  }
-  @ViewChild('cardEdit') cardEditingModal!:TemplateRef<any>
+    cardForm!: FormGroup;
+    isEnableEditing = false;
+    cardNames: any[] = [];
+    errors: ApiError[] = [];
 
-  creditCards:CreditCard[]=[];
-  isNewCard = true;
+    constructor(public dialog: MatDialog, private creditCardService: CreditCardService, private modalService: NgbModal) {
+        this.cardNames = this.creditCardService.getCardNames();
+    }
+
+    @ViewChild('cardEdit') cardEditingModal!: TemplateRef<any>
+
+    creditCards: CreditCard[] = [];
+    isNewCard = true;
 
 
-  ngOnInit(): void {
-    this.createForm();
-    this.getCurrenCreditCards();
-  }
+    ngOnInit(): void {
+        this.createForm();
+        this.getCurrenCreditCards();
+    }
 
-  handleRemove(card: CreditCard,index:number) {
-    this.modalService.open(ConfirmComponent.setTitle('confirmation').setContent('Are you sure to delete ?')).closed.subscribe(()=>{
-      this.creditCards.splice(index, 1);
-      this.creditCardService.removeCreditCard(card.id).subscribe(undefined, () => this.creditCards.splice(index, 0, card));
-    })
-  }
-  handleActive(creditCard: CreditCard) {
-    this.creditCardService.activeCard(creditCard.id).subscribe(()=>{
-      const activateCard = this.creditCards.find(card=>card.active);
-      activateCard!.active=false;
-      creditCard.active=true;
-    },()=>creditCard.active=false)
-  }
-  handleSubmit() {
-    this.errors=[];
-    this.isNewCard?this.save():this.update();
-  }
+    handleRemove(card: CreditCard, index: number) {
+        this.modalService.open(ConfirmComponent.setTitle('confirmation').setContent('Are you sure to delete ?')).closed.subscribe(() => {
+            this.creditCards.splice(index, 1);
+            this.creditCardService.removeCreditCard(card.id).subscribe(undefined, () => this.creditCards.splice(index, 0, card));
+        })
+    }
 
-  save() {
-    const _card = this.cardForm.getRawValue();
-        this.creditCardService.saveCreditCard(_card).subscribe(card=> {
-             this.creditCards.push(card);
-             this.dialog.closeAll();
-           },error => this.errors= Array.from(error));
-  }
+    handleActive(creditCard: CreditCard) {
+        this.creditCardService.activeCard(creditCard.id).subscribe(() => {
+            const activateCard = this.creditCards.find(card => card.active);
+            activateCard!.active = false;
+            creditCard.active = true;
+        }, () => creditCard.active = false)
+    }
 
-  update() {
-      const _card = this.cardForm.getRawValue() as CreditCard;
-      this.creditCardService.updateCreditCard(_card).subscribe(()=>{
-      const  index =this.creditCards.findIndex(c=>c.id===_card.id);
-      const {cardNumber,cardType,expirationDate}=_card;
-      this.creditCards[index]={...this.creditCards[index],cardNumber,cardType,expirationDate};
-      this.dialog.closeAll();
-    },error => this.errors= Array.from(error));
-  }
-  addNew() {
-    this.errors=[];
-    this.isNewCard=true;
-    this.createForm();
-    const dialogRef = this.openDialog();
-    dialogRef.afterClosed().subscribe();
-  }
-  edit(creditCard: CreditCard) {
-    this.errors=[];
-    this.isNewCard=false;
-    const dialogRef = this.openDialog();
-    dialogRef.afterOpened().subscribe(() => {
-      this.cardForm.patchValue(creditCard);
-    });
-  }
+    handleSubmit() {
+        this.errors = [];
+        this.isNewCard ? this.save() : this.update();
+    }
 
-  private openDialog() {
-    return this.dialog.open(this.cardEditingModal, {
-      width: '400px'
-    });
-  }
-  private createForm() {
-    this.cardForm = new FormGroup({
-      id: new FormControl(null),
-      cardType: new FormControl(null, [Validators.required]),
-      cardNumber: new CardNumberFormControl(null, [Validators.required]),
-      expirationDate: new MonthYearFormControl(null, [Validators.required]),
-    });
-  }
+    save() {
+        const _card = this.cardForm.getRawValue();
+        this.creditCardService.saveCreditCard(_card).subscribe(card => {
+            this.creditCards.push(card);
+            this.dialog.closeAll();
+        }, error => this.errors = Array.from(error));
+    }
 
-  getApiError(fieldName:string) {
-    const apiError =  this.errors.find(err => err.fieldName ===fieldName);
-    return apiError?.message;
-  }
+    update() {
+        const _card = this.cardForm.getRawValue() as CreditCard;
+        this.creditCardService.updateCreditCard(_card).subscribe(() => {
+            const index = this.creditCards.findIndex(c => c.id === _card.id);
+            const {cardNumber, cardType, expirationDate} = _card;
+            this.creditCards[index] = {...this.creditCards[index], cardNumber, cardType, expirationDate};
+            this.dialog.closeAll();
+        }, error => this.errors = Array.from(error));
+    }
 
-  private getCurrenCreditCards() {
-     this.creditCardService.getCreditCards().subscribe(cards=>this.creditCards=cards);
-  }
+    addNew() {
+        this.errors = [];
+        this.isNewCard = true;
+        this.createForm();
+        const dialogRef = this.openDialog();
+        dialogRef.afterClosed().subscribe();
+    }
 
-  onCreditCardChange(cardNumber: any) {
-      this.isEnableEditing=!this.creditCards.some(card=>card.cardNumber===cardNumber?.replaceAll('-',''));
-  }
+    edit(creditCard: CreditCard) {
+        this.errors = [];
+        this.isNewCard = false;
+        const dialogRef = this.openDialog();
+        dialogRef.afterOpened().subscribe(() => {
+            this.cardForm.patchValue(creditCard);
+        });
+    }
+
+    private openDialog() {
+        return this.dialog.open(this.cardEditingModal, {
+            width: '400px'
+        });
+    }
+
+    private createForm() {
+        this.cardForm = new FormGroup({
+            id: new FormControl(null),
+            cardType: new FormControl(null, [Validators.required]),
+            cardNumber: new CardNumberFormControl(null, [Validators.required]),
+            expirationDate: new MonthYearFormControl(null, [Validators.required]),
+        });
+    }
+
+    getApiError(fieldName: string) {
+        const apiError = this.errors.find(err => err.fieldName === fieldName);
+        return apiError?.message;
+    }
+
+    private getCurrenCreditCards() {
+        this.creditCardService.getCreditCards().subscribe(cards => this.creditCards = cards);
+    }
+
+    onCreditCardChange(cardNumber: any, fieldName: string) {
+        this.deleteError(fieldName);
+        this.isEnableEditing = !this.creditCards.some(card => card.cardNumber === cardNumber?.replaceAll('-', ''));
+    }
+
+    deleteError(fieldName: string) {
+        this.errors = this.errors.filter(er => er.fieldName !== fieldName);
+    }
 }
 

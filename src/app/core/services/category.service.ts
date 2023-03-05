@@ -1,39 +1,38 @@
 import {Injectable} from '@angular/core';
 import {Observable} from "rxjs";
 import {Category} from "../models/category";
-import {map, retry, timeout} from "rxjs/operators";
+import {retry, timeout} from "rxjs/operators";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment.prod";
-import {PagedResponse} from "../models/pagedResponse";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class CategoryService {
 
-  private categoryUrl = environment.path + 'categories';
-  private timeOut = 100000;
-  private retry = 4;
+    private categoryUrl = environment.path + 'categories';
+    private timeOut = 100000;
+    private retry = 4;
 
-  constructor(private httpClient: HttpClient) {
-  }
+    constructor(private httpClient: HttpClient) {
+    }
 
 
-  getCategories(): Observable<Category[]> {
+    getCategories(): Observable<Category[]> {
 
-    return this.httpClient.get<Category[]>(this.categoryUrl).pipe(
-      timeout(this.timeOut), retry(this.retry));
-  }
+        return this.httpClient.get<Category[]>(this.categoryUrl).pipe(
+            timeout(this.timeOut), retry(this.retry));
+    }
 
-  saveCategory(productCategory: Category): Observable<Category> {
-    return this.httpClient.post<Category>(this.categoryUrl, productCategory);
-  }
+    saveCategory(productCategory: Category): Observable<Category> {
+        return this.httpClient.post<Category>(this.categoryUrl, productCategory);
+    }
 
-  updateCategory(productCategory: Category): Observable<Category> {
-    return this.httpClient.put<Category>(this.categoryUrl + '/' + productCategory.id, productCategory);
-  }
+    updateCategory(productCategory: Category): Observable<Category> {
+        return this.httpClient.put<Category>(this.categoryUrl + '/' + productCategory.id, productCategory);
+    }
 
-  removeCategory(id: number) {
-    return this.httpClient.delete(this.categoryUrl + '/' + id);
-  }
+    removeCategory(id: number) {
+        return this.httpClient.delete(this.categoryUrl + '/' + id);
+    }
 }

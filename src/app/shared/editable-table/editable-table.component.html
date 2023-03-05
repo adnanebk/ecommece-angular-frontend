@@ -1,52 +1,56 @@
-
-  <div class="m-2" *ngIf="enableMultiEditing">
-    <div  class="custom-control custom-switch">
-      <div class="form-check form-switch fs-4">
-        enable multi editing
-        <input (ngModelChange)="pageChanged(page,pageSize)"  class="form-check-input" type="checkbox" role="switch"  checked
-                [(ngModel)]="isBatchEnabled"/>
-      </div>
+<div class="m-2" *ngIf="enableMultiEditing">
+    <div class="custom-control custom-switch">
+        <div class="form-check form-switch fs-4">
+            enable multi editing
+            <input (ngModelChange)="pageChanged(page,pageSize)" class="form-check-input" type="checkbox" role="switch"
+                   checked
+                   [(ngModel)]="isBatchEnabled"/>
+        </div>
     </div>
 
 
     <div *ngIf="isBatchEnabled" class="d-inline">
-      <button (click)="updateAll()" class="btn btn-info m-2">Update all</button>
-      <button [disabled]="!selectedSize" (click)="removeAll()" class="btn btn-danger">Remove selected rows</button>
+        <button (click)="updateAll()" class="btn btn-info m-2">Update all</button>
+        <button [disabled]="!selectedSize" (click)="removeAll()" class="btn btn-danger">Remove selected rows</button>
     </div>
 
-  </div>
-  <div class="table-responsive table-wrapper-scroll-y" #tableContent>
+</div>
+<div class="table-responsive table-wrapper-scroll-y" #tableContent>
 
-  <table class="table table-bordered  table-secondary  m-auto text-center  float-start ">
-      <caption>Editable table</caption>
-      <thead>
-    <tr>
-      <th *ngIf="!isBatchEnabled" class="text-center text-primary align-middle  bg-secondary "><h3>
-          <button  role="button" *ngIf="!isBatchEnabled" class="btn btn-light"
-                   (click)="insertNewRow(tableContent)">
-              <em class="fas fa-plus-square"></em></button></h3></th>
-      <th *ngIf="isBatchEnabled" class="text-center align-middle bg-secondary text-dark">
-        Select all
-        <h4>
-            <mat-checkbox class="example-margin" (change)="onAllSelected($event.checked)"  ></mat-checkbox>
-        </h4>
-      </th>
-      <ng-container *ngFor="let field of fields; let idx = index" >
-        <th *ngIf="!isColHide(field)" (click)="sort(field.name,ic)" class="text-center  align-middle bg-secondary border-secondary" role='button'>
-          <a class="max-content mx-2 text-dark fa-lg fw-bold  text-decoration-none"><strong>{{field.display}}</strong></a>
-          <em #ic class="fa fa-sort" aria-hidden="true"></em>
-        </th>
-      </ng-container>
+    <table class="table table-bordered  table-secondary  m-auto text-center  float-start ">
+        <caption>Editable table</caption>
+        <thead>
+        <tr>
+            <th *ngIf="!isBatchEnabled" class="text-center text-primary align-middle  bg-secondary ">
+                <h3>
+                    <button role="button" *ngIf="!isBatchEnabled" class="btn btn-light"
+                            (click)="addNewItem()">
+                        <em class="fas fa-plus-square"></em></button>
+                </h3>
+            </th>
+            <th *ngIf="isBatchEnabled" class="text-center align-middle bg-secondary text-dark">
+                Select all
+                <h4>
+                    <mat-checkbox class="example-margin" (change)="onAllSelected($event.checked)"></mat-checkbox>
+                </h4>
+            </th>
+            <ng-container *ngFor="let field of fields; let idx = index">
+                <th *ngIf="!isColHide(field)" (click)="sort(field.name,ic)"
+                    class="text-center  align-middle bg-secondary border-secondary" role='button'>
+                    <a class="max-content mx-2 text-dark fa-lg fw-bold  text-decoration-none"><strong>{{field.display}}</strong></a>
+                    <em #ic class="fa fa-sort" aria-hidden="true"></em>
+                </th>
+            </ng-container>
 
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let el of data; let idx= index;trackBy: trackByFn">
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let el of data; let idx= index;trackBy: trackByFn">
 
-      <td class="p-1 align-middle actions" [class]="isDirty(el)?'bgDirty':''" >
+            <td class="p-1 align-middle actions" [class]="isDirty(el)?'bgDirty':''">
       <span *ngIf="!isBatchEnabled" class="table-edit">
         <ng-container *ngIf="el!==currentElement">
-        <button (click)="onViewChanged(el)" type="button"
+        <button (click)="handleEdit(el)" type="button"
                 class="btn btn-rounded btn-sm my-0"><em class="fas fa-edit text-info"></em></button>
         <button (click)="remove(el)" type="button" class="btn btn-rounded  btn-sm  mx-2">
             <em class="fas fa-trash-alt text-danger"></em></button>
@@ -54,76 +58,139 @@
 
         <button [disabled]="isSaving(el)" *ngIf="isCurrentElement(el)" (click)="onSave(el)" type="button"
                 class="btn btn-success btn-rounded btn-sm my-0">
-                    <span *ngIf="isSaving(el)" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                    <span *ngIf="isSaving(el)" class="spinner-grow spinner-grow-sm" role="status"
+                          aria-hidden="true"></span>
 
           Save</button>
-          <button *ngIf="isCurrentElement(el) && !isSaving(el)" (click)="cancelChange()" class="btn m-1 btn-warning btn-sm">cancel</button>
+          <button *ngIf="isCurrentElement(el) && !isSaving(el)" (click)="cancelChange()"
+                  class="btn m-1 btn-warning btn-sm">cancel</button>
 
       </span>
-        <div *ngIf="isBatchEnabled" class="select">
-            <mat-checkbox class="example-margin" [(ngModel)]="el.selected" (change)="onElementSelected(el)"  ></mat-checkbox>
+                <div *ngIf="isBatchEnabled" class="select">
+                    <mat-checkbox class="example-margin" [(ngModel)]="el.selected"
+                                  (change)="onElementSelected(el)"></mat-checkbox>
 
-        </div>
+                </div>
 
-      </td>
- <ng-container  *ngFor="let field of fields">
-   <td  *ngIf="!isColHide(field)" (click)="onViewChanged(el)" class="align-middle td-width"  [class]="{'bgDirty':isDirty(el)}">
+            </td>
+            <ng-container *ngFor="let field of fields">
+                <td *ngIf="!isColHide(field)" (click)="onViewChanged(el)" class="align-middle td-width"
+                    [class]="{'bgDirty':isDirty(el)}">
 
-     <div *ngIf="!isCurrentElement(el) && !isBatchEnabled"  class=" text-max-width" >
-       <strong *ngIf="field.type==='number' || field.type==='decimal' || field.type==='text'"> {{el[field.name]}}</strong>
-       <strong *ngIf="field.type==='textArea'"> {{el[field.name] | limitTo :'60'}}</strong>
-       <strong *ngIf="field.type==='date'"> {{el[field.name] | date :'short'}}</strong>
-       <strong *ngIf="field.type==='bool'"> {{el[field.name]?'Yes':'No'}}</strong>
-       <strong *ngIf="field.type==='select'"> {{el[field.name][getSelectedItem(field.name)!.displayField]}}</strong>
-       <img *ngIf="field.type === 'image'" [src]="el[field.name]" alt=""/>
-     </div>
+                    <div *ngIf="!isCurrentElement(el) && !isBatchEnabled" class=" text-max-width">
+                        <strong *ngIf="field.type==='number' || field.type==='decimal' || field.type==='text'"> {{el[field.name]}}</strong>
+                        <strong *ngIf="field.type==='textArea'"> {{el[field.name] | limitTo :'60'}}</strong>
+                        <strong *ngIf="field.type==='date'"> {{el[field.name] | date :'short'}}</strong>
+                        <strong *ngIf="field.type==='bool'"> {{el[field.name] ? 'Yes' : 'No'}}</strong>
+                        <strong *ngIf="field.type==='select'"> {{el[field.name][getSelectedItem(field.name)!.displayField]}}</strong>
+                        <img *ngIf="field.type === 'image'" [src]="el[field.name]" alt=""/>
+                    </div>
 
-     <div class="py-2 text-center" *ngIf="(isCurrentElement(el) || isBatchEnabled) && !field.readOnly"   >
+                    <div class="py-2 text-center" *ngIf="(isCurrentElement(el) || isBatchEnabled) && !field.readOnly">
 
-         <input *ngIf="field.type==='text'" type="text" [(ngModel)]="el[field.name]" (input)="onValueChanged(el,this.field)"  class=" form-control bg-transparent"  />
-         <input *ngIf="field.type==='number'" type="number" [(ngModel)]="el[field.name]"   (input)="onValueChanged(el,this.field)"  class="form-control bg-transparent"   />
-         <input *ngIf="field.type==='decimal'"  [(ngModel)]="el[field.name]"    (input)="onValueChanged(el,this.field)"  class="form-control bg-transparent"   />
-         <input *ngIf="field.type==='date'" type="date" [(ngModel)]="el[field.name]"   (input)="onValueChanged(el,this.field)"   class="form-control bg-transparent"  />
-         <textarea [autosize]="hasFocus(inp)" #inp *ngIf="field.type==='textArea'"  [(ngModel)]="el[field.name]"    (input)="onValueChanged(el,this.field)"
-                   class="form-control bg-transparent text-area" ></textarea>
-         <div *ngIf="field.type === 'bool'" class="form-check form-switch  fa-xl w-auto d-flex justify-content-center">
-             <input class="form-check-input" type="checkbox"  [(ngModel)]="el[field.name]"   (input)="onValueChanged(el,this.field)" >
-         </div>
-         <select *ngIf="field.type==='select'"  [name]="field.name"  [compareWith]="compareWith" [(ngModel)]="el[field.name]"
-                 (selectionchange)="onValueChanged(idx,this.field)"
-                 class="w-auto form-select bg-transparent">
-             <option [ngValue]="op"
-                     *ngFor="let op of getSelectedItem(field.name)!.options">{{op[getSelectedItem(field.name)!.displayField]}}</option>
-         </select>
+                        <input *ngIf="field.type==='text'" type="text" [(ngModel)]="el[field.name]"
+                               (input)="onValueChanged(el,this.field)" class=" form-control bg-transparent"/>
+                        <input *ngIf="field.type==='number'" type="number" [(ngModel)]="el[field.name]"
+                               (input)="onValueChanged(el,this.field)" class="form-control bg-transparent"/>
+                        <input *ngIf="field.type==='decimal'" [(ngModel)]="el[field.name]"
+                               (input)="onValueChanged(el,this.field)" class="form-control bg-transparent"/>
+                        <input *ngIf="field.type==='date'" type="date" [(ngModel)]="el[field.name]"
+                               (input)="onValueChanged(el,this.field)" class="form-control bg-transparent"/>
+                        <textarea [autosize]="hasFocus(inp)" #inp *ngIf="field.type==='textArea'"
+                                  [(ngModel)]="el[field.name]" (input)="onValueChanged(el,this.field)"
+                                  class="form-control bg-transparent text-area"></textarea>
+                        <div *ngIf="field.type === 'bool'"
+                             class="form-check form-switch  fa-xl w-auto d-flex justify-content-center">
+                            <input class="form-check-input" type="checkbox" [(ngModel)]="el[field.name]"
+                                   (input)="onValueChanged(el,this.field)">
+                        </div>
+                        <select *ngIf="field.type==='select'" [name]="field.name" [compareWith]="compareWith"
+                                [(ngModel)]="el[field.name]"
+                                (selectionchange)="onValueChanged(idx,this.field)"
+                                class="w-auto form-select bg-transparent">
+                            <option [ngValue]="op"
+                                    *ngFor="let op of getSelectedItem(field.name)!.options">{{op[getSelectedItem(field.name)!.displayField]}}</option>
+                        </select>
 
-         <app-file-input [text]="el[field.name]"  [accepts]="['.jpg','.jpeg','.png']" (upload)="uploadFile(el,this.field.name,$event)" *ngIf="field.type === 'image' ">
+                        <app-file-input *ngIf="field.type === 'image'" [text]="el[field.name]"
+                                        [accepts]="['.jpg','.jpeg','.png']"
+                                        (upload)="uploadFile(el,this.field.name,$event)">
 
-         </app-file-input>
+                        </app-file-input>
 
-         <div *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</div>
-     </div>
-   </td>
- </ng-container>
-    </tr>
+                        <div *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</div>
+                    </div>
+                </td>
+            </ng-container>
+        </tr>
 
-    </tbody>
-    <tfoot *ngIf="totalSize && totalSize>pageSize" >
-     <tr>
-       <td [colSpan]="fields.length+1" class="tfoot bg-secondary text-dark">
-         <mat-paginator [length]="totalSize" class="float-start fs-6 bg-secondary text-dark fw-bold"
-                        (page)="pageChanged($event.pageIndex+1,$event.pageSize)"
-                        [pageIndex]="page-1"
-                        [pageSize]="pageSize"
-                        [pageSizeOptions]="[5, 10, 25,50,100]"
-                        aria-label="Select page">
-         </mat-paginator>
+        </tbody>
+        <tfoot *ngIf="totalSize && totalSize>pageSize">
+        <tr>
+            <td [colSpan]="fields.length+1" class="tfoot bg-secondary text-dark">
+                <mat-paginator [length]="totalSize" class="float-start fs-6 bg-secondary text-dark fw-bold"
+                               (page)="pageChanged($event.pageIndex+1,$event.pageSize)"
+                               [pageIndex]="page-1"
+                               [pageSize]="pageSize"
+                               [pageSizeOptions]="[5, 10, 25,50,100]"
+                               aria-label="Select page">
+                </mat-paginator>
 
-       </td>
-     </tr>
-    </tfoot>
+            </td>
+        </tr>
+        </tfoot>
 
-  </table>
+    </table>
+    <ng-template #elementEdit>
+        <form (submit)="handleSubmit()" [formGroup]="myForm">
+            <h1 mat-dialog-title>{{isNewItem ? 'Add new  item' : 'Update item'}}</h1>
 
+            <div mat-dialog-content>
+                <ng-container *ngFor="let field of fields">
+                    <app-select [defaultSelect]="currentElement[field.name]" *ngIf="field.type==='select'"
+                                [haObjectValue]="true" appearance="legacy"
+                                [items]="getSelectedItem(field.name)!.options"
+                                [selectLabel]="getSelectedItem(field.name)!.displayField" [placeholder]="field.display"
+                                [control]="myForm.controls[field.name]">
+                        <span *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</span>
+                    </app-select>
+                    <app-input *ngIf="field.type==='text'" appearance="legacy" [label]="field.display"
+                               [control]="myForm.controls[field.name]" (changeValue)="deleteError(field.name)">
+                        <span *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</span>
+                    </app-input>
+                    <app-input *ngIf="field.type==='number'" inputType="number" appearance="legacy"
+                               [label]="field.display" [control]="myForm.controls[field.name]"
+                               (changeValue)="deleteError(field.name)">
+                        <span *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</span>
+                    </app-input>
+                    <app-input *ngIf="field.type==='decimal'" inputType="decimal" appearance="legacy"
+                               [label]="field.display" [control]="myForm.controls[field.name]"
+                               (changeValue)="deleteError(field.name)">
+                        <span *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</span>
+                    </app-input>
+                    <app-input *ngIf="field.type==='textArea'" inputType="textArea" appearance="legacy"
+                               [label]="field.display" [control]="myForm.controls[field.name]"
+                               (changeValue)="deleteError(field.name)">
+                        <span *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</span>
+                    </app-input>
+                    <div class="mb-4" *ngIf="field.type === 'image'">
+                        <app-file-input [label]="field.display" [text]="currentElement[field.name]"
+                                        [accepts]="['.jpg','.jpeg','.png']"
+                                        (upload)="uploadFile(currentElement,this.field.name,$event)">
+                        </app-file-input>
+                        <span *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</span>
+                    </div>
+                </ng-container>
+
+            </div>
+
+            <div mat-dialog-actions>
+                <button mat-raised-button *ngIf="isNewItem" mat-button color="primary" cdkFocusInitial>Save</button>
+                <button mat-raised-button *ngIf="!isNewItem" mat-button color="primary" cdkFocusInitial>Update</button>
+                <button mat-raised-button [mat-dialog-close]="" color="accent">Cancel</button>
+            </div>
+        </form>
+    </ng-template>
 </div>
 
 

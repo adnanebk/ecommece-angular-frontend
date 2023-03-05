@@ -13,15 +13,15 @@ import {OrdersComponent} from './orders/orders.component';
 
 
 const routes: Routes = [
-  {
-    path: '',
-    component: LayoutComponent,
-    children: [
-      { path: 'payment-info', component: CreditCardsComponent },
-      { path: 'checkout', component: CheckoutComponent },
-      { path: 'orders', component: OrdersComponent }
-    ]
-  }
+    {
+        path: '',
+        component: LayoutComponent,
+        children: [
+            {path: 'payment-info', component: CreditCardsComponent},
+            {path: 'checkout', component: CheckoutComponent},
+            {path: 'orders', component: OrdersComponent}
+        ]
+    }
 ];
 
 @NgModule({
@@ -40,4 +40,5 @@ const routes: Routes = [
         MatStepperModule,
     ]
 })
-export class PayementModule { }
+export class PayementModule {
+}

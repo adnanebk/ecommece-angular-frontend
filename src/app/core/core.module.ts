@@ -18,61 +18,59 @@ import {ToastrModule} from "ngx-toastr";
 import {AdminAuthGuard} from "./guards/admin-auth.guard";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    SocialLoginModule,
-    HttpClientModule,
-    ToastrModule.forRoot(),
-  ],
-  declarations: [
-  ],
-  providers: [
-    AuthGuard,
-    AdminAuthGuard,
+    imports: [
+        CommonModule,
+        SocialLoginModule,
+        HttpClientModule,
+        ToastrModule.forRoot(),
+    ],
+    declarations: [],
+    providers: [
+        AuthGuard,
+        AdminAuthGuard,
 
-    MediaMatcher,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: SpinnerInterceptor,
-      multi: true
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
-    },
-    {
-      provide: ErrorHandler
-    },
-    { provide: NGXLogger, useClass: NGXLogger },
-    { provide: 'LOCALSTORAGE', useValue: window.localStorage },
+        MediaMatcher,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: SpinnerInterceptor,
+            multi: true
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptor,
+            multi: true
+        },
+        {
+            provide: ErrorHandler
+        },
+        {provide: NGXLogger, useClass: NGXLogger},
+        {provide: 'LOCALSTORAGE', useValue: window.localStorage},
 
-    {
-      provide: 'SocialAuthServiceConfig',
-      useValue: {
-        autoLogin: false,
-        providers: [
-          {
-            id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(
-                environment.google.clientId
-            )
-          },
-          {
-            id: FacebookLoginProvider.PROVIDER_ID,
-            provider: new FacebookLoginProvider(environment.facebook.clientId)
-          }
-        ]
-      } as SocialAuthServiceConfig,
-    }
+        {
+            provide: 'SocialAuthServiceConfig',
+            useValue: {
+                autoLogin: false,
+                providers: [
+                    {
+                        id: GoogleLoginProvider.PROVIDER_ID,
+                        provider: new GoogleLoginProvider(
+                            environment.google.clientId
+                        )
+                    },
+                    {
+                        id: FacebookLoginProvider.PROVIDER_ID,
+                        provider: new FacebookLoginProvider(environment.facebook.clientId)
+                    }
+                ]
+            } as SocialAuthServiceConfig,
+        }
 
-  ],
+    ],
 
-  exports: [
-  ]
+    exports: []
 })
 export class CoreModule {
-  constructor(@Optional() @SkipSelf() parentModule: CoreModule) {
-    throwIfAlreadyLoaded(parentModule, 'CoreModule');
-  }
+    constructor(@Optional() @SkipSelf() parentModule: CoreModule) {
+        throwIfAlreadyLoaded(parentModule, 'CoreModule');
+    }
 }

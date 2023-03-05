@@ -6,15 +6,15 @@ import {AuthService} from "../services/auth.service";
 export class AdminAuthGuard implements CanActivate {
 
     constructor(private router: Router,
-        private authService: AuthService) { }
+                private authService: AuthService) {
+    }
 
-   async canActivate()
-    {
+    async canActivate() {
 
-  if(this.authService.isUserAuthenticated() && this.authService.isAdminUser())
-    return true;
+        if (this.authService.isUserAuthenticated() && this.authService.isAdminUser())
+            return true;
 
-  await this.router.navigateByUrl('auth/login');
-  return false;
+        await this.router.navigateByUrl('auth/login');
+        return false;
     }
 }

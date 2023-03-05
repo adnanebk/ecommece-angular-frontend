@@ -1,8 +1,9 @@
-<div class="file-input">
-<input  id="file" #file  type="file" class="form-control file" [accept]="[accepts].join(',')"
-        (change)="uploadFile(file)">
-<label for="file">
-    <span class="small" >{{text && text.substring(text.lastIndexOf('/')+1) | limitTo:'10'}}</span>
-    <em class="fas fa-upload"></em></label>
+<div class="file-input d-flex justify-content-between">
+    <span class="m-2" style="color: gray" *ngIf="label">{{label}}</span>
+    <input id="file" #file type="file" class="form-control file" [accept]="[accepts].join(',')"
+           (change)="uploadFile(file)">
+    <label for="file">
+        <span class="small">{{text && text.substring(text.lastIndexOf('/') + 1) | limitTo:'20'}}</span>
+        <em class="fas fa-upload"></em></label>
 
 </div>

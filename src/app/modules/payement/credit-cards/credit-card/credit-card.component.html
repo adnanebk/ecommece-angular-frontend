@@ -6,7 +6,7 @@
                 class="example-margin float-end"
                 color="accent"
                 [checked]="creditCard.active"
-                 (change)="activeChange($event)">
+                (change)="activeChange($event)">
             <p class="fs-6">default</p>
         </mat-slide-toggle>
     </mat-card-title>
@@ -14,11 +14,15 @@
     <mat-card-content>
         <p>{{creditCard.cardNumber | maskText:4}}</p>
     </mat-card-content>
-    <mat-divider ></mat-divider>
+    <mat-divider></mat-divider>
 
     <mat-card-footer>
-        <button mat-button><mat-icon color="primary" (click)="editCard()" >edit</mat-icon></button>
-        <button mat-button  class="float-end"><mat-icon color="warn" (click)="removeCard()">delete</mat-icon></button>
-<!--        <mat-progress-bar mode="indeterminate"></mat-progress-bar>-->
+        <button mat-button>
+            <mat-icon color="primary" (click)="editCard()">edit</mat-icon>
+        </button>
+        <button mat-button class="float-end">
+            <mat-icon color="warn" (click)="removeCard()">delete</mat-icon>
+        </button>
+        <!--        <mat-progress-bar mode="indeterminate"></mat-progress-bar>-->
     </mat-card-footer>
 </mat-card>

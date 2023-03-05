@@ -2,67 +2,71 @@
     <ng-template #noProducts>
         <ngb-alert>No products found</ngb-alert>
     </ng-template>
-    <div fxFlex="100%" *ngIf="pagedProducts$ | async as pagedProducts" >
+    <div fxFlex="100%" *ngIf="pagedProducts$ | async as pagedProducts">
         <ng-container>
-        <div class="container" fxLayout="row" fxLayoutAlign="center none">
+            <div class="container" fxLayout="row" fxLayoutAlign="center none">
 
-            <h2>Shopping page</h2>
-
-        </div>
-        <div class="container py-5"  >
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="row">
-                        <mat-form-field appearance="fill"  >
-                            <mat-label><strong>Search</strong></mat-label>
-                            <input [(ngModel)]="productPage.search" matInput placeholder="search..." (keyup.enter)="getProductsInPage()">
-                            <mat-icon (click)="searchProducts()" role="button"  matSuffix>search</mat-icon>
-                        </mat-form-field>
-                        <mat-form-field  *ngIf="categories$ | async as categories" appearance="fill" class="w-auto" >
-                            <mat-label><strong>Categories</strong></mat-label>
-                            <mat-select [(ngModel)]="selectedCategoryName" name="category" (selectionChange)="getProductsBySelectedCategory()" >
-                                <mat-option [value]="">
-                                    All
-                                </mat-option>
-                                <mat-option *ngFor="let op of categories"  [value]="op.name">
-                                    {{op.name}}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                        <mat-form-field appearance="fill" class="w-auto" >
-                            <mat-label><strong>Sort by</strong></mat-label>
-                            <mat-select name="sort" [(ngModel)]="selectedFilter" (selectionChange)="getProductsByFilter()" >
-                                <mat-option *ngFor="let filter of filters"  [value]="filter">
-                                    {{filter.display}}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-
-                    </div>
-
-                    <ng-container *ngIf="pagedProducts.totalElements; else noProducts">
-                    <div class="row" >
-                        <div  class="col-md-3" *ngFor="let product of pagedProducts.content ">
-
-                        <app-product [product]="product"></app-product>
-                        </div>
-
-
-                    </div>
-                    <div class="row" >
-                        <div class="justify-content-start  ">
-
-                            <ngb-pagination [collectionSize]="pagedProducts.totalElements" [(page)]="productPage.number" size="lg"
-                                            [pageSize]="productPage.size" [maxSize]="4" [boundaryLinks]="true"
-                                            (pageChange)="getProductsInPage()"
-                            ></ngb-pagination>
-                        </div>
-                    </div>
-                    </ng-container>
-                </div>
+                <h2>Shopping page</h2>
 
             </div>
-        </div>
+            <div class="container py-5">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <mat-form-field appearance="fill">
+                                <mat-label><strong>Search</strong></mat-label>
+                                <input [(ngModel)]="productPage.search" matInput placeholder="search..."
+                                       (keyup.enter)="getProductsInPage()">
+                                <mat-icon (click)="searchProducts()" role="button" matSuffix>search</mat-icon>
+                            </mat-form-field>
+                            <mat-form-field *ngIf="categories$ | async as categories" appearance="fill" class="w-auto">
+                                <mat-label><strong>Categories</strong></mat-label>
+                                <mat-select [(ngModel)]="selectedCategoryName" name="category"
+                                            (selectionChange)="getProductsBySelectedCategory()">
+                                    <mat-option [value]="">
+                                        All
+                                    </mat-option>
+                                    <mat-option *ngFor="let op of categories" [value]="op.name">
+                                        {{op.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field appearance="fill" class="w-auto">
+                                <mat-label><strong>Sort by</strong></mat-label>
+                                <mat-select name="sort" [(ngModel)]="selectedFilter"
+                                            (selectionChange)="getProductsByFilter()">
+                                    <mat-option *ngFor="let filter of filters" [value]="filter">
+                                        {{filter.display}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                        </div>
+
+                        <ng-container *ngIf="pagedProducts.totalElements; else noProducts">
+                            <div class="row">
+                                <div class="col-md-3" *ngFor="let product of pagedProducts.content ">
+
+                                    <app-product [product]="product"></app-product>
+                                </div>
+
+
+                            </div>
+                            <div class="row">
+                                <div class="justify-content-start  ">
+
+                                    <ngb-pagination [collectionSize]="pagedProducts.totalElements"
+                                                    [(page)]="productPage.number" size="lg"
+                                                    [pageSize]="productPage.size" [maxSize]="4" [boundaryLinks]="true"
+                                                    (pageChange)="getProductsInPage()"
+                                    ></ngb-pagination>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+
+                </div>
+            </div>
         </ng-container>
     </div>
 </div>

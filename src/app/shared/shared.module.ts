@@ -25,16 +25,16 @@ import {AutosizeModule} from "ngx-autosize";
         NgbPaginationModule,
         AutosizeModule,
     ],
-  declarations: [
-    LimitToPipe,
-    LocalDatePipe,
-    LayoutComponent,
-    EditableTableComponent,
-    ConfirmComponent,
-    AppInputComponent,
-    SelectComponent,
-    FileInputComponent,
-  ],
+    declarations: [
+        LimitToPipe,
+        LocalDatePipe,
+        LayoutComponent,
+        EditableTableComponent,
+        ConfirmComponent,
+        AppInputComponent,
+        SelectComponent,
+        FileInputComponent,
+    ],
     exports: [
         FormsModule,
         ReactiveFormsModule,
@@ -48,4 +48,5 @@ import {AutosizeModule} from "ngx-autosize";
         EditableTableComponent,
     ]
 })
-export class SharedModule { }
+export class SharedModule {
+}

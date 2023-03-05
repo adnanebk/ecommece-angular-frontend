@@ -4,72 +4,77 @@ import {DataSource, Field} from "../../../../shared/editable-table/editable-tabl
 import {Category} from "../../../../core/models/category";
 import {CategoryService} from "../../../../core/services/category.service";
 import {ToastrService} from "ngx-toastr";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Component({
-  selector: 'app-categories-editing',
-  templateUrl: './categories-editing.component.html',
-  styleUrls: ['./categories-editing.component.css']
+    selector: 'app-categories-editing',
+    templateUrl: './categories-editing.component.html',
+    styleUrls: ['./categories-editing.component.css']
 })
 export class CategoriesEditingComponent implements OnInit {
 
-  dataPage: DataPage = {size:8,number:1};
-  dataSource =  new DataSource<Category>();
+    dataPage: DataPage = {size: 8, number: 1};
+    dataSource = new DataSource<Category>();
+    categoryForm!: FormGroup;
 
-  constructor( private categoryService: CategoryService, private toastrService: ToastrService,
-  ) {
+    constructor(private categoryService: CategoryService, private toastrService: ToastrService,
+    ) {
 
-  }
+    }
 
-  ngOnInit(): void {
-    this.dataSource.fields = [new Field("name","Name")];
-    this.fetchCategories();
-  }
+    ngOnInit(): void {
+        this.createForm();
+        this.dataSource.fields = [new Field("name", "Name")];
+        this.fetchCategories();
+    }
 
-  private fetchCategories() {
-    this.categoryService.getCategories().subscribe(resp => {
-      this.dataSource.data=resp;
-        }
-    );
-  }
-
-
-
-  addCategory(category:Category) {
-    this.categoryService.saveCategory(category).subscribe(resp => {
-      this.dataSource.onRowAdded.next(resp);
-      this.successAlert();
-    }, errors => this.dataSource.onRowErrors.next(Array.from(errors)));
-  }
+    private fetchCategories() {
+        this.categoryService.getCategories().subscribe(resp => {
+                this.dataSource.data = resp;
+            }
+        );
+    }
 
 
+    addCategory(category: Category) {
+        this.categoryService.saveCategory(category).subscribe(resp => {
+            this.dataSource.onRowAdded.next(resp);
+            this.successAlert();
+        }, errors => this.dataSource.onRowErrors.next(Array.from(errors)));
+    }
 
 
-  updateCategory(category:Category) {
-    this.categoryService.updateCategory(category).subscribe(resp => {
-      this.dataSource.onRowUpdated.next(resp);
-      this.successAlert();
-    }, errors =>   this.dataSource.onRowErrors.next(Array.from(errors)));
-  }
+    updateCategory(category: Category) {
+        this.categoryService.updateCategory(category).subscribe(resp => {
+            this.dataSource.onRowUpdated.next(resp);
+            this.successAlert();
+        }, errors => this.dataSource.onRowErrors.next(Array.from(errors)));
+    }
 
-  removeCategory(category:Category) {
-    this.categoryService.removeCategory(category.id).subscribe(() => {
-          this.successAlert();
-          this.dataSource.onRowRemoved.next(category);
-        }
-    )
-  }
+    removeCategory(category: Category) {
+        this.categoryService.removeCategory(category.id).subscribe(() => {
+                this.successAlert();
+                this.dataSource.onRowRemoved.next(category);
+            }
+        )
+    }
 
 
+    sortCategories({sort, direction}: any) {
+        this.dataPage.sortProperty = sort;
+        this.dataPage.sortDirection = direction;
+        this.fetchCategories();
+    }
 
-  sortCategories({sort, direction}:any) {
-    this.dataPage.sortProperty = sort;
-    this.dataPage.sortDirection = direction;
-    this.fetchCategories();
-  }
+    private successAlert() {
+        this.toastrService.success('your operation has been successful');
+    }
 
-  private successAlert() {
-    this.toastrService.success('your operation has been successful');
-  }
-
+    private createForm() {
+        this.categoryForm = new FormGroup({
+            id: new FormControl(null),
+            name: new FormControl(null, [Validators.required]),
+        });
+    }
 }
 

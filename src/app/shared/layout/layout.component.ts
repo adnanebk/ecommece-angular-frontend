@@ -24,10 +24,10 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
     private autoLogoutSubscription: Subscription = new Subscription;
     docUrl = environment.pathDoc;
 
-    constructor(private changeDetectorRef: ChangeDetectorRef,private cartService:CartService,
-        private media: MediaMatcher,
-        public spinnerService: SpinnerService,
-        private authService: AuthService,private router: Router,private activatedRoute: ActivatedRoute) {
+    constructor(private changeDetectorRef: ChangeDetectorRef, private cartService: CartService,
+                private media: MediaMatcher,
+                public spinnerService: SpinnerService,
+                private authService: AuthService, private router: Router, private activatedRoute: ActivatedRoute) {
 
         this.mobileQuery = this.media.matchMedia('(max-width: 1000px)');
         this._mobileQueryListener = () => changeDetectorRef.detectChanges();
@@ -39,7 +39,7 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngOnInit(): void {
-        this.authService.getAuthenticatedUser().subscribe(user=>this.userName=user?.firstName!);
+        this.authService.getAuthenticatedUser().subscribe(user => this.userName = user?.firstName!);
     }
 
     ngOnDestroy(): void {
@@ -60,16 +60,16 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
         return this.authService.isUserAuthenticated();
     }
 
-    getCartItemsCount(){
-      return this.cartService.cartSize;
+    getCartItemsCount() {
+        return this.cartService.cartSize;
     }
 
     async login() {
-      await  this.router.navigateByUrl('auth/login')
+        await this.router.navigateByUrl('auth/login')
     }
 
     private verifyUser() {
-        this.activatedRoute.queryParamMap.subscribe(params=>params.has("verified") && this.authService.enableUser())
+        this.activatedRoute.queryParamMap.subscribe(params => params.has("verified") && this.authService.enableUser())
     }
 
     isAdminUser() {

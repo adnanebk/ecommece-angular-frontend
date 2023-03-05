@@ -1,14 +1,14 @@
-
-<mat-form-field [appearance]="appearance" class="w-100"  >
+<mat-form-field [appearance]="appearance" class="w-100">
     <mat-label>{{placeholder}}</mat-label>
-    <mat-select   [disabled]="readonly" [required]="formControl.hasError('required')" #inp [formControl]="formControl"  >
-        <mat-option *ngFor="let item of items" [value]="selectLabel?item[selectValue]:item">
-            {{selectLabel?item[selectLabel]:item}}
+    <mat-select [compareWith]="compareWith" [disabled]="readonly" [required]="formControl.hasError('required')" #inp
+                [formControl]="formControl">
+        <mat-option *ngFor="let item of items" [value]="haObjectValue?item:item[selectValue]">
+            {{item[selectLabel]}}
         </mat-option>
 
     </mat-select>
-<mat-error *ngIf="formControl.hasError('required')" >please select an option</mat-error>
+    <mat-error *ngIf="formControl.hasError('required')">please select an option</mat-error>
     <span *ngIf="!formControl.touched && !formControl.dirty">
-            <ng-content ></ng-content>
+            <ng-content></ng-content>
     </span>
 </mat-form-field>

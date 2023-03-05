@@ -1,10 +1,12 @@
 <div class="">
     <div class="section-content section-content text-center">
-        <div  class="container-fluid">
-            <h3 class="card-headchangeProductswitcher text-center font-weight-bold text-uppercase py-4">Manage products</h3>
+        <div class="container-fluid">
+            <h3 class="card-headchangeProductswitcher text-center font-weight-bold text-uppercase py-4">Manage
+                products</h3>
             <mat-form-field appearance="fill" class="w-100">
                 <mat-label><strong>Search</strong></mat-label>
-                <input [(ngModel)]="productPage.search" matInput placeholder="search..." (keyup.enter)="fetchProducts()">
+                <input [(ngModel)]="productPage.search" matInput placeholder="search..."
+                       (keyup.enter)="fetchProducts()">
                 <mat-icon (click)="fetchProducts()" role="button" matSuffix>search</mat-icon>
             </mat-form-field>
             <ng-template #noProducts>
@@ -14,16 +16,18 @@
             <ng-container *ngIf="dataSource.data?.length; else noProducts">
                 <button (click)="saveToExcel()" class="btn btn-primary rounded my-2 mx-5">download excel</button>
                 <div class="input-group mx-3">
-                    <strong for="formFile" class="fs-5" >Add/Update from excel</strong>
+                    <strong for="formFile" class="fs-5">Add/Update from excel</strong>
                     <div>
-                        <input #file class="form-control" accept=".xlsx,.xls" (change)="addOrUpdateFromExcel(file)" type="file" id="formFile">
+                        <input #file class="form-control" accept=".xlsx,.xls" (change)="addOrUpdateFromExcel(file)"
+                               type="file" id="formFile">
                     </div>
                 </div>
 
 
-                <app-editable-table (dataUpdated)="updateProduct($event)"
+                <app-editable-table [myForm]="productForm"
                                     [datasource]="dataSource"
                                     [enableMultiEditing]="true"
+                                    (dataUpdated)="updateProduct($event)"
                                     (dataAdded)="addProduct($event)"
                                     (dataPaged)="onPageChanged($event)"
                                     (dataDeleted)="removeProduct($event)"

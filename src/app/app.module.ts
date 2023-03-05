@@ -11,22 +11,23 @@ import {LoggerModule} from 'ngx-logger';
 import {environment} from '../environments/environment';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    CoreModule,
-    SharedModule,
-    CustomMaterialModule.forRoot(),
-    AppRoutingModule,
-    LoggerModule.forRoot({
-      serverLoggingUrl: `http://my-api/logs`,
-      level: environment.logLevel,
-      serverLogLevel: environment.serverLogLevel
-    })
-  ],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent
+    ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        CoreModule,
+        SharedModule,
+        CustomMaterialModule.forRoot(),
+        AppRoutingModule,
+        LoggerModule.forRoot({
+            serverLoggingUrl: `http://my-api/logs`,
+            level: environment.logLevel,
+            serverLogLevel: environment.serverLogLevel
+        })
+    ],
+    bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

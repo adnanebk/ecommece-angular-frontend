@@ -1,12 +1,12 @@
 <div class="container" *ngIf="product">
-    <div class="details-wrapper sec-padding" >
+    <div class="details-wrapper sec-padding">
         <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="80">
             <div fxLayout="row wrap" fxFlex="100" fxFlex.gt-md="100" fxFlex.gt-sm="100">
                 <div fxFlex="100" fxFlex.gt-md="50" fxFlex.md="45">
 
                     <mat-card class="product-image">
                         <div>
-                            <button mat-icon-button  fxHide="false" fxHide.gt-md>
+                            <button mat-icon-button fxHide="false" fxHide.gt-md>
                                 <mat-icon>fullscreen</mat-icon>
                             </button>
                             <img [src]="product.image" alt=""/>
@@ -15,7 +15,7 @@
 
 
                     <div class="images-container">
-                        <div class="swiper-container" >
+                        <div class="swiper-container">
                             <div class="swiper-wrapper">
                                 <!--<div *ngFor="let image of [product.image,product.image]; let i=index" class="swiper-slide">
                                     <mat-card class="p-1">
@@ -24,35 +24,41 @@
                                     </mat-card>
                                 </div>-->
                             </div>
-                            <button mat-icon-button class="swiper-button-prev swipe-arrow"><mat-icon>keyboard_arrow_left</mat-icon></button>
-                            <button mat-icon-button class="swiper-button-next swipe-arrow"><mat-icon>keyboard_arrow_right</mat-icon></button>
+                            <button mat-icon-button class="swiper-button-prev swipe-arrow">
+                                <mat-icon>keyboard_arrow_left</mat-icon>
+                            </button>
+                            <button mat-icon-button class="swiper-button-next swipe-arrow">
+                                <mat-icon>keyboard_arrow_right</mat-icon>
+                            </button>
                         </div>
                     </div>
                 </div>
-                <div fxFlex="100" fxFlex.gt-md="50" fxFlex.md="55" ngClass.gt-sm="px-3 m-0" ngClass.sm="mt-2" ngClass.xs="mt-2">
+                <div fxFlex="100" fxFlex.gt-md="50" fxFlex.md="55" ngClass.gt-sm="px-3 m-0" ngClass.sm="mt-2"
+                     ngClass.xs="mt-2">
 
                     <div class="product-right">
                         <div class="product-details">
                             <h2>{{product.name}}</h2>
-                            <h3 class="price" >{{product.unitPrice | currency:'$'}}</h3>
+                            <h3 class="price">{{product.unitPrice | currency:'$'}}</h3>
                             <p class="text-muted description">{{product.description}}</p>
                         </div>
                         <div class="py-1 mt-15">
                             <p>
                                 <span class="fw-bolder fw-500">Avalibility: </span>
-                                <span class="avalibility" ><span>{{product.unitsInStock}} in Stock</span></span>
+                                <span class="avalibility"><span>{{product.unitsInStock}} in Stock</span></span>
                             </p>
                         </div>
                         <div class="quantity mb-4">
                             <span class="fw-bold  fw-500">Quantity</span>
 
-                            <div fxLayout="row" fxLayout.xs="column"  class="text-muted">
+                            <div fxLayout="row" fxLayout.xs="column" class="text-muted">
 
                                 <div fxLayout="row" fxLayoutAlign="center start">
                                     <button mat-icon-button matTooltip="Remove" (click)="decrement()">
                                         <mat-icon>remove</mat-icon>
                                     </button>
-                                    <input readonly type="text" name="quantity" value="{{quantity}}" class="form-control input-number">
+                                    <input readonly type="text" name="quantity" value="{{quantity}}"
+                                           class="form-control input-number">
                                     <button mat-icon-button matTooltip="Add" (click)="increment()">
                                         <mat-icon>add</mat-icon>
                                     </button>
@@ -61,8 +67,11 @@
                         </div>
                         <div class="buttons">
                             <button mat-raised-button color="primary" class="btn-project me-2" (click)="addToCart()">
-                                <mat-icon>shopping_cart</mat-icon> ADD TO CARD</button>
-                            <button mat-raised-button color="primary" class="btn-project" (click)="checkout()">BUY NOW</button>
+                                <mat-icon>shopping_cart</mat-icon>
+                                ADD TO CARD
+                            </button>
+                            <button mat-raised-button color="primary" class="btn-project" (click)="checkout()">BUY NOW
+                            </button>
                         </div>
                     </div>
                 </div>

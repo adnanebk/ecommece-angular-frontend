@@ -1,4 +1,3 @@
-
 @import "../../../../../assets/variables";
 
 
@@ -11,34 +10,42 @@
       max-width: 100%;
     }
   }
+
   .product-right {
     padding: 0 30px 0 25px;
+
     .product-details {
       padding-bottom: 15px;
       border-bottom: 1px dashed $grey-light;
+
       h2 {
         margin-bottom: 10px;
       }
+
       h4 {
         del {
           color: $grey;
           font-size: 17px;
         }
+
         span {
           padding-left: 5px;
           color: $theme-main-red;
           font-size: 24px;
         }
       }
+
       .avalibility {
         span {
           color: $theme-main-red;
           font-weight: 500;
         }
       }
+
       p.description {
         line-height: 26px;
       }
+
       h3.price {
         font-size: 26px;
         font-weight: 400;
@@ -47,6 +54,7 @@
 
 
     }
+
     .quantity {
       margin-top: 10px;
 
@@ -54,6 +62,7 @@
         margin-bottom: 7px;
         display: block;
       }
+
       input {
         width: 80px;
         text-align: center;
@@ -63,28 +72,33 @@
       }
     }
   }
+
   .info-bar {
     border: 1px solid $grey-light;
     padding: 0 20px;
     margin-top: 0px !important;
-    .mat-icon{
+
+    .mat-icon {
       color: $font-color;
       font-size: 41px;
       margin-right: 15px;
       line-height: 23px;
     }
+
     .content {
       p {
         text-transform: capitalize;
         font-weight: 500;
       }
     }
+
     .mat-card {
       box-shadow: none !important;
       padding: 20px 0;
       border-bottom: 1px solid $grey-light;
 
     }
+
     .mat-card.no-border {
       border-bottom: none;
     }
@@ -92,10 +106,12 @@
 
   .products {
     padding-right: 30px;
+
     .title {
       margin-bottom: 15px;
       position: relative;
       padding-bottom: 1.25rem;
+
       &::before {
         content: "";
         left: 0;
@@ -105,6 +121,7 @@
         bottom: 0.34375rem;
         background-color: #f6f6f6;
       }
+
       &::after {
         content: "";
         left: 0;
@@ -116,16 +133,21 @@
       }
     }
   }
+
   .images-container {
     position: relative;
     margin-top: 10px;
+
     .swiper-container {
       height: 180px;
+
       .swiper-slide {
         display: inline-block;
+
         mat-card {
           max-height: 120px;
           min-height: 120px;
+
           img {
             max-width: 110px;
             margin-bottom: 12px;
@@ -136,11 +158,13 @@
           }
         }
       }
+
       .swiper-button-prev {
         position: absolute;
         top: 32%;
         left: 0px;;
       }
+
       .swiper-button-next {
         position: absolute;
         top: 32%;

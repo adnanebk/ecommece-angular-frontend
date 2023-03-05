@@ -15,8 +15,9 @@ export class LoginComponent implements OnInit {
 
     loginForm!: FormGroup;
     loading!: boolean;
-     errors: ApiError[]=[] ;
-    constructor(private router: Router,private location:Location,
+    errors: ApiError[] = [];
+
+    constructor(private router: Router, private location: Location,
                 private titleService: Title,
                 private authService: AuthService) {
     }
@@ -26,7 +27,6 @@ export class LoginComponent implements OnInit {
         this.titleService.setTitle('Login');
         this.createForm();
     }
-
 
 
     private createForm() {
@@ -45,9 +45,11 @@ export class LoginComponent implements OnInit {
             }
         );
     }
+
     hasError() {
         return this.errors.length;
     }
+
     getErrorMessage() {
         return this.errors[0].message;
     }
@@ -62,9 +64,11 @@ export class LoginComponent implements OnInit {
         await this.authService.loginWithFacebook();
         await this.redirect();
     }
+
     private redirectIfUserLoggedIn() {
-        this.authService.isUserAuthenticated() &&   this.router.navigateByUrl('/');
+        this.authService.isUserAuthenticated() && this.router.navigateByUrl('/');
     }
+
     private async redirect() {
         await this.router.navigateByUrl('/');
         // this.location.back();

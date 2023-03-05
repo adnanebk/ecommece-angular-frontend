@@ -1,37 +1,46 @@
-<mat-card-title class="text-center mt-4 " >Profile Information</mat-card-title>
-<div class="d-lg-flex  gap-5 " >
-    <div class="d-flex flex-column align-items-center image-width" >
+<mat-card-title class="text-center mt-4 ">Profile Information</mat-card-title>
+<div class="d-lg-flex  gap-5 ">
+    <div class="d-flex flex-column align-items-center image-width">
 
-         <img *ngIf="user.imageUrl" [src]="user.imageUrl"  referrerpolicy="no-referrer" class="circle " alt="You have no image">
-         <img *ngIf="!user.imageUrl" src="../../../../../assets/images/user.png" class="circle" alt="You have no image">
+        <img *ngIf="user.imageUrl" [src]="user.imageUrl" referrerpolicy="no-referrer" class="circle "
+             alt="You have no image">
+        <img *ngIf="!user.imageUrl" src="../../../../../assets/images/user.png" class="circle" alt="You have no image">
 
-     <app-file-input [accepts]="['.jpg','.jpeg','.png']" class="input-file" *ngIf="!isImageUploading" (upload)="handleFileUpload($event)"></app-file-input>
-        <div *ngIf="isImageUploading"  class="spinner-border text-primary align-self-center " role="status">
+        <app-file-input [accepts]="['.jpg','.jpeg','.png']" class="input-file" *ngIf="!isImageUploading"
+                        (upload)="handleFileUpload($event)"></app-file-input>
+        <div *ngIf="isImageUploading" class="spinner-border text-primary align-self-center " role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
 
-     </div>
+    </div>
 
     <div class="profile-card border-0 w-100 mt-4 ">
-        <form [formGroup]="profileForm" (submit)="onSubmit()" class="myform" >
+        <form [formGroup]="profileForm" (submit)="onSubmit()" class="myform">
             <mat-card class="formCard">
                 <mat-card-content>
 
-                    <app-input appearance="standard"   matIcon="face" label="First name" [control]="profileForm.controls['firstName']" >
+                    <app-input appearance="standard" matIcon="face" label="First name"
+                               [control]="profileForm.controls['firstName']">
                         <mat-error>{{this.getApiError('firstName')}}</mat-error>
                     </app-input>
-                    <app-input  appearance="standard"  matIcon="face" label="Last name" [control]="profileForm.controls['lastName']" >
+                    <app-input appearance="standard" matIcon="face" label="Last name"
+                               [control]="profileForm.controls['lastName']">
                         <mat-error>{{this.getApiError('lastName')}}</mat-error>
                     </app-input>
-                    <app-input [readonly]="user?.social!" appearance="standard"   matIcon="email" label="Email address" [control]="profileForm.controls['email']" >
+                    <app-input [readonly]="user?.social!" appearance="standard" matIcon="email" label="Email address"
+                               [control]="profileForm.controls['email']">
                         <mat-error>{{this.getApiError('email')}}</mat-error>
                     </app-input>
-                    <app-select appearance="standard" placeholder="Select a country"  [items]="['Morocco','Egypt','Algeria','Tunisia']"   [control]="profileForm.controls['country']" >
+                    <app-select appearance="standard" placeholder="Select a country"
+                                [items]="['Morocco','Egypt','Algeria','Tunisia']"
+                                [control]="profileForm.controls['country']">
                     </app-select>
-                    <app-input  appearance="standard" matIcon="location_on" label="City" [control]="profileForm.controls['city']" >
+                    <app-input appearance="standard" matIcon="location_on" label="City"
+                               [control]="profileForm.controls['city']">
                         <mat-error>{{this.getApiError('city')}}</mat-error>
                     </app-input>
-                    <app-input  appearance="standard"   matIcon="location_on" label="Street" [control]="profileForm.controls['street']" >
+                    <app-input appearance="standard" matIcon="location_on" label="Street"
+                               [control]="profileForm.controls['street']">
                         <mat-error>{{this.getApiError('street')}}</mat-error>
                     </app-input>
 
@@ -39,8 +48,10 @@
 
                 <mat-card-actions class="login-actions text-center">
 
-                    <ng-container >
-                        <button mat-raised-button type="submit" color="primary"    class="mx-4 btn-lg  "   [disabled]="!profileForm.dirty || profileForm.invalid">Save</button>
+                    <ng-container>
+                        <button mat-raised-button type="submit" color="primary" class="mx-4 btn-lg  "
+                                [disabled]="!profileForm.dirty || profileForm.invalid">Save
+                        </button>
                     </ng-container>
                 </mat-card-actions>
             </mat-card>
