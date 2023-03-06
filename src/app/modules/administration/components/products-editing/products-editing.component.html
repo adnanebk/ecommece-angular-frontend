@@ -35,7 +35,7 @@
                                     (RemoveAll)="removeAllProducts($event)"
                 ></app-editable-table>
                 <tr>
-                        <mat-paginator [length]="productPage.totalSize" class="float-start fs-6 bg-secondary text-dark fw-bold"
+                        <mat-paginator [length]="productPage.totalSize" class="float-start fs-6  fw-bold"
                                        (page)="onPage($event.pageIndex+1,$event.pageSize)"
                                        [pageIndex]="productPage.number-1"
                                        [pageSize]="productPage.size"
