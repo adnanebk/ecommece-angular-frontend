@@ -12,7 +12,7 @@ export interface Product {
     category: Category;
     dateCreated: Date;
     lastUpdated: Date;
-    imageFile?: any;
+    imageFile?: File;
 }
 
 

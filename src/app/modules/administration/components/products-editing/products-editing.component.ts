@@ -3,18 +3,13 @@ import {ToastrService} from "ngx-toastr";
 import {CategoryService} from "../../../../core/services/category.service";
 import {ProductService} from "../../../../core/services/product.service";
 import {Product} from "../../../../core/models/product";
-import {DataSource, Field} from "../../../../shared/editable-table/editable-table.component";
+import {DataSource} from "../../../../shared/editable-table/editable-table.component";
 import {DataPage} from "../../../../core/models/dataPage";
 import {saveAs} from 'file-saver';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {Category} from "../../../../core/models/category";
 
-const fields: Field[] = [new Field('sku', 'Sku'), new Field('name', 'Name'),
-    new Field('description', 'Description', 'textArea'), new Field('unitPrice', 'Price', 'decimal'),
-    new Field('active', 'Enable', 'bool'),
-    new Field('unitsInStock', 'Quantity', 'number'), new Field('category', 'Category', 'select'),
-    new Field('dateCreated', 'Newest', 'date', true), new Field('lastUpdated', 'Last updated', 'date', true),
-    new Field('image', 'Image', 'image')
-]
+
 
 @Component({
     selector: 'app-products-editing',
@@ -22,47 +17,49 @@ const fields: Field[] = [new Field('sku', 'Sku'), new Field('name', 'Name'),
     styleUrls: ['./products-editing.component.scss']
 })
 export class ProductsEditingComponent implements OnInit {
-
     productPage: DataPage = {size: 8, number: 1, sortProperty: 'lastUpdated', sortDirection: 'DESC'};
     dataSource = new DataSource<Product>();
     productForm!: FormGroup;
 
     constructor(private productService: ProductService, private categoryService: CategoryService, private toastrService: ToastrService,
     ) {
-
     }
 
     ngOnInit(): void {
         this.createForm();
-        this.dataSource.fields = fields;
         this.fetchCategories();
         this.fetchProducts();
     }
-
-    private fetchCategories() {
-        this.categoryService.getCategories().subscribe(resp => {
-                this.dataSource.nestedObjects.push({
-                    property: 'category',
-                    valueField: 'id',
-                    displayField: 'name',
-                    options: resp
-                });
-            }
-        );
-    }
-
     fetchProducts() {
         this.productService.getProductsInPage(this.productPage).subscribe(resp => {
             this.dataSource.totalSize = this.productPage.totalSize = resp.totalElements;
             this.dataSource.data = resp.content;
         });
     }
+    private fetchCategories() {
+        this.categoryService.getCategories().subscribe(categories => {
+
+            this.dataSource.fields=[
+                {name: 'sku',display:'Sku',type:'text'},
+                {name: 'name',display:'Name',type:'text'},
+                {name: 'description', display:'Description', type:'textArea'},
+                {name: 'unitPrice', display:'Price', type:'decimal'},
+                {name: 'active', display:'Enable', type:'bool'},
+                {name: 'unitsInStock', display:'Quantity', type:'number'},
+                {name: 'category', display:'Category',type: 'select',selectOptions:{displayField:'name',valueField:'id',options:categories}},
+                {name: 'dateCreated', display:'Newest', type:'date',readOnly: true},
+                {name: 'lastUpdated', display:'Last updated', type:'date', readOnly:true},
+                {name: 'image',display: 'Image',type:'image',fileField: 'imageFile'}
+            ];
+            }
+        );
+    }
+
 
     addProduct(product: Product) {
         if (!product.imageFile) {
             this.toastrService.error("you must upload an image");
         }
-        this.setProductImageFile(product);
         this.productService.saveProduct(product).subscribe(resp => {
             this.dataSource.onRowAdded.next(resp);
             this.successAlert();
@@ -71,7 +68,6 @@ export class ProductsEditingComponent implements OnInit {
 
 
     updateProduct(product: Product) {
-        this.setProductImageFile(product);
         this.productService.updateProduct(product).subscribe(resp => {
             this.dataSource.onRowUpdated.next(resp);
             this.successAlert();
@@ -134,10 +130,6 @@ export class ProductsEditingComponent implements OnInit {
                 this.toastrService.error(errors[0].message, 'Error');
             }, () => $input.value = ''
         );
-    }
-
-    private setProductImageFile(product: Product) {
-        product.imageFile = this.dataSource.uploadedFiles.find(upFile => upFile.property === 'image')?.file;
     }
 
     onPageChanged(pageData: { page: number, pageSize: number }) {

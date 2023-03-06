@@ -167,23 +167,19 @@ export class EditableTableComponent implements OnInit, OnDestroy {
         this.errors = [];
         this.isNewItem = false;
         this.currentElement.dirty = false;
-        if (!this.currentElement.isSaving) {
+        if (!this.isSaving(this.currentElement)) {
             // rollback
             Object.assign(this.currentElement, this.originalElement);
         }
-
         this.currentElement = element;
         this.originalElement = {...element};
-
     }
 
-
-    uploadFile(element: DataType, property: string, file: File) {
+    uploadFile(element: DataType, field: Field, file: File) {
         this.errors = [];
         element.dirty = true;
-        element[property] = file.name;
-        this.datasource.uploadedFiles = this.datasource.uploadedFiles.filter(fl => fl.property !== property)
-        this.datasource.uploadedFiles.push({property, file});
+        element[field.name] = file.name;
+        element[field.fileField!] = file;
     }
 
 
@@ -192,10 +188,9 @@ export class EditableTableComponent implements OnInit, OnDestroy {
         if (icon.classList.contains('fa-sort-up')) {
             direction = 'DESC';
             icon.classList.replace('fa-sort-up', 'fa-sort-down');
-        } else if (icon.classList.contains('fa-sort-down')) {
-            icon.classList.replace('fa-sort-down', 'fa-sort-up');
-            direction = 'ASC';
-        } else {
+        }
+        else  {
+            icon.classList.remove('fa-sort-down');
             icon.classList.add('fa-sort-up');
             direction = 'ASC';
         }
@@ -255,9 +250,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
         this.dataPaged.next({page, pageSize});
     }
 
-    get selects() {
-        return this.datasource.nestedObjects;
-    }
+
 
     get data(): DataType[] {
         return this.datasource.data;
@@ -283,9 +276,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
         return el.isSaving;
     }
 
-    getSelectedItem(fieldName: string) {
-        return this.selects.find(sl => sl.property === fieldName);
-    }
+
 
     handleSubmit() {
         Object.assign(this.currentElement, this.myForm.getRawValue());
@@ -325,10 +316,13 @@ export class EditableTableComponent implements OnInit, OnDestroy {
 
 export declare type InputType = 'text' | 'number' | 'decimal' | 'bool' | 'date' | 'textArea' | 'image' | 'select';
 
-export class Field {
-    constructor(public name: string, public display: string, public type: InputType = 'text', public readOnly = false) {
-    }
-
+export interface Field {
+    name: string;
+    display: string;
+    type: InputType;
+    readOnly?: boolean;
+    selectOptions?: { displayField: string, valueField: string, options: any[] };
+    fileField?: string;
 }
 
 export interface ApiError {
@@ -348,8 +342,6 @@ export class DataSource<Type> {
     onRowsRemoved = new Subject<Type[]>();
     identifier = 'id'
     totalSize = 0;
-    uploadedFiles: { property: string, file: File }[] = [];
-    nestedObjects: { property: string, displayField: string, valueField: string, options: any[] } [] = [];
 }
 
 type DataType = any | {

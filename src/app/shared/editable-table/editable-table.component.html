@@ -77,12 +77,12 @@
                 <td *ngIf="!isColHide(field)" (click)="onViewChanged(el)" class="align-middle td-width"
                     [class]="{'bgDirty':isDirty(el)}">
 
-                    <div *ngIf="!isCurrentElement(el) && !isBatchEnabled" class=" text-max-width">
+                    <div *ngIf="(!isCurrentElement(el) && !isBatchEnabled) || field.readOnly" class=" text-max-width">
                         <strong *ngIf="field.type==='number' || field.type==='decimal' || field.type==='text'"> {{el[field.name]}}</strong>
                         <strong *ngIf="field.type==='textArea'"> {{el[field.name] | limitTo :'60'}}</strong>
                         <strong *ngIf="field.type==='date'"> {{el[field.name] | date :'short'}}</strong>
                         <strong *ngIf="field.type==='bool'"> {{el[field.name] ? 'Yes' : 'No'}}</strong>
-                        <strong *ngIf="field.type==='select'"> {{el[field.name][getSelectedItem(field.name)!.displayField]}}</strong>
+                        <strong *ngIf="field.type==='select' && field.selectOptions"> {{el[field.name][field.selectOptions.displayField]}}</strong>
                         <img *ngIf="field.type === 'image'" [src]="el[field.name]" alt=""/>
                     </div>
 
@@ -104,17 +104,17 @@
                             <input class="form-check-input" type="checkbox" [(ngModel)]="el[field.name]"
                                    (input)="onValueChanged(el,this.field)">
                         </div>
-                        <select *ngIf="field.type==='select'" [name]="field.name" [compareWith]="compareWith"
+                        <select *ngIf="field.type==='select' && field.selectOptions" [name]="field.name" [compareWith]="compareWith"
                                 [(ngModel)]="el[field.name]"
                                 (selectionchange)="onValueChanged(idx,this.field)"
                                 class="w-auto form-select bg-transparent">
                             <option [ngValue]="op"
-                                    *ngFor="let op of getSelectedItem(field.name)!.options">{{op[getSelectedItem(field.name)!.displayField]}}</option>
+                                    *ngFor="let op of field.selectOptions.options">{{op[field.selectOptions.displayField]}}</option>
                         </select>
 
                         <app-file-input *ngIf="field.type === 'image'" [text]="el[field.name]"
                                         [accepts]="['.jpg','.jpeg','.png']"
-                                        (upload)="uploadFile(el,this.field.name,$event)">
+                                        (upload)="uploadFile(el,this.field,$event)">
 
                         </app-file-input>
 
@@ -147,10 +147,10 @@
 
             <div mat-dialog-content>
                 <ng-container *ngFor="let field of fields">
-                    <app-select [defaultSelect]="currentElement[field.name]" *ngIf="field.type==='select'"
+                    <app-select  *ngIf="field.type==='select' && field.selectOptions" [defaultSelect]="currentElement[field.name]"
                                 [haObjectValue]="true" appearance="legacy"
-                                [items]="getSelectedItem(field.name)!.options"
-                                [selectLabel]="getSelectedItem(field.name)!.displayField" [placeholder]="field.display"
+                                [items]="field.selectOptions.options"
+                                [selectLabel]="field.selectOptions.displayField" [placeholder]="field.display"
                                 [control]="myForm.controls[field.name]">
                         <span *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</span>
                     </app-select>
@@ -176,7 +176,7 @@
                     <div class="mb-4" *ngIf="field.type === 'image'">
                         <app-file-input [label]="field.display" [text]="currentElement[field.name]"
                                         [accepts]="['.jpg','.jpeg','.png']"
-                                        (upload)="uploadFile(currentElement,this.field.name,$event)">
+                                        (upload)="uploadFile(currentElement,this.field,$event)">
                         </app-file-input>
                         <span *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</span>
                     </div>
