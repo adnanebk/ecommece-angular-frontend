@@ -17,7 +17,6 @@ export class EditableTableComponent implements OnInit, OnDestroy {
     @Output() dataAdded = new EventEmitter<any>();
     @Output() dataDeleted = new EventEmitter<any>();
     @Output() dataSorted = new EventEmitter<{ sort: string, direction: string }>();
-    @Output() dataPaged = new EventEmitter<{ page: number, pageSize: number }>();
     @Input() datasource!: DataSource<any>;
     @Input() enableMultiEditing = false;
     @Input() myForm: FormGroup = new FormGroup({});
@@ -25,12 +24,10 @@ export class EditableTableComponent implements OnInit, OnDestroy {
     @Output() RemoveAll = new EventEmitter<any[]>();
 
     isBatchEnabled = false;
+    isFormEditing = false;
     selectedSize = 0;
     currentElement: DataType = {};
-    originalElement: any = {};
     errors: { fieldName: string, message: string }[] = [];
-    page = 1;
-    pageSize = 8;
     subscriptions: Subscription[] = [];
     isNewItem = true;
 
@@ -62,6 +59,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
             this.data[0] = row;
             this.data[0].isSaving = false;
             this.dialog.closeAll();
+            this.backUpData();
         }));
     }
 
@@ -71,24 +69,27 @@ export class EditableTableComponent implements OnInit, OnDestroy {
             this.data[index] = row;
             this.data[index].isSaving = false;
             this.dialog.closeAll();
+            this.backUpData();
         }));
     }
 
     private handleRowRemoved() {
         this.subscriptions.push(this.datasource.onRowRemoved.subscribe(row => {
             this.data.splice(this.findIndex(row), 1);
+            this.backUpData();
         }));
     }
 
     private handleRowsAdded() {
         this.subscriptions.push(this.datasource.onRowsAdded.subscribe(rows => {
             rows.forEach(r => this.datasource.data.unshift(r));
+            this.backUpData();
         }));
     }
 
     private handleRowsUpdated() {
         this.subscriptions.push(this.datasource.onRowsUpdated.subscribe(rows => {
-            this.datasource.data = this.data.map(row => rows[this.findIndex(row)] || row);
+            this.datasource.setData(this.data.map(row => rows[this.findIndex(row)] || row));
         }));
     }
 
@@ -96,16 +97,15 @@ export class EditableTableComponent implements OnInit, OnDestroy {
         this.subscriptions.push(this.datasource.onRowsRemoved.subscribe(rows => {
             rows.forEach(row => {
                 this.data.splice(this.findIndex(row), 1);
-            })
+            });
+            this.backUpData();
         }));
     }
 
     handleError() {
         this.subscriptions.push(this.datasource.onRowErrors.subscribe(resp => {
-            this.errors = resp;
-            const index = this.data.indexOf(this.currentElement);
-            if (index >= 0)
-                this.data[index].isSaving = false;
+            this.errors = resp.errors;
+            resp.row.isSaving=false;
         }));
     }
 
@@ -151,28 +151,15 @@ export class EditableTableComponent implements OnInit, OnDestroy {
         this.removeError(field.name);
     }
 
-    cancelChange() {
-        if (this.currentElement.isNew) {
-            this.data.splice(0, 1);
-            return;
-        }
-        Object.assign(this.currentElement, this.originalElement);
-        this.currentElement = {};
-    }
-
     onViewChanged(element: any) {
         if (this.isCurrentElement(element) || this.isBatchEnabled)
             return;
-
+        if (!this.isSaving(this.currentElement))
+            this.rolleback();
         this.errors = [];
         this.isNewItem = false;
-        this.currentElement.dirty = false;
-        if (!this.isSaving(this.currentElement)) {
-            // rollback
-            Object.assign(this.currentElement, this.originalElement);
-        }
         this.currentElement = element;
-        this.originalElement = {...element};
+
     }
 
     uploadFile(element: DataType, field: Field, file: File) {
@@ -225,7 +212,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
     }
 
     isCurrentElement(element: any) {
-        return element === this.currentElement;
+        return element[this.identifier] === this.currentElement[this.identifier];
     }
 
     hasFocus(element: HTMLElement) {
@@ -245,13 +232,6 @@ export class EditableTableComponent implements OnInit, OnDestroy {
         return el.dirty && (this.isCurrentElement(el) || this.isBatchEnabled);
     }
 
-    pageChanged(page: number, pageSize: number) {
-        this.errors = [];
-        this.dataPaged.next({page, pageSize});
-    }
-
-
-
     get data(): DataType[] {
         return this.datasource.data;
     }
@@ -262,10 +242,6 @@ export class EditableTableComponent implements OnInit, OnDestroy {
 
     get fields() {
         return this.datasource.fields;
-    }
-
-    get totalSize() {
-        return this.datasource.totalSize;
     }
 
     isColHide(field: Field) {
@@ -295,22 +271,37 @@ export class EditableTableComponent implements OnInit, OnDestroy {
         this.currentElement = {};
         this.myForm.reset({});
         const dialogRef = this.openDialog();
-        dialogRef.afterClosed().subscribe(() => this.currentElement = {});
+        dialogRef.afterClosed().subscribe(() => this.rolleback());
     }
 
     deleteError(fieldName: string) {
         this.errors = this.errors.filter(er => er.fieldName !== fieldName);
     }
 
-    handleEdit(el: any) {
+    handleEdit(el: DataType) {
         this.errors=[];
-        this.currentElement = el;
         this.isNewItem = false;
         const dialogRef = this.openDialog();
         dialogRef.afterOpened().subscribe(() => {
             this.myForm.patchValue(el);
+            this.isFormEditing=true;
+        });
+        dialogRef.afterClosed().subscribe(()=> {
+            this.rolleback();
+            this.isFormEditing=false;
         });
     }
+
+    rolleback() {
+        this.errors=[];
+        this.currentElement = {};
+        this.datasource.rolleBack();
+    }
+    backUpData(){
+        this.currentElement={};
+        this.datasource.backupData();
+    }
+
 }
 
 
@@ -332,16 +323,34 @@ export interface ApiError {
 
 export class DataSource<Type> {
     fields: Field[] = [];
-    data: Type[] = [];
-    onRowErrors = new Subject<ApiError[]>();
+    private _data: Type[] = [];
+    private backedData: Type[] = [];
+    onRowErrors = new Subject<{row:Type,errors:ApiError[] }>();
     onRowAdded = new Subject<Type>();
     onRowsAdded = new Subject<Type[]>();
     onRowUpdated = new Subject<Type>();
     onRowsUpdated = new Subject<Type[]>();
     onRowRemoved = new Subject<Type>();
     onRowsRemoved = new Subject<Type[]>();
-    identifier = 'id'
-    totalSize = 0;
+    identifier = 'id';
+
+    get data(): Type[] {
+        return this._data;
+    }
+
+    public setData(data:Type[]){
+        this._data=data;
+        this.backupData();
+    }
+    backupData() {
+        this.backedData = [];
+        this.data.forEach(e=>this.backedData.push({...e}));
+
+    }
+    rolleBack() {
+        this._data=[];
+        this.backedData.forEach(e=>this._data.push({...e}));
+    }
 }
 
 type DataType = any | {

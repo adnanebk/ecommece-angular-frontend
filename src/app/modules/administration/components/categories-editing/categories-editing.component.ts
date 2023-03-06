@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {DataPage} from "../../../../core/models/dataPage";
-import {DataSource, Field} from "../../../../shared/editable-table/editable-table.component";
+import {ApiError, DataSource, Field} from "../../../../shared/editable-table/editable-table.component";
 import {Category} from "../../../../core/models/category";
 import {CategoryService} from "../../../../core/services/category.service";
 import {ToastrService} from "ngx-toastr";
@@ -30,7 +30,7 @@ export class CategoriesEditingComponent implements OnInit {
 
     private fetchCategories() {
         this.categoryService.getCategories().subscribe(resp => {
-                this.dataSource.data = resp;
+                this.dataSource.setData(resp);
             }
         );
     }
@@ -40,7 +40,7 @@ export class CategoriesEditingComponent implements OnInit {
         this.categoryService.saveCategory(category).subscribe(resp => {
             this.dataSource.onRowAdded.next(resp);
             this.successAlert();
-        }, errors => this.dataSource.onRowErrors.next(Array.from(errors)));
+        }, errors => this.sendErrors(category,errors));
     }
 
 
@@ -48,7 +48,7 @@ export class CategoriesEditingComponent implements OnInit {
         this.categoryService.updateCategory(category).subscribe(resp => {
             this.dataSource.onRowUpdated.next(resp);
             this.successAlert();
-        }, errors => this.dataSource.onRowErrors.next(Array.from(errors)));
+        }, errors => this.sendErrors(category,errors));
     }
 
     removeCategory(category: Category) {
@@ -75,6 +75,9 @@ export class CategoriesEditingComponent implements OnInit {
             id: new FormControl(null),
             name: new FormControl(null, [Validators.required]),
         });
+    }
+    private sendErrors(category: Category, errors: ApiError[]) {
+        this.dataSource.onRowErrors.next({row:category,errors:errors});
     }
 }
 

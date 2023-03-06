@@ -2,9 +2,10 @@
     <div class="custom-control custom-switch">
         <div class="form-check form-switch fs-4">
             enable multi editing
-            <input (ngModelChange)="pageChanged(page,pageSize)" class="form-check-input" type="checkbox" role="switch"
+            <input (ngModelChange)="rolleback()" class="form-check-input" type="checkbox" role="switch"
                    checked
                    [(ngModel)]="isBatchEnabled"/>
+            <button (click)="rolleback()" class="btn btn-info"><em class="fas fa-refresh"></em>Refresh</button>
         </div>
     </div>
 
@@ -47,9 +48,9 @@
         <tbody>
         <tr *ngFor="let el of data; let idx= index;trackBy: trackByFn">
 
-            <td class="p-1 align-middle actions" [class]="isDirty(el)?'bgDirty':''">
+       <td class="p-1 align-middle actions" [class]="isDirty(el)?'bgDirty':''">
       <span *ngIf="!isBatchEnabled" class="table-edit">
-        <ng-container *ngIf="el!==currentElement">
+        <ng-container *ngIf="!isCurrentElement(el)">
         <button (click)="handleEdit(el)" type="button"
                 class="btn btn-rounded btn-sm my-0"><em class="fas fa-edit text-info"></em></button>
         <button (click)="remove(el)" type="button" class="btn btn-rounded  btn-sm  mx-2">
@@ -60,9 +61,9 @@
                 class="btn btn-success btn-rounded btn-sm my-0">
                     <span *ngIf="isSaving(el)" class="spinner-grow spinner-grow-sm" role="status"
                           aria-hidden="true"></span>
-
-          Save</button>
-          <button *ngIf="isCurrentElement(el) && !isSaving(el)" (click)="cancelChange()"
+          Save
+        </button>
+          <button *ngIf="isCurrentElement(el) && !isSaving(el)" (click)="rolleback()"
                   class="btn m-1 btn-warning btn-sm">cancel</button>
 
       </span>
@@ -86,7 +87,7 @@
                         <img *ngIf="field.type === 'image'" [src]="el[field.name]" alt=""/>
                     </div>
 
-                    <div class="py-2 text-center" *ngIf="(isCurrentElement(el) || isBatchEnabled) && !field.readOnly">
+                    <div class="py-2 text-center" *ngIf="(isCurrentElement(el) || isBatchEnabled)">
 
                         <input *ngIf="field.type==='text'" type="text" [(ngModel)]="el[field.name]"
                                (input)="onValueChanged(el,this.field)" class=" form-control bg-transparent"/>
@@ -118,27 +119,14 @@
 
                         </app-file-input>
 
-                        <div *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</div>
+                        <div *ngIf="hasError() && !isFormEditing" class="text-danger">{{getError(field.name)}}</div>
                     </div>
                 </td>
             </ng-container>
         </tr>
 
         </tbody>
-        <tfoot *ngIf="totalSize && totalSize>pageSize">
-        <tr>
-            <td [colSpan]="fields.length+1" class="tfoot bg-secondary text-dark">
-                <mat-paginator [length]="totalSize" class="float-start fs-6 bg-secondary text-dark fw-bold"
-                               (page)="pageChanged($event.pageIndex+1,$event.pageSize)"
-                               [pageIndex]="page-1"
-                               [pageSize]="pageSize"
-                               [pageSizeOptions]="[5, 10, 25,50,100]"
-                               aria-label="Select page">
-                </mat-paginator>
 
-            </td>
-        </tr>
-        </tfoot>
 
     </table>
     <ng-template #elementEdit>
@@ -185,8 +173,10 @@
             </div>
 
             <div mat-dialog-actions>
-                <button mat-raised-button *ngIf="isNewItem" mat-button color="primary" cdkFocusInitial>Save</button>
-                <button mat-raised-button *ngIf="!isNewItem" mat-button color="primary" cdkFocusInitial>Update</button>
+                <button mat-raised-button *ngIf="isNewItem && !isSaving(this.currentElement)" mat-button color="primary" cdkFocusInitial>Save</button>
+                <button mat-raised-button *ngIf="!isNewItem && !isSaving(this.currentElement)" mat-button color="primary" cdkFocusInitial>Update</button>
+                <span *ngIf="isSaving(this.currentElement)" class="spinner-grow spinner-grow m-2" role="status"
+                      aria-hidden="true"></span>
                 <button mat-raised-button [mat-dialog-close]="" color="accent">Cancel</button>
             </div>
         </form>

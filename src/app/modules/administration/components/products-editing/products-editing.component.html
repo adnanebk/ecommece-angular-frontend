@@ -29,12 +29,21 @@
                                     [enableMultiEditing]="true"
                                     (dataUpdated)="updateProduct($event)"
                                     (dataAdded)="addProduct($event)"
-                                    (dataPaged)="onPageChanged($event)"
                                     (dataDeleted)="removeProduct($event)"
                                     (dataSorted)="sortProducts($event)"
                                     (UpdateAll)="updateProducts($event)"
                                     (RemoveAll)="removeAllProducts($event)"
                 ></app-editable-table>
+                <tr>
+                        <mat-paginator [length]="productPage.totalSize" class="float-start fs-6 bg-secondary text-dark fw-bold"
+                                       (page)="onPage($event.pageIndex+1,$event.pageSize)"
+                                       [pageIndex]="productPage.number-1"
+                                       [pageSize]="productPage.size"
+                                       [pageSizeOptions]="[5, 10, 25,50,100]"
+                                       aria-label="Select page">
+                        </mat-paginator>
+
+                </tr>
                 <br>
                 <br>
 

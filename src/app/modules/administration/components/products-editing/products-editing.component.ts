@@ -3,7 +3,7 @@ import {ToastrService} from "ngx-toastr";
 import {CategoryService} from "../../../../core/services/category.service";
 import {ProductService} from "../../../../core/services/product.service";
 import {Product} from "../../../../core/models/product";
-import {DataSource} from "../../../../shared/editable-table/editable-table.component";
+import {ApiError, DataSource} from "../../../../shared/editable-table/editable-table.component";
 import {DataPage} from "../../../../core/models/dataPage";
 import {saveAs} from 'file-saver';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
@@ -32,8 +32,8 @@ export class ProductsEditingComponent implements OnInit {
     }
     fetchProducts() {
         this.productService.getProductsInPage(this.productPage).subscribe(resp => {
-            this.dataSource.totalSize = this.productPage.totalSize = resp.totalElements;
-            this.dataSource.data = resp.content;
+            this.productPage.totalSize = resp.totalElements;
+            this.dataSource.setData(resp.content);
         });
     }
     private fetchCategories() {
@@ -63,7 +63,7 @@ export class ProductsEditingComponent implements OnInit {
         this.productService.saveProduct(product).subscribe(resp => {
             this.dataSource.onRowAdded.next(resp);
             this.successAlert();
-        }, errors => this.dataSource.onRowErrors.next(Array.from(errors)));
+        }, errors => this.sendErrors(product,errors));
     }
 
 
@@ -71,7 +71,7 @@ export class ProductsEditingComponent implements OnInit {
         this.productService.updateProduct(product).subscribe(resp => {
             this.dataSource.onRowUpdated.next(resp);
             this.successAlert();
-        }, errors => this.dataSource.onRowErrors.next(Array.from(errors)));
+        }, errors => this.sendErrors(product,errors));
     }
 
 
@@ -132,12 +132,6 @@ export class ProductsEditingComponent implements OnInit {
         );
     }
 
-    onPageChanged(pageData: { page: number, pageSize: number }) {
-        this.productPage.number = pageData.page;
-        this.productPage.size = pageData.pageSize;
-        this.fetchProducts()
-    }
-
 
     private createForm() {
         this.productForm = new FormGroup({
@@ -151,11 +145,19 @@ export class ProductsEditingComponent implements OnInit {
             unitsInStock: new FormControl(null, [Validators.required]),
         });
     }
+    onPage(number: number, pageSize: number) {
+        this.productPage.number = number;
+        this.productPage.size = pageSize;
+        this.fetchProducts();
+    }
 
     private successAlert(msg = '') {
         this.toastrService.success('your operation has been successful ' + msg);
     }
 
+    private sendErrors(product: Product, errors: ApiError[]) {
+        this.dataSource.onRowErrors.next({row:product,errors:errors});
+    }
 }
 
 
