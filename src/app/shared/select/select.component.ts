@@ -11,10 +11,9 @@ export class SelectComponent implements OnInit {
 
     @Input() control: AbstractControl = new FormControl();
     @Input() selectLabel = '';
-    @Input() defaultSelect = {};
     @Input() readonly = false;
-    @Input() haObjectValue = false;
-    @Input() selectValue = 'id';
+    @Input() useObjectAsValue = false;
+    @Input() selectValue = '';
     @Input() items: any[] = [];
     @Input() placeholder = '';
     @Input() appearance: MatFormFieldAppearance = 'outline';
@@ -38,6 +37,6 @@ export class SelectComponent implements OnInit {
     }
 
     compareWith(item1: any, item2: any): boolean {
-        return ((item1 && item2) && item1[this.selectValue] === item2[this.selectValue]) || item1 === item2;
+        return (item1 && item2 && typeof item1 ==='object') ? item1[this.selectValue] === item2[this.selectValue] : item1 === item2;
     }
 }

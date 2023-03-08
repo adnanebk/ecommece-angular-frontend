@@ -135,11 +135,11 @@
 
             <div mat-dialog-content>
                 <ng-container *ngFor="let field of fields">
-                    <app-select  *ngIf="field.type==='select' && field.selectOptions" [defaultSelect]="currentElement[field.name]"
-                                [haObjectValue]="true" appearance="legacy"
-                                [items]="field.selectOptions.options"
-                                [selectLabel]="field.selectOptions.displayField" [placeholder]="field.display"
-                                [control]="myForm.controls[field.name]">
+                    <app-select  *ngIf="field.type==='select' && field.selectOptions" [items]="field.selectOptions.options"
+                                 [selectValue]="field.selectOptions.valueField"  [selectLabel]="field.selectOptions.displayField"
+                                 [useObjectAsValue]="true" appearance="legacy"
+                                 [placeholder]="field.display" [control]="myForm.controls[field.name]"
+                                >
                         <span *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</span>
                     </app-select>
                     <app-input *ngIf="field.type==='text'" appearance="legacy" [label]="field.display"

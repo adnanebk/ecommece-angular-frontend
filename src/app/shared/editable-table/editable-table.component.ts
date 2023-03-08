@@ -17,9 +17,9 @@ export class EditableTableComponent implements OnInit, OnDestroy {
     @Output() dataAdded = new EventEmitter<any>();
     @Output() dataDeleted = new EventEmitter<any>();
     @Output() dataSorted = new EventEmitter<{ sort: string, direction: string }>();
-    @Input() datasource!: DataSource<any>;
-    @Input() enableMultiEditing = false;
-    @Input() myForm: FormGroup = new FormGroup({});
+    @Input()  datasource!: DataSource<any>;
+    @Input()  enableMultiEditing = false;
+    @Input()  myForm: FormGroup = new FormGroup({});
     @Output() UpdateAll = new EventEmitter<any[]>();
     @Output() RemoveAll = new EventEmitter<any[]>();
 

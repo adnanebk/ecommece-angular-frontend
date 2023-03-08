@@ -1,9 +1,10 @@
 <mat-form-field [appearance]="appearance" class="w-100">
     <mat-label>{{placeholder}}</mat-label>
-    <mat-select [compareWith]="compareWith" [disabled]="readonly" [required]="formControl.hasError('required')" #inp
-                [formControl]="formControl">
-        <mat-option *ngFor="let item of items" [value]="haObjectValue?item:item[selectValue]">
-            {{item[selectLabel]}}
+    <mat-select  [disabled]="readonly" [required]="formControl.hasError('required')" #inp
+                [formControl]="formControl" [compareWith]="compareWith">
+        <mat-option *ngFor="let item of items"
+          [value]="selectValue && !useObjectAsValue?item[selectValue]:item" >
+            {{selectLabel?item[selectLabel]:item}}
         </mat-option>
 
     </mat-select>

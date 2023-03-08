@@ -42,11 +42,6 @@ export class UserService {
         return this.httpClient.patch<void>(this.baseUrl + 'auth/send-confirmation', email);
     }
 
-    getCurrentAuthUser() {
-        return this.httpClient.get<AppUser>(this.baseUrl + 'auth/user-info');
-    }
-
-
     updateUserProfile(profile: UserProfile, id?: number) {
         return this.httpClient.patch<AppUser>(this.baseUrl + 'users/current', profile);
     }
