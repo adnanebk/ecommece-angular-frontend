@@ -39,11 +39,11 @@ export class UserService {
     }
 
     sendActivationMessage(email: string) {
-        return this.httpClient.patch<void>(this.baseUrl + 'auth/user/send-confirmation', email);
+        return this.httpClient.patch<void>(this.baseUrl + 'auth/send-confirmation', email);
     }
 
     getCurrentAuthUser() {
-        return this.httpClient.get<AppUser>(this.baseUrl + 'auth/user');
+        return this.httpClient.get<AppUser>(this.baseUrl + 'auth/user-info');
     }
 
 
@@ -52,7 +52,7 @@ export class UserService {
     }
 
     updateUserPassword(changePassword: ChangePassword) {
-        return this.httpClient.patch(this.baseUrl + 'auth/user/change-password', changePassword);
+        return this.httpClient.patch(this.baseUrl + 'auth/change-password', changePassword);
     }
 
 
@@ -63,6 +63,9 @@ export class UserService {
 
     }
 
+    enableUserAccount(code: string) {
+       return this.httpClient.post(this.baseUrl+'users/current/enable',code);
+    }
 }
 
 

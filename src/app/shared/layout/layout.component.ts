@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {MediaMatcher} from '@angular/cdk/layout';
 import {Subscription} from 'rxjs';
 
@@ -7,6 +7,8 @@ import {AuthService} from "../../core/services/auth.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {CartService} from "../../core/services/cart.service";
 import {environment} from "../../../environments/environment.prod";
+import {MatDialog} from "@angular/material/dialog";
+import {ApiError} from "../../core/models/api-error";
 
 @Component({
     selector: 'app-layout',
@@ -17,15 +19,16 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
 
     private _mobileQueryListener: () => void;
     mobileQuery: MediaQueryList;
-    showSpinner: boolean = false;
     userName: string = "";
-    isAdmin: boolean = false;
+    @ViewChild('confirmationForm') cardEditingModal!: TemplateRef<any>
 
     private autoLogoutSubscription: Subscription = new Subscription;
     docUrl = environment.pathDoc;
+    confirmationCode ='';
+    errorMessage='';
 
     constructor(private changeDetectorRef: ChangeDetectorRef, private cartService: CartService,
-                private media: MediaMatcher,
+                private media: MediaMatcher,public dialog: MatDialog,
                 public spinnerService: SpinnerService,
                 private authService: AuthService, private router: Router, private activatedRoute: ActivatedRoute) {
 
@@ -51,7 +54,11 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
     ngAfterViewInit(): void {
         this.changeDetectorRef.detectChanges();
     }
-
+     openDialog() {
+        return this.dialog.open(this.cardEditingModal, {
+            width: '350px'
+        });
+    }
     logout() {
         this.authService.logout();
     }
@@ -69,10 +76,29 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     private verifyUser() {
-        this.activatedRoute.queryParamMap.subscribe(params => params.has("verified") && this.authService.enableUser())
+       // this.activatedRoute.queryParamMap.subscribe(params => params.has("verified") && this.authService.enableUser())
     }
 
     isAdminUser() {
         return this.authService.isAdminUser();
+    }
+
+    isUserEnabled() {
+       return Boolean(this.authService.isUserEnabled());
+    }
+
+    onChangeCode($event: string) {
+        this.confirmationCode=$event;
+    }
+
+    onAccountActivation() {
+        this.errorMessage='';
+        this.authService.enableUser(this.confirmationCode)
+            .subscribe(()=>this.dialog.closeAll(),
+                (er:ApiError[])=>this.errorMessage=er[0].message);
+    }
+
+    sendConfirmationCode() {
+        this.authService.sendActivationMessage();
     }
 }

@@ -85,8 +85,15 @@ export class AuthService {
 
     }
 
-    enableUser() {
-        let localUser = this.getCurrentUser();
+    enableUser(code:string) {
+       return  this.userService.enableUserAccount(code).pipe(
+           tap(()=>{
+            this.toastrService.success('you have successfully activated your account');
+            const user  = this.getCurrentUser();
+            user!.enabled=true;
+            this.updateUserInformation(user!);
+        }));
+ /*       let localUser = this.getCurrentUser();
         if (localUser && !localUser.enabled) {
             this.userService.getCurrentAuthUser().subscribe(user => {
                 if (user.enabled) {
@@ -96,8 +103,7 @@ export class AuthService {
                 }
             });
 
-
-        }
+        }*/
 
     }
 
@@ -124,17 +130,12 @@ export class AuthService {
 
     sendCompleteRegistrationNotification() {
         this.isToastOpened = true;
-        let toast = this.toastrService.info('Please complete your registration by activating your account in your email messages or click here to resend the activation code',
+        let toast = this.toastrService.info('Activate your account to see the full features',
             'Activate your account', {
                 timeOut: 10000,
                 extendedTimeOut: 3000,
             });
-        toast.onTap.subscribe(() => {
-                this.sendActivationMessage().subscribe(() => this.toastrService.info('We have just sent you a confirmation link,check your email messages'));
-            }
-        );
         toast.onHidden.subscribe(() => this.isToastOpened = false);
-
     }
 
     getToken() {
@@ -148,7 +149,9 @@ export class AuthService {
     isAdminUser() {
         return this.getCurrentUser()?.roles?.some(role => role.name.includes('ADMIN'));
     }
-
+    sendActivationMessage() {
+         this.userService.sendActivationMessage(this.getCurrentUser()!.email).subscribe(()=>this.toastrService.info("we have just send you a confirmation code,please verify your email account"));
+    }
     private mapUser(socialUser: SocialUser): SocialUserLogin {
         const {firstName, lastName, email, photoUrl, provider, authToken, idToken} = socialUser;
         return {firstName, lastName, email, image: photoUrl, token: provider === 'GOOGLE' ? idToken : authToken};
@@ -167,9 +170,5 @@ export class AuthService {
 
     private getCurrentUser() {
         return this.userSubject.value;
-    }
-
-    private sendActivationMessage() {
-        return this.userService.sendActivationMessage(this.getCurrentUser()!.email);
     }
 }

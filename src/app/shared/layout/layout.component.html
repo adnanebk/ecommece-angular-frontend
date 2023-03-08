@@ -14,7 +14,7 @@
         </a>
 
         <span class="navbar-spacer"></span>
-
+        <a routerLink="" (click)="openDialog()" class="text-white text-decoration-none" *ngIf="isLoggedIn() && !isUserEnabled()">Active my account</a>
         <button mat-icon-button routerLink="/shopping-cart">
             <mat-icon [matBadge]="getCartItemsCount() | async" matBadgeColor="accent">shopping_cart</mat-icon>
         </button>
@@ -54,7 +54,17 @@
         </mat-menu>
 
     </mat-toolbar>
+    <ng-template #confirmationForm>
+        <form>
+            <strong>Enter the code you have received from your email</strong>
+            <app-input (changeValue)="onChangeCode($event)" label="Confirmation code" ></app-input>
+            <button [disabled]="!this.confirmationCode"  (click)="onAccountActivation()"
+                    class="btn btn-success">Active</button>
+            <a routerLink="" (click)="sendConfirmationCode()" class="m-2 fs-6 text-black-50 text-decoration-none" >Click here to resend the code</a>
+            <div class="alert alert-danger m-2" *ngIf="errorMessage">{{errorMessage}}</div>
+        </form>
 
+    </ng-template>
     <mat-sidenav-container class="navbar-sidenav-container">
         <!-- Side nav -->
         <mat-sidenav #snav [opened]="!mobileQuery.matches" [mode]="mobileQuery.matches ? 'over' : 'side'"
