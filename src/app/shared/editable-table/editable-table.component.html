@@ -46,7 +46,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let el of data; let idx= index;trackBy: trackByFn">
+        <tr *ngFor="let el of data; let idx= index;trackBy: trackById">
 
        <td class="p-1 align-middle actions" [class]="isDirty(el)?'bgDirty':''">
       <span *ngIf="!isBatchEnabled" class="table-edit">
@@ -87,7 +87,7 @@
                         <img *ngIf="field.type === 'image'" [src]="el[field.name]" alt=""/>
                     </div>
 
-                    <div class="py-2 text-center" *ngIf="(isCurrentElement(el) || isBatchEnabled)">
+                    <div class="py-2 text-center" *ngIf="(isCurrentElement(el) || isBatchEnabled) && !field.readOnly">
 
                         <input *ngIf="field.type==='text'" type="text" [(ngModel)]="el[field.name]"
                                (input)="onValueChanged(el,this.field)" class=" form-control bg-transparent"/>
@@ -105,11 +105,10 @@
                             <input class="form-check-input" type="checkbox" [(ngModel)]="el[field.name]"
                                    (input)="onValueChanged(el,this.field)">
                         </div>
-                        <select *ngIf="field.type==='select' && field.selectOptions" [name]="field.name" [compareWith]="compareWith"
-                                [(ngModel)]="el[field.name]"
-                                (selectionchange)="onValueChanged(idx,this.field)"
-                                class="w-auto form-select bg-transparent">
-                            <option [ngValue]="op"
+                        <select *ngIf="field.type==='select' && field.selectOptions" [name]="field.name"  (selectionchange)="onValueChanged(idx,this.field)"
+                                [compareWith]="compareWith" [(ngModel)]="el[field.name]"
+                                class="w-auto form-select bg-transparent" >
+                            <option [value]="op"
                                     *ngFor="let op of field.selectOptions.options">{{op[field.selectOptions.displayField]}}</option>
                         </select>
 
@@ -134,14 +133,21 @@
             <h1 mat-dialog-title>{{isNewItem ? 'Add new  item' : 'Update item'}}</h1>
 
             <div mat-dialog-content>
-                <ng-container *ngFor="let field of fields">
-                    <app-select  *ngIf="field.type==='select' && field.selectOptions" [items]="field.selectOptions.options"
-                                 [selectValue]="field.selectOptions.valueField"  [selectLabel]="field.selectOptions.displayField"
-                                 [useObjectAsValue]="true" appearance="legacy"
-                                 [placeholder]="field.display" [control]="myForm.controls[field.name]"
-                                >
+                <ng-container *ngFor="let field of fields; trackBy: trackByField">
+                    <mat-form-field *ngIf="field.type==='select'" appearance="legacy" class="w-100">
+                        <mat-label>{{field.selectOptions!.displayField}}</mat-label>
+                        <mat-select  [required]="true"
+                                     [formControl]="getFormControl(field.name)"
+                                     [compareWith]="compareWith">
+                            <mat-option *ngFor="let item of field.selectOptions!.options"
+                                        [value]="item" >
+                                {{item[field.selectOptions!.displayField]}}
+                            </mat-option>
+
+                        </mat-select>
                         <span *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</span>
-                    </app-select>
+
+                    </mat-form-field>
                     <app-input *ngIf="field.type==='text'" appearance="legacy" [label]="field.display"
                                [control]="myForm.controls[field.name]" (changeValue)="deleteError(field.name)">
                         <span *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</span>

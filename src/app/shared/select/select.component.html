@@ -3,7 +3,7 @@
     <mat-select  [disabled]="readonly" [required]="formControl.hasError('required')" #inp
                 [formControl]="formControl" [compareWith]="compareWith">
         <mat-option *ngFor="let item of items"
-          [value]="selectValue && !useObjectAsValue?item[selectValue]:item" >
+          [value]="selectValue?item[selectValue]:item" >
             {{selectLabel?item[selectLabel]:item}}
         </mat-option>
 

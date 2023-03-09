@@ -12,8 +12,7 @@ export class SelectComponent implements OnInit {
     @Input() control: AbstractControl = new FormControl();
     @Input() selectLabel = '';
     @Input() readonly = false;
-    @Input() useObjectAsValue = false;
-    @Input() selectValue = '';
+    @Input() selectValue :string = '';
     @Input() items: any[] = [];
     @Input() placeholder = '';
     @Input() appearance: MatFormFieldAppearance = 'outline';

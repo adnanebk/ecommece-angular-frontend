@@ -3,7 +3,7 @@ import {DatePipe} from '@angular/common';
 import {Subject, Subscription} from "rxjs";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ConfirmComponent} from "../confirm-dialogue/confirm.component";
-import {FormGroup} from "@angular/forms";
+import {FormControl, FormGroup} from "@angular/forms";
 import {MatDialog} from "@angular/material/dialog";
 
 
@@ -219,12 +219,14 @@ export class EditableTableComponent implements OnInit, OnDestroy {
         return element === document.activeElement;
     }
 
-    trackByFn(item: any): string {
-        return item[this.identifier];
+    trackById(i:any, item: any): string {
+        return item && item[this.identifier];
     }
-
+    trackByField(i:any, item: Field): string {
+        return item.name;
+    }
     compareWith(item1: any, item2: any): boolean {
-        return ((item1 && item2) && item1.id === item2.id) || item1 === item2;
+        return (item1 && item2) ? item1.id=== item2.id : item1 === item2;
     }
 
 
@@ -237,7 +239,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
     }
 
     get identifier() {
-        return this.datasource.identifier;
+        return this.datasource.identifier || 'id';
     }
 
     get fields() {
@@ -302,6 +304,9 @@ export class EditableTableComponent implements OnInit, OnDestroy {
         this.datasource.backupData();
     }
 
+    getFormControl(name: string) {
+        return this.myForm.controls[name] as FormControl;
+    }
 }
 
 
@@ -332,7 +337,7 @@ export class DataSource<Type> {
     onRowsUpdated = new Subject<Type[]>();
     onRowRemoved = new Subject<Type>();
     onRowsRemoved = new Subject<Type[]>();
-    identifier = 'id';
+    identifier = '';
 
     get data(): Type[] {
         return this._data;
