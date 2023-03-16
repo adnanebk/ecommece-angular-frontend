@@ -89,16 +89,6 @@ table thead {
     z-index: 1;
 }
 
-
-/*input[type=text], input[type=number], textarea, select {
-  border: none;
-  !*border-radius: 5px;*!
-  background-color: inherit;
-  outline: 0;
-  height: 30px;
-  border-bottom: 2px solid mediumslateblue;
-}*/
-
 td {
     font-size: 12px;
 }

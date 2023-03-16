@@ -93,18 +93,6 @@ export class AuthService {
             user!.enabled=true;
             this.updateUserInformation(user!);
         }));
- /*       let localUser = this.getCurrentUser();
-        if (localUser && !localUser.enabled) {
-            this.userService.getCurrentAuthUser().subscribe(user => {
-                if (user.enabled) {
-                    this.toastrService.success('you have successfully verified your account');
-                    user.enabled = true;
-                    this.updateUserInformation(user);
-                }
-            });
-
-        }*/
-
     }
 
     refreshJwtToken() {
