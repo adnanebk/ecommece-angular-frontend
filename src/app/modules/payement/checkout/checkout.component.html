@@ -3,7 +3,7 @@
 
 
         <mat-stepper [linear]="true" #stepper class="col-lg-10">
-            <mat-step [stepControl]="customerForm">
+            <mat-step [hasError]="hasCustomerCardErrors()" [stepControl]="customerForm">
                 <form [formGroup]="customerForm">
                     <ng-template matStepLabel>Fill out your shipping information</ng-template>
 
@@ -28,21 +28,21 @@
                     </div>
                 </form>
             </mat-step>
-            <mat-step [stepControl]="creditCardForm" label="Fill out payment information">
+            <mat-step [hasError]="hasCreditCardErrors()" [stepControl]="creditCardForm"
+                      label="Fill out payment information">
                 <form [formGroup]="creditCardForm">
-
-                    <app-select [readonly]="!isEnableCardEditing" appearance="fill" [items]="cardNames"
+                    <app-input matIcon="credit_card" label="Card number"
+                               [control]="creditCardForm.controls['cardNumber']">
+                        <mat-error>{{this.getApiError('creditCard.cardNumber')}}</mat-error>
+                    </app-input>
+                    <app-select [readonly]="!isCardNumberChanged()" appearance="fill" [items]="cardOptions"
                                 selectValue="cardType" selectLabel="name" placeholder="Card type"
                                 [control]="creditCardForm.controls['cardType']">
-                        <mat-error>{{this.getApiError('cardType')}}</mat-error>
+                        <mat-error>{{this.getApiError('creditCard.cardType')}}</mat-error>
                     </app-select>
-                    <app-input (changeValue)="onCreditCardChange($event)" matIcon="credit_card" label="Card number"
-                               [control]="creditCardForm.controls['cardNumber']">
-                        <mat-error>{{this.getApiError('cardNumber')}}</mat-error>
-                    </app-input>
-                    <app-input [readonly]="!isEnableCardEditing" label="Expiration date"
+                    <app-input [readonly]="!isCardNumberChanged()" label="Expiration date"
                                [control]="creditCardForm.controls['expirationDate']">
-                        <mat-error>{{this.getApiError('expirationDate')}}</mat-error>
+                        <mat-error>{{this.getApiError('creditCard.expirationDate')}}</mat-error>
                     </app-input>
 
                     <div>
@@ -55,10 +55,7 @@
                 <ng-template matStepLabel>Done</ng-template>
                 <p>You are now done.</p>
                 <div>
-                    <strong *ngIf="errors.length" class="text-danger">Please go back and fixe the errors below</strong>
-                    <ul>
-                        <li *ngFor="let error of errors"><strong class="text-danger">{{error.message}}</strong></li>
-                    </ul>
+                    <div *ngIf="errors?.length" class="alert alert-danger">Please go back and fixe the errors</div>
                     <button mat-raised-button color="accent" (click)="stepper.previous()">Back</button>
                     <button mat-raised-button class="mx-2" color="primary" (click)="onSubmit()">Complete</button>
                 </div>

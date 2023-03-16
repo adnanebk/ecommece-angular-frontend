@@ -1,5 +1,9 @@
 export interface ApiError {
-    fieldName: string;
-    name: string;
+    code?: string;
     message: string;
+    errors?:FieldError[];
+}
+export  interface  FieldError{
+    fieldName: string;
+    message:string
 }

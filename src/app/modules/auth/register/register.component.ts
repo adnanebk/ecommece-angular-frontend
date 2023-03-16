@@ -12,9 +12,6 @@ import {ApiError} from "../../../core/models/api-error";
 })
 export class RegisterComponent implements OnInit {
     registerForm!: FormGroup;
-    state?: any;
-    errors: ApiError[] = [];
-
 
     constructor(private authService: AuthService, private router: Router) {
         this.createForm();
@@ -30,18 +27,12 @@ export class RegisterComponent implements OnInit {
     onSubmit() {
         this.registerForm.clearValidators();
         this.registerForm.markAsPristine();
-        this.errors = [];
 
         this.authService.register(this.registerForm.value).subscribe((user) => this.redirect(),
             (err) => {
-                this.errors = Array.from(err);
+                this.setErrors(err);
             }
         );
-    }
-
-
-    handleChange() {
-        this.errors = [];
     }
 
 
@@ -65,9 +56,8 @@ export class RegisterComponent implements OnInit {
         await this.router.navigateByUrl('/');
     }
 
-    getApiError(fieldName: string) {
-        const apiError = this.errors.find(err => err.fieldName === fieldName);
-        return apiError?.message;
+    private setErrors(error: ApiError) {
+        error.errors?.forEach(err => this.registerForm.setErrors({[err.fieldName]: err.message}))
     }
 
 

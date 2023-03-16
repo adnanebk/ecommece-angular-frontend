@@ -5,9 +5,7 @@
             <mat-card-subtitle><a routerLink="/auth/register"><strong>Don't have an account, create a one</strong></a>
             </mat-card-subtitle>
             <mat-card-content>
-                <mat-error *ngIf="hasError()">
-                    <strong>{{getErrorMessage()}}</strong>
-                </mat-error>
+
                 <app-input matIcon="email" label="Email" [control]="loginForm.controls['email']"></app-input>
 
                 <app-input label="Password" inputType="password" [control]="loginForm.controls['password']"></app-input>
@@ -15,9 +13,11 @@
             </mat-card-content>
 
             <mat-card-actions class="login-actions text-center">
-
+                <div class="alert alert-danger" *ngIf="loginForm.hasError('invalid')">
+                    <strong>{{loginForm.getError('invalid')}}</strong>
+                </div>
                 <button (click)="login()" class="btn  btn-lg btn-primary btn-rounded w-responsive"
-                        [disabled]="loginForm.invalid || loading">
+                        [disabled]="loginForm.invalid">
                     Login
                 </button>
 
@@ -37,7 +37,5 @@
             </mat-card-actions>
 
         </mat-card>
-
-        <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
     </form>
 </div>

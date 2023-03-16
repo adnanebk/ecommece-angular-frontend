@@ -6,18 +6,22 @@
             </mat-card-subtitle>
             <mat-card-content>
                 <app-input matIcon="face" label="First name" [control]="registerForm.controls['firstName']">
-                    <mat-error>{{this.getApiError('firstName')}}</mat-error>
+                    <mat-error
+                            *ngIf="registerForm.hasError('firstName')">{{this.registerForm.getError('firstName')}}</mat-error>
                 </app-input>
                 <app-input matIcon="face" label="Last name" [control]="registerForm.controls['lastName']">
-                    <mat-error>{{this.getApiError('lastName')}}</mat-error>
+                    <mat-error
+                            *ngIf="registerForm.hasError('lastName')">{{this.registerForm.getError('lastName')}}</mat-error>
                 </app-input>
 
                 <app-input matIcon="email" label="Email address" [control]="registerForm.controls['email']">
-                    <mat-error>{{this.getApiError('email')}}</mat-error>
+                    <mat-error
+                            *ngIf="registerForm.hasError('email')">{{this.registerForm.getError('email')}}</mat-error>
                 </app-input>
 
                 <app-input label="Password" inputType="password" [control]="registerForm.controls['password']">
-                    <mat-error>{{this.getApiError('password')}}</mat-error>
+                    <mat-error
+                            *ngIf="registerForm.hasError('password')">{{this.registerForm.getError('password')}}</mat-error>
                 </app-input>
                 <app-input label="Confirmed password" inputType="password"
                            [control]="registerForm.controls['confirmPassword']"></app-input>

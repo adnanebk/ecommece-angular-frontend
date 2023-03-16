@@ -2,6 +2,12 @@ import {Injectable} from '@angular/core';
 import {CreditCard} from "../models/CreditCard";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment.prod";
+import {map} from "rxjs";
+
+export interface CardOption {
+    cardType: string;
+    name: string;
+}
 
 @Injectable({
     providedIn: 'root'
@@ -37,8 +43,12 @@ export class CreditCardService {
         return this.httpClient.patch<void>(this.creditCardUrl + '/active/' + id, null);
     }
 
-    getCardNames() {
+    getCardNames():CardOption[] {
         return [{cardType: 'VISA', name: 'Visa'}, {cardType: 'MASTERCARD', name: 'Master Card'}];
+    }
+
+    getActiveCreditCard() {
+        return this.getCreditCards().pipe(map(cards=>cards.find(card => card.active)));
     }
 }
 

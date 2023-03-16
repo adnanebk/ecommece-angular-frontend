@@ -14,8 +14,6 @@ import {ApiError} from "../../../core/models/api-error";
 export class LoginComponent implements OnInit {
 
     loginForm!: FormGroup;
-    loading!: boolean;
-    errors: ApiError[] = [];
 
     constructor(private router: Router, private location: Location,
                 private titleService: Title,
@@ -39,19 +37,10 @@ export class LoginComponent implements OnInit {
     login() {
         this.authService.login(this.loginForm.getRawValue()).subscribe(
             () => this.redirect()
-            , (err) => {
-                this.errors = err;
-                console.log(err)
+            , (err: ApiError) => {
+                this.loginForm.setErrors({invalid: err.message})
             }
         );
-    }
-
-    hasError() {
-        return this.errors.length;
-    }
-
-    getErrorMessage() {
-        return this.errors[0].message;
     }
 
     async googleLogin() {

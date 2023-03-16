@@ -3,12 +3,11 @@ import {ToastrService} from "ngx-toastr";
 import {CategoryService} from "../../../../core/services/category.service";
 import {ProductService} from "../../../../core/services/product.service";
 import {Product} from "../../../../core/models/product";
-import {ApiError, DataSource} from "../../../../shared/editable-table/editable-table.component";
+import {DataSource} from "../../../../shared/editable-table/editable-table.component";
 import {DataPage} from "../../../../core/models/dataPage";
 import {saveAs} from 'file-saver';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Category} from "../../../../core/models/category";
-
 
 
 @Component({
@@ -30,27 +29,33 @@ export class ProductsEditingComponent implements OnInit {
         this.fetchCategories();
         this.fetchProducts();
     }
+
     fetchProducts() {
         this.productService.getProductsInPage(this.productPage).subscribe(resp => {
             this.productPage.totalSize = resp.totalElements;
             this.dataSource.setData(resp.content);
         });
     }
+
     private fetchCategories() {
         this.categoryService.getCategories().subscribe(categories => {
-
-            this.dataSource.fields=[
-                {name: 'sku',display:'Sku',type:'text'},
-                {name: 'name',display:'Name',type:'text'},
-                {name: 'description', display:'Description', type:'textArea'},
-                {name: 'unitPrice', display:'Price', type:'decimal'},
-                {name: 'active', display:'Enable', type:'bool'},
-                {name: 'unitsInStock', display:'Quantity', type:'number'},
-                {name: 'category', display:'Category',type: 'select',selectOptions:{displayField:'name',valueField:'id',options:categories}},
-                {name: 'dateCreated', display:'Newest', type:'date',readOnly: true},
-                {name: 'lastUpdated', display:'Last updated', type:'date', readOnly:true},
-                {name: 'image',display: 'Image',type:'image',fileField: 'imageFile'}
-            ];
+                this.dataSource.fields = [
+                    {name: 'sku', display: 'Sku', type: 'text'},
+                    {name: 'name', display: 'Name', type: 'text'},
+                    {name: 'description', display: 'Description', type: 'textArea'},
+                    {name: 'unitPrice', display: 'Price', type: 'decimal'},
+                    {name: 'active', display: 'Enable', type: 'bool'},
+                    {name: 'unitsInStock', display: 'Quantity', type: 'number'},
+                    {
+                        name: 'category',
+                        display: 'Category',
+                        type: 'select',
+                        selectOptions: {displayField: 'name', valueField: 'id', options: categories}
+                    },
+                    {name: 'dateCreated', display: 'Newest', type: 'date', readOnly: true},
+                    {name: 'lastUpdated', display: 'Last updated', type: 'date', readOnly: true},
+                    {name: 'image', display: 'Image', type: 'image', fileField: 'imageFile'}
+                ];
             }
         );
     }
@@ -63,7 +68,7 @@ export class ProductsEditingComponent implements OnInit {
         this.productService.saveProduct(product).subscribe(resp => {
             this.dataSource.onRowAdded.next(resp);
             this.successAlert();
-        }, errors => this.sendErrors(product,errors));
+        }, error => this.sendErrors(product, error.errors));
     }
 
 
@@ -71,7 +76,7 @@ export class ProductsEditingComponent implements OnInit {
         this.productService.updateProduct(product).subscribe(resp => {
             this.dataSource.onRowUpdated.next(resp);
             this.successAlert();
-        }, errors => this.sendErrors(product,errors));
+        }, error => this.sendErrors(product, error.errors));
     }
 
 
@@ -80,7 +85,7 @@ export class ProductsEditingComponent implements OnInit {
                 this.dataSource.onRowsUpdated.next(products);
                 this.successAlert();
             },
-            errors => Array.from(errors).length && this.toastrService.error(errors[0].message, 'Error'));
+            error => this.toastrService.error(error.message, 'Error'));
     }
 
     removeProduct(product: Product) {
@@ -123,12 +128,8 @@ export class ProductsEditingComponent implements OnInit {
                 this.successAlert(products?.ADDED.length + " items has been added and " + products?.UPDATED.length + " items has been removed");
                 this.dataSource.onRowsAdded.next(products?.ADDED);
                 this.dataSource.onRowsUpdated.next(products?.UPDATED);
-                $input.value = '';
             },
-            errors => {
-                $input.value = '';
-                this.toastrService.error(errors[0].message, 'Error');
-            }, () => $input.value = ''
+            error => this.toastrService.error(error.message, 'Error')
         );
     }
 
@@ -145,6 +146,7 @@ export class ProductsEditingComponent implements OnInit {
             unitsInStock: new FormControl(null, [Validators.required]),
         });
     }
+
     onPage(number: number, pageSize: number) {
         this.productPage.number = number;
         this.productPage.size = pageSize;
@@ -155,8 +157,8 @@ export class ProductsEditingComponent implements OnInit {
         this.toastrService.success('your operation has been successful ' + msg);
     }
 
-    private sendErrors(product: Product, errors: ApiError[]) {
-        this.dataSource.onRowErrors.next({row:product,errors:errors});
+    private sendErrors(product: Product, errors: any[]) {
+        this.dataSource.onRowErrors.next({row: product, errors});
     }
 }
 

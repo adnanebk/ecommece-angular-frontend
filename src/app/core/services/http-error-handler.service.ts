@@ -3,6 +3,7 @@ import {AuthService} from "./auth.service";
 import {catchError, Observable, switchMap, throwError} from "rxjs";
 import {HttpEvent, HttpHandler, HttpRequest} from "@angular/common/http";
 import {AuthInterceptor} from "../interceptors/auth.interceptor";
+import {ApiError} from "../models/api-error";
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +13,7 @@ export class HttpErrorHandlerService {
     }
 
 
-    handleError(resp: { error: { errors: any[]; message: string | undefined; code: string }; status: number }, originalRequest: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    handleError(resp: { error: ApiError; status: number }, originalRequest: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
         const {error, status} = resp;
         if (!(error instanceof ErrorEvent)) {
             {
@@ -28,6 +29,6 @@ export class HttpErrorHandlerService {
                     this.authService.sendCompleteRegistrationNotification();
             }
         }
-        return throwError(error?.errors.length ? error.errors : [error]);
+        return throwError(error);
     }
 }

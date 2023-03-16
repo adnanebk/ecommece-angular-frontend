@@ -4,7 +4,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {CreditCard} from "../../../core/models/CreditCard";
 import {CardNumberFormControl} from "../../../shared/form-controls/card-number-form-control";
 import {MonthYearFormControl} from "../../../shared/form-controls/month-year-form-control";
-import {CreditCardService} from "../../../core/services/credit-card.service";
+import {CardOption, CreditCardService} from "../../../core/services/credit-card.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ConfirmComponent} from "../../../shared/confirm-dialogue/confirm.component";
 import {ApiError} from "../../../core/models/api-error";
@@ -16,18 +16,15 @@ import {ApiError} from "../../../core/models/api-error";
 })
 export class CreditCardsComponent implements OnInit {
     cardForm!: FormGroup;
-    isEnableEditing = false;
-    cardNames: any[] = [];
-    errors: ApiError[] = [];
+    cardNames: CardOption[] = [];
+    selectedCard?: CreditCard;
+    creditCards: CreditCard[] = [];
 
     constructor(public dialog: MatDialog, private creditCardService: CreditCardService, private modalService: NgbModal) {
         this.cardNames = this.creditCardService.getCardNames();
     }
 
     @ViewChild('cardEdit') cardEditingModal!: TemplateRef<any>
-
-    creditCards: CreditCard[] = [];
-    isNewCard = true;
 
 
     ngOnInit(): void {
@@ -51,7 +48,6 @@ export class CreditCardsComponent implements OnInit {
     }
 
     handleSubmit() {
-        this.errors = [];
         this.isNewCard ? this.save() : this.update();
     }
 
@@ -60,30 +56,27 @@ export class CreditCardsComponent implements OnInit {
         this.creditCardService.saveCreditCard(_card).subscribe(card => {
             this.creditCards.push(card);
             this.dialog.closeAll();
-        }, error => this.errors = Array.from(error));
+        }, error => this.setErrors(error));
     }
 
     update() {
         const _card = this.cardForm.getRawValue() as CreditCard;
         this.creditCardService.updateCreditCard(_card).subscribe(() => {
             const index = this.creditCards.findIndex(c => c.id === _card.id);
-            const {cardNumber, cardType, expirationDate} = _card;
-            this.creditCards[index] = {...this.creditCards[index], cardNumber, cardType, expirationDate};
+            this.creditCards[index] = {..._card};
             this.dialog.closeAll();
-        }, error => this.errors = Array.from(error));
+        }, error => this.setErrors(error));
     }
 
     addNew() {
-        this.errors = [];
-        this.isNewCard = true;
+        this.selectedCard = undefined;
         this.createForm();
         const dialogRef = this.openDialog();
         dialogRef.afterClosed().subscribe();
     }
 
     edit(creditCard: CreditCard) {
-        this.errors = [];
-        this.isNewCard = false;
+        this.selectedCard = creditCard;
         const dialogRef = this.openDialog();
         dialogRef.afterOpened().subscribe(() => {
             this.cardForm.patchValue(creditCard);
@@ -105,22 +98,21 @@ export class CreditCardsComponent implements OnInit {
         });
     }
 
-    getApiError(fieldName: string) {
-        const apiError = this.errors.find(err => err.fieldName === fieldName);
-        return apiError?.message;
-    }
-
     private getCurrenCreditCards() {
         this.creditCardService.getCreditCards().subscribe(cards => this.creditCards = cards);
     }
 
-    onCreditCardChange(cardNumber: any, fieldName: string) {
-        this.deleteError(fieldName);
-        this.isEnableEditing = !this.creditCards.some(card => card.cardNumber === cardNumber?.replaceAll('-', ''));
+    isCardNumberChanged() {
+        return this.selectedCard?.cardNumber !== this.cardForm.get('cardNumber')?.value?.replaceAll('-', '');
     }
 
-    deleteError(fieldName: string) {
-        this.errors = this.errors.filter(er => er.fieldName !== fieldName);
+    get isNewCard() {
+        return !Boolean(this.selectedCard?.id);
     }
+
+    private setErrors(error: ApiError) {
+        error.errors?.forEach(err => this.cardForm.setErrors({[err.fieldName]: err.message}))
+    }
+
 }
 

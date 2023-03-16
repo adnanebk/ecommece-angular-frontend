@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ApiError} from "../../../core/models/api-error";
 import {CartItem} from "../../../core/models/cart-item";
 import {CartService} from "../../../core/services/cart.service";
-import {CreditCardService} from "../../../core/services/credit-card.service";
+import {CardOption, CreditCardService} from "../../../core/services/credit-card.service";
 import {Router} from "@angular/router";
 import {AuthService} from "../../../core/services/auth.service";
 import {CardNumberFormControl} from "../../../shared/form-controls/card-number-form-control";
@@ -21,21 +21,19 @@ export class CheckoutComponent implements OnInit {
 
     customerForm!: FormGroup;
     creditCardForm!: FormGroup;
-    isLinear = false;
-
-    errors: ApiError[] = [];
+    error?: ApiError;
     cartItems: CartItem[] = [];
     totalQuantity: number = 0;
     totalPrice: number = 0;
-    cardNames: any[] = [];
-    isEnableCardEditing = false;
-    defaultCard?: CreditCard;
+    cardOptions: CardOption[] = [];
+    selectedCard?: CreditCard;
+
 
     constructor(public formBuilder: FormBuilder, private cartService: CartService,
                 private orderService: OrderService, private creditCardService: CreditCardService,
                 private router: Router, private authService: AuthService) {
         this.getCartItems();
-        this.cardNames = this.creditCardService.getCardNames();
+        this.cardOptions = this.creditCardService.getCardNames();
 
     }
 
@@ -52,10 +50,10 @@ export class CheckoutComponent implements OnInit {
                     ...user,
                     fullName: (user.firstName + ' ' + (user.lastName || '')).trim()
                 });
-                this.creditCardService.getCreditCards().subscribe((cards) => {
-                    if (cards?.length) {
-                        this.defaultCard = cards.find(card => card.active);
-                        this.creditCardForm.patchValue({...this.defaultCard});
+                this.creditCardService.getActiveCreditCard().subscribe((card) => {
+                    if (card) {
+                        this.selectedCard = card;
+                        this.creditCardForm.patchValue({...this.selectedCard});
                     }
                 });
             }
@@ -91,34 +89,44 @@ export class CheckoutComponent implements OnInit {
         });
     }
 
-    saveOrder(order: Order) {
-        order.orderItems = this.cartItems;
-        order.quantity = this.totalQuantity;
-        order.totalPrice = this.totalPrice;
-        this.orderService.saveOrder(order).subscribe(() => {
-            this.router.navigateByUrl('/orders');
-        }, (errors => {
-            this.errors = Array.from(errors);
-            this.customerForm.patchValue(order);
-        }));
-    }
-
     onSubmit() {
-        this.errors = [];
-        const myOrder: Order = {...this.customerForm.getRawValue()};
-        myOrder.creditCard = this.creditCardForm.getRawValue();
-
+        const myOrder: Order = {
+            ...this.customerForm.getRawValue(), totalPrice: this.totalPrice,
+            quantity: this.totalQuantity, orderItems: this.cartItems,
+            creditCard: this.creditCardForm.getRawValue()
+        };
         this.saveOrder(myOrder);
     }
 
+    saveOrder(order: Order) {
+        this.orderService.saveOrder(order).subscribe(() => {
+            this.router.navigateByUrl('/orders');
+        }, (error => {
+            this.creditCardForm.setErrors({err: true});
+            this.error = error;
+        }));
+    }
+
     getApiError(fieldName: string) {
-        const apiError = this.errors.find(err => err.fieldName === fieldName);
-        return apiError?.message;
+        const error = this.error?.errors?.find(err => err.fieldName === fieldName);
+        return error?.message?.includes('.')
+            ? error.message.substring(error?.message.lastIndexOf('.') + 1)
+            : error?.message;
     }
 
-
-    onCreditCardChange(cardNumber: any) {
-        this.isEnableCardEditing = this.defaultCard?.cardNumber !== cardNumber?.replaceAll('-', '');
+    isCardNumberChanged() {
+        return this.selectedCard?.cardNumber !== this.creditCardForm.get('cardNumber')?.value?.replaceAll('-', '');
     }
 
+    hasCreditCardErrors() {
+        return this.error?.errors?.some(err => err.fieldName.includes('creditCard'));
+    }
+
+    hasCustomerCardErrors() {
+        return this.error?.errors?.some(err => !err.fieldName.includes('.'));
+    }
+
+    public get errors() {
+        return this.error?.errors || [];
+    }
 }

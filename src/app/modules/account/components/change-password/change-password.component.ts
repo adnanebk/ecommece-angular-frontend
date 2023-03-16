@@ -3,8 +3,8 @@ import {Component, OnInit} from '@angular/core';
 import {MustMatch} from "../../../../shared/validators/mustMatch";
 import {ToastrService} from "ngx-toastr";
 import {AppUser} from "../../../../core/models/app-user";
-import {ApiError} from "../../../../shared/editable-table/editable-table.component";
 import {UserService} from "../../../../core/services/user.service";
+import {ApiError} from "../../../../core/models/api-error";
 
 @Component({
     selector: 'app-change-password',
@@ -15,7 +15,6 @@ export class ChangePasswordComponent implements OnInit {
 
     form!: FormGroup;
     user!: AppUser;
-    errors: ApiError[] = [];
 
     constructor(private userService: UserService, private toastrService: ToastrService) {
     }
@@ -32,14 +31,13 @@ export class ChangePasswordComponent implements OnInit {
     changePassword() {
         this.form.clearValidators();
         this.form.markAsPristine();
-        this.errors = [];
         this.userService.updateUserPassword(this.form.getRawValue())
             .subscribe(() => this.toastrService.success('your password has been changed successfully'),
-                errors => this.errors = this.errors = Array.from(errors));
+                error => this.setErrors(error));
     }
 
-    getApiError(fieldName: string) {
-        const apiError = this.errors?.find(err => err.fieldName === fieldName);
-        return apiError?.message;
+
+    private setErrors(error: ApiError) {
+        error.errors?.forEach(err => this.form.setErrors({[err.fieldName]: err.message}))
     }
 }

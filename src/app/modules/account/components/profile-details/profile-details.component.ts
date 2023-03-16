@@ -13,7 +13,6 @@ import {AppUser} from "../../../../core/models/app-user";
 })
 export class ProfileDetailsComponent implements OnInit {
     profileForm!: FormGroup;
-    errors: ApiError[] = [];
     user!: AppUser;
     isImageUploading = false;
 
@@ -39,19 +38,17 @@ export class ProfileDetailsComponent implements OnInit {
     onSubmit() {
         this.profileForm.clearValidators();
         this.profileForm.markAsPristine();
-        this.errors = [];
         const updatedProfile = this.profileForm.getRawValue();
         Object.keys(updatedProfile).forEach((k) => updatedProfile[k] = updatedProfile[k] === '' ? null : updatedProfile[k]);
         this.userService.updateUserProfile(updatedProfile, this.user.id!).subscribe(() => {
                 this.toastrService.success('your profile has been updated successfully');
                 this.authService.updateUserInformation(Object.assign(this.user, updatedProfile));
-            }, error => this.errors = Array.from(error)
+            }, (error: ApiError) => this.setErrors(error)
         );
     }
 
 
     handleChange() {
-        this.errors = [];
     }
 
 
@@ -67,12 +64,6 @@ export class ProfileDetailsComponent implements OnInit {
         );
     }
 
-
-    getApiError(fieldName: string) {
-        const apiError = this.errors.find(err => err.fieldName === fieldName);
-        return apiError?.message;
-    }
-
     handleFileUpload(file: File) {
         this.isImageUploading = true;
         this.userService.updateImage(file).subscribe(res => {
@@ -83,4 +74,7 @@ export class ProfileDetailsComponent implements OnInit {
         }, err => this.isImageUploading = false)
     }
 
+    private setErrors(error: ApiError) {
+        error.errors?.forEach(err => this.profileForm.setErrors({[err.fieldName]: err.message}))
+    }
 }

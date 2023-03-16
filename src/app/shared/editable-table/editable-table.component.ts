@@ -254,8 +254,6 @@ export class EditableTableComponent implements OnInit, OnDestroy {
         return el.isSaving;
     }
 
-
-
     handleSubmit() {
         Object.assign(this.currentElement, this.myForm.getRawValue());
         this.onSave(this.currentElement);

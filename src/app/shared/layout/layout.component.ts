@@ -95,7 +95,7 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
         this.errorMessage='';
         this.authService.enableUser(this.confirmationCode)
             .subscribe(()=>this.dialog.closeAll(),
-                (er:ApiError[])=>this.errorMessage=er[0].message);
+                (err:ApiError)=>this.errorMessage=err.message);
     }
 
     sendConfirmationCode() {

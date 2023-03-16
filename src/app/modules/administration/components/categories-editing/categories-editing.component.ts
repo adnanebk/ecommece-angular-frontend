@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {DataPage} from "../../../../core/models/dataPage";
-import {ApiError, DataSource, Field} from "../../../../shared/editable-table/editable-table.component";
+import {DataSource} from "../../../../shared/editable-table/editable-table.component";
 import {Category} from "../../../../core/models/category";
 import {CategoryService} from "../../../../core/services/category.service";
 import {ToastrService} from "ngx-toastr";
@@ -24,7 +24,7 @@ export class CategoriesEditingComponent implements OnInit {
 
     ngOnInit(): void {
         this.createForm();
-        this.dataSource.fields = [{name:"name", display:"Name",type:'text'}];
+        this.dataSource.fields = [{name: "name", display: "Name", type: 'text'}];
         this.fetchCategories();
     }
 
@@ -40,7 +40,7 @@ export class CategoriesEditingComponent implements OnInit {
         this.categoryService.saveCategory(category).subscribe(resp => {
             this.dataSource.onRowAdded.next(resp);
             this.successAlert();
-        }, errors => this.sendErrors(category,errors));
+        }, error => this.sendErrors(category, error.errors));
     }
 
 
@@ -48,7 +48,7 @@ export class CategoriesEditingComponent implements OnInit {
         this.categoryService.updateCategory(category).subscribe(resp => {
             this.dataSource.onRowUpdated.next(resp);
             this.successAlert();
-        }, errors => this.sendErrors(category,errors));
+        }, error => this.sendErrors(category, error.errors));
     }
 
     removeCategory(category: Category) {
@@ -76,8 +76,9 @@ export class CategoriesEditingComponent implements OnInit {
             name: new FormControl(null, [Validators.required]),
         });
     }
-    private sendErrors(category: Category, errors: ApiError[]) {
-        this.dataSource.onRowErrors.next({row:category,errors:errors});
+
+    private sendErrors(category: Category, errors: any[]) {
+        this.dataSource.onRowErrors.next({row: category, errors});
     }
 }
 
