@@ -12,7 +12,6 @@ import {SocialUserLogin} from "../models/socialUserLogin";
 })
 export class AuthService {
     private userSubject = new BehaviorSubject<AppUser | null>(null);
-    private isToastOpened = false;
     public isTokenExpired = false;
 
 
@@ -98,14 +97,14 @@ export class AuthService {
     refreshJwtToken() {
 
         this.isTokenExpired = true;
-        const token = this.getAuthDataFromStorage()?.refreshToken ?? '';
-        if (!token) {
+        const refreshToken = this.getAuthDataFromStorage()?.refreshToken ?? '';
+        if (!refreshToken) {
             this.logout();
         }
-        return this.userService.refreshMyToken(token).pipe(
-            tap(resp => {
-                resp = {...resp, appUser: this.getCurrentUser()!};
-                this.saveAuthDataToStorage(resp);
+        return this.userService.refreshMyToken(refreshToken).pipe(
+            tap(authData => {
+                authData = {...authData, appUser: this.getCurrentUser()!};
+                this.saveAuthDataToStorage(authData);
                 this.isTokenExpired = false;
                 this.toastrService.info("token has just been refreshed")
             }),
@@ -117,13 +116,12 @@ export class AuthService {
     }
 
     sendCompleteRegistrationNotification() {
-        this.isToastOpened = true;
         let toast = this.toastrService.info('Activate your account to see the full features',
             'Activate your account', {
                 timeOut: 10000,
                 extendedTimeOut: 3000,
             });
-        toast.onHidden.subscribe(() => this.isToastOpened = false);
+        toast.onHidden.subscribe();
     }
 
     getToken() {
