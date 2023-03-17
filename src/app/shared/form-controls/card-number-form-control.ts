@@ -4,8 +4,10 @@ export class CardNumberFormControl extends FormControl {
 
     override setValue(value: string) {
 
-        if (!value)
+        if (!value) {
+            super.setValue(value)
             return;
+        }
 
         super.setValue(CardNumberFormControl.toCardFormat(value));
 

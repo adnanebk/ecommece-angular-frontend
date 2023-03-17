@@ -15,7 +15,6 @@ import {ApiError} from "../../../core/models/api-error";
     styleUrls: ['./credit-cards.component.scss']
 })
 export class CreditCardsComponent implements OnInit {
-    cardForm!: FormGroup;
     cardNames: CardOption[] = [];
     selectedCard?: CreditCard;
     creditCards: CreditCard[] = [];
@@ -28,7 +27,6 @@ export class CreditCardsComponent implements OnInit {
 
 
     ngOnInit(): void {
-        this.createForm();
         this.getCurrenCreditCards();
     }
 
@@ -47,72 +45,40 @@ export class CreditCardsComponent implements OnInit {
         }, () => creditCard.active = false)
     }
 
-    handleSubmit() {
-        this.isNewCard ? this.save() : this.update();
-    }
-
-    save() {
-        const _card = this.cardForm.getRawValue();
-        this.creditCardService.saveCreditCard(_card).subscribe(card => {
+    save(card:CreditCard) {
             this.creditCards.push(card);
             this.dialog.closeAll();
-        }, error => this.setErrors(error));
     }
 
-    update() {
-        const _card = this.cardForm.getRawValue() as CreditCard;
-        this.creditCardService.updateCreditCard(_card).subscribe(() => {
-            const index = this.creditCards.findIndex(c => c.id === _card.id);
-            this.creditCards[index] = {..._card};
+    update(card:CreditCard) {
+            const index = this.creditCards.findIndex(c => c.id === card.id);
+            this.creditCards[index] = {...card,active:this.creditCards[index].active};
             this.dialog.closeAll();
-        }, error => this.setErrors(error));
     }
 
     addNew() {
-        this.selectedCard = undefined;
-        this.createForm();
-        const dialogRef = this.openDialog();
-        dialogRef.afterClosed().subscribe();
+        this.openDialog(undefined);
     }
 
     edit(creditCard: CreditCard) {
-        this.selectedCard = creditCard;
-        const dialogRef = this.openDialog();
-        dialogRef.afterOpened().subscribe(() => {
-            this.cardForm.patchValue(creditCard);
-        });
+      this.openDialog(creditCard)
     }
 
-    private openDialog() {
-        return this.dialog.open(this.cardEditingModal, {
+    private openDialog(selectedCard?:CreditCard) {
+        const dialogRef =  this.dialog.open(this.cardEditingModal, {
             width: '400px'
         });
+        dialogRef.afterOpened().subscribe(()=>this.selectedCard=selectedCard);
+        dialogRef.afterClosed().subscribe(()=>this.selectedCard=undefined);
     }
 
-    private createForm() {
-        this.cardForm = new FormGroup({
-            id: new FormControl(null),
-            cardType: new FormControl(null, [Validators.required]),
-            cardNumber: new CardNumberFormControl(null, [Validators.required]),
-            expirationDate: new MonthYearFormControl(null, [Validators.required]),
-        });
-    }
 
     private getCurrenCreditCards() {
         this.creditCardService.getCreditCards().subscribe(cards => this.creditCards = cards);
     }
 
-    isCardNumberChanged() {
-        return this.selectedCard?.cardNumber !== this.cardForm.get('cardNumber')?.value?.replaceAll('-', '');
-    }
 
-    get isNewCard() {
-        return !Boolean(this.selectedCard?.id);
-    }
 
-    private setErrors(error: ApiError) {
-        error.errors?.forEach(err => this.cardForm.setErrors({[err.fieldName]: err.message}))
-    }
 
 }
 

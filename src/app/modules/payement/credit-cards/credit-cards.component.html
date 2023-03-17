@@ -13,39 +13,8 @@
         </button>
 
         <ng-template #cardEdit>
-            <form (submit)="handleSubmit()" [formGroup]="cardForm">
-                <h1 mat-dialog-title>{{isNewCard ? 'Add new credit card' : 'Updating credit card'}}</h1>
-
-                <div mat-dialog-content>
-                    <app-select [readonly]="!isCardNumberChanged() && !isNewCard" appearance="fill" [items]="cardNames"
-                                selectValue="cardType" selectLabel="name" placeholder="Card type"
-                                [control]="cardForm.controls['cardType']">
-                        <mat-error
-                                *ngIf="cardForm.hasError('cardType')">{{this.cardForm.getError('cardType')}}</mat-error>
-                    </app-select>
-                    <app-input appearance="fill"
-                               matIcon="credit_card" label="Card number" [control]="cardForm.controls['cardNumber']">
-                        <mat-error
-                                *ngIf="cardForm.hasError('cardNumber')">{{this.cardForm.getError('cardNumber')}}</mat-error>
-                    </app-input>
-                    <app-input [readonly]="!isCardNumberChanged() && !isNewCard" appearance="fill"
-                               placeHolder="month/year, ex: mm/yy,10/30" label="Expiration date"
-                               [control]="cardForm.controls['expirationDate']">
-                        <mat-error
-                                *ngIf="cardForm.hasError('expirationDate')">{{this.cardForm.getError('expirationDate')}}</mat-error>
-                    </app-input>
-                </div>
-
-                <div mat-dialog-actions>
-                    <button mat-raised-button *ngIf="isNewCard" [disabled]="cardForm.invalid" mat-button color="primary"
-                            cdkFocusInitial>Save
-                    </button>
-                    <button mat-raised-button *ngIf="!isNewCard" mat-button [disabled]="cardForm.invalid"
-                            color="primary" cdkFocusInitial>Update
-                    </button>
-                    <button mat-raised-button [mat-dialog-close]="" color="accent">Cancel</button>
-                </div>
-            </form>
+          <app-credit-card-form [selectedCard]="selectedCard!"  (addNewCard)="save($event)" (updateCard)="update($event)" >
+          </app-credit-card-form>
         </ng-template>
 
         <ngb-alert *ngIf="!creditCards.length" type="secondary" class="w-100 mt-4 "> You have no credit cards

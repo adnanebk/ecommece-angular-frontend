@@ -4,8 +4,10 @@ export class MonthYearFormControl extends FormControl {
 
 
     override setValue(value: string, options?: { onlySelf?: boolean; emitEvent?: boolean; emitModelToViewChange?: boolean; emitViewToModelChange?: boolean }) {
-        if (!value)
+        if (!value) {
+            super.setValue(value)
             return;
+        }
         let prevValue = value.substring(0, value.length - 1);
 
         let regexPattern = /^-?[0-9]+$/;

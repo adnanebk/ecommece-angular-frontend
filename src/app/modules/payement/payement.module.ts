@@ -10,6 +10,7 @@ import {MascTextPipe} from "../../shared/pipes/mascText.pipe";
 import {CheckoutComponent} from "./checkout/checkout.component";
 import {MatStepperModule} from "@angular/material/stepper";
 import {OrdersComponent} from './orders/orders.component';
+import {CreditCardFormComponent} from "./credit-cards/credit-card-form/credit-card-form.component";
 
 
 const routes: Routes = [
@@ -27,6 +28,7 @@ const routes: Routes = [
 @NgModule({
     declarations: [
         CreditCardsComponent,
+        CreditCardFormComponent,
         CreditCardComponent,
         CheckoutComponent,
         MascTextPipe,
