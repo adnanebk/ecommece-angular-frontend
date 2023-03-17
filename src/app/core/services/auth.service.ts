@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {tap} from 'rxjs/operators';
-import {BehaviorSubject, catchError, lastValueFrom} from 'rxjs';
+import {BehaviorSubject, catchError, lastValueFrom, map} from 'rxjs';
 import {FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialUser} from 'angularx-social-login';
 import {AppUser} from "../models/app-user";
 import {AuthData, UserService} from "./user.service";
@@ -11,13 +11,12 @@ import {SocialUserLogin} from "../models/socialUserLogin";
     providedIn: 'root'
 })
 export class AuthService {
-    private userSubject = new BehaviorSubject<AppUser | null>(null);
+    private authData = new BehaviorSubject<AuthData | null>(null);
     public isTokenExpired = false;
-
 
     constructor(private userService: UserService, private socialAuthService: SocialAuthService, private toastrService: ToastrService) {
         const authData = this.getAuthDataFromStorage();
-        authData && this.userSubject.next(authData.appUser);
+        authData && this.authData.next(authData);
     }
 
     isUserAuthenticated(): boolean {
@@ -26,31 +25,31 @@ export class AuthService {
 
     register(user: AppUser) {
         return this.userService.register(user).pipe(
-            tap(response => {
-                this.saveAuthDataToStorage(response);
+            tap(authData => {
+                this.saveAuthDataToStorage(authData);
                 this.sendCompleteRegistrationNotification();
             })
         );
     }
 
-    login(user: any) {
-        return this.userService.login(user).pipe(
-            tap(response => {
-                this.saveAuthDataToStorage(response);
+    login(userLogin: {email:string,password:string}) {
+        return this.userService.login(userLogin).pipe(
+            tap(authData => {
+                this.saveAuthDataToStorage(authData);
             })
         );
     }
 
     getAuthenticatedUser() {
-        return this.userSubject.asObservable();
+        return this.authData.asObservable().pipe(map(authData=>authData?.appUser));
     }
 
     isUserEnabled() {
-        return this.getCurrentUser()?.enabled;
+        return Boolean(this.getCurrentUser()?.enabled);
     }
 
     logout() {
-        this.userSubject.next(null);
+        this.authData.next(null);
         localStorage.removeItem('auth-data');
         location.reload();
     }
@@ -58,7 +57,7 @@ export class AuthService {
 
     async loginWithGoogle() {
         const socialUser = await this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
-        await lastValueFrom(this.userService.googleLogin(this.mapUser(socialUser))
+        await lastValueFrom(this.userService.googleLogin(this.mapSocialUser(socialUser))
             .pipe(tap(response => {
                 this.saveAuthDataToStorage(response);
             })));
@@ -66,7 +65,7 @@ export class AuthService {
 
     async loginWithFacebook() {
         const socialUser = await this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID);
-        await lastValueFrom(this.userService.facebookLogin(this.mapUser(socialUser))
+        await lastValueFrom(this.userService.facebookLogin(this.mapSocialUser(socialUser))
             .pipe(tap(response => {
                 this.saveAuthDataToStorage(response);
             })));
@@ -74,12 +73,8 @@ export class AuthService {
 
     updateUserInformation(user: AppUser) {
         const authData = this.getAuthDataFromStorage();
-        if (!authData) {
-            this.logout();
-            return;
-        }
-        authData.appUser = user;
-        this.saveAuthDataToStorage(authData);
+        authData!.appUser = user;
+        this.saveAuthDataToStorage(authData!);
 
 
     }
@@ -95,7 +90,6 @@ export class AuthService {
     }
 
     refreshJwtToken() {
-
         this.isTokenExpired = true;
         const refreshToken = this.getAuthDataFromStorage()?.refreshToken ?? '';
         if (!refreshToken) {
@@ -103,7 +97,6 @@ export class AuthService {
         }
         return this.userService.refreshMyToken(refreshToken).pipe(
             tap(authData => {
-                authData = {...authData, appUser: this.getCurrentUser()!};
                 this.saveAuthDataToStorage(authData);
                 this.isTokenExpired = false;
                 this.toastrService.info("token has just been refreshed")
@@ -138,23 +131,25 @@ export class AuthService {
     sendActivationMessage() {
          this.userService.sendActivationMessage(this.getCurrentUser()!.email).subscribe(()=>this.toastrService.info("we have just send you a confirmation code,please verify your email account"));
     }
-    private mapUser(socialUser: SocialUser): SocialUserLogin {
+    private mapSocialUser(socialUser: SocialUser): SocialUserLogin {
         const {firstName, lastName, email, photoUrl, provider, authToken, idToken} = socialUser;
         return {firstName, lastName, email, image: photoUrl, token: provider === 'GOOGLE' ? idToken : authToken};
     }
 
     private saveAuthDataToStorage(authData: AuthData) {
         localStorage.setItem('auth-data', JSON.stringify(authData));
-        this.userSubject.next(authData.appUser);
+        this.authData.next(authData);
     }
 
 
     private getAuthDataFromStorage(): AuthData | undefined {
+        if(this.authData.value)
+            return this.authData.value;
         const jsonData = localStorage.getItem('auth-data');
         return jsonData && JSON.parse(jsonData);
     }
 
     private getCurrentUser() {
-        return this.userSubject.value;
+        return this.authData.value?.appUser;
     }
 }
