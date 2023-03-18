@@ -27,9 +27,9 @@
                     </div>
                 </form>
             </mat-step>
-            <mat-step [hasError]="hasCreditCardErrors()" [stepControl]="formCard.cardForm"
+            <mat-step  [hasError]="hasCreditCardErrors()" [stepControl]="formCard.cardForm"
                       label="Fill out payment information">
-               <app-credit-card-form #formCard  [selectedCard]="selectedCard!" [hideActions]="true" >
+               <app-credit-card-form class="m-1" #formCard  [selectedCard]="selectedCard!" [hideActions]="true" >
                    <button mat-raised-button color="accent" matStepperPrevious>Back</button>
                    <button mat-raised-button class="mx-2" color="primary" matStepperNext>Next</button>
                </app-credit-card-form>

@@ -1,6 +1,4 @@
 <form (submit)="!hideActions && handleSubmit()" [formGroup]="cardForm">
-    <h1 mat-dialog-title>{{isNewCard ? 'Add new credit card' : 'Updating credit card'}}</h1>
-
     <div mat-dialog-content>
         <app-select [readonly]="!isCardNumberChanged() && !isNewCard" appearance="fill" [items]="cardOptions"
                     selectValue="cardType" selectLabel="name" placeholder="Card type"

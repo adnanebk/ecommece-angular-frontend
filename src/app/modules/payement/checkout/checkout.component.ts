@@ -101,10 +101,7 @@ export class CheckoutComponent implements OnInit {
     }
     private setErrors(error: ApiError) {
         error.errors?.forEach(err => {
-            if(err.fieldName.includes('creditCard')) {
-                err.fieldName = err.fieldName.substring(err.fieldName.lastIndexOf('.') + 1);
-                this.creditCardForm.cardForm.setErrors({[err.fieldName]: err.message})
-            }
+              this.creditCardForm.cardForm.setErrors({[err.fieldName]: err.message})
         })
     }
 

@@ -13,7 +13,8 @@
         </button>
 
         <ng-template #cardEdit>
-          <app-credit-card-form [selectedCard]="selectedCard!"  (addNewCard)="save($event)" (updateCard)="update($event)" >
+            <h1 mat-dialog-title>{{!selectedCard?.id ? 'Add new credit card' : 'Updating credit card'}}</h1>
+            <app-credit-card-form [selectedCard]="selectedCard!"  (addNewCard)="save($event)" (updateCard)="update($event)" >
           </app-credit-card-form>
         </ng-template>
 
