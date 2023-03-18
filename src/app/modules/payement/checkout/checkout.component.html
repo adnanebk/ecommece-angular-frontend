@@ -7,56 +7,40 @@
                 <form [formGroup]="customerForm">
                     <ng-template matStepLabel>Fill out your shipping information</ng-template>
 
-
                     <app-input matIcon="face" label="Full name" [control]="customerForm.controls['fullName']">
-                        <mat-error>{{this.getApiError('fullName')}}</mat-error>
+                        <mat-error>{{this.customerForm.getError('fullName')}}</mat-error>
                     </app-input>
                     <app-input matIcon="email" label="Email address" [control]="customerForm.controls['email']">
-                        <mat-error>{{this.getApiError('email')}}</mat-error>
+                        <mat-error>{{this.customerForm.getError('email')}}</mat-error>
                     </app-input>
                     <app-select placeholder="Select a country" [items]="['Morocco','Egypt','Algeria','Tunisia']"
                                 [control]="customerForm.controls['country']">
                     </app-select>
                     <app-input matIcon="location_on" label="City" [control]="customerForm.controls['city']">
-                        <mat-error>{{this.getApiError('city')}}</mat-error>
+                        <mat-error>{{this.customerForm.getError('city')}}</mat-error>
                     </app-input>
                     <app-input matIcon="location_on" label="Street" [control]="customerForm.controls['street']">
-                        <mat-error>{{this.getApiError('street')}}</mat-error>
+                        <mat-error>{{this.customerForm.getError('street')}}</mat-error>
                     </app-input>
                     <div>
                         <button mat-raised-button color="primary" matStepperNext>Next</button>
                     </div>
                 </form>
             </mat-step>
-            <mat-step [hasError]="hasCreditCardErrors()" [stepControl]="creditCardForm"
+            <mat-step [hasError]="hasCreditCardErrors()" [stepControl]="formCard.cardForm"
                       label="Fill out payment information">
-                <form [formGroup]="creditCardForm">
-                    <app-input matIcon="credit_card" label="Card number"
-                               [control]="creditCardForm.controls['cardNumber']">
-                        <mat-error>{{this.getApiError('creditCard.cardNumber')}}</mat-error>
-                    </app-input>
-                    <app-select [readonly]="!isCardNumberChanged()" appearance="fill" [items]="cardOptions"
-                                selectValue="cardType" selectLabel="name" placeholder="Card type"
-                                [control]="creditCardForm.controls['cardType']">
-                        <mat-error>{{this.getApiError('creditCard.cardType')}}</mat-error>
-                    </app-select>
-                    <app-input [readonly]="!isCardNumberChanged()" label="Expiration date"
-                               [control]="creditCardForm.controls['expirationDate']">
-                        <mat-error>{{this.getApiError('creditCard.expirationDate')}}</mat-error>
-                    </app-input>
+               <app-credit-card-form #formCard  [selectedCard]="selectedCard!" [hideActions]="true" >
+                   <button mat-raised-button color="accent" matStepperPrevious>Back</button>
+                   <button mat-raised-button class="mx-2" color="primary" matStepperNext>Next</button>
+               </app-credit-card-form>
 
-                    <div>
-                        <button mat-raised-button color="accent" matStepperPrevious>Back</button>
-                        <button mat-raised-button class="mx-2" color="primary" matStepperNext>Next</button>
-                    </div>
-                </form>
             </mat-step>
             <mat-step>
                 <ng-template matStepLabel>Done</ng-template>
                 <p>You are now done.</p>
                 <div>
-                    <div *ngIf="errors?.length" class="alert alert-danger">Please go back and fixe the errors</div>
-                    <button mat-raised-button color="accent" (click)="stepper.previous()">Back</button>
+                    <div *ngIf="hasAnyApiErrors()" class="alert alert-danger">Please go back and fixe the errors</div>
+                    <button mat-raised-button color="accent" matStepperPrevious >Back</button>
                     <button mat-raised-button class="mx-2" color="primary" (click)="onSubmit()">Complete</button>
                 </div>
             </mat-step>

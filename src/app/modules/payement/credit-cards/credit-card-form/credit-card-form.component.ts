@@ -15,6 +15,7 @@ export class CreditCardFormComponent implements OnInit {
   cardForm  = new FormGroup({});
   cardOptions: CardOption[] = [{cardType: 'VISA', name: 'Visa'}, {cardType: 'MASTERCARD', name: 'Master Card'}];
   private _selectedCard?: CreditCard;
+  @Input() hideActions=false
   @Output() addNewCard = new EventEmitter<CreditCard>();
   @Output() updateCard = new EventEmitter<CreditCard>();
 
@@ -70,6 +71,8 @@ export class CreditCardFormComponent implements OnInit {
   }
 
   private setErrors(error: ApiError) {
-    error.errors?.forEach(err => this.cardForm.setErrors({[err.fieldName]: err.message}))
+    error.errors?.forEach(err => {
+      this.cardForm.setErrors({[err.fieldName]: err.message})
+    })
   }
 }
