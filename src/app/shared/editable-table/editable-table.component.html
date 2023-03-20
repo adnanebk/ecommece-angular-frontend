@@ -49,24 +49,23 @@
         <tr *ngFor="let el of data; let idx= index;trackBy: trackById">
 
        <td class="p-1 align-middle actions" [class]="isDirty(el)?'bgDirty':''">
-      <span *ngIf="!isBatchEnabled" class="table-edit">
+      <ng-container *ngIf="!isBatchEnabled" class="table-edit">
         <ng-container *ngIf="!isCurrentElement(el)">
         <button (click)="handleEdit(el)" type="button"
                 class="btn btn-rounded btn-sm my-0"><em class="fas fa-edit text-info"></em></button>
         <button (click)="remove(el)" type="button" class="btn btn-rounded  btn-sm  mx-2">
             <em class="fas fa-trash-alt text-danger"></em></button>
           </ng-container>
-
-        <button [disabled]="isSaving(el)" *ngIf="isCurrentElement(el)" (click)="onSave(el)" type="button"
+      <ng-container *ngIf="isCurrentElement(el)" >
+        <button [disabled]="isSaving(el)"  (click)="onSave(el)" type="button"
                 class="btn btn-success btn-rounded btn-sm my-0">
                     <span *ngIf="isSaving(el)" class="spinner-grow spinner-grow-sm" role="status"
-                          aria-hidden="true"></span>
-          Save
+                          aria-hidden="true"></span> Save
         </button>
-          <button *ngIf="isCurrentElement(el) && !isSaving(el)" (click)="rolleback()"
+          <button *ngIf="!isSaving(el)" (click)="rolleback()"
                   class="btn m-1 btn-warning btn-sm">cancel</button>
-
-      </span>
+      </ng-container>
+      </ng-container>
                 <div *ngIf="isBatchEnabled" class="select">
                     <mat-checkbox class="example-margin" [(ngModel)]="el.selected"
                                   (change)="onElementSelected(el)"></mat-checkbox>
@@ -78,7 +77,7 @@
                 <td *ngIf="!isColHide(field)" (click)="onViewChanged(el)" class="align-middle td-width"
                     [class]="{'bgDirty':isDirty(el)}">
 
-                    <div *ngIf="(!isCurrentElement(el) && !isBatchEnabled) || field.readOnly" class=" text-max-width">
+                    <div *ngIf="!isRowEditing(el,field)" class=" text-max-width">
                         <strong *ngIf="field.type==='number' || field.type==='decimal' || field.type==='text'"> {{el[field.name]}}</strong>
                         <strong *ngIf="field.type==='textArea'"> {{el[field.name] | limitTo :'60'}}</strong>
                         <strong *ngIf="field.type==='date'"> {{el[field.name] | date :'short'}}</strong>
@@ -87,7 +86,7 @@
                         <img *ngIf="field.type === 'image'" [src]="el[field.name]" alt=""/>
                     </div>
 
-                    <div class="py-2 text-center" *ngIf="(isCurrentElement(el) || isBatchEnabled) && !field.readOnly">
+                    <div class="py-2 text-center" *ngIf="isRowEditing(el,field)">
 
                         <input *ngIf="field.type==='text'" type="text" [(ngModel)]="el[field.name]"
                                (input)="onValueChanged(el,this.field)" class=" form-control bg-transparent"/>
@@ -118,7 +117,7 @@
 
                         </app-file-input>
 
-                        <div *ngIf="hasError() && !isFormEditing" class="text-danger">{{getError(field.name)}}</div>
+                        <div *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</div>
                     </div>
                 </td>
             </ng-container>

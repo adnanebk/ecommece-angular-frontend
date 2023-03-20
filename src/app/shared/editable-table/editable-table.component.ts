@@ -5,6 +5,7 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ConfirmComponent} from "../confirm-dialogue/confirm.component";
 import {FormControl, FormGroup} from "@angular/forms";
 import {MatDialog} from "@angular/material/dialog";
+import {Data} from "@angular/router";
 
 
 @Component({
@@ -304,6 +305,10 @@ export class EditableTableComponent implements OnInit, OnDestroy {
 
     getFormControl(name: string) {
         return this.myForm.controls[name] as FormControl;
+    }
+
+    isRowEditing(el: Data, field: Field) {
+        return (this.isCurrentElement(el) || this.isBatchEnabled) && !field.readOnly && !this.isFormEditing;
     }
 }
 

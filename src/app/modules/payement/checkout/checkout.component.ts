@@ -23,7 +23,7 @@ export class CheckoutComponent implements OnInit {
     totalQuantity: number = 0;
     totalPrice: number = 0;
     selectedCard?: CreditCard;
-    @ViewChild(CreditCardFormComponent) creditCardForm!: CreditCardFormComponent;
+    @ViewChild(CreditCardFormComponent) creditCardComponent!: CreditCardFormComponent;
 
 
     constructor(public formBuilder: FormBuilder, private cartService: CartService,
@@ -78,7 +78,7 @@ export class CheckoutComponent implements OnInit {
         const myOrder: Order = {
             ...this.customerForm.getRawValue(), totalPrice: this.totalPrice,
             quantity: this.totalQuantity, orderItems: this.cartItems,
-            creditCard: this.creditCardForm.cardForm.getRawValue()
+            creditCard: this.creditCardComponent.cardForm.getRawValue()
         };
         this.saveOrder(myOrder);
     }
@@ -97,11 +97,11 @@ export class CheckoutComponent implements OnInit {
     }
 
     hasCreditCardErrors() {
-          return Boolean(this.creditCardForm?.cardForm.errors);
+          return Boolean(this.creditCardComponent?.cardForm.errors);
     }
     private setErrors(error: ApiError) {
         error.errors?.forEach(err => {
-              this.creditCardForm.cardForm.setErrors({[err.fieldName]: err.message})
+              this.creditCardComponent.cardForm.setErrors({[err.fieldName]: err.message})
         })
     }
 
