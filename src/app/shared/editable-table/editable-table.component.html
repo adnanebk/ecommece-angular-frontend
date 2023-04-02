@@ -50,13 +50,13 @@
 
        <td class="p-1 align-middle actions" [class]="isDirty(el)?'bgDirty':''">
       <ng-container *ngIf="!isBatchEnabled" class="table-edit">
-        <ng-container *ngIf="!isCurrentElement(el)">
+        <ng-container *ngIf="!isCurrentElement(el) || isFormEditing">
         <button (click)="handleEdit(el)" type="button"
                 class="btn btn-rounded btn-sm my-0"><em class="fas fa-edit text-info"></em></button>
         <button (click)="remove(el)" type="button" class="btn btn-rounded  btn-sm  mx-2">
             <em class="fas fa-trash-alt text-danger"></em></button>
           </ng-container>
-      <ng-container *ngIf="isCurrentElement(el)" >
+      <ng-container *ngIf="isCurrentElement(el) && !isFormEditing" >
         <button [disabled]="isSaving(el)"  (click)="onSave(el)" type="button"
                 class="btn btn-success btn-rounded btn-sm my-0">
                     <span *ngIf="isSaving(el)" class="spinner-grow spinner-grow-sm" role="status"

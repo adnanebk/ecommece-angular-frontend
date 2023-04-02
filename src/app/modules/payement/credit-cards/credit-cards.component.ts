@@ -1,13 +1,9 @@
 import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {MatDialog} from "@angular/material/dialog";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {CreditCard} from "../../../core/models/CreditCard";
-import {CardNumberFormControl} from "../../../shared/form-controls/card-number-form-control";
-import {MonthYearFormControl} from "../../../shared/form-controls/month-year-form-control";
 import {CardOption, CreditCardService} from "../../../core/services/credit-card.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ConfirmComponent} from "../../../shared/confirm-dialogue/confirm.component";
-import {ApiError} from "../../../core/models/api-error";
 
 @Component({
     selector: 'app-credit-cards',
@@ -57,7 +53,7 @@ export class CreditCardsComponent implements OnInit {
     }
 
     addNew() {
-        this.openDialog(undefined);
+        this.openDialog();
     }
 
     edit(creditCard: CreditCard) {

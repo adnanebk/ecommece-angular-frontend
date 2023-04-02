@@ -48,10 +48,6 @@ export class ProfileDetailsComponent implements OnInit {
     }
 
 
-    handleChange() {
-    }
-
-
     private createForm() {
         this.profileForm = new FormGroup({
                 email: new FormControl(null, [Validators.required, Validators.email]),
