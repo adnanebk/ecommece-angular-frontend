@@ -8,6 +8,7 @@ import {DataPage} from "../../../../core/models/dataPage";
 import {saveAs} from 'file-saver';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Category} from "../../../../core/models/category";
+import {ApiError, FieldError} from "../../../../core/models/api-error";
 
 
 @Component({
@@ -19,6 +20,7 @@ export class ProductsEditingComponent implements OnInit {
     productPage: DataPage = {size: 8, number: 1, sortProperty: 'lastUpdated', sortDirection: 'DESC'};
     dataSource = new DataSource<Product>();
     productForm!: FormGroup;
+    errors: FieldError[]=[];
 
     constructor(private productService: ProductService, private categoryService: CategoryService, private toastrService: ToastrService,
     ) {
@@ -85,7 +87,7 @@ export class ProductsEditingComponent implements OnInit {
                 this.dataSource.onRowsUpdated.next(products);
                 this.successAlert();
             },
-            error => this.toastrService.error(error.message, 'Error'));
+            (error:ApiError) => this.sendErrors(error.errors?.length && error.errors[0].rootBean,error.errors!));
     }
 
     removeProduct(product: Product) {
@@ -128,8 +130,12 @@ export class ProductsEditingComponent implements OnInit {
                 this.successAlert(products?.ADDED.length + " items has been added and " + products?.UPDATED.length + " items has been updated");
                 this.dataSource.onRowsAdded.next(products?.ADDED);
                 this.dataSource.onRowsUpdated.next(products?.UPDATED);
+                $input.value='';
             },
-            error => this.toastrService.error(error.message, 'Error')
+            (error:ApiError) => {
+                this.errors = error?.errors || [];
+                $input.value='';
+            }
         );
     }
 

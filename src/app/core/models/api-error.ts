@@ -5,5 +5,6 @@ export interface ApiError {
 }
 export  interface  FieldError{
     fieldName: string;
+    rootBean:any;
     message:string
 }

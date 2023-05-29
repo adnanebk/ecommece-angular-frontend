@@ -1,6 +1,9 @@
 .bgDirty {
     background-color: #f1e9be;
 }
+.bgError {
+    background-color: rgba(255, 99, 71, 0.42);
+}
 
 .select-size {
     width: 10px;

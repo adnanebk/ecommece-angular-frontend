@@ -32,6 +32,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
     subscriptions: Subscription[] = [];
     isNewItem = true;
     isDataChanged=false;
+    errorRow: DataType;
 
     constructor(public dialog: MatDialog, private datePipe: DatePipe, private modalService: NgbModal) {
     }
@@ -107,6 +108,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
     handleError() {
         this.subscriptions.push(this.datasource.onRowErrors.subscribe(resp => {
             this.errors = resp.errors;
+            this.errorRow=resp.row;
             resp.row.isSaving=false;
         }));
     }
@@ -200,8 +202,8 @@ export class EditableTableComponent implements OnInit, OnDestroy {
         }
     }
 
-    hasError() {
-        return this.errors.length;
+    hasError(element=this.myForm.getRawValue()) {
+        return this.errorRow && this.errorRow[this.identifier]==element[this.identifier] && this.errors.length;
     }
 
     getError(fieldName: string) {
@@ -233,7 +235,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
 
 
     isDirty(el: DataType) {
-        return el.dirty && (this.isCurrentElement(el) || this.isBatchEnabled);
+        return el.dirty ;
     }
 
     get data(): DataType[] {

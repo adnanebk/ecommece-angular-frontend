@@ -12,7 +12,11 @@
             <ng-template #noProducts>
                 <ngb-alert>No products found</ngb-alert>
             </ng-template>
-
+             <div class="alert alert-danger" *ngIf="errors?.length">
+                 <ul>
+                   <li *ngFor="let error of errors">{{error.message}}</li>
+                 </ul>
+             </div>
             <ng-container *ngIf="dataSource.data?.length; else noProducts">
                 <button (click)="saveToExcel()" class="btn btn-primary rounded my-2 mx-5">download excel</button>
                 <div class="input-group mx-3">

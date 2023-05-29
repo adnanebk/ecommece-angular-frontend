@@ -48,7 +48,7 @@
         <tbody>
         <tr *ngFor="let el of data; let idx= index;trackBy: trackById">
 
-       <td class="p-1 align-middle actions" [class]="isDirty(el)?'bgDirty':''">
+       <td class="p-1 align-middle actions" [ngClass]="{'bgDirty':isDirty(el),'bgError':hasError(el)}">
       <ng-container *ngIf="!isBatchEnabled" class="table-edit">
         <ng-container *ngIf="!isCurrentElement(el) || isFormEditing">
         <button (click)="handleEdit(el)" type="button"
@@ -75,7 +75,7 @@
             </td>
             <ng-container *ngFor="let field of fields">
                 <td *ngIf="!isColHide(field)" (click)="onViewChanged(el)" class="align-middle td-width"
-                    [class]="{'bgDirty':isDirty(el)}">
+                    [class]="{'bgDirty':isDirty(el),'bgError':hasError(el)}">
 
                     <div *ngIf="!isRowEditing(el,field)" class=" text-max-width">
                         <strong *ngIf="field.type==='number' || field.type==='decimal' || field.type==='text'"> {{el[field.name]}}</strong>
@@ -117,7 +117,7 @@
 
                         </app-file-input>
 
-                        <div *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</div>
+                        <div *ngIf="hasError(el)" class="text-danger">{{getError(field.name)}}</div>
                     </div>
                 </td>
             </ng-container>
