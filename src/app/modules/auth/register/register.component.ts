@@ -52,8 +52,8 @@ export class RegisterComponent implements OnInit {
         this.authService.isUserAuthenticated() && this.redirect();
     }
 
-    private async redirect() {
-        await this.router.navigateByUrl('/');
+    private  redirect() {
+         this.router.navigateByUrl('/');
     }
 
     private setErrors(error: ApiError) {
