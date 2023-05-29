@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AbstractControl, FormControl} from "@angular/forms";
 import {MatFormFieldAppearance} from "@angular/material/form-field/form-field";
 
@@ -7,7 +7,7 @@ import {MatFormFieldAppearance} from "@angular/material/form-field/form-field";
     templateUrl: './app-input.component.html',
     styleUrls: ['./app-input.component.scss']
 })
-export class AppInputComponent {
+export class AppInputComponent implements OnInit{
 
     @Input() control: AbstractControl = new FormControl();
     @Input() label = '';
@@ -37,6 +37,10 @@ export class AppInputComponent {
     onChange(value: any) {
         this.hasError()
         this.changeValue.emit(value);
+    }
+
+    ngOnInit(): void {
+        console.log(this.formControl)
     }
 }
 

@@ -5,31 +5,31 @@
             <input (ngModelChange)="rolleback()" class="form-check-input" type="checkbox" role="switch"
                    checked
                    [(ngModel)]="isBatchEnabled"/>
-            <button (click)="rolleback()" class="btn btn-info"><em class="fas fa-refresh"></em>Refresh</button>
+            <button (click)="rolleback()" class="btn btn-primary"><em class="fas fa-refresh"></em>Refresh</button>
         </div>
     </div>
 
 
     <div *ngIf="isBatchEnabled" class="d-inline">
-        <button (click)="updateAll()" class="btn btn-info m-2">Update all</button>
+        <button [disabled]="!isDataChanged" (click)="updateAll()" class="btn btn-info m-2">Update all</button>
         <button [disabled]="!selectedSize" (click)="removeAll()" class="btn btn-danger">Remove selected rows</button>
     </div>
 
 </div>
 <div class="table-responsive table-wrapper-scroll-y" #tableContent>
 
-    <table class="table table-bordered  table-secondary  m-auto text-center  float-start ">
+    <table class="table table-bordered  table-light  m-auto text-center  float-start ">
         <caption>Editable table</caption>
         <thead>
         <tr>
-            <th *ngIf="!isBatchEnabled" class="text-center text-primary align-middle  bg-secondary ">
+            <th *ngIf="!isBatchEnabled" class="text-center text-primary align-middle  bg-info ">
                 <h3>
-                    <button role="button" *ngIf="!isBatchEnabled" class="btn btn-light"
+                    <button role="button" *ngIf="!isBatchEnabled" class="btn btn-dark"
                             (click)="addNewItem()">
                         <em class="fas fa-plus-square"></em></button>
                 </h3>
             </th>
-            <th *ngIf="isBatchEnabled" class="text-center align-middle bg-secondary text-dark">
+            <th *ngIf="isBatchEnabled" class="text-center align-middle bg-info text-dark">
                 Select all
                 <h4>
                     <mat-checkbox class="example-margin" (change)="onAllSelected($event.checked)"></mat-checkbox>
@@ -37,7 +37,7 @@
             </th>
             <ng-container *ngFor="let field of fields; let idx = index">
                 <th *ngIf="!isColHide(field)" (click)="sort(field.name,ic)"
-                    class="text-center  align-middle bg-secondary border-secondary" role='button'>
+                    class="text-center  align-middle bg-info border-secondary" role='button'>
                     <a class="max-content mx-2 text-dark fa-lg fw-bold  text-decoration-none"><strong>{{field.display}}</strong></a>
                     <em #ic class="fa fa-sort" aria-hidden="true"></em>
                 </th>
@@ -80,7 +80,7 @@
                     <div *ngIf="!isRowEditing(el,field)" class=" text-max-width">
                         <strong *ngIf="field.type==='number' || field.type==='decimal' || field.type==='text'"> {{el[field.name]}}</strong>
                         <strong *ngIf="field.type==='textArea'"> {{el[field.name] | limitTo :'60'}}</strong>
-                        <strong *ngIf="field.type==='date'"> {{el[field.name] | date :'short'}}</strong>
+                        <strong *ngIf="field.type==='date'"> {{el[field.name] | date }}</strong>
                         <strong *ngIf="field.type==='bool'"> {{el[field.name] ? 'Yes' : 'No'}}</strong>
                         <strong *ngIf="field.type==='select' && field.selectOptions"> {{el[field.name][field.selectOptions.displayField]}}</strong>
                         <img *ngIf="field.type === 'image'" [src]="el[field.name]" alt=""/>

@@ -64,8 +64,9 @@ export class CreditCardsComponent implements OnInit {
         const dialogRef =  this.dialog.open(this.cardEditingModal, {
             width: '400px'
         });
-        dialogRef.afterOpened().subscribe(()=>this.selectedCard=selectedCard);
-        dialogRef.afterClosed().subscribe(()=>this.selectedCard=undefined);
+        dialogRef.afterOpened().subscribe();
+        this.selectedCard=selectedCard;
+        dialogRef.afterClosed().subscribe();
     }
 
 

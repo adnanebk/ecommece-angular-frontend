@@ -31,6 +31,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
     errors: { fieldName: string, message: string }[] = [];
     subscriptions: Subscription[] = [];
     isNewItem = true;
+    isDataChanged=false;
 
     constructor(public dialog: MatDialog, private datePipe: DatePipe, private modalService: NgbModal) {
     }
@@ -149,6 +150,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
 
     onValueChanged(el: DataType, field: Field) {
         el.dirty = true;
+        this.isDataChanged=true;
         this.removeError(field.name);
     }
 

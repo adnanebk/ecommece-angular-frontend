@@ -15,7 +15,16 @@
         <ng-template #cardEdit>
             <h1 mat-dialog-title>{{!selectedCard?.id ? 'Add new credit card' : 'Updating credit card'}}</h1>
             <app-credit-card-form [selectedCard]="selectedCard!"  (addNewCard)="save($event)" (updateCard)="update($event)" >
-          </app-credit-card-form>
+                <div mat-dialog-actions >
+                    <button mat-raised-button  mat-button color="primary" *ngIf="!selectedCard"
+                            cdkFocusInitial>Save
+                    </button>
+                    <button mat-raised-button mat-button *ngIf="selectedCard"
+                            color="primary" cdkFocusInitial>Update
+                    </button>
+                    <button mat-raised-button [mat-dialog-close]="" color="accent">Cancel</button>
+                </div>
+            </app-credit-card-form>
         </ng-template>
 
         <ngb-alert *ngIf="!creditCards.length" type="secondary" class="w-100 mt-4 "> You have no credit cards

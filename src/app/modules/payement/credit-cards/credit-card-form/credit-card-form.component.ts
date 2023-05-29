@@ -11,43 +11,45 @@ import {ApiError} from "../../../../core/models/api-error";
   templateUrl: './credit-card-form.component.html',
   styleUrls: ['./credit-card-form.component.css']
 })
-export class CreditCardFormComponent implements OnInit {
+export class CreditCardFormComponent {
   cardForm  = new FormGroup({});
   cardOptions: CardOption[] = [{cardType: 'VISA', name: 'Visa'}, {cardType: 'MASTERCARD', name: 'Master Card'}];
   private _selectedCard?: CreditCard;
-  @Input() hideActions=false
   @Output() addNewCard = new EventEmitter<CreditCard>();
   @Output() updateCard = new EventEmitter<CreditCard>();
+  cards: CreditCard[]=[];
 
 
   @Input() set selectedCard(creditCard: CreditCard) {
     this._selectedCard = creditCard;
-    console.log('card form --',creditCard);
     if(!creditCard)
       this.cardForm.reset();
-    else
-      this.cardForm.patchValue(creditCard);
+    else this.cardForm.patchValue(creditCard);
+
   }
 
   constructor(private creditCardService:CreditCardService) {
-  }
-
-  ngOnInit(): void {
     this.createForm();
-
+    this.creditCardService.getCreditCards().subscribe(cards=> {
+      this.cards = cards;
+    });
   }
+
+
 
   isCardNumberChanged() {
     return this._selectedCard?.cardNumber !== this.cardForm.get('cardNumber')?.value?.replaceAll('-', '');
   }
   handleSubmit() {
+    if(this.cardForm.invalid)
+      return;
     this.isNewCard ? this.save() : this.update();
   }
 
   save() {
-    this.creditCardService.saveCreditCard(this.cardForm.getRawValue()).subscribe(card => {
-       this.addNewCard.next(card);
-    }, error => this.setErrors(error));
+        this.creditCardService.saveCreditCard(this.cardForm.getRawValue()).subscribe(card => {
+          this.addNewCard.next(card);
+        }, error => this.setErrors(error));
   }
 
   update() {
@@ -65,7 +67,7 @@ export class CreditCardFormComponent implements OnInit {
     this.cardForm = new FormGroup({
       id: new FormControl(null),
       cardType: new FormControl(null, [Validators.required]),
-      cardNumber: new CardNumberFormControl(null, [Validators.required]),
+      cardNumber: new CardNumberFormControl(null,[Validators.required]),
       expirationDate: new MonthYearFormControl(null, [Validators.required]),
     });
   }
@@ -74,5 +76,24 @@ export class CreditCardFormComponent implements OnInit {
     error.errors?.forEach(err => {
       this.cardForm.setErrors({[err.fieldName]: err.message})
     })
+  }
+
+   validateCardNumber(cardNumber:any) {
+          const formValue = cardNumber.replaceAll('-', '');
+          if(formValue==this._selectedCard?.cardNumber)
+            return;
+          const isExist = this.cards.some(card => card.cardNumber == formValue);
+     if (isExist && !this.cardForm.hasError('cardNumber'))
+            this.cardForm.setErrors({'cardNumber': 'Card number already used'});
+  }
+
+  validateExpirationDate(expirationDate:string) {
+    const monthYear= expirationDate.split('/')?.map(val=>Number(val));
+    if(monthYear?.length<2)
+      return;
+    const currentDate = new Date();
+    const cardDate = new Date(2000+monthYear[1],monthYear[0]-1,currentDate.getDate());
+    if(cardDate<=currentDate)
+      this.cardForm.setErrors({'expirationDate': 'Expiration date must be in the future'});
   }
 }
