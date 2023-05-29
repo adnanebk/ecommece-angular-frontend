@@ -125,7 +125,7 @@ export class ProductsEditingComponent implements OnInit {
     addOrUpdateFromExcel($input: HTMLInputElement) {
         const file: File = $input.files![0];
         this.productService.addOrUpdateProductsFromExcel(file).subscribe(products => {
-                this.successAlert(products?.ADDED.length + " items has been added and " + products?.UPDATED.length + " items has been removed");
+                this.successAlert(products?.ADDED.length + " items has been added and " + products?.UPDATED.length + " items has been updated");
                 this.dataSource.onRowsAdded.next(products?.ADDED);
                 this.dataSource.onRowsUpdated.next(products?.UPDATED);
             },

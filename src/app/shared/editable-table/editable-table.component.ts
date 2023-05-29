@@ -157,8 +157,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
     onViewChanged(element: any) {
         if (this.isCurrentElement(element) || this.isBatchEnabled)
             return;
-        if (!this.isSaving(this.currentElement))
-            this.rolleback();
+        this.rolleback();
         this.errors = [];
         this.isNewItem = false;
         this.currentElement = element;
