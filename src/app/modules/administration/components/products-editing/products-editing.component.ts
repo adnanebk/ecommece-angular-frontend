@@ -133,7 +133,9 @@ export class ProductsEditingComponent implements OnInit {
                 $input.value='';
             },
             (error:ApiError) => {
-                this.errors = error?.errors || [];
+            if(error?.errors?.length)
+                this.errors = error?.errors;
+            else this.toastrService.error(error.message);
                 $input.value='';
             }
         );
