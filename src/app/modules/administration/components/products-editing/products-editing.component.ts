@@ -166,6 +166,9 @@ export class ProductsEditingComponent implements OnInit {
     }
 
     private sendErrors(product: Product, errors: any[]) {
+        if(!product)
+            this.errors=errors;
+        else
         this.dataSource.onRowErrors.next({row: product, errors});
     }
 }
