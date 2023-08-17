@@ -1,11 +1,12 @@
 import {Injectable} from '@angular/core';
 import {tap} from 'rxjs/operators';
-import {BehaviorSubject, catchError, lastValueFrom, map} from 'rxjs';
+import {BehaviorSubject, catchError, lastValueFrom, map, of} from 'rxjs';
 import {FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialUser} from 'angularx-social-login';
 import {AppUser} from "../models/app-user";
 import {AuthData, UserService} from "./user.service";
 import {ToastrService} from "ngx-toastr";
 import {SocialUserLogin} from "../models/socialUserLogin";
+import {Router} from "@angular/router";
 
 @Injectable({
     providedIn: 'root'
@@ -13,8 +14,9 @@ import {SocialUserLogin} from "../models/socialUserLogin";
 export class AuthService {
     private authData = new BehaviorSubject<AuthData | null>(null);
     public isTokenExpired = false;
+     activeToastr=false;
 
-    constructor(private userService: UserService, private socialAuthService: SocialAuthService, private toastrService: ToastrService) {
+    constructor(private userService: UserService, private socialAuthService: SocialAuthService, private toastrService: ToastrService,private router: Router) {
         const authData = this.getAuthDataFromStorage();
         authData && this.authData.next(authData);
     }
@@ -51,7 +53,7 @@ export class AuthService {
     logout() {
         this.authData.next(null);
         localStorage.removeItem('auth-data');
-        location.reload();
+        this.router.navigateByUrl('/auth/login');
     }
 
 
@@ -95,11 +97,16 @@ export class AuthService {
         if (!refreshToken) {
             this.logout();
         }
+
         return this.userService.refreshMyToken(refreshToken).pipe(
             tap(authData => {
+                if(this.activeToastr)
+                    return;
                 this.saveAuthDataToStorage(authData);
                 this.isTokenExpired = false;
-                this.toastrService.info("token has just been refreshed")
+                const toastr=this.toastrService.info("token has just been refreshed")
+                toastr.onShown.subscribe(()=>this.activeToastr=true);
+                toastr.onHidden.subscribe(()=>this.activeToastr=true);
             }),
             catchError(async er => {
                     this.logout();
@@ -109,12 +116,15 @@ export class AuthService {
     }
 
     sendCompleteRegistrationNotification() {
+        if(this.activeToastr)
+           return
         let toast = this.toastrService.info('Activate your account to see the full features',
             'Activate your account', {
                 timeOut: 10000,
                 extendedTimeOut: 3000,
             });
-        toast.onHidden.subscribe();
+        toast.onShown.subscribe(()=>this.activeToastr=true)
+        toast.onHidden.subscribe(()=>this.activeToastr=false);
     }
 
     getToken() {

@@ -55,7 +55,6 @@ export class UserService {
         const formData = new FormData();
         formData.append('image', file);
         return this.httpClient.patch<any>(this.baseUrl + 'users/current/upload-image', formData);
-
     }
 
     enableUserAccount(code: string) {
