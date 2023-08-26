@@ -14,7 +14,7 @@ import {Router} from "@angular/router";
 export class AuthService {
     private authData = new BehaviorSubject<AuthData | null>(null);
     public isTokenExpired = false;
-     activeToastr=false;
+     isToastrShow=false;
 
     constructor(private userService: UserService, private socialAuthService: SocialAuthService, private toastrService: ToastrService,private router: Router) {
         const authData = this.getAuthDataFromStorage();
@@ -100,13 +100,13 @@ export class AuthService {
 
         return this.userService.refreshMyToken(refreshToken).pipe(
             tap(authData => {
-                if(this.activeToastr)
+                if(this.isToastrShow)
                     return;
                 this.saveAuthDataToStorage(authData);
                 this.isTokenExpired = false;
                 const toastr=this.toastrService.info("token has just been refreshed")
-                toastr.onShown.subscribe(()=>this.activeToastr=true);
-                toastr.onHidden.subscribe(()=>this.activeToastr=true);
+                toastr.onShown.subscribe(()=>this.isToastrShow=true);
+                toastr.onHidden.subscribe(()=>this.isToastrShow=false);
             }),
             catchError(async er => {
                     this.logout();
@@ -116,15 +116,15 @@ export class AuthService {
     }
 
     sendCompleteRegistrationNotification() {
-        if(this.activeToastr)
+        if(this.isToastrShow)
            return
         let toast = this.toastrService.info('Activate your account to see the full features',
             'Activate your account', {
                 timeOut: 10000,
                 extendedTimeOut: 3000,
             });
-        toast.onShown.subscribe(()=>this.activeToastr=true)
-        toast.onHidden.subscribe(()=>this.activeToastr=false);
+        toast.onShown.subscribe(()=>this.isToastrShow=true)
+        toast.onHidden.subscribe(()=>this.isToastrShow=false);
     }
 
     getToken() {
