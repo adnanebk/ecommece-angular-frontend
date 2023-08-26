@@ -54,9 +54,10 @@ export class ProductsEditingComponent implements OnInit {
                         type: 'select',
                         selectOptions: {displayField: 'name', valueField: 'id', options: categories}
                     },
+                    {name: 'image', display: 'Image', type: 'image', fileField: 'imageFile'},
                     {name: 'dateCreated', display: 'Newest', type: 'date', readOnly: true},
                     {name: 'lastUpdated', display: 'Last updated', type: 'date', readOnly: true},
-                    {name: 'image', display: 'Image', type: 'image', fileField: 'imageFile'}
+
                 ];
             }
         );

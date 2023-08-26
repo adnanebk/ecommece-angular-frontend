@@ -92,12 +92,13 @@ export class EditableTableComponent implements OnInit, OnDestroy {
 
     private handleRowsUpdated() {
         this.subscriptions.push(this.datasource.onRowsUpdated.subscribe(rows => {
-            this.datasource.setData(this.data.map(row => rows[this.findIndex(row)] || row));
+            this.datasource.setData(this.data.map(row => rows.find(r=>r[this.identifier]==row[this.identifier]) || row));
         }));
     }
 
     private handleRowsRemoved() {
         this.subscriptions.push(this.datasource.onRowsRemoved.subscribe(rows => {
+            //  this.datasource.setData(this.data.filter(row=>!rows.find(r=>r[this.identifier]==row[this.identifier])))
             rows.forEach(row => {
                 this.data.splice(this.findIndex(row), 1);
             });
@@ -251,7 +252,9 @@ export class EditableTableComponent implements OnInit, OnDestroy {
     }
 
     isColHide(field: Field) {
-        return (this.isBatchEnabled && (field.type === 'image' || field.readOnly));
+        return (field.readOnly && Object.keys(this.currentElement)?.length)
+             ||  (this.isBatchEnabled && field.type == 'image')
+             ||   (field.readOnly && this.isBatchEnabled);
     }
 
     isSaving(el: DataType) {

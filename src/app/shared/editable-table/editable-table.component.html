@@ -74,7 +74,7 @@
 
             </td>
             <ng-container *ngFor="let field of fields">
-                <td *ngIf="!isColHide(field)" (click)="onViewChanged(el)" class="align-middle td-width"
+                <td *ngIf="!isColHide(field)" (click)="onViewChanged(el)" class="align-middle"
                     [class]="{'bgDirty':isDirty(el),'bgError':hasError(el)}">
 
                     <div *ngIf="!isRowEditing(el,field)" class=" text-max-width">
@@ -89,7 +89,7 @@
                     <div class="py-2 text-center" *ngIf="isRowEditing(el,field)">
 
                         <input *ngIf="field.type==='text'" type="text" [(ngModel)]="el[field.name]"
-                               (input)="onValueChanged(el,this.field)" class=" form-control bg-transparent"/>
+                               (input)="onValueChanged(el,this.field)" class="max-content form-control bg-transparent"/>
                         <input *ngIf="field.type==='number'" type="number" [(ngModel)]="el[field.name]"
                                (input)="onValueChanged(el,this.field)" class="form-control bg-transparent"/>
                         <input *ngIf="field.type==='decimal'" [(ngModel)]="el[field.name]"
@@ -111,7 +111,7 @@
                                     *ngFor="let op of field.selectOptions.options">{{op[field.selectOptions.displayField]}}</option>
                         </select>
 
-                        <app-file-input *ngIf="field.type === 'image'" [text]="el[field.name]"
+                        <app-file-input *ngIf="field.type === 'image'" text="upload"
                                         [accepts]="['.jpg','.jpeg','.png']"
                                         (upload)="uploadFile(el,this.field,$event)">
 
@@ -167,7 +167,7 @@
                         <span *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</span>
                     </app-input>
                     <div class="mb-4" *ngIf="field.type === 'image'">
-                        <app-file-input [label]="field.display" [text]="currentElement[field.name]"
+                        <app-file-input [label]="field.display"
                                         [accepts]="['.jpg','.jpeg','.png']"
                                         (upload)="uploadFile(currentElement,this.field,$event)">
                         </app-file-input>

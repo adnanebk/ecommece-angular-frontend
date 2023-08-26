@@ -100,13 +100,9 @@ export class AuthService {
 
         return this.userService.refreshMyToken(refreshToken).pipe(
             tap(authData => {
-                if(this.isToastrShow)
-                    return;
                 this.saveAuthDataToStorage(authData);
                 this.isTokenExpired = false;
-                const toastr=this.toastrService.info("token has just been refreshed")
-                toastr.onShown.subscribe(()=>this.isToastrShow=true);
-                toastr.onHidden.subscribe(()=>this.isToastrShow=false);
+                this.toastrService.info("Jwt token has just been refreshed")
             }),
             catchError(async er => {
                     this.logout();
