@@ -9,8 +9,8 @@ export const environment = {
     production: false,
     logLevel: NgxLoggerLevel.TRACE,
     serverLogLevel: NgxLoggerLevel.OFF,
-    api_url: 'https://ang-shop.herokuapp.com/api/',
-    api_doc: 'https://ang-shop.herokuapp.com/swagger-ui/',
+    api_url: 'http://localhost:8080/api/',
+    api_doc: 'http://localhost:8080/swagger-ui/',
     google: {
         clientId: '517151847301-i200k7o5tivqaitri8ri8j1obrjp0bd6.apps.googleusercontent.com'
     },
