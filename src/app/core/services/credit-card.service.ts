@@ -14,7 +14,7 @@ export interface CardOption {
 })
 export class CreditCardService {
 
-    private creditCardUrl = environment.path + 'creditCards';
+    private creditCardUrl = environment.api_url + 'creditCards';
 
     constructor(private httpClient: HttpClient) {
 

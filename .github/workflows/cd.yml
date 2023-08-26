@@ -28,4 +28,6 @@ jobs:
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          api_url: https://ang-shop.herokuapp.com/api/
+          api_doc: https://ang-shop.herokuapp.com/api/swagger-ui/
         timeout-minutes: 1

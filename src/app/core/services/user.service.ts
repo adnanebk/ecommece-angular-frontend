@@ -11,7 +11,7 @@ import {SocialUserLogin} from "../models/socialUserLogin";
     providedIn: 'root'
 })
 export class UserService {
-    private baseUrl = environment.path;
+    private baseUrl = environment.api_url;
 
 
     constructor(private httpClient: HttpClient) {

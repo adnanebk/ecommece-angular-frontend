@@ -23,7 +23,7 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('confirmationForm') cardEditingModal!: TemplateRef<any>
 
     private autoLogoutSubscription: Subscription = new Subscription;
-    docUrl = environment.pathDoc;
+    docUrl = environment.api_doc;
     confirmationCode ='';
     errorMessage='';
 

@@ -11,7 +11,7 @@ import {DataPage} from "../models/dataPage";
 })
 export class ProductService {
 
-    private productUrl = environment.path + 'products';
+    private productUrl = environment.api_url + 'products';
     private timeOut = 100000;
     private retry = 4;
 

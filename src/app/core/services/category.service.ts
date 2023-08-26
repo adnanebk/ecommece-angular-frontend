@@ -10,7 +10,7 @@ import {environment} from "../../../environments/environment.prod";
 })
 export class CategoryService {
 
-    private categoryUrl = environment.path + 'categories';
+    private categoryUrl = environment.api_url + 'categories';
     private timeOut = 100000;
     private retry = 4;
 
