@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import {ProductsComponent} from './components/products.component';
 import {RouterModule, Routes} from "@angular/router";
 import {SharedModule} from "../../shared/shared.module";
@@ -35,6 +35,7 @@ const routes: Routes = [
         RouterModule.forChild(routes),
         NgbPaginationModule,
         NgbAlertModule,
+        NgOptimizedImage,
 
     ]
 })
