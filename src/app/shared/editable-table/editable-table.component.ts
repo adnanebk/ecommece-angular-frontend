@@ -268,7 +268,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
 
     private openDialog() {
         return this.dialog.open(this.editingModal, {
-            width: '400px'
+            width: '500px'
         });
     }
 
