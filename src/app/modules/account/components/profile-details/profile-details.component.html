@@ -19,29 +19,29 @@
             <mat-card class="formCard">
                 <mat-card-content>
 
-                    <app-input appearance="standard" matIcon="face" label="First name"
+                    <app-input appearance="outline" matIcon="face" label="First name"
                                [control]="profileForm.controls['firstName']">
                         <mat-error
                                 *ngIf="profileForm.hasError('firstName')">{{profileForm.getError('firstName')}}</mat-error>
                     </app-input>
-                    <app-input appearance="standard" matIcon="face" label="Last name"
+                    <app-input appearance="outline" matIcon="face" label="Last name"
                                [control]="profileForm.controls['lastName']">
                         <mat-error
                                 *ngIf="profileForm.hasError('lastName')">{{profileForm.getError('lastName')}}</mat-error>
                     </app-input>
-                    <app-input [readonly]="user?.social!" appearance="standard" matIcon="email" label="Email address"
+                    <app-input [readonly]="user.social!" appearance="outline" matIcon="email" label="Email address"
                                [control]="profileForm.controls['email']">
                         <mat-error *ngIf="profileForm.hasError('email')">{{profileForm.getError('email')}}</mat-error>
                     </app-input>
-                    <app-select appearance="standard" placeholder="Select a country"
+                    <app-select appearance="outline" placeholder="Select a country"
                                 [items]="['Morocco','Egypt','Algeria','Tunisia']"
                                 [control]="profileForm.controls['country']">
                     </app-select>
-                    <app-input appearance="standard" matIcon="location_on" label="City"
+                    <app-input appearance="outline" matIcon="location_on" label="City"
                                [control]="profileForm.controls['city']">
                         <mat-error *ngIf="profileForm.hasError('city')">{{profileForm.getError('city')}}</mat-error>
                     </app-input>
-                    <app-input appearance="standard" matIcon="location_on" label="Street"
+                    <app-input appearance="outline" matIcon="location_on" label="Street"
                                [control]="profileForm.controls['street']">
                         <mat-error *ngIf="profileForm.hasError('street')">{{profileForm.getError('street')}}</mat-error>
                     </app-input>

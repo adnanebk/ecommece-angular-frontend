@@ -12,7 +12,7 @@ import {ApiError} from "../../../../core/models/api-error";
   styleUrls: ['./credit-card-form.component.css']
 })
 export class CreditCardFormComponent {
-  cardForm  = new FormGroup({});
+  cardForm!: FormGroup;
   cardOptions: CardOption[] = [{cardType: 'VISA', name: 'Visa'}, {cardType: 'MASTERCARD', name: 'Master Card'}];
   private _selectedCard?: CreditCard;
   @Output() addNewCard = new EventEmitter<CreditCard>();

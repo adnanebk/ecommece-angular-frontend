@@ -15,7 +15,7 @@ const routes: Routes = [
         component: LayoutComponent,
         children: [
             {path: 'products', component: ProductsComponent},
-            {path: '', redirectTo: 'products'},
+            {path: '', redirectTo: 'products',pathMatch:'full'},
             {path: 'product/details/:sku', component: ProductDetailsComponent},
         ]
     }

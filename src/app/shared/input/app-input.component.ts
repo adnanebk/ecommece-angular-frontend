@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AbstractControl, FormControl} from "@angular/forms";
-import {MatFormFieldAppearance} from "@angular/material/form-field/form-field";
+import {MatFormFieldAppearance} from "@angular/material/form-field";
 
 @Component({
     selector: 'app-input',

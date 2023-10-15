@@ -133,7 +133,7 @@
 
             <div mat-dialog-content>
                 <ng-container *ngFor="let field of fields; trackBy: trackByField">
-                    <mat-form-field *ngIf="field.type==='select'" appearance="legacy" class="w-100">
+                    <mat-form-field *ngIf="field.type==='select'" appearance="outline" class="w-100">
                         <mat-label>{{field.selectOptions!.displayField}}</mat-label>
                         <mat-select  [required]="true"
                                      [formControl]="getFormControl(field.name)"
@@ -147,21 +147,21 @@
                         <span *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</span>
 
                     </mat-form-field>
-                    <app-input *ngIf="field.type==='text'" appearance="legacy" [label]="field.display"
+                    <app-input *ngIf="field.type==='text'" appearance="outline" [label]="field.display"
                                [control]="myForm.controls[field.name]" (changeValue)="deleteError(field.name)">
                         <span *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</span>
                     </app-input>
-                    <app-input *ngIf="field.type==='number'" inputType="number" appearance="legacy"
+                    <app-input *ngIf="field.type==='number'" inputType="number" appearance="outline"
                                [label]="field.display" [control]="myForm.controls[field.name]"
                                (changeValue)="deleteError(field.name)">
                         <span *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</span>
                     </app-input>
-                    <app-input *ngIf="field.type==='decimal'" inputType="decimal" appearance="legacy"
+                    <app-input *ngIf="field.type==='decimal'" inputType="decimal" appearance="outline"
                                [label]="field.display" [control]="myForm.controls[field.name]"
                                (changeValue)="deleteError(field.name)">
                         <span *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</span>
                     </app-input>
-                    <app-input *ngIf="field.type==='textArea'" inputType="textArea" appearance="legacy"
+                    <app-input *ngIf="field.type==='textArea'" inputType="textArea" appearance="outline"
                                [label]="field.display" [control]="myForm.controls[field.name]"
                                (changeValue)="deleteError(field.name)">
                         <span *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</span>
