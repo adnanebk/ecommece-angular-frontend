@@ -7,7 +7,7 @@
         <div *ngIf="orders?.length"  class="container-fluid my-5 fw-bold fs-6  justify-content-center">
             <div class="card card-1">
                 <div class="card-header ">
-                    <div class="alert alert-success">Thanks for your Order !</div>
+                    <mat-toolbar color="primary">Thanks for your Order !</mat-toolbar>
                 </div>
                 <div *ngFor="let order of orders ; let idx=index" class="card-body">
                  

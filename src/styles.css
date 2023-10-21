@@ -30,11 +30,11 @@ body {
 h3.light-mode {
  
 }
-.dark-mode .card, .dark-mode .mat-card, .dark-mode .mat-tab-body, .dark-mode td, .dark-mode .form-select {
+.form-control,.dark-mode .card, .dark-mode .mat-card, .dark-mode .mat-tab-body, .dark-mode td, .dark-mode .form-select {
     background-color:#424242 !important;
     color: white !important;
 }
-button span, .dark-mode .text-muted, .dark-mode strong, .dark-mode input, .dark-mode textarea{
+.dark-mode button, .dark-mode .text-muted, .dark-mode strong, .dark-mode input, .dark-mode textarea{
     color:white !important;
 }
 .full-width {
