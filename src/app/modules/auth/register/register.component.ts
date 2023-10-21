@@ -57,7 +57,9 @@ export class RegisterComponent implements OnInit {
     }
 
     private setErrors(error: ApiError) {
-        error.errors?.forEach(err => this.registerForm.setErrors({[err.fieldName]: err.message}))
+        error.errors?.forEach(err => {
+            this.registerForm.setErrors({[err.fieldName]: err.message});
+        })
     }
 
 

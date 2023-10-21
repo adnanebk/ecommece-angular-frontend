@@ -11,6 +11,7 @@ export class AppInputComponent implements OnInit{
 
     @Input() control: AbstractControl = new FormControl();
     @Input() label = '';
+    @Input() errorKeys:string[] = [];
     @Input() placeHolder = '';
     @Input() inputType: InputType = 'text'
     @Input() matIcon = '';

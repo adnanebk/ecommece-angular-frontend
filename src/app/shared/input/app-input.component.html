@@ -33,6 +33,9 @@
         <mat-datepicker #picker></mat-datepicker>
     </ng-container>
 
+       <ng-container *ngFor="let key of errorKeys">
+           <span class="error" *ngIf="formControl?.parent?.hasError(key)">{{formControl.parent?.getError(key)}}</span>
+       </ng-container>
     <ng-container *ngIf="hasError()">
         <span class="error" *ngIf="formControl.hasError('required')"> this field is required </span>
         <span class="error" *ngIf="formControl.hasError('email')"> email must be in valid format </span>
@@ -40,6 +43,7 @@
         <span class="error" *ngIf="formControl.hasError('minlength')">The characters must be at least
             {{formControl.getError('minlength')!['requiredLength']}} </span>
     </ng-container>
+   
 
     <span *ngIf="!formControl.touched || formControl.valid">
             <ng-content></ng-content>

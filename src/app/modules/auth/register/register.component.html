@@ -5,27 +5,21 @@
             <mat-card-subtitle><a routerLink="/auth/login"><strong>Click if already have an account</strong></a>
             </mat-card-subtitle>
             <mat-card-content>
-                <app-input matIcon="face" label="First name" [control]="registerForm.controls['firstName']">
-                    <mat-error
-                            *ngIf="registerForm.hasError('firstName')">{{this.registerForm.getError('firstName')}}</mat-error>
+                <app-input [errorKeys]="['firstName']" matIcon="face" label="First name" [control]="registerForm.controls['firstName']">
+
                 </app-input>
-                <app-input matIcon="face" label="Last name" [control]="registerForm.controls['lastName']">
-                    <mat-error
-                            *ngIf="registerForm.hasError('lastName')">{{this.registerForm.getError('lastName')}}</mat-error>
+                <app-input [errorKeys]="['lastName']" matIcon="face" label="Last name" [control]="registerForm.controls['lastName']">
                 </app-input>
 
-                <app-input matIcon="email" label="Email address" [control]="registerForm.controls['email']">
-                    <mat-error
-                            *ngIf="registerForm.hasError('email')">{{this.registerForm.getError('email')}}</mat-error>
-                </app-input>
+                <app-input [errorKeys]="['email']" matIcon="email" label="Email address" [control]="registerForm.controls['email']">
+                </app-input> 
 
-                <app-input label="Password" inputType="password" [control]="registerForm.controls['password']">
-                    <mat-error
-                            *ngIf="registerForm.hasError('password')">{{this.registerForm.getError('password')}}</mat-error>
+                <app-input [errorKeys]="['password']"  label="Password" inputType="password" [control]="registerForm.controls['password']">
+                    
                 </app-input>
                 <app-input label="Confirmed password" inputType="password"
                            [control]="registerForm.controls['confirmPassword']"></app-input>
-
+               
             </mat-card-content>
 
             <mat-card-actions class="login-actions text-center">

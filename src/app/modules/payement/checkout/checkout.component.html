@@ -1,30 +1,26 @@
 <div class="container">
     <div class="row">
-        <mat-stepper [linear]="true" #stepper class="col-lg-10">
-            <mat-step [hasError]="hasCustomerCardErrors()" [stepControl]="customerForm">
+        <mat-stepper [linear]="true" #stepper  class="col-lg-10">
+            <mat-step #step1 [stepControl]="customerForm">
                 <form [formGroup]="customerForm">
                     <ng-template matStepLabel>Fill out your shipping information</ng-template>
-                    <app-input matIcon="face" label="Full name" [control]="customerForm.controls['fullName']">
-                        <mat-error>{{this.customerForm.getError('fullName')}}</mat-error>
+                    <app-input [errorKeys]="['fullName']" matIcon="face" label="Full name" [control]="customerForm.controls['fullName']">
                     </app-input>
-                    <app-input matIcon="email" label="Email address" [control]="customerForm.controls['email']">
-                        <mat-error>{{this.customerForm.getError('email')}}</mat-error>
+                    <app-input [errorKeys]="['email']" matIcon="email" label="Email address" [control]="customerForm.controls['email']">
                     </app-input>
                     <app-select placeholder="Select a country" [items]="['Morocco','Egypt','Algeria','Tunisia']"
                                 [control]="customerForm.controls['country']">
                     </app-select>
-                    <app-input matIcon="location_on" label="City" [control]="customerForm.controls['city']">
-                        <mat-error>{{this.customerForm.getError('city')}}</mat-error>
+                    <app-input [errorKeys]="['city']" matIcon="location_on" label="City" [control]="customerForm.controls['city']">
                     </app-input>
-                    <app-input matIcon="location_on" label="Street" [control]="customerForm.controls['street']">
-                        <mat-error>{{this.customerForm.getError('street')}}</mat-error>
+                    <app-input [errorKeys]="['street']" matIcon="location_on" label="Street" [control]="customerForm.controls['street']">
                     </app-input>
                     <div>
                         <button mat-raised-button color="primary" matStepperNext>Next</button>
                     </div>
                 </form>
             </mat-step>
-            <mat-step  [hasError]="hasCreditCardErrors()" [stepControl]="formCard.cardForm" label="Fill out payment information">
+            <mat-step #step2  [stepControl]="formCard.cardForm" label="Fill out payment information">
                <app-credit-card-form class="m-1" #formCard  [selectedCard]="selectedCard!"  >
                </app-credit-card-form>
                 <button mat-raised-button color="accent" matStepperPrevious>Back</button>
@@ -34,7 +30,6 @@
                 <ng-template matStepLabel>Done</ng-template>
                 <p>You are now done.</p>
                 <div>
-                    <div *ngIf="hasAnyApiErrors()" class="alert alert-danger">Please go back and fixe the errors</div>
                     <button mat-raised-button color="accent" matStepperPrevious >Back</button>
                     <button mat-raised-button class="mx-2" color="primary" (click)="onSubmit()">Complete</button>
                 </div>

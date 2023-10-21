@@ -3,19 +3,14 @@
         <app-select [readonly]="!isCardNumberChanged() && !isNewCard" appearance="fill" [items]="cardOptions"
                     selectValue="cardType" selectLabel="name" placeholder="Card type"
                     [control]="cardForm.controls['cardType']">
-            <mat-error
-                    *ngIf="cardForm.hasError('cardType')">{{this.cardForm.getError('cardType')}}</mat-error>
-        </app-select>
-        <app-input appearance="fill" (changeValue)="validateCardNumber($event)" matIcon="credit_card" label="Card number" [control]="cardForm.controls['cardNumber']">
-            <mat-error *ngIf="cardForm.hasError('cardNumber')">{{this.cardForm.getError('cardNumber')}}</mat-error>
+                   </app-select>
+        <app-input [errorKeys]="['cardNumber']" appearance="fill" (changeValue)="validateCardNumber($event)" matIcon="credit_card" label="Card number" [control]="cardForm.controls['cardNumber']">
         </app-input>
-        <app-input (changeValue)="validateExpirationDate($event)"
+        <app-input [errorKeys]="['expirationDate']" (changeValue)="validateExpirationDate($event)"
                 [readonly]="!isCardNumberChanged() && !isNewCard" appearance="fill"
                    placeHolder="month/year, ex: mm/yy,10/30" label="Expiration date"
                    [control]="cardForm.controls['expirationDate']">
-            <mat-error
-                    *ngIf="cardForm.hasError('expirationDate')">{{this.cardForm.getError('expirationDate')}}</mat-error>
-        </app-input>
+                    </app-input>
     </div>
     <ng-content></ng-content>
 </form>
