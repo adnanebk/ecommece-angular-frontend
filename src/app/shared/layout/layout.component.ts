@@ -4,11 +4,12 @@ import {Subscription} from 'rxjs';
 
 import {SpinnerService} from '../../core/services/spinner.service';
 import {AuthService} from "../../core/services/auth.service";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {CartService} from "../../core/services/cart.service";
 import {environment} from "../../../environments/environment.prod";
 import {MatDialog} from "@angular/material/dialog";
 import {ApiError} from "../../core/models/api-error";
+import {DarkModeService} from "angular-dark-mode";
 
 @Component({
     selector: 'app-layout',
@@ -26,11 +27,14 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
     docUrl = environment.api_doc;
     confirmationCode ='';
     errorMessage='';
+    isDarkModeEnabled: boolean=false;
 
     constructor(private changeDetectorRef: ChangeDetectorRef, private cartService: CartService,
                 private media: MediaMatcher,public dialog: MatDialog,
-                public spinnerService: SpinnerService,
-                private authService: AuthService, private router: Router, private activatedRoute: ActivatedRoute) {
+                public spinnerService: SpinnerService,private darkModeService: DarkModeService,
+                private authService: AuthService, private router: Router) {
+
+        this.darkModeService.darkMode$.subscribe(isDarkModeEnabled=>this.isDarkModeEnabled=isDarkModeEnabled);
 
         this.mobileQuery = this.media.matchMedia('(max-width: 1000px)');
         this._mobileQueryListener = () => changeDetectorRef.detectChanges();
@@ -100,5 +104,9 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
 
     sendConfirmationCode() {
         this.authService.sendActivationMessage();
+    }
+
+    onThemeChange() {
+        this.isDarkModeEnabled?this.darkModeService.disable():this.darkModeService.enable();
     }
 }

@@ -28,6 +28,7 @@
     "@fortawesome/fontawesome-free": "^6.1.1",
     "@ng-bootstrap/ng-bootstrap": "^14.2.0",
     "@popperjs/core": "^2.11.5",
+    "angular-dark-mode": "^3.1.0",
     "angularx-social-login": "^4.1.0",
     "bootstrap": "^5.1.3",
     "file-saver": "^2.0.5",

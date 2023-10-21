@@ -105,6 +105,9 @@
                     <mat-icon mat-list-icon> list_alt</mat-icon>
                     <p mat-line>Rest api doc</p>
                 </a>
+                <a mat-list-item>
+                <mat-slide-toggle [checked]="isDarkModeEnabled" (change)="onThemeChange()" >Dark theme</mat-slide-toggle>
+                </a>
             </mat-nav-list>
 
         </mat-sidenav>
