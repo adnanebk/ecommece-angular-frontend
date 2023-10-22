@@ -11,6 +11,7 @@ import {OrderService} from "../../../core/services/order.service";
 import {CreditCard} from "../../../core/models/CreditCard";
 import {CreditCardFormComponent} from "../credit-cards/credit-card-form/credit-card-form.component";
 import {MatStepper} from "@angular/material/stepper";
+import {Location} from "@angular/common";
 
 @Component({
     selector: 'app-checkout',
@@ -31,18 +32,17 @@ export class CheckoutComponent implements OnInit,AfterViewInit {
 
     constructor(public formBuilder: FormBuilder, private cartService: CartService,
                 private orderService: OrderService, private creditCardService: CreditCardService,
-                private router: Router, private authService: AuthService) {
-        this.getCartItems();
+                private router: Router, private authService: AuthService,private location: Location) {
+        const state = this.location.getState() as any;
+        this.cartItems = state?.cartItems ?? this.cartService.cart.value;
+
     }
 
     ngAfterViewInit(): void {
         this.creditCardForm=this.creditCardComponent?.cardForm;
-        this.hasCreditCardErrors();
     }
 
-    private getCartItems() {
-        this.cartItems = this.router.getCurrentNavigation()?.extras?.state?.['cartItems'] ?? this.cartService.cart.value;
-    }
+   
 
     ngOnInit(): void {
         this.createCustomerForm();
@@ -99,22 +99,15 @@ export class CheckoutComponent implements OnInit,AfterViewInit {
         }));
     }
     
-    hasCreditCardErrors() {
-          this.creditCardForm?.valueChanges.subscribe(()=>{
-              if(this.creditCardForm.errors)
-              {
-                  this.stepper.steps.get(0)?.select();
-              }
-          });
-          
-    }
     private setErrors(error: ApiError) {
         error.errors?.forEach(err => {
               this.creditCardForm?.setErrors({[err.fieldName]: err.message});
               this.stepper.steps.get(1)?.select();
-              
         })
     }
 
 
+    hasCreditCardError() {
+        return Boolean(this.creditCardForm?.errors);
+    }
 }
