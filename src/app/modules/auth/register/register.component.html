@@ -2,7 +2,7 @@
     <form [formGroup]="registerForm" fxFlex="50%" fxFlex.sm="50%" fxFlex.xs="90%" (submit)="onSubmit()" class="myform">
         <mat-card class="formCard">
             <mat-card-title>Register</mat-card-title>
-            <mat-card-subtitle><a routerLink="/auth/login"><strong>Click if already have an account</strong></a>
+            <mat-card-subtitle><a class="text-decoration-none" routerLink="/auth/login"><strong>Click if already have an account</strong></a>
             </mat-card-subtitle>
             <mat-card-content>
                 <app-input [errorKeys]="['firstName']" matIcon="face" label="First name" [control]="registerForm.controls['firstName']">

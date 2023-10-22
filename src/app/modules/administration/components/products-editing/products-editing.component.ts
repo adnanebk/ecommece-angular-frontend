@@ -28,7 +28,7 @@ export class ProductsEditingComponent implements OnInit {
 
     ngOnInit(): void {
         this.createForm();
-        this.fetchCategories();
+        this.setDatasourceFields();
         this.fetchProducts();
     }
 
@@ -39,7 +39,7 @@ export class ProductsEditingComponent implements OnInit {
         });
     }
 
-    private fetchCategories() {
+    private setDatasourceFields() {
         this.categoryService.getCategories().subscribe(categories => {
                 this.dataSource.fields = [
                     {name: 'sku', display: 'Sku', type: 'text'},
