@@ -95,15 +95,17 @@ export class CheckoutComponent implements OnInit,AfterViewInit {
         this.orderService.saveOrder(order).subscribe(() => {
             this.router.navigateByUrl('/orders');
         }, (error => {
+            this.customerForm.patchValue(order)
             this.setErrors(error);
+            this.stepper.steps.get(1)?.select();
         }));
     }
     
     private setErrors(error: ApiError) {
-        error.errors?.forEach(err => {
+        if(!this.creditCardForm.errors)
+          error.errors?.forEach(err => {
               this.creditCardForm?.setErrors({[err.fieldName]: err.message});
-              this.stepper.steps.get(1)?.select();
-        })
+        });
     }
 
 

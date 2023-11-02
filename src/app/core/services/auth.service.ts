@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {tap} from 'rxjs/operators';
-import {BehaviorSubject, catchError, lastValueFrom, map, of} from 'rxjs';
+import {BehaviorSubject, catchError, lastValueFrom, map} from 'rxjs';
 import {FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialUser} from 'angularx-social-login';
 import {AppUser} from "../models/app-user";
 import {AuthData, UserService} from "./user.service";

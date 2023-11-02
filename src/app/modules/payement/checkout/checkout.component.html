@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row">
-        <mat-stepper [linear]="true" #stepper  class="col-lg-10">
-            <mat-step #step1 [stepControl]="customerForm">
+        <mat-stepper #stepper  class="col-lg-10">
+            <mat-step #step1 [stepControl]="customerForm" >
                 <form [formGroup]="customerForm">
                     <ng-template matStepLabel>Fill out your shipping information</ng-template>
                     <app-input [errorKeys]="['fullName']" matIcon="face" label="Full name" [control]="customerForm.controls['fullName']">
@@ -16,7 +16,7 @@
                     <app-input [errorKeys]="['street']" matIcon="location_on" label="Street" [control]="customerForm.controls['street']">
                     </app-input>
                     <div>
-                        <button mat-raised-button color="primary" matStepperNext>Next</button>
+                        <button [disabled]="customerForm.invalid" mat-raised-button color="primary" matStepperNext>Next</button>
                     </div>
                 </form>
             </mat-step>
@@ -24,7 +24,7 @@
                <app-credit-card-form class="m-1" #formCard  [selectedCard]="selectedCard!"  >
                </app-credit-card-form>
                 <button mat-raised-button color="accent" matStepperPrevious>Back</button>
-                <button mat-raised-button class="mx-2" color="primary" matStepperNext>Next</button>
+                <button [disabled]="creditCardForm?.invalid" mat-raised-button class="mx-2" color="primary" matStepperNext>Next</button>
             </mat-step>
             <mat-step>
                 <ng-template matStepLabel>Done</ng-template>

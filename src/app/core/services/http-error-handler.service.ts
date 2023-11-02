@@ -25,10 +25,10 @@ export class HttpErrorHandlerService {
                         catchError((err) => this.handleError(err, originalRequest, next)),
                     );
                 }
-                if (status === 403 && error?.code === 'user.not.enabled')
+                else if (status === 403 && error?.code === 'user.not.enabled')
                     this.authService.sendCompleteRegistrationNotification();
             }
         }
-        return throwError(error);
+        return throwError(()=>error);
     }
 }

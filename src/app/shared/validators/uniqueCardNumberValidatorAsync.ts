@@ -1,6 +1,5 @@
-import { ValidatorFn} from "@angular/forms";
+import {ValidatorFn} from "@angular/forms";
 import {CreditCard} from "../../core/models/CreditCard";
-import {LoggerModule} from "ngx-logger";
 
 
 export function uniqueCardNumberValidatorAsync(cards:CreditCard[],initialCardNumber:string | undefined):ValidatorFn {
