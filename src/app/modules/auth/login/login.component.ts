@@ -60,6 +60,5 @@ export class LoginComponent implements OnInit {
 
     private async redirect() {
         await this.router.navigateByUrl('/');
-        // this.location.back();
     }
 }
