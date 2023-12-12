@@ -1,4 +1,4 @@
-<div class="container" *ngIf="product">
+<div class="container" as *ngIf="product$ | async as product">
     <div class="details-wrapper sec-padding">
         <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="80">
             <div fxLayout="row wrap" fxFlex="100" fxFlex.gt-md="100" fxFlex.gt-sm="100">
@@ -59,18 +59,18 @@
                                     </button>
                                     <input readonly type="text" name="quantity" value="{{quantity}}"
                                            class="form-control input-number">
-                                    <button mat-icon-button matTooltip="Add" (click)="increment()">
+                                    <button mat-icon-button matTooltip="Add" (click)="increment(product)">
                                         <mat-icon>add</mat-icon>
                                     </button>
                                 </div>
                             </div>
                         </div>
                         <div class="buttons">
-                            <button mat-raised-button color="primary" class="btn-project me-2" (click)="addToCart()">
+                            <button mat-raised-button color="primary" class="btn-project me-2" (click)="addToCart(product)">
                                 <mat-icon>shopping_cart</mat-icon>
                                 ADD TO CARD
                             </button>
-                            <button mat-raised-button color="primary" class="btn-project" (click)="checkout()">BUY NOW
+                            <button mat-raised-button color="primary" class="btn-project" (click)="checkout(product)">BUY NOW
                             </button>
                         </div>
                     </div>

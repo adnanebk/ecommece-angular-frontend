@@ -42,22 +42,16 @@ export class ProductsComponent implements OnInit {
         this.categories$ = this.categoryService.getCategories();
     }
 
-    searchProducts() {
-        this.productPage.number = 1;
-        this.getProductsInPage();
-    }
-
 
     getProductsByFilter() {
         if (this.selectedFilter) {
-            this.productPage.number = 1;
             this.productPage.sortProperty = this.selectedFilter.property;
             this.productPage.sortDirection = this.selectedFilter.direction;
-            this.getProductsInPage();
+            this.getFirstPageProducts();
         }
     }
 
-    getProductsBySelectedCategory() {
+    getFirstPageProducts() {
         this.productPage.number = 1;
         this.getProductsInPage();
     }

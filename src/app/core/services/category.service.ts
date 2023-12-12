@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Observable} from "rxjs";
 import {Category} from "../models/category";
-import {retry, timeout} from "rxjs/operators";
+import {retry, shareReplay, timeout} from "rxjs/operators";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment.prod";
 
@@ -21,7 +21,7 @@ export class CategoryService {
     getCategories(): Observable<Category[]> {
 
         return this.httpClient.get<Category[]>(this.categoryUrl).pipe(
-            timeout(this.timeOut), retry(this.retry));
+            timeout(this.timeOut), retry(this.retry),shareReplay());
     }
 
     saveCategory(productCategory: Category): Observable<Category> {

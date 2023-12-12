@@ -25,6 +25,7 @@ export class CheckoutComponent implements OnInit,AfterViewInit {
     cartItems: CartItem[] = [];
     totalQuantity: number = 0;
     totalPrice: number = 0;
+    creditCards: CreditCard[] = [];
     selectedCard?: CreditCard;
     @ViewChild(CreditCardFormComponent) creditCardComponent!: CreditCardFormComponent;
     @ViewChild(MatStepper) stepper!:MatStepper;
@@ -52,10 +53,8 @@ export class CheckoutComponent implements OnInit,AfterViewInit {
                     ...user,
                     fullName: (user.firstName + ' ' + (user.lastName || '')).trim()
                 });
-                this.creditCardService.getActiveCreditCard().subscribe((card) => {
-                    if (card) {
-                        this.selectedCard = card;
-                    }
+                this.creditCardService.getCreditCards().subscribe((cards) => {
+                        this.selectedCard = cards.find(card=>card.active);
                 });
             }
 

@@ -1,19 +1,21 @@
-import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {MatDialog} from "@angular/material/dialog";
 import {CreditCard} from "../../../core/models/CreditCard";
 import {CardOption, CreditCardService} from "../../../core/services/credit-card.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ConfirmComponent} from "../../../shared/confirm-dialogue/confirm.component";
+import {Observable} from "rxjs";
 
 @Component({
     selector: 'app-credit-cards',
     templateUrl: './credit-cards.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     styleUrls: ['./credit-cards.component.scss']
 })
 export class CreditCardsComponent implements OnInit {
     cardNames: CardOption[] = [];
     selectedCard?: CreditCard;
-    creditCards: CreditCard[] = [];
+    creditCards$! : Observable<CreditCard[]>;
 
     constructor(public dialog: MatDialog, private creditCardService: CreditCardService, private modalService: NgbModal) {
         this.cardNames = this.creditCardService.getCardNames();
@@ -23,33 +25,30 @@ export class CreditCardsComponent implements OnInit {
 
 
     ngOnInit(): void {
-        this.getCurrenCreditCards();
+        this.creditCards$ = this.creditCardService.getCreditCards();
     }
 
-    handleRemove(card: CreditCard, index: number) {
+    handleRemove(card: CreditCard) {
         this.modalService.open(ConfirmComponent.setTitle('confirmation').setContent('Are you sure to delete ?')).closed.subscribe(() => {
-            this.creditCards.splice(index, 1);
-            this.creditCardService.removeCreditCard(card.id).subscribe(undefined, () => this.creditCards.splice(index, 0, card));
+            this.creditCardService.removeCreditCard(card).subscribe();
         })
     }
 
     handleActive(creditCard: CreditCard) {
-        this.creditCardService.activeCard(creditCard.id).subscribe(() => {
-            const activateCard = this.creditCards.find(card => card.active);
-            activateCard!.active = false;
-            creditCard.active = true;
-        }, () => creditCard.active = false)
+        this.creditCardService.activeCard(creditCard.id).subscribe();
     }
 
-    save(card:CreditCard) {
-            this.creditCards.push(card);
+    handleAdd(card:CreditCard) {
+        this.creditCardService.saveCreditCard(card).subscribe(()=>{
             this.dialog.closeAll();
+        });
     }
 
-    update(card:CreditCard) {
-            const index = this.creditCards.findIndex(c => c.id === card.id);
-            this.creditCards[index] = {...card,active:this.creditCards[index].active};
-            this.dialog.closeAll();
+    handleUpdate(cardToUpdate:CreditCard) {
+        this.creditCardService.updateCreditCard(cardToUpdate).subscribe(()=>{
+            this.dialog.closeAll();   
+        })
+        
     }
 
     addNew() {
@@ -64,18 +63,9 @@ export class CreditCardsComponent implements OnInit {
         const dialogRef =  this.dialog.open(this.cardEditingModal, {
             width: '400px'
         });
-        dialogRef.afterOpened().subscribe();
         this.selectedCard=selectedCard;
+        dialogRef.afterOpened().subscribe();
         dialogRef.afterClosed().subscribe();
     }
-
-
-    private getCurrenCreditCards() {
-        this.creditCardService.getCreditCards().subscribe(cards => this.creditCards = cards);
-    }
-
-
-
-
 }
 

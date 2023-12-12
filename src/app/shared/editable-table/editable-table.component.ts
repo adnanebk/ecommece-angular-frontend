@@ -151,7 +151,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
         modifiedElements.length && this.UpdateAll.emit(modifiedElements);
     }
 
-    onValueChanged(el: DataType, field: Field) {
+    onValueChanged(el: DataType, field: Schema) {
         el.dirty = true;
         this.isDataChanged=true;
         this.removeError(field.name);
@@ -167,7 +167,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
 
     }
 
-    uploadFile(element: DataType, field: Field, file: File) {
+    uploadFile(element: DataType, field: Schema, file: File) {
         this.errors = [];
         element.dirty = true;
         element[field.name] = file.name;
@@ -227,7 +227,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
     trackById(i:any, item: any): string {
         return item && item[this.identifier];
     }
-    trackByField(i:any, item: Field): string {
+    trackByField(i:any, item: Schema): string {
         return item.name;
     }
     compareWith(item1: any, item2: any): boolean {
@@ -248,10 +248,10 @@ export class EditableTableComponent implements OnInit, OnDestroy {
     }
 
     get fields() {
-        return this.datasource.fields;
+        return this.datasource.schema;
     }
 
-    isColHide(field: Field) {
+    isColHide(field: Schema) {
         return (field.readOnly && Object.keys(this.currentElement)?.length)
              ||  (this.isBatchEnabled && field.type == 'image')
              ||   (field.readOnly && this.isBatchEnabled);
@@ -313,7 +313,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
         return this.myForm.controls[name] as FormControl;
     }
 
-    isRowEditing(el: Data, field: Field) {
+    isRowEditing(el: Data, field: Schema) {
         return (this.isCurrentElement(el) || this.isBatchEnabled) && !field.readOnly && !this.isFormEditing;
     }
 }
@@ -321,7 +321,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
 
 export declare type InputType = 'text' | 'number' | 'decimal' | 'bool' | 'date' | 'textArea' | 'image' | 'select';
 
-export interface Field {
+export interface Schema {
     name: string;
     display: string;
     type: InputType;
@@ -336,7 +336,7 @@ export interface ApiError {
 }
 
 export class DataSource<Type> {
-    fields: Field[] = [];
+    schema: Schema[] = [];
     private _data: Type[] = [];
     private backedData: Type[] = [];
     onRowErrors = new Subject<{row:Type,errors:ApiError[] }>();

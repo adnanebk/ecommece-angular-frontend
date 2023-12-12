@@ -17,12 +17,12 @@
                                 <mat-label><strong>Search</strong></mat-label>
                                 <input [(ngModel)]="productPage.search" matInput placeholder="search..."
                                        (keyup.enter)="getProductsInPage()">
-                                <mat-icon (click)="searchProducts()" role="button" matSuffix>search</mat-icon>
+                                <mat-icon (click)="getFirstPageProducts()" role="button" matSuffix>search</mat-icon>
                             </mat-form-field>
                             <mat-form-field *ngIf="categories$ | async as categories" appearance="fill" class="w-auto">
                                 <mat-label><strong>Categories</strong></mat-label>
                                 <mat-select [(ngModel)]="selectedCategoryName" name="category"
-                                            (selectionChange)="getProductsBySelectedCategory()">
+                                            (selectionChange)="getFirstPageProducts()">
                                     <mat-option [value]="">
                                         All
                                     </mat-option>

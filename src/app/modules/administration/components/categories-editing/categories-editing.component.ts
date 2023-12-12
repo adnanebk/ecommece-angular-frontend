@@ -24,7 +24,7 @@ export class CategoriesEditingComponent implements OnInit {
 
     ngOnInit(): void {
         this.createForm();
-        this.dataSource.fields = [{name: "name", display: "Name", type: 'text'}];
+        this.dataSource.schema = [{name: "name", display: "Name", type: 'text'}];
         this.fetchCategories();
     }
 

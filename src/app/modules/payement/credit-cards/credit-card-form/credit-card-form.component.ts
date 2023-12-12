@@ -1,7 +1,7 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {CreditCard} from "../../../../core/models/CreditCard";
-import {CardOption, CreditCardService} from "../../../../core/services/credit-card.service";
+import {CardOption} from "../../../../core/services/credit-card.service";
 import {CardNumberFormControl} from "../../../../shared/form-controls/card-number-form-control";
 import {MonthYearFormControl} from "../../../../shared/form-controls/month-year-form-control";
 import {ApiError} from "../../../../core/models/api-error";
@@ -9,17 +9,17 @@ import {ApiError} from "../../../../core/models/api-error";
 @Component({
   selector: 'app-credit-card-form',
   templateUrl: './credit-card-form.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./credit-card-form.component.css']
 })
 export class CreditCardFormComponent {
   cardForm!: FormGroup;
   cardOptions: CardOption[] = [{cardType: 'VISA', name: 'Visa'}, {cardType: 'MASTERCARD', name: 'Master Card'}];
   private _selectedCard?: CreditCard;
-  @Output() addNewCard = new EventEmitter<CreditCard>();
+  @Output() addCard = new EventEmitter<CreditCard>();
   @Output() updateCard = new EventEmitter<CreditCard>();
-  cards: CreditCard[]=[];
 
-
+  @Input() cards: CreditCard[] = []
   @Input() set selectedCard(creditCard: CreditCard) {
     this._selectedCard = creditCard;
     if(!creditCard)
@@ -28,11 +28,8 @@ export class CreditCardFormComponent {
 
   }
 
-  constructor(private creditCardService:CreditCardService) {
+  constructor() {
     this.createForm();
-    this.creditCardService.getCreditCards().subscribe(cards=> {
-      this.cards = cards;
-    });
   }
 
 
@@ -43,20 +40,15 @@ export class CreditCardFormComponent {
   handleSubmit() {
     if(this.cardForm.invalid)
       return;
-    this.isNewCard ? this.save() : this.update();
+    this.isNewCard ? this.addNew() : this.update();
   }
 
-  save() {
-        this.creditCardService.saveCreditCard(this.cardForm.getRawValue()).subscribe(card => {
-          this.addNewCard.next(card);
-        }, error => this.setErrors(error));
+  addNew() {
+          this.addCard.next(this.cardForm.getRawValue());
   }
 
   update() {
-    const card:CreditCard = this.cardForm.getRawValue();
-    this.creditCardService.updateCreditCard(card).subscribe(() => {
-      this.updateCard.next(card);
-    }, error => this.setErrors(error));
+      this.updateCard.next(this.cardForm.getRawValue());
   }
 
   get isNewCard() {

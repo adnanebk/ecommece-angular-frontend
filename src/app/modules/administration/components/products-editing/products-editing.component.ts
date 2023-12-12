@@ -28,20 +28,12 @@ export class ProductsEditingComponent implements OnInit {
 
     ngOnInit(): void {
         this.createForm();
-        this.setDatasourceFields();
+        this.setDatasourceSchema();
         this.fetchProducts();
     }
-
-    fetchProducts() {
-        this.productService.getProductsInPage(this.productPage).subscribe(resp => {
-            this.productPage.totalSize = resp.totalElements;
-            this.dataSource.setData(resp.content);
-        });
-    }
-
-    private setDatasourceFields() {
+    private setDatasourceSchema() {
         this.categoryService.getCategories().subscribe(categories => {
-                this.dataSource.fields = [
+                this.dataSource.schema = [
                     {name: 'sku', display: 'Sku', type: 'text'},
                     {name: 'name', display: 'Name', type: 'text'},
                     {name: 'description', display: 'Description', type: 'textArea'},
@@ -62,11 +54,18 @@ export class ProductsEditingComponent implements OnInit {
             }
         );
     }
+    fetchProducts() {
+        this.productService.getProductsInPage(this.productPage).subscribe(resp => {
+            this.productPage.totalSize = resp.totalElements;
+            this.dataSource.setData(resp.content);
+        });
+    }
+
 
 
     addProduct(product: Product) {
         if (!product.imageFile) {
-            this.toastrService.error("you must upload an image");
+            this.dataSource.onRowErrors.next({row: product,errors:[{fieldName:'image',message:'You must upload an image'}]});
         }
         this.productService.saveProduct(product).subscribe(resp => {
             this.dataSource.onRowAdded.next(resp);
