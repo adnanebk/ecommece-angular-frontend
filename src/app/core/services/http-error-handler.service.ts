@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {AuthService} from "./auth.service";
 import {catchError, Observable, switchMap, throwError} from "rxjs";
 import {HttpEvent, HttpHandler, HttpRequest} from "@angular/common/http";
-import {AuthInterceptor} from "../interceptors/auth.interceptor";
+import {GlobalInterceptor} from "../interceptors/global.interceptor";
 import {ApiError} from "../models/api-error";
 
 @Injectable({
@@ -21,7 +21,7 @@ export class HttpErrorHandlerService {
                     if (this.authService.isTokenExpired)
                         return this.handleError(resp, originalRequest, next);
                     return this.authService.refreshJwtToken().pipe(
-                        switchMap((authData) => next.handle(AuthInterceptor.createRequestWithToken(originalRequest, authData.token))),
+                        switchMap((authData) => next.handle(GlobalInterceptor.createRequestWithToken(originalRequest, authData.token))),
                         catchError((err) => this.handleError(err, originalRequest, next)),
                     );
                 }

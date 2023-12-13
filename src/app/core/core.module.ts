@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {MediaMatcher} from '@angular/cdk/layout';
 import {NGXLogger} from 'ngx-logger';
-import {AuthInterceptor} from './interceptors/auth.interceptor';
+import {GlobalInterceptor} from './interceptors/global.interceptor';
 import {SpinnerInterceptor} from './interceptors/spinner.interceptor';
 import {AuthGuard} from './guards/auth.guard';
 import {throwIfAlreadyLoaded} from './guards/module-import.guard';
@@ -37,7 +37,7 @@ import {AdminAuthGuard} from "./guards/admin-auth.guard";
         },
         {
             provide: HTTP_INTERCEPTORS,
-            useClass: AuthInterceptor,
+            useClass: GlobalInterceptor,
             multi: true
         },
         {
