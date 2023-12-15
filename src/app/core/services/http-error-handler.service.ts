@@ -15,7 +15,7 @@ export class HttpErrorHandlerService {
 
     handleError(resp: { error: ApiError; status: number }, originalRequest: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
         const {error, status} = resp;
-        if (!(error instanceof ErrorEvent)) {
+        if (!(error instanceof ErrorEvent))
             {
                 if (status === 401 && error?.code === 'jwt.expired') {
                     if (this.authService.isTokenExpired)
@@ -27,7 +27,6 @@ export class HttpErrorHandlerService {
                 }
                 else if (status === 403 && error?.code === 'user.not.enabled')
                     this.authService.sendCompleteRegistrationNotification();
-            }
         }
         return throwError(()=>error);
     }

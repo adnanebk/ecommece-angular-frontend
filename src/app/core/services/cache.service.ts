@@ -1,6 +1,6 @@
-import { HttpEvent, HttpParams, HttpRequest, HttpResponse } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { Observable, of, tap } from "rxjs";
+import {HttpEvent, HttpParams, HttpRequest, HttpResponse} from "@angular/common/http";
+import {Injectable} from "@angular/core";
+import {Observable, of, tap} from "rxjs";
 
 @Injectable({
     providedIn: 'root'
@@ -8,7 +8,7 @@ import { Observable, of, tap } from "rxjs";
 export class CacheService {
 
     private  cachedData =new  Map<string,HttpResponse<any>>();
-    private  pathPattern = /\/api\/([^\/]+)\/?/;
+    private  pathPattern = /api\/([^/]+)\/?/;
     private  orderPath = 'orders';
     private  creditCardPath = 'creditCards';
 
@@ -40,7 +40,7 @@ export class CacheService {
         });
     }
     getPageNumberIfPageable(params: HttpParams): string {
-        if(params && params.has('number'))
+        if(params?.has('number'))
          return params.get('number')!;
         return ''; 
     }
@@ -48,8 +48,9 @@ export class CacheService {
 
 
 private getPathUrl(url: string): string{
-    const match = url.match(this.pathPattern);
-    return match && match[1] || '';
+    const match = this.pathPattern.exec(url);
+    console.log('match',match)
+    return match?.[1] || '';
    }
 
 }

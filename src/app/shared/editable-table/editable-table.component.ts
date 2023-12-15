@@ -209,7 +209,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
 
     getError(fieldName: string) {
         const error = this.errors.find(er => er.fieldName === fieldName);
-        return error && error?.message;
+        return error?.message;
     }
 
     removeError(fieldName: string) {
@@ -225,7 +225,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
     }
 
     trackById(i:any, item: any): string {
-        return item && item[this.identifier];
+        return item?.[this.identifier];
     }
     trackByField(i:any, item: Schema): string {
         return item.name;

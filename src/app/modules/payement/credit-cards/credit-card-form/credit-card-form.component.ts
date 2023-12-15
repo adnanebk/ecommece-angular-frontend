@@ -52,7 +52,7 @@ export class CreditCardFormComponent {
   }
 
   get isNewCard() {
-    return !Boolean(this._selectedCard?.id);
+    return !this._selectedCard?.id;
   }
 
   private createForm() {

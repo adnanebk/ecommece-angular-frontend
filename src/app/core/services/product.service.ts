@@ -23,8 +23,8 @@ export class ProductService {
         let params = new HttpParams()
             .append('number', productPage.number - 1)
             .append('size', productPage.size)
-            .append('sortProperty', productPage.sortProperty || 'dateCreated')
-            .append('sortDirection', productPage.sortDirection || 'ASC')
+            .append('sortProperty', productPage.sortProperty ?? 'dateCreated')
+            .append('sortDirection', productPage.sortDirection ?? 'ASC')
         if (productPage.search)
             params = params.set('search', productPage.search);
         if (categoryName)

@@ -18,18 +18,7 @@
         <button mat-icon-button routerLink="/shopping-cart">
             <mat-icon [matBadge]="getCartItemsCount() | async" matBadgeColor="accent">shopping_cart</mat-icon>
         </button>
-        <!--    <mat-menu #notificationMenu="matMenu" xPosition="before" yPosition="above" [overlapTrigger]="false">
-
-              <a mat-menu-item>
-                <span>You have new tasks</span>
-              </a>
-              <a mat-menu-item>
-                <span>You have a new message</span>
-              </a>
-
-            </mat-menu>-->
-
-
+        
         <button mat-button [matMenuTriggerFor]="userMenu">
             <mat-icon>person</mat-icon>
             <span fxShow fxHide.xs>
@@ -118,7 +107,6 @@
             <div class="progress-bar-container">
                 <mat-progress-bar color="accent" mode="indeterminate" *ngIf="spinnerService.visibility | async">
                 </mat-progress-bar>
-                <!-- <mat-spinner class="spinner" [diameter]="50" *ngIf="showSpinner"></mat-spinner> -->
             </div>
 
 
