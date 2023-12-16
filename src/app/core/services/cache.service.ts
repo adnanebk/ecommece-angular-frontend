@@ -14,7 +14,7 @@ export class CacheService {
 
 
  applyCache(request: HttpRequest<unknown>,httpEvent$: Observable<HttpEvent<any>>) : Observable<HttpEvent<any>>{
-        const pathUrl = this.getPathUrl(request.url) + this.getPageNumberIfPageable(request.params);
+        const pathUrl = this.getPathUrl(request.url) + request.params.toString()
         if(request.method==='GET' && this.cachedData.has(pathUrl))
           return of(this.cachedData.get(pathUrl)!);
         else if(request.method!=='GET'){
@@ -24,8 +24,7 @@ export class CacheService {
         return httpEvent$.pipe(
             tap(event => {
               if (event instanceof HttpResponse) {
-                const pageNum = event.body?.number;
-                this.cachedData.set(this.getPathUrl(request.url)+(pageNum!==undefined?pageNum:''),event);
+                this.cachedData.set(pathUrl,event);
               }
             }))
     }
@@ -39,13 +38,7 @@ export class CacheService {
             });
         });
     }
-    getPageNumberIfPageable(params: HttpParams): string {
-        if(params?.has('number'))
-         return params.get('number')!;
-        return ''; 
-    }
-
-
+    
 
 private getPathUrl(url: string): string{
     const match = this.pathPattern.exec(url);
