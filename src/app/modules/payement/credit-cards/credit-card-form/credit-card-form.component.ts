@@ -64,12 +64,6 @@ export class CreditCardFormComponent {
     });
   }
 
-  private setErrors(error: ApiError) {
-    error.errors?.forEach(err => {
-      this.cardForm.setErrors({[err.fieldName]: err.message})
-    })
-  }
-
    validateCardNumber(cardNumber:any) {
           const formValue = cardNumber.replaceAll('-', '');
           if(formValue==this._selectedCard?.cardNumber)

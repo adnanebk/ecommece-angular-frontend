@@ -1,6 +1,5 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ApiError} from "../../../core/models/api-error";
 import {CartItem} from "../../../core/models/cart-item";
 import {CartService} from "../../../core/services/cart.service";
 import {CreditCardService} from "../../../core/services/credit-card.service";
@@ -93,19 +92,12 @@ export class CheckoutComponent implements OnInit,AfterViewInit {
     saveOrder(order: Order) {
         this.orderService.saveOrder(order).subscribe(() => {
             this.router.navigateByUrl('/orders');
-        }, (error => {
+        }, (() => {
             this.customerForm.patchValue(order)
-            this.setErrors(error);
             this.stepper.steps.get(1)?.select();
         }));
     }
     
-    private setErrors(error: ApiError) {
-        if(!this.creditCardForm.errors)
-          error.errors?.forEach(err => {
-              this.creditCardForm?.setErrors({[err.fieldName]: err.message});
-        });
-    }
 
 
     hasCreditCardError() {
