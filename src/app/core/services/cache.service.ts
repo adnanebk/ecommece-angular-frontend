@@ -29,14 +29,12 @@ export class CacheService {
             }))
     }
     clearCacheForCurrentPath(pathUrl: string,method: string) {
-         setTimeout(() => {
             this.cachedData.forEach((r,path) => {
                 if(path.includes(pathUrl))
                     this.cachedData.delete(path);
                 if (pathUrl === this.orderPath && method === 'POST')
                     this.cachedData.delete(this.creditCardPath);
             });
-        });
     }
     
 
