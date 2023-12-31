@@ -1,8 +1,8 @@
 .bgDirty {
-    background-color: #f1e9be;
+    background-color: #f1e9be !important;
 }
 .bgError {
-    background-color: rgba(255, 99, 71, 0.42);
+    background-color: rgba(255, 99, 71, 0.42) !important;
 }
 
 .select-size {
@@ -45,7 +45,7 @@ button {
 }
 
 .row-error {
-    background-color: #f8bdbd;
+    background-color: #f8bdbd !important;
 }
 
 table {

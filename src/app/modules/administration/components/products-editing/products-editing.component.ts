@@ -3,12 +3,12 @@ import {ToastrService} from "ngx-toastr";
 import {CategoryService} from "../../../../core/services/category.service";
 import {ProductService} from "../../../../core/services/product.service";
 import {Product} from "../../../../core/models/product";
-import {DataSource} from "../../../../shared/editable-table/editable-table.component";
 import {DataPage} from "../../../../core/models/dataPage";
 import {saveAs} from 'file-saver';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Category} from "../../../../core/models/category";
 import {ApiError, FieldError} from "../../../../core/models/api-error";
+import {DataSource} from "../../../../shared/editable-table/models/data.source";
 
 
 @Component({

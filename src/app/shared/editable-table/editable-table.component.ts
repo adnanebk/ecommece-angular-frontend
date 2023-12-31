@@ -1,11 +1,14 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild} from '@angular/core';
 import {DatePipe} from '@angular/common';
-import {Subject, Subscription} from "rxjs";
+import {Subscription} from "rxjs";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ConfirmComponent} from "../confirm-dialogue/confirm.component";
 import {FormControl, FormGroup} from "@angular/forms";
 import {MatDialog} from "@angular/material/dialog";
 import {Data} from "@angular/router";
+import {DataSource} from "./models/data.source";
+import {Schema} from "./models/schema";
+import {ApiError} from "./models/api.error";
 
 
 @Component({
@@ -28,7 +31,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
     isFormEditing = false;
     selectedSize = 0;
     currentElement: DataType = {};
-    errors: { fieldName: string, message: string }[] = [];
+    errors: ApiError[] = [];
     subscriptions: Subscription[] = [];
     isNewItem = true;
     isDataChanged=false;
@@ -98,7 +101,6 @@ export class EditableTableComponent implements OnInit, OnDestroy {
 
     private handleRowsRemoved() {
         this.subscriptions.push(this.datasource.onRowsRemoved.subscribe(rows => {
-            //  this.datasource.setData(this.data.filter(row=>!rows.find(r=>r[this.identifier]==row[this.identifier])))
             rows.forEach(row => {
                 this.data.splice(this.findIndex(row), 1);
             });
@@ -302,7 +304,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
     rolleback() {
         this.errors=[];
         this.currentElement = {};
-        this.datasource.rolleBack();
+        this.datasource.roleBack();
     }
     backUpData(){
         this.currentElement={};
@@ -321,53 +323,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
 
 export declare type InputType = 'text' | 'number' | 'decimal' | 'bool' | 'date' | 'textArea' | 'image' | 'select';
 
-export interface Schema {
-    name: string;
-    display: string;
-    type: InputType;
-    readOnly?: boolean;
-    selectOptions?: { displayField: string, valueField: string, options: any[] };
-    fileField?: string;
-}
-
-export interface ApiError {
-    message: string;
-    fieldName: string;
-}
-
-export class DataSource<Type> {
-    schema: Schema[] = [];
-    private _data: Type[] = [];
-    private backedData: Type[] = [];
-    onRowErrors = new Subject<{row:Type,errors:ApiError[] }>();
-    onRowAdded = new Subject<Type>();
-    onRowsAdded = new Subject<Type[]>();
-    onRowUpdated = new Subject<Type>();
-    onRowsUpdated = new Subject<Type[]>();
-    onRowRemoved = new Subject<Type>();
-    onRowsRemoved = new Subject<Type[]>();
-    identifier = '';
-
-    get data(): Type[] {
-        return this._data;
-    }
-
-    public setData(data:Type[]){
-        this._data=data;
-        this.backupData();
-    }
-    backupData() {
-        this.backedData = [];
-        this.data.forEach(e=>this.backedData.push({...e}));
-
-    }
-    rolleBack() {
-        this._data=[];
-        this.backedData.forEach(e=>this._data.push({...e}));
-    }
-}
-
-type DataType = any | {
+type DataType = any & {
     dirty: boolean;
     isSaving: boolean;
     selected: boolean;

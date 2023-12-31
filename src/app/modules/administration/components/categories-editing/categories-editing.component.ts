@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {DataPage} from "../../../../core/models/dataPage";
-import {DataSource} from "../../../../shared/editable-table/editable-table.component";
 import {Category} from "../../../../core/models/category";
 import {CategoryService} from "../../../../core/services/category.service";
 import {ToastrService} from "ngx-toastr";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {DataSource} from "../../../../shared/editable-table/models/data.source";
 
 @Component({
     selector: 'app-categories-editing',
