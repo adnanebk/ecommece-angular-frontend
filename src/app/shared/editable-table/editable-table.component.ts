@@ -159,7 +159,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
         this.removeError(field.name);
     }
 
-    onViewChanged(element: any) {
+    onRowClicked(element: any) {
         if (this.isCurrentElement(element) || this.isBatchEnabled)
             return;
         this.rolleback();

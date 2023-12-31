@@ -74,7 +74,7 @@
 
             </td>
             <ng-container *ngFor="let field of fields">
-                <td *ngIf="!isColHide(field)" (click)="onViewChanged(el)" class="align-middle"
+                <td *ngIf="!isColHide(field)" (click)="onRowClicked(el)" class="align-middle"
                     [class]="{'bgDirty':isDirty(el),'bgError':hasError(el)}">
 
                     <div *ngIf="!isRowEditing(el,field)" class=" text-max-width">
