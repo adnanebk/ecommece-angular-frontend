@@ -30,12 +30,12 @@ export class EditableTableComponent implements OnInit, OnDestroy {
     isBatchEnabled = false;
     isFormEditing = false;
     selectedSize = 0;
-    currentElement: DataType = {};
+    currentElement: any = {};
     errors: ApiError[] = [];
     subscriptions: Subscription[] = [];
     isNewItem = true;
     isDataChanged=false;
-    errorRow: DataType;
+    errorRow: any;
 
     constructor(public dialog: MatDialog, private datePipe: DatePipe, private modalService: NgbModal) {
     }
@@ -120,7 +120,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
         return this.data.findIndex(r => r[this.identifier] === row[this.identifier]);
     }
 
-    onSave(element: DataType) {
+    onSave(element: any) {
         this.errors = [];
         element.isSaving = true;
         this.isNewItem ? this.dataAdded.emit(element) : this.dataUpdated.emit(element);
@@ -153,7 +153,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
         modifiedElements.length && this.UpdateAll.emit(modifiedElements);
     }
 
-    onValueChanged(el: DataType, field: Schema) {
+    onValueChanged(el: any, field: Schema) {
         el.dirty = true;
         this.isDataChanged=true;
         this.removeError(field.name);
@@ -169,7 +169,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
 
     }
 
-    uploadFile(element: DataType, field: Schema, file: File) {
+    uploadFile(element: any, field: Schema, file: File) {
         this.errors = [];
         element.dirty = true;
         element[field.name] = file.name;
@@ -191,7 +191,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
         this.dataSorted.emit({sort, direction});
     }
 
-    onElementSelected(el: DataType) {
+    onElementSelected(el: any) {
         el.selected ? this.selectedSize++ : this.selectedSize--;
     }
 
@@ -237,11 +237,11 @@ export class EditableTableComponent implements OnInit, OnDestroy {
     }
 
 
-    isDirty(el: DataType) {
+    isDirty(el: any) {
         return el.dirty ;
     }
 
-    get data(): DataType[] {
+    get data(): any[] {
         return this.datasource.data;
     }
 
@@ -259,7 +259,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
              ||   (field.readOnly && this.isBatchEnabled);
     }
 
-    isSaving(el: DataType) {
+    isSaving(el: any) {
         return el.isSaving;
     }
 
@@ -287,7 +287,7 @@ export class EditableTableComponent implements OnInit, OnDestroy {
         this.errors = this.errors.filter(er => er.fieldName !== fieldName);
     }
 
-    handleEdit(el: DataType) {
+    handleEdit(el: any) {
         this.errors=[];
         this.isNewItem = false;
         const dialogRef = this.openDialog();
@@ -323,10 +323,5 @@ export class EditableTableComponent implements OnInit, OnDestroy {
 
 export declare type InputType = 'text' | 'number' | 'decimal' | 'bool' | 'date' | 'textArea' | 'image' | 'select';
 
-type DataType = any & {
-    dirty: boolean;
-    isSaving: boolean;
-    selected: boolean;
-}
 
 
