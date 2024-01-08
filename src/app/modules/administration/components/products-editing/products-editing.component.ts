@@ -87,7 +87,10 @@ export class ProductsEditingComponent implements OnInit {
                 this.dataSource.onRowsUpdated.next(products);
                 this.successAlert();
             },
-            (error:ApiError) => this.sendErrors(error.errors?.length && error.errors[0].rootBean,error.errors!));
+            ({errors}:ApiError) => {
+             errors?.forEach(error=>this.sendErrors(error?.rootBean,[error]));
+                
+            });
     }
 
     removeProduct(product: Product) {
@@ -171,6 +174,10 @@ export class ProductsEditingComponent implements OnInit {
             this.errors=errors;
         else
         this.dataSource.onRowErrors.next({row: product, errors});
+
+        errors?.forEach(err => {
+            this.productForm.setErrors({[err.fieldName]: err.message});
+        }) 
     }
 }
 

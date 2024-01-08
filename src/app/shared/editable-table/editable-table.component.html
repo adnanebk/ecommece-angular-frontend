@@ -54,7 +54,7 @@
         <button (click)="handleEdit(el)" type="button"
                 class="btn btn-rounded btn-sm my-0"><em class="fas fa-edit text-info"></em></button>
         <button (click)="remove(el)" type="button" class="btn btn-rounded  btn-sm  mx-2">
-            <em class="fas fa-trash-alt text-danger"></em></button>
+            <em class="fas fa-trash-alt text-error"></em></button>
           </ng-container>
       <ng-container *ngIf="isCurrentElement(el) && !isFormEditing" >
         <button [disabled]="isSaving(el)"  (click)="onSave(el)" type="button"
@@ -89,22 +89,22 @@
                     <div class="py-2 text-center" *ngIf="isRowEditing(el,field)">
 
                         <input *ngIf="field.type==='text'" type="text" [(ngModel)]="el[field.name]"
-                               (input)="onValueChanged(el,this.field)" class="max-content form-control bg-transparent"/>
+                               (input)="onValueChanged(el)" class="max-content form-control bg-transparent"/>
                         <input *ngIf="field.type==='number'" type="number" [(ngModel)]="el[field.name]"
-                               (input)="onValueChanged(el,this.field)" class="form-control bg-transparent"/>
+                               (input)="onValueChanged(el)" class="form-control bg-transparent"/>
                         <input *ngIf="field.type==='decimal'" [(ngModel)]="el[field.name]"
-                               (input)="onValueChanged(el,this.field)" class="form-control bg-transparent"/>
+                               (input)="onValueChanged(el)" class="form-control bg-transparent"/>
                         <input *ngIf="field.type==='date'" type="date" [(ngModel)]="el[field.name]"
-                               (input)="onValueChanged(el,this.field)" class="form-control bg-transparent"/>
+                               (input)="onValueChanged(el)" class="form-control bg-transparent"/>
                         <textarea [autosize]="hasFocus(inp)" #inp *ngIf="field.type==='textArea'"
-                                  [(ngModel)]="el[field.name]" (input)="onValueChanged(el,this.field)"
+                                  [(ngModel)]="el[field.name]" (input)="onValueChanged(el)"
                                   class="form-control bg-transparent text-area"></textarea>
                         <div *ngIf="field.type === 'bool'"
                              class="form-check form-switch  fa-xl w-auto d-flex justify-content-center">
                             <input class="form-check-input" type="checkbox" [(ngModel)]="el[field.name]"
-                                   (input)="onValueChanged(el,this.field)">
+                                   (input)="onValueChanged(el)">
                         </div>
-                        <select *ngIf="field.type==='select' && field.selectOptions" [name]="field.name"  (selectionchange)="onValueChanged(idx,this.field)"
+                        <select *ngIf="field.type==='select' && field.selectOptions" [name]="field.name"  (selectionchange)="onValueChanged(idx)"
                                 [compareWith]="compareWith" [(ngModel)]="el[field.name]"
                                 class="w-auto form-select bg-transparent" >
                             <option [value]="op"
@@ -117,7 +117,7 @@
 
                         </app-file-input>
 
-                        <div *ngIf="hasError(el)" class="text-danger">{{getError(field.name)}}</div>
+                        <div *ngIf="hasError(el)" class="text-error">{{getError(field.name,el)}}</div>
                     </div>
                 </td>
             </ng-container>
@@ -144,34 +144,25 @@
                             </mat-option>
 
                         </mat-select>
-                        <span *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</span>
 
                     </mat-form-field>
-                    <app-input *ngIf="field.type==='text'" appearance="outline" [label]="field.display"
-                               [control]="myForm.controls[field.name]" (changeValue)="deleteError(field.name)">
-                        <span *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</span>
+                    <app-input *ngIf="field.type==='text'"  appearance="outline" [label]="field.display"
+                               [errorKeys]="[field.name]" [control]="myForm.controls[field.name]" >
                     </app-input>
                     <app-input *ngIf="field.type==='number'" inputType="number" appearance="outline"
-                               [label]="field.display" [control]="myForm.controls[field.name]"
-                               (changeValue)="deleteError(field.name)">
-                        <span *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</span>
+                               [errorKeys]="[field.name]" [label]="field.display" [control]="myForm.controls[field.name]">
                     </app-input>
                     <app-input *ngIf="field.type==='decimal'" inputType="decimal" appearance="outline"
-                               [label]="field.display" [control]="myForm.controls[field.name]"
-                               (changeValue)="deleteError(field.name)">
-                        <span *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</span>
+                               [errorKeys]="[field.name]" [label]="field.display" [control]="myForm.controls[field.name]">
                     </app-input>
                     <app-input *ngIf="field.type==='textArea'" inputType="textArea" appearance="outline"
-                               [label]="field.display" [control]="myForm.controls[field.name]"
-                               (changeValue)="deleteError(field.name)">
-                        <span *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</span>
+                               [errorKeys]="[field.name]" [label]="field.display" [control]="myForm.controls[field.name]">
                     </app-input>
                     <div class="mb-4" *ngIf="field.type === 'image'">
                         <app-file-input [label]="field.display"
                                         [accepts]="['.jpg','.jpeg','.png']"
                                         (upload)="uploadFile(currentElement,this.field,$event)">
                         </app-file-input>
-                        <span *ngIf="hasError()" class="text-danger">{{getError(field.name)}}</span>
                     </div>
                 </ng-container>
 
