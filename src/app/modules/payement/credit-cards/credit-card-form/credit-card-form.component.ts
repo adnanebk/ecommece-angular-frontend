@@ -65,15 +65,20 @@ export class CreditCardFormComponent {
   }
 
    validateCardNumber(cardNumber:any) {
-          const formValue = cardNumber.replaceAll('-', '');
-          if(formValue==this._selectedCard?.cardNumber)
-            return;
-          if(cardNumber?.length<19)
-            this.cardForm.setErrors({'cardNumber': 'Invalid card number'});
+    setTimeout(()=> {
+      const formValue = cardNumber.replaceAll('-', '');
+      if (formValue == this._selectedCard?.cardNumber)
+        return;
+      if (cardNumber?.length && cardNumber?.length < 19) {
+        this.cardForm.setErrors({'cardNumber': 'Invalid card number'});
+        return;
+      }
 
-     const isExist = this.cards.some(card => card.cardNumber == formValue);
-     if (isExist && !this.cardForm.hasError('cardNumber'))
-            this.cardForm.setErrors({'cardNumber': 'Card number already used'});
+      const isExist = this.cards.some(card => card.cardNumber == formValue);
+      if (isExist && !this.cardForm.hasError('cardNumber'))
+        this.cardForm.setErrors({'cardNumber': 'Card number already used'});
+    });
+    
   }
 
   validateExpirationDate(expirationDate:string) {
