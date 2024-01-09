@@ -14,12 +14,12 @@
 
         <ng-template #cardEdit>
             <h1 mat-dialog-title>{{!selectedCard?.id ? 'Add new credit card' : 'Updating credit card'}}</h1>
-            <app-credit-card-form [cards]="creditCards" [selectedCard]="selectedCard!" (addCard)="handleAdd($event)" (updateCard)="handleUpdate($event)" >
+            <app-credit-card-form #form [cards]="creditCards" [selectedCard]="selectedCard!" (addCard)="handleAdd($event)" (updateCard)="handleUpdate($event)" >
                 <div mat-dialog-actions >
-                    <button mat-raised-button  mat-button color="primary" *ngIf="!selectedCard"
+                    <button [disabled]="form.cardForm?.invalid" mat-raised-button  mat-button color="primary" *ngIf="!selectedCard"
                             cdkFocusInitial>Save
                     </button>
-                    <button mat-raised-button mat-button *ngIf="selectedCard"
+                    <button [disabled]="form.cardForm?.invalid" mat-raised-button mat-button *ngIf="selectedCard"
                             color="primary" cdkFocusInitial>Update
                     </button>
                     <button mat-raised-button [mat-dialog-close]="" color="accent">Cancel</button>

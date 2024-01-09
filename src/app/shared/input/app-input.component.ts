@@ -7,7 +7,7 @@ import {MatFormFieldAppearance} from "@angular/material/form-field";
     templateUrl: './app-input.component.html',
     styleUrls: ['./app-input.component.scss']
 })
-export class AppInputComponent implements OnInit{
+export class AppInputComponent {
 
     @Input() control: AbstractControl = new FormControl();
     @Input() label = '';
@@ -36,13 +36,9 @@ export class AppInputComponent implements OnInit{
 
 
     onChange(value: any) {
-        this.hasError()
         this.changeValue.emit(value);
     }
-
-    ngOnInit(): void {
-        console.log(this.formControl)
-    }
+    
 }
 
 

@@ -4,7 +4,6 @@ import {CreditCard} from "../../../../core/models/CreditCard";
 import {CardOption} from "../../../../core/services/credit-card.service";
 import {CardNumberFormControl} from "../../../../shared/form-controls/card-number-form-control";
 import {MonthYearFormControl} from "../../../../shared/form-controls/month-year-form-control";
-import {ApiError} from "../../../../core/models/api-error";
 
 @Component({
   selector: 'app-credit-card-form',
@@ -70,24 +69,22 @@ export class CreditCardFormComponent {
       if (formValue == this._selectedCard?.cardNumber)
         return;
       if (cardNumber?.length && cardNumber?.length < 19) {
-        this.cardForm.setErrors({'cardNumber': 'Invalid card number'});
+        this.cardForm.controls['cardNumber']?.setErrors({'cardNumber': 'Invalid card number'});
         return;
       }
-
       const isExist = this.cards.some(card => card.cardNumber == formValue);
-      if (isExist && !this.cardForm.hasError('cardNumber'))
-        this.cardForm.setErrors({'cardNumber': 'Card number already used'});
+      if (isExist)
+        this.cardForm.controls['cardNumber']?.setErrors({'cardNumber': 'Card number already used'});
     });
-    
   }
 
   validateExpirationDate(expirationDate:string) {
+    setTimeout(()=> {
     const monthYear= expirationDate.split('/')?.map(val=>Number(val));
-    if(monthYear?.length<2)
-      return;
     const currentDate = new Date();
     const cardDate = new Date(2000+monthYear[1],monthYear[0]-1,currentDate.getDate());
     if(cardDate<=currentDate)
-      this.cardForm.setErrors({'expirationDate': 'Expiration date must be in the future'});
+      this.cardForm.controls['expirationDate']?.setErrors({'expirationDate': 'Expiration date must be in the future'});
+  })
   }
 }
