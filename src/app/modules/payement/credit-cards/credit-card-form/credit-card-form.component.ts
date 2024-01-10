@@ -4,6 +4,8 @@ import {CreditCard} from "../../../../core/models/CreditCard";
 import {CardOption} from "../../../../core/services/credit-card.service";
 import {CardNumberFormControl} from "../../../../shared/form-controls/card-number-form-control";
 import {MonthYearFormControl} from "../../../../shared/form-controls/month-year-form-control";
+import {CardNumberValidator} from "../../../../shared/validators/cardNumberValidator";
+import {ExpirationDateValidator} from "../../../../shared/validators/expirationDateValidator";
 
 @Component({
   selector: 'app-credit-card-form',
@@ -58,33 +60,8 @@ export class CreditCardFormComponent {
     this.cardForm = new FormGroup({
       id: new FormControl(null),
       cardType: new FormControl(null, [Validators.required]),
-      cardNumber: new CardNumberFormControl(null,[Validators.required]),
-      expirationDate: new MonthYearFormControl(null, [Validators.required]),
+      cardNumber: new CardNumberFormControl(null,[Validators.required,CardNumberValidator(this.cards)]),
+      expirationDate: new MonthYearFormControl(null, [Validators.required,ExpirationDateValidator]),
     });
-  }
-
-   validateCardNumber(cardNumber:any) {
-    setTimeout(()=> {
-      const formValue = cardNumber.replaceAll('-', '');
-      if (formValue == this._selectedCard?.cardNumber)
-        return;
-      if (cardNumber?.length && cardNumber?.length < 19) {
-        this.cardForm.controls['cardNumber']?.setErrors({'cardNumber': 'Invalid card number'});
-        return;
-      }
-      const isExist = this.cards.some(card => card.cardNumber == formValue);
-      if (isExist)
-        this.cardForm.controls['cardNumber']?.setErrors({'cardNumber': 'Card number already used'});
-    });
-  }
-
-  validateExpirationDate(expirationDate:string) {
-    setTimeout(()=> {
-    const monthYear= expirationDate.split('/')?.map(val=>Number(val));
-    const currentDate = new Date();
-    const cardDate = new Date(2000+monthYear[1],monthYear[0]-1,currentDate.getDate());
-    if(cardDate<=currentDate)
-      this.cardForm.controls['expirationDate']?.setErrors({'expirationDate': 'Expiration date must be in the future'});
-  })
   }
 }
