@@ -6,8 +6,6 @@
 @import "~@fortawesome/fontawesome-free/css/solid.css";
 @import "~@fortawesome/fontawesome-free/css/regular.css";
 @import "~@fortawesome/fontawesome-free/css/brands.css";
-@import "darkTheme.css";
-
 @import '~ngx-toastr/toastr';
 
 .page-item:not(.active) .page-link {

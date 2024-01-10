@@ -108,5 +108,21 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
 
     onThemeChange() {
         this.isDarkModeEnabled?this.darkModeService.disable():this.darkModeService.enable();
-    }
+            const head = document.getElementsByTagName('head')[0];
+
+            let themeLink = document.getElementById(
+                'dark-theme'
+            ) as HTMLLinkElement;
+            if (!this.isDarkModeEnabled) {
+                themeLink.remove();
+            } else {
+                const style = document.createElement('link');
+                style.id = 'dark-theme';
+                style.rel = 'stylesheet';
+                style.type = 'text/css';
+                style.href = `assets/darkTheme.css`;
+                if(this.isDarkModeEnabled)
+                 head.appendChild(style);
+            }
+        }
 }
