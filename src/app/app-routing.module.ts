@@ -5,12 +5,13 @@ import {AuthGuard} from './core/guards/auth.guard';
 import {AdminAuthGuard} from "./core/guards/admin-auth.guard";
 
 const appRoutes: Routes = [
+    {path: '', redirectTo: 'products',pathMatch:'full'},
     {
         path: 'auth',
         loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule),
     },
     {
-        path: '',
+        path: 'products',
         loadChildren: () => import('./modules/products/products.module').then(m => m.ProductsModule),
     },
     {
@@ -18,7 +19,7 @@ const appRoutes: Routes = [
         loadChildren: () => import('./modules/shopping-cart/shopping-cart.module').then(m => m.ShoppingCartModule),
     },
     {
-        path: '',
+        path: 'admin',
         loadChildren: () => import('./modules/administration/administration.module').then(m => m.AdministrationModule),
         canActivate: [AdminAuthGuard]
     },

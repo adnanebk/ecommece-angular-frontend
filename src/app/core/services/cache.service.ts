@@ -1,4 +1,4 @@
-import {HttpEvent, HttpParams, HttpRequest, HttpResponse} from "@angular/common/http";
+import {HttpEvent, HttpRequest, HttpResponse} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import {Observable, of, tap} from "rxjs";
 
@@ -40,7 +40,6 @@ export class CacheService {
 
 private getPathUrl(url: string): string{
     const match = this.pathPattern.exec(url);
-    console.log('match',match)
     return match?.[1] || '';
    }
 

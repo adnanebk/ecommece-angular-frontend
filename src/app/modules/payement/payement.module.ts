@@ -2,7 +2,6 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {CreditCardsComponent} from './credit-cards/credit-cards.component';
 import {RouterModule, Routes} from "@angular/router";
-import {LayoutComponent} from "../../shared/layout/layout.component";
 import {SharedModule} from "../../shared/shared.module";
 import {CreditCardComponent} from './credit-cards/credit-card/credit-card.component';
 import {NgbAlertModule} from "@ng-bootstrap/ng-bootstrap";
@@ -14,15 +13,9 @@ import {CreditCardFormComponent} from "./credit-cards/credit-card-form/credit-ca
 
 
 const routes: Routes = [
-    {
-        path: '',
-        component: LayoutComponent,
-        children: [
             {path: 'payment-info', component: CreditCardsComponent},
             {path: 'checkout', component: CheckoutComponent},
             {path: 'orders', component: OrdersComponent}
-        ]
-    }
 ];
 
 @NgModule({

@@ -35,7 +35,6 @@ export class ProductsComponent implements OnInit {
 
     getProductsInPage() {
         this.pagedProducts$ = this.productService.getProductsInPage(this.productPage, this.selectedCategoryName);
-
     }
 
     private getCategories() {

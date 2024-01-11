@@ -46,6 +46,7 @@ import {AutosizeModule} from "ngx-autosize";
         FileInputComponent,
         SelectComponent,
         EditableTableComponent,
+        LayoutComponent,
     ]
 })
 export class SharedModule {

@@ -3,22 +3,16 @@ import {CommonModule, NgOptimizedImage} from '@angular/common';
 import {ProductsComponent} from './components/products.component';
 import {RouterModule, Routes} from "@angular/router";
 import {SharedModule} from "../../shared/shared.module";
-import {LayoutComponent} from "../../shared/layout/layout.component";
 import {ProductDetailsComponent} from "./components/product-details/product-details.component";
 import {ProductComponent} from "./components/product/product.component";
 import {NgbAlertModule, NgbPaginationModule} from "@ng-bootstrap/ng-bootstrap";
 
 
 const routes: Routes = [
-    {
-        path: '',
-        component: LayoutComponent,
-        children: [
-            {path: 'products', component: ProductsComponent},
-            {path: '', redirectTo: 'products',pathMatch:'full'},
-            {path: 'product/details/:sku', component: ProductDetailsComponent},
-        ]
-    }
+    
+            {path: '', component: ProductsComponent},
+            {path: 'product/details/:sku', component: ProductDetailsComponent}
+    
 ];
 
 

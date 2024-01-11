@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, TemplateRef, ViewChild} from '@angular/core';
 import {MediaMatcher} from '@angular/cdk/layout';
 import {Subscription} from 'rxjs';
 
@@ -9,14 +9,13 @@ import {CartService} from "../../core/services/cart.service";
 import {environment} from "../../../environments/environment.prod";
 import {MatDialog} from "@angular/material/dialog";
 import {ApiError} from "../../core/models/api-error";
-import {DarkModeService} from "angular-dark-mode";
 
 @Component({
     selector: 'app-layout',
     templateUrl: './layout.component.html',
     styleUrls: ['./layout.component.css']
 })
-export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
+export class LayoutComponent {
 
     private _mobileQueryListener: () => void;
     mobileQuery: MediaQueryList;
@@ -31,10 +30,8 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
 
     constructor(private changeDetectorRef: ChangeDetectorRef, private cartService: CartService,
                 private media: MediaMatcher,public dialog: MatDialog,
-                public spinnerService: SpinnerService,private darkModeService: DarkModeService,
+                public spinnerService: SpinnerService,
                 private authService: AuthService, private router: Router) {
-
-        this.darkModeService.darkMode$.subscribe(isDarkModeEnabled=>this.isDarkModeEnabled=isDarkModeEnabled);
 
         this.mobileQuery = this.media.matchMedia('(max-width: 1000px)');
         this._mobileQueryListener = () => changeDetectorRef.detectChanges();
@@ -42,13 +39,13 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
         this.mobileQuery.addListener(this._mobileQueryListener);
 
         this.verifyUser();
-
+        this.onThemeChange(Boolean(localStorage.getItem('dark-theme')));
     }
 
     ngOnInit(): void {
         this.authService.getAuthenticatedUser().subscribe(user => this.userName = user?.firstName!);
     }
-
+    
     ngOnDestroy(): void {
         // tslint:disable-next-line: deprecation
         this.mobileQuery.removeListener(this._mobileQueryListener);
@@ -106,23 +103,25 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
         this.authService.sendActivationMessage();
     }
 
-    onThemeChange() {
-        this.isDarkModeEnabled?this.darkModeService.disable():this.darkModeService.enable();
-            const head = document.getElementsByTagName('head')[0];
-
+    onThemeChange(checked: boolean) {
+        this.isDarkModeEnabled = checked;
+        const head = document.getElementsByTagName('head')[0];
             let themeLink = document.getElementById(
                 'dark-theme'
             ) as HTMLLinkElement;
-            if (!this.isDarkModeEnabled) {
-                themeLink.remove();
+           if (!this.isDarkModeEnabled && themeLink) {
+               themeLink.href='';
+               themeLink.remove();
+               console.log('remove',themeLink);
+               localStorage.setItem('dark-theme','');
             } else {
                 const style = document.createElement('link');
                 style.id = 'dark-theme';
                 style.rel = 'stylesheet';
                 style.type = 'text/css';
                 style.href = `assets/darkTheme.css`;
-                if(this.isDarkModeEnabled)
                  head.appendChild(style);
+                localStorage.setItem('dark-theme','true');
             }
         }
 }

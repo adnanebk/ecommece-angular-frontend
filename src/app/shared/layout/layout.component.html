@@ -95,7 +95,7 @@
                     <p mat-line>Rest api doc</p>
                 </a>
                 <a mat-list-item>
-                <mat-slide-toggle [checked]="isDarkModeEnabled" (change)="onThemeChange()" >Dark theme</mat-slide-toggle>
+                <mat-slide-toggle [checked]="isDarkModeEnabled" (change)="onThemeChange($event.checked)" >Dark theme</mat-slide-toggle>
                 </a>
             </mat-nav-list>
 
