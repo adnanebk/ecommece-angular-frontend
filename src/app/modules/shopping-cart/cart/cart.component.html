@@ -63,7 +63,7 @@
                                               [routerLink]="['/products']"
                                               routerLinkActive="router-link-active">Continue shopping</a>
         </div>
-        <div class="mat-cell text-center text-white"><a mat-raised-button color="primary"
+        <div *ngIf="cartItems?.length" class="mat-cell text-center text-white"><a mat-raised-button color="primary"
                                                              class="btn-project" [routerLink]="['/checkout']"
                                                              routerLinkActive="router-link-active">Proceed To
             Checkout</a></div>

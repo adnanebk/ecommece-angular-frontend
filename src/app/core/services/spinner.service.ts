@@ -15,6 +15,7 @@ export class SpinnerService {
     }
 
     hide() {
-        this.visibility.next(false);
+        setTimeout(()=>
+            this.visibility.next(false));
     }
 }
