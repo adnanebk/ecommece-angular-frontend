@@ -3,7 +3,7 @@
         <img class="card-img rounded-0 img-fluid" [ngSrc]="product.image" [width]="200" [height]="200" alt="">
         <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
             <ul class="list-unstyled">
-                <button mat-fab routerLink="/product/details/{{product.sku}}" color="primary" class="m-2 d-block"
+                <button mat-fab routerLink="details/{{product.sku}}" color="primary" class="m-2 d-block"
                         href="shop-single.html"><em class="far fa-eye fs-5"></em></button>
                 <button mat-fab color="primary" (click)="addToCart()" class="m-2"><em
                         class="fas fa-cart-plus fs-5"></em></button>
@@ -12,7 +12,7 @@
     </div>
 
     <div class="card-body">
-        <a routerLink="/product/details/{{product.sku}}"
+        <a routerLink="details/{{product.sku}}"
            class="h3 text-decoration-none title"><strong>{{product.name}}</strong></a>
         <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
             <li class="pt-2">

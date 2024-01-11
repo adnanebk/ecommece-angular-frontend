@@ -11,7 +11,7 @@ import {NgbAlertModule, NgbPaginationModule} from "@ng-bootstrap/ng-bootstrap";
 const routes: Routes = [
     
             {path: '', component: ProductsComponent},
-            {path: 'product/details/:sku', component: ProductDetailsComponent}
+            {path: 'details/:sku', component: ProductDetailsComponent}
     
 ];
 
