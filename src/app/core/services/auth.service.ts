@@ -114,7 +114,7 @@ export class AuthService {
     sendCompleteRegistrationNotification() {
         if(this.isToastrShow)
            return
-        let toast = this.toastrService.info('Activate your account to see the full features',
+        let toast = this.toastrService.info('Activate your account to enable the full features',
             'Activate your account', {
                 timeOut: 10000,
                 extendedTimeOut: 3000,

@@ -32,10 +32,9 @@
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
     </ng-container>
-
        <ng-container *ngFor="let key of errorKeys">
            <span class="error" *ngIf="formControl?.parent?.hasError(key)">{{formControl.parent?.getError(key)}}</span>
-           <span class="error" *ngIf="formControl?.hasError(key)">{{formControl?.getError(key)}}</span>
+           <span class="error" *ngIf="formControl?.getError(key)?.length>5">{{formControl?.getError(key)}}</span>
        </ng-container>
     <ng-container *ngIf="hasError()">
         <span class="error" *ngIf="formControl.hasError('required')"> this field is required </span>

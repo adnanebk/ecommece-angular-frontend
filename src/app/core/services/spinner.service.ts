@@ -10,7 +10,8 @@ export class SpinnerService {
     
 
     show() {
-        this.visibility.next(true);
+        setTimeout(()=>
+         this.visibility.next(true));
     }
 
     hide() {
