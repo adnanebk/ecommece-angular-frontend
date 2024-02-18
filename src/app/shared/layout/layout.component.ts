@@ -27,11 +27,14 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
     confirmationCode ='';
     errorMessage='';
     isDarkModeEnabled: boolean=false;
+    themeLink: HTMLLinkElement;
 
     constructor(private changeDetectorRef: ChangeDetectorRef, private cartService: CartService,
                 private media: MediaMatcher,public dialog: MatDialog,
                 public spinnerService: SpinnerService,
                 private authService: AuthService, private router: Router) {
+        this.createDarkThemeLink();
+        this.themeLink = document.getElementById('dark-theme') as HTMLLinkElement;            
         this.onThemeChange(Boolean(localStorage.getItem('dark-theme')));
         this.mobileQuery = this.media.matchMedia('(max-width: 1000px)');
         this._mobileQueryListener = () => changeDetectorRef.detectChanges();
@@ -96,25 +99,23 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
     sendConfirmationCode() {
         this.authService.sendActivationMessage();
     }
+    createDarkThemeLink() {
+        const head = document.getElementsByTagName('head')[0];
+        const style = document.createElement('link');
+            style.id = 'dark-theme';
+            style.rel = 'stylesheet';
+            style.type = 'text/css';
+            style.href = ``;
+            head.appendChild(style);
+    }
 
     onThemeChange(checked: boolean) {
         this.isDarkModeEnabled = checked;
-        const head = document.getElementsByTagName('head')[0];
-            let themeLink = document.getElementById(
-                'dark-theme'
-            ) as HTMLLinkElement;
-           if (!this.isDarkModeEnabled && themeLink) {
-               themeLink.href='';
-               themeLink.remove();
-               console.log('remove',themeLink);
+           if (!this.isDarkModeEnabled) {
+               this.themeLink.href='';
                localStorage.setItem('dark-theme','');
             } else {
-                const style = document.createElement('link');
-                style.id = 'dark-theme';
-                style.rel = 'stylesheet';
-                style.type = 'text/css';
-                style.href = `assets/darkTheme.css`;
-                 head.appendChild(style);
+                this.themeLink.href='assets/darkTheme.css';
                 localStorage.setItem('dark-theme','true');
             }
         }
