@@ -14,14 +14,10 @@ export class GlobalInterceptor implements HttpInterceptor {
     }
 
     intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-        const token = this.authService.getToken();
-        let cloned = request;
-        if (token) {
-            cloned = this.createRequestWithToken(request, token);
-        }
+       const token = this.authService.getToken();
         if(!this.isRefreshing)
-         return this.cacheService.applyCache(cloned,this.handleRequest(next,cloned));
-        return this.handleRequest(next,cloned)
+         return this.cacheService.applyCache(request,this.handleRequest(token,next,request));
+        return this.handleRequest(token,next,request)
     }
 
     handleError(resp: { error: ApiError; status: number }, originalRequest: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
@@ -38,7 +34,7 @@ export class GlobalInterceptor implements HttpInterceptor {
                         }),
                         switchMap((authData) => {
                             this.isRefreshing=false;
-                            return next.handle(this.createRequestWithToken(originalRequest, authData.token));
+                            return this.handleRequest(authData.token,next,originalRequest);
                         })
                     );
                 }
@@ -54,7 +50,8 @@ export class GlobalInterceptor implements HttpInterceptor {
         });
     }
 
-    private handleRequest(next: HttpHandler,req: HttpRequest<unknown>){
+    private handleRequest(token: string | undefined,next: HttpHandler,req: HttpRequest<unknown>){
+        req = token ? this.createRequestWithToken(req, token):req;    
         return  next.handle(req).pipe(
             catchError((resp) => {
                 return this.handleError(resp, req, next);

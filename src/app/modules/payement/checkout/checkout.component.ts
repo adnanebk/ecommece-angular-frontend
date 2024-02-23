@@ -53,8 +53,7 @@ export class CheckoutComponent implements OnInit,AfterViewInit {
                     fullName: (user.firstName + ' ' + (user.lastName || '')).trim()
                 });
                 this.creditCardService.getCreditCards().subscribe((cards) => {
-                        this.selectedCard = cards.find(card=>card.active);
-                        console.log('--------------------');
+                this.selectedCard = cards.find(card=>card.active);
                 });
             }
 
