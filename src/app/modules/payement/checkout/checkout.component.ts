@@ -54,6 +54,7 @@ export class CheckoutComponent implements OnInit,AfterViewInit {
                 });
                 this.creditCardService.getCreditCards().subscribe((cards) => {
                         this.selectedCard = cards.find(card=>card.active);
+                        console.log('--------------------');
                 });
             }
 
@@ -94,7 +95,6 @@ export class CheckoutComponent implements OnInit,AfterViewInit {
             this.router.navigateByUrl('/orders');
         }, (() => {
             this.customerForm.patchValue(order)
-            this.stepper.steps.get(1)?.select();
         }));
     }
     

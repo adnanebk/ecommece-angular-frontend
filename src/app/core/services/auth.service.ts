@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {tap} from 'rxjs/operators';
-import {BehaviorSubject, catchError, lastValueFrom, map} from 'rxjs';
+import {BehaviorSubject, EMPTY, catchError, lastValueFrom, map} from 'rxjs';
 import {FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialUser} from 'angularx-social-login';
 import {AppUser} from "../models/app-user";
 import {AuthData, UserService} from "./user.service";
@@ -13,7 +13,6 @@ import {Router} from "@angular/router";
 })
 export class AuthService {
     private authData = new BehaviorSubject<AuthData | null>(null);
-    public isTokenExpired = false;
      isToastrShow=false;
 
     constructor(private userService: UserService, private socialAuthService: SocialAuthService, private toastrService: ToastrService,private router: Router) {
@@ -92,7 +91,6 @@ export class AuthService {
     }
 
     refreshJwtToken() {
-        this.isTokenExpired = true;
         const refreshToken = this.getAuthDataFromStorage()?.refreshToken ?? '';
         if (!refreshToken) {
             this.logout();
@@ -101,14 +99,8 @@ export class AuthService {
         return this.userService.refreshMyToken(refreshToken).pipe(
             tap(authData => {
                 this.saveAuthDataToStorage(authData);
-                this.isTokenExpired = false;
                 this.toastrService.info("Jwt token has just been refreshed")
-            }),
-            catchError(async er => {
-                    this.logout();
-                    return er;
-                }
-            ))
+            }));
     }
 
     sendCompleteRegistrationNotification() {

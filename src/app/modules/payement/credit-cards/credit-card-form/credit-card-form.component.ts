@@ -17,10 +17,10 @@ export class CreditCardFormComponent {
   cardForm!: FormGroup;
   cardOptions: CardOption[] = [{cardType: 'VISA', name: 'Visa'}, {cardType: 'MASTERCARD', name: 'Master Card'}];
   private _selectedCard?: CreditCard;
+  private _cards: CreditCard[]=[];
   @Output() addCard = new EventEmitter<CreditCard>();
   @Output() updateCard = new EventEmitter<CreditCard>();
 
-  @Input() cards: CreditCard[] = []
   @Input() set selectedCard(creditCard: CreditCard) {
     this._selectedCard = creditCard;
     if(!creditCard)
@@ -28,10 +28,15 @@ export class CreditCardFormComponent {
     else this.cardForm.patchValue(creditCard);
 
   }
-
-  constructor() {
-    this.createForm();
+  @Input() set cards(cards: CreditCard[]){
+      this._cards=cards || [];
+      this.createForm();
   }
+
+  get cards(){
+    return this._cards;
+  }
+
 
 
 

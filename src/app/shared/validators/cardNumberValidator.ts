@@ -8,8 +8,8 @@ return (control: AbstractControl) => {
     if (cardNumber?.length && cardNumber?.length < 16) {
       return   {'cardNumber': 'Invalid card number'};
     }
-    const isExist = cards.some(card => card.cardNumber === cardNumber);
-    if (isExist && !control.hasError('cardNumber'))
+    const isExist = cards.some(card => card.cardNumber === cardNumber && card.id!==control.parent?.get('id')?.value);
+    if (isExist)
         return  {'cardNumber': 'Card number already used'};
     return null
 
