@@ -17,8 +17,7 @@ export class ProductComponent {
 
 
     addToCart() {
-        const quantity = 1;
-        this.cartService.addToCart({...this.product, quantity});
+        this.cartService.addToCart({...this.product, quantity: 1});
     }
 
 }

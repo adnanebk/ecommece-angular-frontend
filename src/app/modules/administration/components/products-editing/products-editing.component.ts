@@ -154,7 +154,7 @@ export class ProductsEditingComponent implements OnInit {
             sku: new FormControl(null, [Validators.required]),
             unitPrice: new FormControl(null, [Validators.required]),
             category: new FormControl(null, [Validators.required]),
-            active: new FormControl(null, [Validators.required]),
+            active: new FormControl(false),
             unitsInStock: new FormControl(null, [Validators.required]),
         });
     }

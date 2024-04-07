@@ -33,7 +33,9 @@ export class ProductsComponent implements OnInit {
         this.getCategories();
     }
 
-    getProductsInPage() {
+    getProductsInPage(fromFirst: boolean = false) {
+        if(fromFirst)
+           this.productPage.number=1; 
         this.pagedProducts$ = this.productService.getProductsInPage(this.productPage, this.selectedCategoryName);
     }
 
@@ -46,12 +48,8 @@ export class ProductsComponent implements OnInit {
         if (this.selectedFilter) {
             this.productPage.sortProperty = this.selectedFilter.property;
             this.productPage.sortDirection = this.selectedFilter.direction;
-            this.getFirstPageProducts();
+            this.getProductsInPage(true);
         }
     }
-
-    getFirstPageProducts() {
-        this.productPage.number = 1;
-        this.getProductsInPage();
-    }
+    
 }
