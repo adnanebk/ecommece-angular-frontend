@@ -61,7 +61,7 @@ export class ProductService {
     }
 
     updateProducts(products: Product[]) {
-        return this.httpClient.put<Product[]>(this.productUrl + '/list', products);
+        return this.httpClient.put<Product[]>(this.productUrl, products);
     }
 
     deleteProducts(productsIds: number[]) {
@@ -73,7 +73,7 @@ export class ProductService {
         const httpOptions = {
             responseType: 'blob' as 'json'
         };
-        return this.httpClient.get<any>(this.productUrl + '/excel/download/' + products.map(product => product.id).join(','), httpOptions);
+        return this.httpClient.get<any>(`${this.productUrl}/${products.map(product => product.id).join(',')}/excel`, httpOptions);
     }
 
     addOrUpdateProductsFromExcel(file: File) {

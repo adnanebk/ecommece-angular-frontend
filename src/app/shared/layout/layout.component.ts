@@ -9,6 +9,7 @@ import {CartService} from "../../core/services/cart.service";
 import {environment} from "../../../environments/environment.prod";
 import {MatDialog} from "@angular/material/dialog";
 import {ApiError} from "../../core/models/api-error";
+import { DarkThemeService } from '../darkTheme.service';
 
 @Component({
     selector: 'app-layout',
@@ -26,16 +27,15 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
     docUrl = environment.api_doc;
     confirmationCode ='';
     errorMessage='';
-    isDarkModeEnabled: boolean=false;
-    themeLink: HTMLLinkElement;
+
+    get isDarkModeEnabled(){
+        return this.darModeService.isDarkModeEnabled;
+    }
 
     constructor(private changeDetectorRef: ChangeDetectorRef, private cartService: CartService,
                 private media: MediaMatcher,public dialog: MatDialog,
-                public spinnerService: SpinnerService,
+                public spinnerService: SpinnerService,private darModeService:DarkThemeService,
                 private authService: AuthService, private router: Router) {
-        this.createDarkThemeLink();
-        this.themeLink = document.getElementById('dark-theme') as HTMLLinkElement;            
-        this.onThemeChange(Boolean(localStorage.getItem('dark-theme')));
         this.mobileQuery = this.media.matchMedia('(max-width: 1000px)');
         this._mobileQueryListener = () => changeDetectorRef.detectChanges();
         this.mobileQuery.addListener(this._mobileQueryListener);
@@ -99,24 +99,9 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterViewInit {
     sendConfirmationCode() {
         this.authService.sendActivationMessage();
     }
-    createDarkThemeLink() {
-        const head = document.getElementsByTagName('head')[0];
-        const style = document.createElement('link');
-            style.id = 'dark-theme';
-            style.rel = 'stylesheet';
-            style.type = 'text/css';
-            style.href = ``;
-            head.appendChild(style);
-    }
+
 
     onThemeChange(checked: boolean) {
-        this.isDarkModeEnabled = checked;
-           if (!this.isDarkModeEnabled) {
-               this.themeLink.href='';
-               localStorage.setItem('dark-theme','');
-            } else {
-                this.themeLink.href='assets/darkTheme.css';
-                localStorage.setItem('dark-theme','true');
-            }
+        this.darModeService.changeTheme(checked);    
         }
 }

@@ -64,7 +64,7 @@ export class CreditCardService {
     }
 
     activeCard(id: number) {
-        return this.httpClient.patch<void>(this.creditCardUrl + '/active/' + id, null)
+        return this.httpClient.patch<void>(`${this.creditCardUrl}/${id}/active`, null)
             .pipe(tap(()=>{
                 this.$cardsSubject.next(this.$cardsSubject.value.map(card=>{
                     card.active = card.id===id;
