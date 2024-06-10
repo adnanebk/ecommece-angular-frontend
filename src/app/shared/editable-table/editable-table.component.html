@@ -129,7 +129,7 @@
     </table>
     <ng-template #elementEdit>
         <form (submit)="handleSubmit()" [formGroup]="myForm">
-            <h1 mat-dialog-title>{{isNewItem ? 'Add new  item' : 'Update item'}}</h1>
+            <h1 mat-dialog-title>{{this.currentElement.isNewItem ? 'Add new  item' : 'Update item'}}</h1>
 
             <div mat-dialog-content>
                 <ng-container *ngFor="let field of fields; trackBy: trackByField">
@@ -169,8 +169,8 @@
             </div>
 
             <div mat-dialog-actions>
-                <button mat-raised-button *ngIf="isNewItem && !isSaving(this.currentElement)" mat-button color="primary" cdkFocusInitial>Save</button>
-                <button mat-raised-button *ngIf="!isNewItem && !isSaving(this.currentElement)" mat-button color="primary" cdkFocusInitial>Update</button>
+                <button mat-raised-button *ngIf="this.currentElement.isNewItem && !isSaving(this.currentElement)" mat-button color="primary" cdkFocusInitial>Save</button>
+                <button mat-raised-button *ngIf="!this.currentElement.isNewItem && !isSaving(this.currentElement)" mat-button color="primary" cdkFocusInitial>Update</button>
                 <span *ngIf="isSaving(this.currentElement)" class="spinner-grow spinner-grow m-2" role="status"
                       aria-hidden="true"></span>
                 <button mat-raised-button [mat-dialog-close]="" color="accent">Cancel</button>
