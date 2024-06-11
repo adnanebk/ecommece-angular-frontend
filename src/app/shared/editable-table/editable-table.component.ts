@@ -153,7 +153,7 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
         el.errors = [];
     }
 
-    onRowClicked(element: T, index: number) {
+    onRowClicked(element: T) {
         if (this.isCurrentElement(element) || this.isBatchEnabled)
             return;
         if (this.currentElement.dirty && !this.currentElement.isSaving)
@@ -269,14 +269,14 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
 
 
     handleEdit(element: any) {
+        this.rolleback();
         element.isNewItem = false;
         const dialogRef = this.openDialog();
+        this.isFormEditing = true;
         dialogRef.afterOpened().subscribe(() => {
             this.myForm.patchValue(element);
-            this.isFormEditing = true;
         });
         dialogRef.afterClosed().subscribe(() => {
-            this.rolleback();
             this.isFormEditing = false;
         });
     }
