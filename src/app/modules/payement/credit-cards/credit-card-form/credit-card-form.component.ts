@@ -11,7 +11,6 @@ import {ExpirationDateValidator} from "../../../../shared/validators/expirationD
   selector: 'app-credit-card-form',
   templateUrl: './credit-card-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrls: ['./credit-card-form.component.css']
 })
 export class CreditCardFormComponent {
 
