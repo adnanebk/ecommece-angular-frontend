@@ -111,5 +111,5 @@ input[type=text], textarea, select {
     background-color: #ffaead !important;
 }
 .text-error{
-    color: darkred;
+    color: tomato;
 }

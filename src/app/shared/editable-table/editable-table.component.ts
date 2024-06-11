@@ -1,13 +1,13 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild} from '@angular/core';
-import {DatePipe} from '@angular/common';
-import {Subscription} from "rxjs";
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {ConfirmComponent} from "../confirm-dialogue/confirm.component";
-import {FormControl, FormGroup} from "@angular/forms";
-import {MatDialog} from "@angular/material/dialog";
-import {DataSource} from "./models/data.source";
-import {Schema} from "./models/schema";
-import {ApiError} from "./models/api.error";
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { Subscription } from "rxjs";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { ConfirmComponent } from "../confirm-dialogue/confirm.component";
+import { FormControl, FormGroup } from "@angular/forms";
+import { MatDialog } from "@angular/material/dialog";
+import { DataSource } from "./models/data.source";
+import { Schema } from "./models/schema";
+import { ApiError } from "./models/api.error";
 
 
 @Component({
@@ -20,9 +20,9 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
     @Output() dataAdded = new EventEmitter<T>();
     @Output() dataDeleted = new EventEmitter<T>();
     @Output() dataSorted = new EventEmitter<{ sort: string, direction: string }>();
-    @Input()  datasource!: DataSource<T>;
-    @Input()  enableMultiEditing = false;
-    @Input()  myForm: FormGroup = new FormGroup({});
+    @Input() datasource!: DataSource<T>;
+    @Input() enableMultiEditing = false;
+    @Input() myForm: FormGroup = new FormGroup({});
     @Output() UpdateAll = new EventEmitter<T[]>();
     @Output() RemoveAll = new EventEmitter<T[]>();
 
@@ -31,7 +31,7 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
     selectedSize = 0;
     currentElement: T = {} as T;
     subscriptions: Subscription[] = [];
-    isDataChanged=false;
+    isDataChanged = false;
 
     constructor(public dialog: MatDialog, private datePipe: DatePipe, private modalService: NgbModal) {
     }
@@ -91,7 +91,7 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
 
     private handleRowsUpdated() {
         this.subscriptions.push(this.datasource.onRowsUpdated.subscribe(rows => {
-            this.datasource.setData(this.data.map(row => rows.find(r=>r[this.identifier]==row[this.identifier]) || row));
+            this.datasource.setData(this.data.map(row => rows.find(r => r[this.identifier] == row[this.identifier]) || row));
         }));
     }
 
@@ -106,9 +106,9 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
 
     handleError() {
         this.subscriptions.push(this.datasource.onRowErrors.subscribe(resp => {
-            const element = this.data.find(el=>el[this.identifier]==resp.row[this.identifier]) || resp.row;
+            const element = this.data.find(el => el[this.identifier] == resp.row[this.identifier]) || resp.row;
             element.errors = resp.errors;
-            element.isSaving=false;
+            element.isSaving = false;
         }));
     }
 
@@ -117,7 +117,7 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
     }
 
     onSave(element: T) {
-        element.errors=[];
+        element.errors = [];
         element.isSaving = true;
         element.isNewItem ? this.dataAdded.emit(element) : this.dataUpdated.emit(element);
     }
@@ -127,7 +127,7 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
             if (!element[this.identifier]) {
                 this.data.splice(0, 1);
             } else {
-                element.errors=[];
+                element.errors = [];
                 this.dataDeleted.emit(element);
             }
         });
@@ -149,14 +149,15 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
 
     onValueChanged(el: T) {
         el.dirty = true;
-        this.isDataChanged=true;
+        this.isDataChanged = true;
         el.errors = [];
     }
 
-    onRowClicked(element: T) {
+    onRowClicked(element: T, index: number) {
         if (this.isCurrentElement(element) || this.isBatchEnabled)
             return;
-        this.rolleback();
+        if (this.currentElement.dirty && !this.currentElement.isSaving)
+            this.rolleback();
         element.isNewItem = false;
         this.currentElement = element;
     }
@@ -175,12 +176,12 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
             direction = 'DESC';
             icon.classList.replace('fa-sort-up', 'fa-sort-down');
         }
-        else  {
+        else {
             icon.classList.remove('fa-sort-down');
             icon.classList.add('fa-sort-up');
             direction = 'ASC';
         }
-        this.dataSorted.emit({sort, direction});
+        this.dataSorted.emit({ sort, direction });
     }
 
     onElementSelected(el: T) {
@@ -201,8 +202,8 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
         return element.errors?.length;
     }
 
-    getError(fieldName: string,element:T) {
-       return element.errors?.find(err=>err.fieldName==fieldName)?.message;
+    getError(fieldName: string, element: T) {
+        return element.errors?.find(err => err.fieldName == fieldName)?.message;
     }
 
     isCurrentElement(element: any) {
@@ -213,22 +214,22 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
         return element === document.activeElement;
     }
 
-    trackById(i:any, item: any): string {
+    trackById(i: any, item: any): string {
         return item?.[this.identifier];
     }
-    trackByField(i:any, item: Schema): string {
+    trackByField(i: any, item: Schema): string {
         return item.name;
     }
     compareWith(item1: any, item2: any): boolean {
-        return (item1 && item2) ? item1.id=== item2.id : item1 === item2;
+        return (item1 && item2) ? item1.id === item2.id : item1 === item2;
     }
 
 
     isDirty(el: T) {
-        return el.dirty ;
+        return el.dirty;
     }
 
-    get data():  T[] & any[] {
+    get data(): T[] & any[] {
         return this.datasource.data;
     }
 
@@ -242,12 +243,12 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
 
     isColHide(field: Schema) {
         return (field.readOnly && Object.keys(this.currentElement)?.length)
-             ||  (this.isBatchEnabled && field.type == 'image')
-             ||   (field.readOnly && this.isBatchEnabled);
+            || (this.isBatchEnabled && field.type == 'image')
+            || (field.readOnly && this.isBatchEnabled);
     }
 
     handleSubmit() {
-        if(this.myForm.invalid)
+        if (this.myForm.invalid)
             return;
         Object.assign(this.currentElement, this.myForm.getRawValue());
         this.onSave(this.currentElement);
@@ -260,23 +261,23 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
     }
 
     addNewItem() {
-        this.currentElement = {isNewItem: true} as T;
+        this.currentElement = { isNewItem: true } as T;
         this.myForm.reset({});
         const dialogRef = this.openDialog();
         dialogRef.afterClosed().subscribe(() => this.rolleback());
     }
-    
+
 
     handleEdit(element: any) {
         element.isNewItem = false;
         const dialogRef = this.openDialog();
         dialogRef.afterOpened().subscribe(() => {
             this.myForm.patchValue(element);
-            this.isFormEditing=true;
+            this.isFormEditing = true;
         });
-        dialogRef.afterClosed().subscribe(()=> {
+        dialogRef.afterClosed().subscribe(() => {
             this.rolleback();
-            this.isFormEditing=false;
+            this.isFormEditing = false;
         });
     }
 
@@ -284,8 +285,8 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
         this.currentElement = {} as T;
         this.datasource.roleBack();
     }
-    backUpData(){
-        this.currentElement={} as T;
+    backUpData() {
+        this.currentElement = {} as T;
         this.datasource.backupData();
     }
 
@@ -297,7 +298,7 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
         return (this.isCurrentElement(el) || this.isBatchEnabled) && !field.readOnly && !this.isFormEditing;
     }
 
-    getField(element: T,field: Schema){
+    getField(element: T, field: Schema) {
         return element[field.name];
     }
 }
@@ -309,7 +310,7 @@ export interface Data {
     dirty?: boolean,
     errors?: ApiError[],
     [key: string | symbol]: any;
-} 
+}
 export declare type InputType = 'text' | 'number' | 'decimal' | 'bool' | 'date' | 'textArea' | 'image' | 'select';
 
 
