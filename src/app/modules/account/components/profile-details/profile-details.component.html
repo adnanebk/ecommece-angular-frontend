@@ -3,8 +3,8 @@
     <div class="d-flex flex-column align-items-center image-width">
 
         <img *ngIf="user.imageUrl" [src]="user.imageUrl" referrerpolicy="no-referrer" class="circle "
-             alt="You have no image">
-        <img *ngIf="!user.imageUrl" src="../../../../../assets/images/user.png" class="circle" alt="You have no image">
+             alt="My avatar">
+        <img *ngIf="!user.imageUrl" src="../../../../../assets/images/user.png" class="circle" alt="My avatar">
 
         <app-file-input [accepts]="['.jpg','.jpeg','.png']" class="mt-2" *ngIf="!isImageUploading" text="Modify image"
                         (upload)="handleFileUpload($event)"></app-file-input>
