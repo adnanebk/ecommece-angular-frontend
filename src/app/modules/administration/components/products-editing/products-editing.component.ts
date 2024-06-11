@@ -64,9 +64,6 @@ export class ProductsEditingComponent implements OnInit {
 
 
     addProduct(product: Product) {
-        if (!product.imageFile) {
-            this.dataSource.onRowErrors.next({row: product,errors:[{fieldName:'image',message:'You must upload an image'}]});
-        }
         this.productService.saveProduct(product).subscribe(resp => {
             this.dataSource.onRowAdded.next(resp);
             this.successAlert();
@@ -150,6 +147,7 @@ export class ProductsEditingComponent implements OnInit {
         this.productForm = new FormGroup({
             id: new FormControl(null),
             name: new FormControl(null, [Validators.required]),
+            image: new FormControl(null, [Validators.required]),
             description: new FormControl(null, [Validators.required]),
             sku: new FormControl(null, [Validators.required]),
             unitPrice: new FormControl(null, [Validators.required]),

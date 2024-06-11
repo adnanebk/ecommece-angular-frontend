@@ -56,12 +56,12 @@
             <em class="fas fa-trash-alt text-error"></em></button>
           </ng-container>
       <ng-container *ngIf="isCurrentElement(el) && !isFormEditing" >
-        <button [disabled]="isSaving(el)"  (click)="onSave(el)" type="button"
+        <button [disabled]="el.isSaving"  (click)="onSave(el)" type="button"
                 class="btn btn-success btn-rounded btn-sm my-0">
-                    <span *ngIf="isSaving(el)" class="spinner-grow spinner-grow-sm" role="status"
+                    <span *ngIf="el.isSaving" class="spinner-grow spinner-grow-sm" role="status"
                           aria-hidden="true"></span> Save
         </button>
-          <button *ngIf="!isSaving(el)" (click)="rolleback()"
+          <button *ngIf="!el.isSaving" (click)="rolleback()"
                   class="btn m-1 btn-warning btn-sm">cancel</button>
       </ng-container>
       </ng-container>
@@ -162,15 +162,18 @@
                                         [accepts]="['.jpg','.jpeg','.png']"
                                         (upload)="uploadFile(currentElement,this.field,$event)">
                         </app-file-input>
+                       <span  *ngIf="myForm.controls && myForm.touched &&
+                       myForm.controls[field.name].hasError('required')" class="text-danger">
+                        Please upload a file</span> 
                     </div>
                 </ng-container>
 
             </div>
 
             <div mat-dialog-actions>
-                <button mat-raised-button *ngIf="this.currentElement.isNewItem && !isSaving(this.currentElement)" mat-button color="primary" cdkFocusInitial>Save</button>
-                <button mat-raised-button *ngIf="!this.currentElement.isNewItem && !isSaving(this.currentElement)" mat-button color="primary" cdkFocusInitial>Update</button>
-                <span *ngIf="isSaving(this.currentElement)" class="spinner-grow spinner-grow m-2" role="status"
+                <button mat-raised-button *ngIf="this.currentElement.isNewItem && !currentElement.isSaving" mat-button color="primary" cdkFocusInitial>Save</button>
+                <button mat-raised-button *ngIf="!this.currentElement.isNewItem && !currentElement.isSaving" mat-button color="primary" cdkFocusInitial>Update</button>
+                <span *ngIf="currentElement.isSaving" class="spinner-grow spinner-grow m-2" role="status"
                       aria-hidden="true"></span>
                 <button mat-raised-button [mat-dialog-close]="" color="accent">Cancel</button>
             </div>

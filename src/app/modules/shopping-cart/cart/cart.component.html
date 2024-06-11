@@ -20,7 +20,7 @@
                 </div>
                 <div *ngFor="let item of cartItems" class="mat-row">
                     <div class="mat-cell" routerLink="/product/details/{{item.id}}"><img [src]="item.image"
-                                                                                         alt="item image"></div>
+                                                                                         alt="{{item.name}}"></div>
                     <div class="mat-cell"><a class="product-name">{{item.name}}</a></div>
                     <div class="mat-cell price">{{item.unitPrice | currency : '$'}}</div>
                     <div class="mat-cell text-muted">

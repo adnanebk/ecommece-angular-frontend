@@ -9,7 +9,7 @@ export class FileInputComponent implements OnInit {
 
     @Output() upload = new EventEmitter<File>();
     @Input() accepts: string[] = [];
-    @Input() text = '';
+    @Input() text = 'choose';
     @Input() label = '';
 
 
@@ -19,8 +19,8 @@ export class FileInputComponent implements OnInit {
 
             const reader = new FileReader();
             reader.addEventListener('load', () => {
-                console.log('---', file.name);
                 this.upload.emit(file);
+                this.text=file.name;
             });
             reader.readAsDataURL(file);
         }

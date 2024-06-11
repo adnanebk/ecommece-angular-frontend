@@ -106,11 +106,9 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
 
     handleError() {
         this.subscriptions.push(this.datasource.onRowErrors.subscribe(resp => {
-            const element = this.data.find(el=>el[this.identifier]==resp.row[this.identifier])
-            if(element){
-                element.errors = resp.errors;
-                resp.row.isSaving=false;
-            }   
+            const element = this.data.find(el=>el[this.identifier]==resp.row[this.identifier]) || resp.row;
+            element.errors = resp.errors;
+            element.isSaving=false;
         }));
     }
 
@@ -167,6 +165,7 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
         element.dirty = true;
         element[field.name] = file.name;
         element[field.fileField!] = file;
+        this.myForm.controls[field.name].patchValue(file);
     }
 
 
@@ -245,10 +244,6 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
         return (field.readOnly && Object.keys(this.currentElement)?.length)
              ||  (this.isBatchEnabled && field.type == 'image')
              ||   (field.readOnly && this.isBatchEnabled);
-    }
-
-    isSaving(el: any) {
-        return el.isSaving;
     }
 
     handleSubmit() {

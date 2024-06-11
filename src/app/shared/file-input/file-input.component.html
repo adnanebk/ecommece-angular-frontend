@@ -1,5 +1,5 @@
 <div class="file-input d-flex justify-content-between">
-    <span class="m-2" style="color: gray" *ngIf="label">{{label}}</span>
+    <span class="m-2 max-content" style="color: gray" *ngIf="label">{{label}}</span>
     <input id="file" #file type="file" class="form-control file" [accept]="[accepts].join(',')"
            (change)="uploadFile(file)">
     <label for="file">
