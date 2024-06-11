@@ -104,7 +104,7 @@
                             <input class="form-check-input" type="checkbox" [(ngModel)]="el[field.name]"
                                    (input)="onValueChanged(el)">
                         </div>
-                        <select *ngIf="field.type==='select' && field.selectOptions" [name]="field.name"  (selectionchange)="onValueChanged(idx)"
+                        <select *ngIf="field.type==='select' && field.selectOptions" [name]="field.name"  (selectionchange)="onValueChanged(el)"
                                 [compareWith]="compareWith" [(ngModel)]="el[field.name]"
                                 class="w-auto form-select bg-transparent" >
                             <option [value]="op"

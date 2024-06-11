@@ -32,7 +32,6 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
     currentElement: T = {} as T;
     subscriptions: Subscription[] = [];
     isDataChanged=false;
-    errorRows: {row: T, errors: ApiError[]}[]=[];
 
     constructor(public dialog: MatDialog, private datePipe: DatePipe, private modalService: NgbModal) {
     }
@@ -107,8 +106,11 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
 
     handleError() {
         this.subscriptions.push(this.datasource.onRowErrors.subscribe(resp => {
-            this.errorRows.push(resp);
-            resp.row.isSaving=false;
+            const element = this.data.find(el=>el[this.identifier]==resp.row[this.identifier])
+            if(element){
+                element.errors = resp.errors;
+                resp.row.isSaving=false;
+            }   
         }));
     }
 
@@ -117,7 +119,7 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
     }
 
     onSave(element: T) {
-        this.errorRows = [];
+        element.errors=[];
         element.isSaving = true;
         element.isNewItem ? this.dataAdded.emit(element) : this.dataUpdated.emit(element);
     }
@@ -127,7 +129,7 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
             if (!element[this.identifier]) {
                 this.data.splice(0, 1);
             } else {
-                this.errorRows = [];
+                element.errors=[];
                 this.dataDeleted.emit(element);
             }
         });
@@ -136,7 +138,6 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
     removeAll() {
         this.modalService.open(ConfirmComponent.setContent(this.selectedSize + ' row/rows selected, Are you sure to remove them all ?')).closed.subscribe(() => {
             if (this.selectedSize > 0) {
-                this.errorRows = [];
                 this.RemoveAll.emit(this.data.filter(e => e.selected));
                 this.selectedSize = 0;
             }
@@ -144,29 +145,25 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
     }
 
     updateAll() {
-        this.errorRows = [];
         let modifiedElements = this.data.filter(e => e.dirty);
         modifiedElements.length && this.UpdateAll.emit(modifiedElements);
     }
 
-    onValueChanged(el: any) {
+    onValueChanged(el: T) {
         el.dirty = true;
         this.isDataChanged=true;
-        this.removeError(el);
+        el.errors = [];
     }
 
-    onRowClicked(element: any) {
+    onRowClicked(element: T) {
         if (this.isCurrentElement(element) || this.isBatchEnabled)
             return;
         this.rolleback();
-        this.errorRows = [];
         element.isNewItem = false;
         this.currentElement = element;
-
     }
 
     uploadFile(element: any, field: Schema, file: File) {
-        this.errorRows = [];
         element.dirty = true;
         element[field.name] = file.name;
         element[field.fileField!] = file;
@@ -201,17 +198,12 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
         }
     }
 
-    hasError(element:any) {
-        return this.errorRows?.some(err=>err.row[this.identifier]==element[this.identifier] && err.errors?.length);
+    hasError(element: T) {
+        return element.errors?.length;
     }
 
-    getError(fieldName: string,element:any) {
-       return this.errorRows?.find(e => e.row[this.identifier] === element[this.identifier])
-               ?.errors?.find(err=>err.fieldName===fieldName)?.message;
-    }
-
-    removeError(element: any) {
-        this.errorRows = this.errorRows?.filter(e => e.row[this.identifier] !== element[this.identifier])
+    getError(fieldName: string,element:T) {
+       return element.errors?.find(err=>err.fieldName==fieldName)?.message;
     }
 
     isCurrentElement(element: any) {
@@ -273,7 +265,6 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
     }
 
     addNewItem() {
-        this.errorRows = [];
         this.currentElement = {isNewItem: true} as T;
         this.myForm.reset({});
         const dialogRef = this.openDialog();
@@ -282,7 +273,6 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
     
 
     handleEdit(element: any) {
-        this.errorRows=[];
         element.isNewItem = false;
         const dialogRef = this.openDialog();
         dialogRef.afterOpened().subscribe(() => {
@@ -296,7 +286,6 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
     }
 
     rolleback() {
-        this.errorRows=[];
         this.currentElement = {} as T;
         this.datasource.roleBack();
     }
@@ -322,7 +311,8 @@ export interface Data {
     isSaving?: boolean,
     isNewItem?: boolean,
     selected?: boolean,
-    dirty?: boolean
+    dirty?: boolean,
+    errors?: ApiError[],
     [key: string | symbol]: any;
 } 
 export declare type InputType = 'text' | 'number' | 'decimal' | 'bool' | 'date' | 'textArea' | 'image' | 'select';
