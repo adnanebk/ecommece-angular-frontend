@@ -23,11 +23,10 @@
         <thead>
         <tr>
             <th *ngIf="!isBatchEnabled" class="text-center text-primary align-middle  bg-info ">
-                <h3>
+                
                     <button role="button" *ngIf="!isBatchEnabled" class="btn btn-dark"
                             (click)="addNewItem()">
                         <em class="fas fa-plus-square"></em></button>
-                </h3>
             </th>
             <th *ngIf="isBatchEnabled" class="text-center align-middle bg-info text-dark">
                 Select all
