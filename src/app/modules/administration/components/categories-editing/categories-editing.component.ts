@@ -9,7 +9,6 @@ import {DataSource} from "../../../../shared/editable-table/models/data.source";
 @Component({
     selector: 'app-categories-editing',
     templateUrl: './categories-editing.component.html',
-    styleUrls: ['./categories-editing.component.css']
 })
 export class CategoriesEditingComponent implements OnInit {
 
