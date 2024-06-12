@@ -51,6 +51,7 @@ button {
 table {
     text-align: left;
     position: relative;
+    height: 100%;
     border-collapse: collapse;
 }
 
