@@ -24,8 +24,13 @@
     width: max-content;
 }
 
-img {
+.td-img {
     max-height: 50px;
+    object-fit: contain;
+}
+.zoom-img{
+    height: 100%;
+    width: 100%;
     object-fit: contain;
 }
 

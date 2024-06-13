@@ -14,7 +14,8 @@ export class CacheService {
 
 
  applyCache(request: HttpRequest<unknown>,httpEvent$: Observable<HttpEvent<any>>) : Observable<HttpEvent<any>>{
-        const pathUrl = this.getPathUrl(request.url) + request.params.toString()
+        const pathUrl = this.getPathUrl(request.url) + request.params.toString();
+        debugger
         if(request.method==='GET' && this.cachedData.has(pathUrl))
           return of(this.cachedData.get(pathUrl)!);
         else if(request.method!=='GET'){
@@ -39,8 +40,7 @@ export class CacheService {
     
 
 private getPathUrl(url: string): string{
-    const match = this.pathPattern.exec(url);
-    return match?.[1] || '';
+  return new URL(url).pathname;
    }
 
 }

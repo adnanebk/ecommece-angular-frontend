@@ -85,7 +85,8 @@
                             <strong *ngIf="field.type==='bool'"> {{el[field.name] ? 'Yes' : 'No'}}</strong>
                             <strong *ngIf="field.type==='select' && field.selectOptions">
                                 {{el[field.name][field.selectOptions.displayField]}}</strong>
-                            <img *ngIf="field.type === 'image'" [src]="el[field.name]" alt="container" />
+                            <img class="td-img"  (click)="onImageClicked(el[field.name])" *ngIf="field.type === 'image'" role="button"
+                            [src]="el[field.name]" alt="container" />
                         </div>
 
                         <div class="py-2 text-center" *ngIf="isRowEditing(el,field)">
@@ -179,5 +180,8 @@
                 <button mat-raised-button [mat-dialog-close]="" color="accent">Cancel</button>
             </div>
         </form>
+    </ng-template>
+    <ng-template #zoomedImages>
+        <img  [src]="zoomedImage" class="zoom-img" alt="container" />
     </ng-template>
 </div>

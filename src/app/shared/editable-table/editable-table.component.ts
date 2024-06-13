@@ -32,11 +32,13 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
     currentElement: T = {} as T;
     subscriptions: Subscription[] = [];
     isDataChanged = false;
+    zoomedImage = '';
 
     constructor(public dialog: MatDialog, private datePipe: DatePipe, private modalService: NgbModal) {
     }
 
-    @ViewChild('elementEdit') editingModal!: TemplateRef<any>
+    @ViewChild('elementEdit') editingModal!: TemplateRef<any>;
+    @ViewChild('zoomedImages') zoomedImagesModal!: TemplateRef<any>;
 
     ngOnDestroy(): void {
         this.subscriptions.forEach(sub => sub.unsubscribe());
@@ -278,6 +280,13 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
         });
         dialogRef.afterClosed().subscribe(() => {
             this.isFormEditing = false;
+        });
+    }
+
+    onImageClicked(src: string) {
+        this.zoomedImage = src;
+        this.dialog.open(this.zoomedImagesModal, {
+            width: '500px',height: '500px'
         });
     }
 
