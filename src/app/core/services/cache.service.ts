@@ -8,14 +8,12 @@ import {Observable, of, tap} from "rxjs";
 export class CacheService {
 
     private  cachedData =new  Map<string,HttpResponse<any>>();
-    private  pathPattern = /api\/([^/]+)\/?/;
     private  orderPath = 'orders';
     private  creditCardPath = 'creditCards';
 
 
  applyCache(request: HttpRequest<unknown>,httpEvent$: Observable<HttpEvent<any>>) : Observable<HttpEvent<any>>{
         const pathUrl = this.getPathUrl(request.url) + request.params.toString();
-        debugger
         if(request.method==='GET' && this.cachedData.has(pathUrl))
           return of(this.cachedData.get(pathUrl)!);
         else if(request.method!=='GET'){

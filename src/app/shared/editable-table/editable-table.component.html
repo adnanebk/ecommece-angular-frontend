@@ -57,10 +57,9 @@
                         <span *ngIf="el.isSaving" class="spinner-grow spinner-grow-sm" role="status"
                             aria-hidden="true"></span>
                         <ng-container *ngIf="isCurrentElement(el) && !isFormEditing">
-                            <button [disabled]="el.isSaving" (click)="onSave(el)" type="button"
+                            <button *ngIf="!el.isSaving" (click)="onSave(el)" type="button"
                                 class="btn btn-success btn-rounded btn-sm my-0">
-                                <span *ngIf="el.isSaving" class="spinner-grow spinner-grow-sm" role="status"
-                                    aria-hidden="true"></span> Save
+                                Save
                             </button>
                             <button *ngIf="!el.isSaving" (click)="rolleback()"
                                 class="btn m-1 btn-warning btn-sm">cancel</button>

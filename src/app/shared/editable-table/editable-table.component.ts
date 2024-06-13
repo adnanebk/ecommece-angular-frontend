@@ -69,6 +69,7 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
 
     private handleRowUpdated() {
         this.subscriptions.push(this.datasource.onRowUpdated.subscribe(row => {
+            this.rolleback();
             const index = this.findIndex(row);
             this.data[index] = row;
             this.data[index].isSaving = false;
@@ -109,6 +110,7 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
     handleError() {
         this.subscriptions.push(this.datasource.onRowErrors.subscribe(resp => {
             const element = this.data.find(el => el[this.identifier] == resp.row[this.identifier]) || resp.row;
+            debugger
             element.errors = resp.errors;
             element.isSaving = false;
         }));
@@ -121,7 +123,10 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
     onSave(element: T) {
         element.errors = [];
         element.isSaving = true;
-        element.isNewItem ? this.dataAdded.emit(element) : this.dataUpdated.emit(element);
+        setTimeout(() => {
+            element.isNewItem ? this.dataAdded.emit(element) : this.dataUpdated.emit(element);
+
+        }, 6000);
     }
 
     remove(element: T) {
@@ -270,9 +275,10 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
     }
 
 
-    handleEdit(element: any) {
-        this.rolleback();
+    handleEdit(element: T) {
         element.isNewItem = false;
+        element.dirty = true;
+        this.currentElement=element;
         const dialogRef = this.openDialog();
         this.isFormEditing = true;
         dialogRef.afterOpened().subscribe(() => {
