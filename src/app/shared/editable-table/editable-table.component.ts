@@ -123,10 +123,7 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
     onSave(element: T) {
         element.errors = [];
         element.isSaving = true;
-        setTimeout(() => {
-            element.isNewItem ? this.dataAdded.emit(element) : this.dataUpdated.emit(element);
-
-        }, 6000);
+        element.isNewItem ? this.dataAdded.emit(element) : this.dataUpdated.emit(element);
     }
 
     remove(element: T) {
@@ -193,6 +190,13 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
 
     onElementSelected(el: T) {
         el.selected ? this.selectedSize++ : this.selectedSize--;
+    }
+    onImageClicked($event: Event,src: string) {
+        $event.stopPropagation();
+        this.zoomedImage = src;
+        this.dialog.open(this.zoomedImagesModal, {
+            width: '500px',height: '500px'
+        });
     }
 
     onAllSelected(checked: boolean) {
@@ -289,12 +293,6 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
         });
     }
 
-    onImageClicked(src: string) {
-        this.zoomedImage = src;
-        this.dialog.open(this.zoomedImagesModal, {
-            width: '500px',height: '500px'
-        });
-    }
 
     rolleback() {
         this.currentElement = {} as T;
