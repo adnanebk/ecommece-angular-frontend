@@ -191,11 +191,11 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
     onElementSelected(el: T) {
         el.selected ? this.selectedSize++ : this.selectedSize--;
     }
-    onImageClicked($event: Event,src: string) {
+    onImageClicked($event: Event, src: string) {
         $event.stopPropagation();
         this.zoomedImage = src;
         this.dialog.open(this.zoomedImagesModal, {
-            width: '500px',height: '500px'
+            width: '500px', height: '500px'
         });
     }
 
@@ -207,6 +207,33 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
             this.selectedSize = 0;
             this.data.forEach(e => e.selected = false);
         }
+    }
+
+    addNewItem() {
+        this.currentElement = { isNewItem: true } as T;
+        this.myForm.reset({});
+        const dialogRef = this.openDialog();
+        dialogRef.afterClosed().subscribe(() => this.rolleback());
+    }
+
+    handleEdit(element: T) {
+        element.isNewItem = false;
+        element.dirty = true;
+        this.currentElement = element;
+        const dialogRef = this.openDialog();
+        this.isFormEditing = true;
+        dialogRef.afterOpened().subscribe(() => {
+            this.myForm.patchValue(element);
+        });
+        dialogRef.afterClosed().subscribe(() => {
+            this.isFormEditing = false;
+        });
+    }
+    handleSubmit() {
+        if (this.myForm.invalid)
+            return;
+        Object.assign(this.currentElement, this.myForm.getRawValue());
+        this.onSave(this.currentElement);
     }
 
     hasError(element: T) {
@@ -258,38 +285,10 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
             || (field.readOnly && this.isBatchEnabled);
     }
 
-    handleSubmit() {
-        if (this.myForm.invalid)
-            return;
-        Object.assign(this.currentElement, this.myForm.getRawValue());
-        this.onSave(this.currentElement);
-    }
 
     private openDialog() {
         return this.dialog.open(this.editingModal, {
             width: '500px'
-        });
-    }
-
-    addNewItem() {
-        this.currentElement = { isNewItem: true } as T;
-        this.myForm.reset({});
-        const dialogRef = this.openDialog();
-        dialogRef.afterClosed().subscribe(() => this.rolleback());
-    }
-
-
-    handleEdit(element: T) {
-        element.isNewItem = false;
-        element.dirty = true;
-        this.currentElement=element;
-        const dialogRef = this.openDialog();
-        this.isFormEditing = true;
-        dialogRef.afterOpened().subscribe(() => {
-            this.myForm.patchValue(element);
-        });
-        dialogRef.afterClosed().subscribe(() => {
-            this.isFormEditing = false;
         });
     }
 
