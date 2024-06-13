@@ -134,46 +134,18 @@
     }
   }
 
-  .images-container {
-    position: relative;
-    margin-top: 10px;
-
-    .swiper-container {
-      height: 180px;
-
-      .swiper-slide {
-        display: inline-block;
-
+ 
         mat-card {
-          max-height: 120px;
-          min-height: 120px;
-
           img {
-            max-width: 110px;
-            margin-bottom: 12px;
+            max-height: 400px;
+            object-fit: contain;
             display: block;
             margin-left: auto;
             margin-right: auto;
             cursor: pointer;
           }
         }
-      }
 
-      .swiper-button-prev {
-        position: absolute;
-        top: 32%;
-        left: 0px;;
-      }
-
-      .swiper-button-next {
-        position: absolute;
-        top: 32%;
-        right: 0px;;
-      }
-    }
-
-
-  }
 }
 
 .product-slick.product-zoom.slick-initialized.slick-slider {

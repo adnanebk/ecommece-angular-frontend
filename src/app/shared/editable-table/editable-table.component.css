@@ -25,7 +25,8 @@
 }
 
 img {
-    width: 80px;
+    max-height: 50px;
+    object-fit: contain;
 }
 
 .number-input {
