@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
-import { DatePipe } from '@angular/common';
 import { Subscription } from "rxjs";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ConfirmComponent } from "../confirm-dialogue/confirm.component";
@@ -45,11 +44,23 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
             },{[this.identifier]: new FormControl(null)}));
     }
 
-    constructor(public dialog: MatDialog, private datePipe: DatePipe, private modalService: NgbModal) {
+    constructor(public dialog: MatDialog, private modalService: NgbModal) {
     }
 
     @ViewChild('elementEdit') editingModal!: TemplateRef<any>;
     @ViewChild('zoomedImages') zoomedImagesModal!: TemplateRef<any>;
+
+     get data(): T[] & any[] {
+        return this.datasource.data;
+    }
+
+    get identifier() {
+        return this.datasource.identifier;
+    }
+
+    get schema() {
+        return this.datasource.schema || [];
+    }
 
     ngOnInit(): void {
         if(!this.datasource)
@@ -273,21 +284,8 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
         return (item1 && item2) ? item1.id === item2.id : item1 === item2;
     }
 
-
     isDirty(el: T) {
         return el.dirty;
-    }
-
-    get data(): T[] & any[] {
-        return this.datasource.data;
-    }
-
-    get identifier() {
-        return this.datasource.identifier;
-    }
-
-    get schema() {
-        return this.datasource.schema || [];
     }
 
     isColHide(field: Schema) {

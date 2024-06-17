@@ -45,8 +45,6 @@ export class ProductsEditingComponent implements OnInit {
         });
     }
 
-
-
     addProduct(product: Product) {
         this.productService.saveProduct(product).subscribe(resp => {
             this.dataSource.onRowAdded.next(resp);
