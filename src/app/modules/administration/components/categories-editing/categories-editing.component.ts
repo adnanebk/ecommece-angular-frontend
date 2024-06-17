@@ -5,6 +5,7 @@ import {CategoryService} from "../../../../core/services/category.service";
 import {ToastrService} from "ngx-toastr";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {DataSource} from "../../../../shared/editable-table/models/data.source";
+import { Schema } from 'src/app/shared/editable-table/models/schema';
 
 @Component({
     selector: 'app-categories-editing',
@@ -13,23 +14,22 @@ import {DataSource} from "../../../../shared/editable-table/models/data.source";
 export class CategoriesEditingComponent implements OnInit {
 
     dataPage: DataPage = {size: 8, number: 1};
-    dataSource = new DataSource<Category>();
+    dataSource!: DataSource<Category>;
     categoryForm!: FormGroup;
 
     constructor(private categoryService: CategoryService, private toastrService: ToastrService,
     ) {
-
     }
 
     ngOnInit(): void {
-        this.createForm();
-        this.dataSource.schema = [{name: "name", display: "Name", type: 'text'}];
-        this.fetchCategories();
+        this.setDataSource();
     }
 
-    private fetchCategories() {
+    private setDataSource() {
         this.categoryService.getCategories().subscribe(resp => {
-                this.dataSource.setData(resp);
+            const schema: Schema[] = [{name: "name", display: "Name", type: 'text',
+                formControl: new FormControl(null, [Validators.required])}];
+                this.dataSource = new DataSource(schema,resp);
             }
         );
     }
@@ -62,18 +62,11 @@ export class CategoriesEditingComponent implements OnInit {
     sortCategories({sort, direction}: any) {
         this.dataPage.sortProperty = sort;
         this.dataPage.sortDirection = direction;
-        this.fetchCategories();
+        this.categoryService.getCategories().subscribe(categories=>this.dataSource.setData(categories));
     }
 
     private successAlert() {
         this.toastrService.success('your operation has been successful');
-    }
-
-    private createForm() {
-        this.categoryForm = new FormGroup({
-            id: new FormControl(null),
-            name: new FormControl(null, [Validators.required]),
-        });
     }
 
     private sendErrors(category: Category, errors: any[]) {

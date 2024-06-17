@@ -17,7 +17,7 @@
                    <li *ngFor="let error of errors">{{error.message}}</li>
                  </ul>
              </div>
-            <ng-container *ngIf="dataSource.data?.length; else noProducts">
+            <ng-container *ngIf="dataSource?.data?.length; else noProducts">
                 <button (click)="saveToExcel()" class="btn btn-primary rounded my-2 mx-5">download excel</button>
                 <div class="input-group mx-3">
                     <strong for="formFile" class="fs-5">Add/Update from excel</strong>
@@ -28,8 +28,7 @@
                 </div>
 
 
-                <app-editable-table [myForm]="productForm"
-                                    [datasource]="dataSource"
+                <app-editable-table [dataSource]="dataSource"
                                     [enableMultiEditing]="true"
                                     (dataUpdated)="updateProduct($event)"
                                     (dataAdded)="addProduct($event)"

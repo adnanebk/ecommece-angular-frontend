@@ -13,10 +13,18 @@ export class DataSource<Type> {
     onRowsUpdated = new Subject<Type[]>();
     onRowRemoved = new Subject<Type>();
     onRowsRemoved = new Subject<Type[]>();
-    identifier = '';
+    identifier = 'id';
 
     get data(): Type[] {
         return this._data;
+    }
+
+    /**
+     *
+     */
+    constructor(schema: Schema[],data: Type[]) {
+        this.schema = schema;
+        this.setData(data);
     }
 
     public setData(data: Type[]) {

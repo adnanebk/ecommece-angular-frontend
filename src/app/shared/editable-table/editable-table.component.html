@@ -32,7 +32,7 @@
                         <mat-checkbox class="example-margin" (change)="onAllSelected($event.checked)"></mat-checkbox>
                     </h4>
                 </th>
-                <ng-container *ngFor="let field of fields; let idx = index">
+                <ng-container *ngFor="let field of schema; let idx = index">
                     <th *ngIf="!isColHide(field)" (click)="sort(field.name,ic)"
                         class="text-center  align-middle bg-info border-secondary" role='button'>
                         <a
@@ -72,7 +72,7 @@
                     </div>
 
                 </td>
-                <ng-container *ngFor="let field of fields">
+                <ng-container *ngFor="let field of schema">
                     <td *ngIf="!isColHide(field)" (click)="onRowClicked(el)" class="align-middle"
                         [class]="{'bgDirty':isDirty(el),'bgError':hasError(el)}">
 
@@ -89,7 +89,6 @@
                         </div>
 
                         <div class="py-2 text-center" *ngIf="isRowEditing(el,field)">
-
                             <input *ngIf="field.type==='text'" type="text" [(ngModel)]="el[field.name]"
                                 (input)="onValueChanged(el)" class="max-content form-control bg-transparent" />
                             <input *ngIf="field.type==='number'" type="number" [(ngModel)]="el[field.name]"
@@ -133,7 +132,7 @@
             <h1 mat-dialog-title>{{this.currentElement.isNewItem ? 'Add new item' : 'Update item'}}</h1>
 
             <div mat-dialog-content>
-                <ng-container *ngFor="let field of fields; trackBy: trackByField">
+                <ng-container *ngFor="let field of schema; trackBy: trackByField">
                     <mat-form-field *ngIf="field.type==='select'" appearance="outline" class="w-100">
                         <mat-label>{{field.selectOptions!.displayField}}</mat-label>
                         <mat-select [required]="true" [formControl]="getFormControl(field.name)"

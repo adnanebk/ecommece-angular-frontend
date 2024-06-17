@@ -2,7 +2,7 @@
     <h3 class="card-headchangeProductswitcher text-center font-weight-bold text-uppercase py-4">Manage categories</h3>
 
     <app-editable-table [myForm]="categoryForm" (dataUpdated)="updateCategory($event)"
-                        [datasource]="dataSource"
+                        [dataSource]="dataSource"
                         (dataAdded)="addCategory($event)"
                         (dataDeleted)="removeCategory($event)"
                         (dataSorted)="sortCategories($event)"

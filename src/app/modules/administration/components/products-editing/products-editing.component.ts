@@ -9,6 +9,8 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Category} from "../../../../core/models/category";
 import {ApiError, FieldError} from "../../../../core/models/api-error";
 import {DataSource} from "../../../../shared/editable-table/models/data.source";
+import { Schema } from 'src/app/shared/editable-table/models/schema';
+import { forkJoin } from 'rxjs';
 
 
 @Component({
@@ -18,7 +20,7 @@ import {DataSource} from "../../../../shared/editable-table/models/data.source";
 })
 export class ProductsEditingComponent implements OnInit {
     productPage: DataPage = {size: 8, number: 1, sortProperty: 'lastUpdated', sortDirection: 'DESC'};
-    dataSource = new DataSource<Product>();
+    dataSource! : DataSource<Product>;
     productForm!: FormGroup;
     errors: FieldError[]=[];
 
@@ -27,32 +29,14 @@ export class ProductsEditingComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.createForm();
-        this.setDatasourceSchema();
-        this.fetchProducts();
+        this.setDatasource();
     }
-    private setDatasourceSchema() {
-        this.categoryService.getCategories().subscribe(categories => {
-                this.dataSource.schema = [
-                    {name: 'sku', display: 'Sku', type: 'text'},
-                    {name: 'name', display: 'Name', type: 'text'},
-                    {name: 'description', display: 'Description', type: 'textArea'},
-                    {name: 'unitPrice', display: 'Price', type: 'decimal'},
-                    {name: 'active', display: 'Enable', type: 'bool'},
-                    {name: 'unitsInStock', display: 'Quantity', type: 'number'},
-                    {
-                        name: 'category',
-                        display: 'Category',
-                        type: 'select',
-                        selectOptions: {displayField: 'name', valueField: 'id', options: categories}
-                    },
-                    {name: 'image', display: 'Image', type: 'image', fileField: 'imageFile'},
-                    {name: 'dateCreated', display: 'Newest', type: 'date', readOnly: true},
-                    {name: 'lastUpdated', display: 'Last updated', type: 'date', readOnly: true},
-
-                ];
-            }
-        );
+    private setDatasource() {
+                forkJoin([this.categoryService.getCategories(),this.productService.getProductsInPage(this.productPage)])
+                .subscribe(([categories,products])=>{
+                this.productPage.totalSize = products.totalElements;
+                this.dataSource = new DataSource<Product>(this.createSchema(categories),products.content);
+                });
     }
     fetchProducts() {
         this.productService.getProductsInPage(this.productPage).subscribe(resp => {
@@ -142,25 +126,32 @@ export class ProductsEditingComponent implements OnInit {
         );
     }
 
-
-    private createForm() {
-        this.productForm = new FormGroup({
-            id: new FormControl(null),
-            name: new FormControl(null, [Validators.required]),
-            image: new FormControl(null, [Validators.required]),
-            description: new FormControl(null, [Validators.required]),
-            sku: new FormControl(null, [Validators.required]),
-            unitPrice: new FormControl(null, [Validators.required]),
-            category: new FormControl(null, [Validators.required]),
-            active: new FormControl(false),
-            unitsInStock: new FormControl(null, [Validators.required]),
-        });
-    }
-
     onPage(number: number, pageSize: number) {
         this.productPage.number = number;
         this.productPage.size = pageSize;
         this.fetchProducts();
+    }
+
+    private createSchema(categories: Category[]): Schema[] {
+        return [
+            {name: 'sku', display: 'Sku', type: 'text',formControl: new FormControl(null,[Validators.required])},
+            {name: 'name', display: 'Name', type: 'text',formControl: new FormControl(null,[Validators.required])},
+            {name: 'description', display: 'Description', type: 'textArea',formControl: new FormControl(null,[Validators.required])},
+            {name: 'unitPrice', display: 'Price', type: 'decimal',formControl: new FormControl(null,[Validators.required])},
+            {name: 'active', display: 'Enable', type: 'bool',formControl: new FormControl(false)},
+            {name: 'unitsInStock', display: 'Quantity', type: 'number',formControl: new FormControl(null,[Validators.required])},
+            {
+                name: 'category',
+                display: 'Category',
+                type: 'select',
+                selectOptions: {displayField: 'name', valueField: 'id', options: categories},
+                formControl: new FormControl(null,[Validators.required])
+            },
+            {name: 'image', display: 'Image', type: 'image', fileField: 'imageFile',formControl: new FormControl(null,[Validators.required])},
+            {name: 'dateCreated', display: 'Newest', type: 'date', readOnly: true,formControl: new FormControl(null,[Validators.required])},
+            {name: 'lastUpdated', display: 'Last updated', type: 'date', readOnly: true,formControl: new FormControl(null)},
+
+        ];
     }
 
     private successAlert(msg = '') {

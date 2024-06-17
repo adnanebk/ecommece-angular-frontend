@@ -20,12 +20,12 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
     @Output() dataAdded = new EventEmitter<T>();
     @Output() dataDeleted = new EventEmitter<T>();
     @Output() dataSorted = new EventEmitter<{ sort: string, direction: string }>();
-    @Input() datasource!: DataSource<T>;
     @Input() enableMultiEditing = false;
     @Input() myForm: FormGroup = new FormGroup({});
     @Output() UpdateAll = new EventEmitter<T[]>();
     @Output() RemoveAll = new EventEmitter<T[]>();
 
+    datasource: DataSource<T> = new DataSource<T>([],[]);
     isBatchEnabled = false;
     isFormEditing = false;
     selectedSize = 0;
@@ -34,18 +34,30 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
     isDataChanged = false;
     zoomedImage = '';
 
+    @Input()
+    set dataSource(datasource: DataSource<T>){
+        if(!datasource)
+            return;
+        this.datasource = datasource;
+        this.myForm = new FormGroup(datasource.schema.reduce((obj: any,current)=>{
+            obj[current.name] = current.formControl;
+            return obj;
+            },{[this.identifier]: new FormControl(null)}));
+    }
+
     constructor(public dialog: MatDialog, private datePipe: DatePipe, private modalService: NgbModal) {
     }
 
     @ViewChild('elementEdit') editingModal!: TemplateRef<any>;
     @ViewChild('zoomedImages') zoomedImagesModal!: TemplateRef<any>;
 
+    ngOnInit(): void {
+        if(!this.datasource)
+            return;
+        this.handleDatasourceChanges()
+    }
     ngOnDestroy(): void {
         this.subscriptions.forEach(sub => sub.unsubscribe());
-    }
-
-    ngOnInit(): void {
-        this.handleDatasourceChanges()
     }
 
     private handleDatasourceChanges() {
@@ -110,7 +122,6 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
     handleError() {
         this.subscriptions.push(this.datasource.onRowErrors.subscribe(resp => {
             const element = this.data.find(el => el[this.identifier] == resp.row[this.identifier]) || resp.row;
-            debugger
             element.errors = resp.errors;
             element.isSaving = false;
         }));
@@ -223,7 +234,7 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
         const dialogRef = this.openDialog();
         this.isFormEditing = true;
         dialogRef.afterOpened().subscribe(() => {
-            this.myForm.patchValue(element);
+        this.myForm.patchValue(element);
         });
         dialogRef.afterClosed().subscribe(() => {
             this.isFormEditing = false;
@@ -272,11 +283,11 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
     }
 
     get identifier() {
-        return this.datasource.identifier || 'id';
+        return this.datasource.identifier;
     }
 
-    get fields() {
-        return this.datasource.schema;
+    get schema() {
+        return this.datasource.schema || [];
     }
 
     isColHide(field: Schema) {
