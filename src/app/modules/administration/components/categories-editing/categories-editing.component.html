@@ -1,7 +1,7 @@
 <div class="container">
     <h3 class="card-headchangeProductswitcher text-center font-weight-bold text-uppercase py-4">Manage categories</h3>
 
-    <app-editable-table [myForm]="categoryForm" (dataUpdated)="updateCategory($event)"
+    <app-editable-table (dataUpdated)="updateCategory($event)"
                         [dataSource]="dataSource"
                         (dataAdded)="addCategory($event)"
                         (dataDeleted)="removeCategory($event)"

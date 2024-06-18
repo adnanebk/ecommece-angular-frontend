@@ -5,7 +5,7 @@ import {ProductService} from "../../../../core/services/product.service";
 import {Product} from "../../../../core/models/product";
 import {DataPage} from "../../../../core/models/dataPage";
 import {saveAs} from 'file-saver';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormControl, Validators} from "@angular/forms";
 import {Category} from "../../../../core/models/category";
 import {ApiError, FieldError} from "../../../../core/models/api-error";
 import {DataSource} from "../../../../shared/editable-table/models/data.source";
@@ -21,7 +21,6 @@ import { forkJoin } from 'rxjs';
 export class ProductsEditingComponent implements OnInit {
     productPage: DataPage = {size: 8, number: 1, sortProperty: 'lastUpdated', sortDirection: 'DESC'};
     dataSource! : DataSource<Product>;
-    productForm!: FormGroup;
     errors: FieldError[]=[];
 
     constructor(private productService: ProductService, private categoryService: CategoryService, private toastrService: ToastrService,
@@ -52,14 +51,12 @@ export class ProductsEditingComponent implements OnInit {
         }, error => this.sendErrors(product, error.errors));
     }
 
-
     updateProduct(product: Product) {
         this.productService.updateProduct(product).subscribe(resp => {
             this.dataSource.onRowUpdated.next(resp);
             this.successAlert();
         }, error => this.sendErrors(product, error.errors));
     }
-
 
     updateProducts($products: Product[]) {
         this.productService.updateProducts($products).subscribe(products => {
@@ -80,12 +77,10 @@ export class ProductsEditingComponent implements OnInit {
         )
     }
 
-    removeAllProducts(products: Product[]) {
+    removeProducts(products: Product[]) {
         this.successAlert(products.length + " items has been removed");
         this.productService.deleteProducts(products.map(pr => pr.id)).subscribe(() => {
             this.dataSource.onRowsRemoved.next(products);
-            this.productPage.number++;
-            this.fetchProducts();
         });
     }
 
@@ -156,15 +151,12 @@ export class ProductsEditingComponent implements OnInit {
         this.toastrService.success('your operation has been successful ' + msg);
     }
 
-    private sendErrors(product: Product, errors: any[]) {
+    private sendErrors(product: Product, errors: FieldError[]) {
         if(!product)
             this.errors=errors;
-        else
+        else {
         this.dataSource.onRowErrors.next({row: product, errors});
-
-        errors?.forEach(err => {
-            this.productForm.setErrors({[err.fieldName]: err.message});
-        }) 
+    }
     }
 }
 

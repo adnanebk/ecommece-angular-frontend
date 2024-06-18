@@ -135,6 +135,9 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
             const element = this.data.find(el => el[this.identifier] == resp.row[this.identifier]) || resp.row;
             element.errors = resp.errors;
             element.isSaving = false;
+            resp.errors?.forEach(err => {
+                this.myForm.setErrors({[err.fieldName]: err.message});
+            })
         }));
     }
 

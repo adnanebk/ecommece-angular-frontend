@@ -3,7 +3,7 @@ import {DataPage} from "../../../../core/models/dataPage";
 import {Category} from "../../../../core/models/category";
 import {CategoryService} from "../../../../core/services/category.service";
 import {ToastrService} from "ngx-toastr";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormControl, Validators} from "@angular/forms";
 import {DataSource} from "../../../../shared/editable-table/models/data.source";
 import { Schema } from 'src/app/shared/editable-table/models/schema';
 
@@ -15,7 +15,6 @@ export class CategoriesEditingComponent implements OnInit {
 
     dataPage: DataPage = {size: 8, number: 1};
     dataSource!: DataSource<Category>;
-    categoryForm!: FormGroup;
 
     constructor(private categoryService: CategoryService, private toastrService: ToastrService,
     ) {
