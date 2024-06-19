@@ -83,8 +83,8 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
 
     private handleRowAdded() {
         this.subscriptions.push(this.datasource.onRowAdded.subscribe(row => {
-            this.data[0] = row;
-            this.data[0].isSaving = false;
+            row.isSaving = false;
+            this.datasource.data.unshift(row);
             this.dialog.closeAll();
             this.backUpData();
         }));

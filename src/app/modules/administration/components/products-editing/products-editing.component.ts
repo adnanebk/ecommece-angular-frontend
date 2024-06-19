@@ -141,7 +141,7 @@ export class ProductsEditingComponent implements OnInit {
                 formControl: new FormControl(null,[Validators.required])
             },
             {name: 'image', display: 'Image', type: 'image', fileField: 'imageFile',formControl: new FormControl(null,[Validators.required])},
-            {name: 'dateCreated', display: 'Newest', type: 'date', readOnly: true,formControl: new FormControl(null,[Validators.required])},
+            {name: 'dateCreated', display: 'Newest', type: 'date', readOnly: true,formControl: new FormControl(null)},
             {name: 'lastUpdated', display: 'Last updated', type: 'date', readOnly: true,formControl: new FormControl(null)},
 
         ];

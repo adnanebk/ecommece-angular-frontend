@@ -134,7 +134,7 @@
             <div mat-dialog-content>
                 <ng-container *ngFor="let field of schema; trackBy: trackByField">
                     <mat-form-field *ngIf="field.type==='select'" appearance="outline" class="w-100">
-                        <mat-label>{{field.selectOptions!.displayField}}</mat-label>
+                        <mat-label>{{field.display}}</mat-label>
                         <mat-select [required]="true" [formControl]="getFormControl(field.name)"
                             [compareWith]="compareWith">
                             <mat-option *ngFor="let item of field.selectOptions!.options" [value]="item">
