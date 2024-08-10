@@ -103,6 +103,7 @@ td {
 
 input[type=text], textarea, select {
     font-size: small;
+    width: 100%;
 }
 
 :host ::ng-deep .mat-form-field-wrapper {

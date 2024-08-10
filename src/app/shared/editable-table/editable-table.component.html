@@ -58,11 +58,14 @@
                             aria-hidden="true"></span>
                         <ng-container *ngIf="isCurrentElement(el) && !isFormEditing">
                             <button *ngIf="!el.isSaving" (click)="onSave(el)" type="button"
-                                class="btn btn-success btn-rounded btn-sm my-0">
-                                Save
+                                class="btn btn-ic">
+                                <em class="fas fa-check text-success"></em>
                             </button>
                             <button *ngIf="!el.isSaving" (click)="rolleback()"
-                                class="btn m-1 btn-warning btn-sm">cancel</button>
+                                class="btn btn-rounded">
+                                <em class="fas fa-window-close text-warning"></em>
+                            </button>
+
                         </ng-container>
                     </ng-container>
                     <div *ngIf="isBatchEnabled" class="select">

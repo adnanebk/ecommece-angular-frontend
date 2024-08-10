@@ -8,8 +8,8 @@ import {Observable, of, tap} from "rxjs";
 export class CacheService {
 
     private  cachedData =new  Map<string,HttpResponse<any>>();
-    private  orderPath = 'orders';
-    private  creditCardPath = 'creditCards';
+    private  orderPath = '/api/orders';
+    private  creditCardPath = '/api/creditCards';
 
 
  applyCache(request: HttpRequest<unknown>,httpEvent$: Observable<HttpEvent<any>>) : Observable<HttpEvent<any>>{
@@ -17,7 +17,7 @@ export class CacheService {
         if(request.method==='GET' && this.cachedData.has(pathUrl))
           return of(this.cachedData.get(pathUrl)!);
         else if(request.method!=='GET'){
-        this.clearCacheForCurrentPath(pathUrl,request.method);
+        this.clearCache(pathUrl,request.method);
         return httpEvent$;
         }
         return httpEvent$.pipe(
@@ -27,11 +27,12 @@ export class CacheService {
               }
             }))
     }
-    clearCacheForCurrentPath(pathUrl: string,method: string) {
+    clearCache(pathUrl: string, method: string) {
             this.cachedData.forEach((r,path) => {
+                pathUrl = pathUrl.replace(/(\/api\/[^\/]+)\/.*/, '$1');
                 if(path.includes(pathUrl))
                     this.cachedData.delete(path);
-                if (pathUrl === this.orderPath && method === 'POST')
+                if (this.orderPath.includes(pathUrl) && method === 'POST')
                     this.cachedData.delete(this.creditCardPath);
             });
     }
