@@ -4,8 +4,8 @@ import {CreditCard} from "../../../../core/models/CreditCard";
 import {CardOption} from "../../../../core/services/credit-card.service";
 import {CardNumberFormControl} from "../../../../shared/form-controls/card-number-form-control";
 import {MonthYearFormControl} from "../../../../shared/form-controls/month-year-form-control";
-import {CardNumberValidator} from "../../../../shared/validators/cardNumberValidator";
-import {ExpirationDateValidator} from "../../../../shared/validators/expirationDateValidator";
+import {ValidateCardNumber} from "../../../../shared/validators/validateCardNumber";
+import {ValidateCardExpirationDate} from "../../../../shared/validators/validateCardExpirationDate";
 
 @Component({
   selector: 'app-credit-card-form',
@@ -44,7 +44,7 @@ export class CreditCardFormComponent {
   }
 
   isCardNumberChanged() {
-    return this._selectedCard?.cardNumber !== this.cardForm?.get('cardNumber')?.value?.replaceAll('-', '');
+    return this._selectedCard?.cardNumber !== this.cardNumberControl().value?.replaceAll('-', '');
   }
   handleSubmit() {
     if(this.cardForm.invalid)
@@ -68,9 +68,24 @@ export class CreditCardFormComponent {
     const controls = {
       id: new FormControl(null),
       cardType: new FormControl(null, [Validators.required]),
-      cardNumber: new CardNumberFormControl(null,[Validators.required,CardNumberValidator(this.cards)]),
-      expirationDate: new MonthYearFormControl(null, [Validators.required,ExpirationDateValidator]),
+      cardNumber: new CardNumberFormControl(null,[Validators.required]),
+      expirationDate: new MonthYearFormControl(null, [Validators.required]),
     };
     this.cardForm = new FormGroup(controls);
+  }
+
+  validateCardNumber() {
+     ValidateCardNumber(this.cardNumberControl(),this.cards);
+  }
+  validateExpirationDate() {
+    ValidateCardExpirationDate(this.expirationDateControl());
+  }
+
+  expirationDateControl() {
+    return this.cardForm.controls['expirationDate'];
+  }
+
+  cardNumberControl() {
+    return this.cardForm.controls['cardNumber'];
   }
 }

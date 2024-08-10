@@ -44,7 +44,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let el of data; let idx= index;trackBy: trackById">
+            <tr *ngFor="let el of data; trackBy: trackById">
 
                 <td class="p-1 align-middle actions" [ngClass]="{'bgDirty':isDirty(el),'bgError':hasError(el)}">
                     <ng-container *ngIf="!isBatchEnabled" class="table-edit">
@@ -58,7 +58,7 @@
                             aria-hidden="true"></span>
                         <ng-container *ngIf="isCurrentElement(el) && !isFormEditing">
                             <button *ngIf="!el.isSaving" (click)="onSave(el)" type="button"
-                                class="btn btn-ic">
+                                class="btn btn-group btn-lg">
                                 <em class="fas fa-check text-success"></em>
                             </button>
                             <button *ngIf="!el.isSaving" (click)="rolleback()"

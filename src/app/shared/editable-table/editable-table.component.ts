@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output, TemplateRef, ViewChild } from '@angular/core';
 import { Subscription } from "rxjs";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ConfirmComponent } from "../confirm-dialogue/confirm.component";
@@ -14,7 +14,7 @@ import { ApiError } from "./models/api.error";
     templateUrl: './editable-table.component.html',
     styleUrls: ['./editable-table.component.css']
 })
-export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy {
+export class EditableTableComponent<T extends Data> implements OnDestroy {
     @Output() dataUpdated = new EventEmitter<T>();
     @Output() dataAdded = new EventEmitter<T>();
     @Output() dataDeleted = new EventEmitter<T>();
@@ -38,6 +38,7 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
         if(!datasource)
             return;
         this.datasource = datasource;
+        this.handleDatasourceChanges()
         this.myForm = new FormGroup(datasource.schema.reduce((obj: any,current)=>{
             obj[current.name] = current.formControl;
             return obj;
@@ -62,16 +63,12 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
         return this.datasource.schema || [];
     }
 
-    ngOnInit(): void {
-        if(!this.datasource)
-            return;
-        this.handleDatasourceChanges()
-    }
     ngOnDestroy(): void {
-        this.subscriptions.forEach(sub => sub.unsubscribe());
+        this.unsubscribeFromAll();
     }
 
     private handleDatasourceChanges() {
+        this.unsubscribeFromAll();
         this.handleRowAdded();
         this.handleRowRemoved();
         this.handleRowsRemoved();
@@ -80,7 +77,10 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
         this.handleRowsUpdated();
         this.handleError();
     }
-
+    private unsubscribeFromAll() {
+        this.subscriptions.forEach(sub => sub.unsubscribe());
+        this.subscriptions = [];
+    }
     private handleRowAdded() {
         this.subscriptions.push(this.datasource.onRowAdded.subscribe(row => {
             row.isSaving = false;
@@ -93,6 +93,7 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
     private handleRowUpdated() {
         this.subscriptions.push(this.datasource.onRowUpdated.subscribe(row => {
             this.rolleback();
+            debugger
             const index = this.findIndex(row);
             this.data[index] = row;
             this.data[index].isSaving = false;
@@ -320,10 +321,6 @@ export class EditableTableComponent<T extends Data> implements OnInit, OnDestroy
 
     isRowEditing(el: T, field: Schema) {
         return (this.isCurrentElement(el) || this.isBatchEnabled) && !field.readOnly && !this.isFormEditing;
-    }
-
-    getField(element: T, field: Schema) {
-        return element[field.name];
     }
 }
 

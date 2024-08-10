@@ -20,6 +20,8 @@ export class AppInputComponent {
     @Input() appearance: MatFormFieldAppearance = 'outline';
     @Output() changeValue = new EventEmitter<any>();
 
+    @Output() blur = new EventEmitter<any>();
+
 
     get formControl(): FormControl {
         return this.control as FormControl;

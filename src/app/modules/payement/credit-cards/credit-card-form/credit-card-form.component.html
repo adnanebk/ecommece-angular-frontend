@@ -4,12 +4,13 @@
                     selectValue="cardType" selectLabel="name" placeholder="Card type"
                     [control]="cardForm.controls['cardType']">
                    </app-select>
-        <app-input [errorKeys]="['cardNumber']" appearance="fill" matIcon="credit_card" label="Card number" [control]="cardForm.controls['cardNumber']">
+        <app-input [errorKeys]="['cardNumber']" appearance="fill" matIcon="credit_card" label="Card number" [control]="cardNumberControl()"
+        (blur)="validateCardNumber()"   >
         </app-input>
-        <app-input [errorKeys]="['expirationDate']"
+        <app-input [errorKeys]="['expirationDate']" (blur)="validateExpirationDate()"
                 [readonly]="!isCardNumberChanged() && !isNewCard" appearance="fill"
                    placeHolder="month/year, ex: mm/yy,10/30" label="Expiration date"
-                   [control]="cardForm.controls['expirationDate']">
+                   [control]="expirationDateControl()">
                     </app-input>
     </div>
     <ng-content></ng-content>

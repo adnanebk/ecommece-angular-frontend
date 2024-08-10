@@ -4,7 +4,7 @@
     <ng-container *ngIf="inputType==='text' ||inputType==='number' ">
 
         <input [class.disabledInput]="readonly" (input)="onChange(inp.value)" #inp matInput [readonly]="readonly"
-               [formControl]="formControl" [placeholder]="placeHolder"
+               [formControl]="formControl" [placeholder]="placeHolder" (blur)="blur.emit()"
                [required]="formControl.hasError('required')" type="{{inputType}}"/>
     </ng-container>
     <ng-container *ngIf="inputType==='textArea'">

@@ -28,7 +28,7 @@ export class CategoriesEditingComponent implements OnInit {
         this.categoryService.getCategories().subscribe(resp => {
             const schema: Schema[] = [{name: "name", display: "Name", type: 'text',
                 formControl: new FormControl(null, [Validators.required])}];
-                this.dataSource = new DataSource(schema,resp);
+                this.dataSource = new DataSource<Category>(schema,resp);
             }
         );
     }
