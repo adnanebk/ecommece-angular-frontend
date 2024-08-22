@@ -1,27 +1,42 @@
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=adnanebk_ecommece-angular-frontend&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=adnanebk_ecommece-angular-frontend)
 
+This is the frontend side of the application
 
-## Development server
+it has been developed using Angular, java 17 and spring boot  ,
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+core features :
 
-## Code scaffolding
+* Classic and social Authentication (using jwt with refresh token)
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+* Roles access ability
 
-## Build
+* Account information
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+* Password changing ability
 
-## Running unit tests
+* Displaying products with filters and pagination
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+* Product details
 
-## Running end-to-end tests
+* Credit cart management
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+* Products managements by admin
 
-## Further help
+* using excel to add/modify products
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+* Add to Cart ability with its management
+
+* Displaying Orders
+
+* Making orders ability
+
+* Dark/light theme switching
+
+* Swagger documentation
+
+* and more
+
+I have implemented CI/CD pipelines to automate quality checks using SonarCloud and the deployment, with the backend deployed to Heroku and the frontend deployed to Netlify
+
+The backend-end side is here https://github.com/adnanebk/ecommerce-spring-backend

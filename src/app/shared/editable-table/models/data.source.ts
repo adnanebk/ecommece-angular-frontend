@@ -2,7 +2,7 @@ import {Subject} from "rxjs";
 import {Schema} from "./schema";
 import {ApiError} from "./api.error";
 
-export class DataSource<Type> {
+export class DataSource<Type extends { [key: string | symbol]: any}> {
     schema: Schema[] = [];
     private _data: Type[] = [];
     private backedData: Type[] = [];
@@ -19,9 +19,6 @@ export class DataSource<Type> {
         return this._data;
     }
 
-    /**
-     *
-     */
     constructor(schema: Schema[],data: Type[]) {
         this.schema = schema;
         this.setData(data);
@@ -37,7 +34,11 @@ export class DataSource<Type> {
         this.data.forEach(e => this.backedData.push({...e}));
     }
 
-    public roleBack() {
+    public roleBack(index?: number) {
+        if(index){
+            this._data[index] = {...this.backedData[index]};
+            return;
+        }
         this._data = [];
         this.backedData.forEach(e => this._data.push({...e}));
     }

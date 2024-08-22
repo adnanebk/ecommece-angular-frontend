@@ -2,15 +2,15 @@
     <div class="custom-control custom-switch">
         <div class="form-check form-switch fs-4">
             enable multi editing
-            <input (ngModelChange)="rolleback()" class="form-check-input" type="checkbox" role="switch" checked
-                [(ngModel)]="isBatchEnabled" />
-            <button (click)="rolleback()" class="btn btn-primary"><em class="fas fa-refresh"></em>Refresh</button>
+            <input (ngModelChange)="rollback()" class="form-check-input" type="checkbox" role="switch" checked
+                   [(ngModel)]="isBatchEnabled" />
+            <button (click)="rollback()" class="btn btn-primary"><em class="fas fa-refresh"></em>Refresh</button>
         </div>
     </div>
 
 
     <div *ngIf="isBatchEnabled" class="d-inline">
-        <button [disabled]="!isDataChanged" (click)="updateAll()" class="btn btn-info m-2">Update all</button>
+        <button [disabled]="!hasDataChanged()" (click)="updateAll()" class="btn btn-info m-2">Update all</button>
         <button [disabled]="!selectedSize" (click)="removeAll()" class="btn btn-danger">Remove selected rows</button>
     </div>
 
@@ -32,7 +32,7 @@
                         <mat-checkbox class="example-margin" (change)="onAllSelected($event.checked)"></mat-checkbox>
                     </h4>
                 </th>
-                <ng-container *ngFor="let field of schema; let idx = index">
+                <ng-container *ngFor="let field of schema; trackBy: trackByField">
                     <th *ngIf="!isColHide(field)" (click)="sort(field.name,ic)"
                         class="text-center  align-middle bg-info border-secondary" role='button'>
                         <a
@@ -48,7 +48,7 @@
 
                 <td class="p-1 align-middle actions" [ngClass]="{'bgDirty':isDirty(el),'bgError':hasError(el)}">
                     <ng-container *ngIf="!isBatchEnabled" class="table-edit">
-                        <ng-container *ngIf="(!isCurrentElement(el) || isFormEditing) && !el.isSaving">
+                        <ng-container *ngIf="(!isCurrentElement(el) || isDialogOpened) && !el.isSaving">
                             <button (click)="handleEdit(el)" type="button" class="btn btn-rounded btn-sm my-0"><em
                                     class="fas fa-edit text-info"></em></button>
                             <button (click)="remove(el)" type="button" class="btn btn-rounded  btn-sm  mx-2">
@@ -56,12 +56,12 @@
                         </ng-container>
                         <span *ngIf="el.isSaving" class="spinner-grow spinner-grow-sm" role="status"
                             aria-hidden="true"></span>
-                        <ng-container *ngIf="isCurrentElement(el) && !isFormEditing">
+                        <ng-container *ngIf="isCurrentElement(el) && !isDialogOpened">
                             <button *ngIf="!el.isSaving" (click)="onSave(el)" type="button"
                                 class="btn btn-group btn-lg">
                                 <em class="fas fa-check text-success"></em>
                             </button>
-                            <button *ngIf="!el.isSaving" (click)="rolleback()"
+                            <button *ngIf="!el.isSaving" (click)="rollback()"
                                 class="btn btn-rounded">
                                 <em class="fas fa-window-close text-warning"></em>
                             </button>
@@ -111,7 +111,7 @@
                             <select *ngIf="field.type==='select' && field.selectOptions" [name]="field.name"
                                 (selectionchange)="onValueChanged(el)" [compareWith]="compareWith"
                                 [(ngModel)]="el[field.name]" class="w-auto form-select bg-transparent">
-                                <option [value]="op" *ngFor="let op of field.selectOptions.options">
+                                <option [ngValue]="op" *ngFor="let op of field.selectOptions.options">
                                     {{op[field.selectOptions.displayField]}}</option>
                             </select>
 

@@ -15,22 +15,21 @@ import { ApiError } from "./models/api.error";
     styleUrls: ['./editable-table.component.css']
 })
 export class EditableTableComponent<T extends Data> implements OnDestroy {
+    @Input() enableMultiEditing = false;
+    @Input() myForm: FormGroup = new FormGroup({});
     @Output() dataUpdated = new EventEmitter<T>();
     @Output() dataAdded = new EventEmitter<T>();
     @Output() dataDeleted = new EventEmitter<T>();
     @Output() dataSorted = new EventEmitter<{ sort: string, direction: string }>();
-    @Input() enableMultiEditing = false;
-    @Input() myForm: FormGroup = new FormGroup({});
     @Output() UpdateAll = new EventEmitter<T[]>();
     @Output() RemoveAll = new EventEmitter<T[]>();
 
     datasource: DataSource<T> = new DataSource<T>([],[]);
     isBatchEnabled = false;
-    isFormEditing = false;
+    isDialogOpened = false;
     selectedSize = 0;
     currentElement: T = {} as T;
     subscriptions: Subscription[] = [];
-    isDataChanged = false;
     zoomedImage = '';
 
     @Input()
@@ -84,56 +83,47 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
     private handleRowAdded() {
         this.subscriptions.push(this.datasource.onRowAdded.subscribe(row => {
             row.isSaving = false;
-            this.datasource.data.unshift(row);
+            this.datasource.setData([row,...this.data])
             this.dialog.closeAll();
-            this.backUpData();
         }));
     }
 
     private handleRowUpdated() {
         this.subscriptions.push(this.datasource.onRowUpdated.subscribe(row => {
-            this.rolleback();
-            debugger
-            const index = this.findIndex(row);
-            this.data[index] = row;
-            this.data[index].isSaving = false;
+            row.isSaving = false;
+            this.datasource.setData(this.data.map(e=>this.haveEqualIds(e,row)?row:e));
             this.dialog.closeAll();
-            this.backUpData();
+            this.currentElement = {} as T;
+
         }));
     }
 
     private handleRowRemoved() {
         this.subscriptions.push(this.datasource.onRowRemoved.subscribe(row => {
-            this.data.splice(this.findIndex(row), 1);
-            this.backUpData();
+            this.datasource.setData(this.data.filter(el=>!this.haveEqualIds(el,row)));
         }));
     }
 
     private handleRowsAdded() {
         this.subscriptions.push(this.datasource.onRowsAdded.subscribe(rows => {
-            rows.forEach(r => this.datasource.data.unshift(r));
-            this.backUpData();
+            this.datasource.setData([...rows,...this.data]);
         }));
     }
 
     private handleRowsUpdated() {
         this.subscriptions.push(this.datasource.onRowsUpdated.subscribe(rows => {
-            this.datasource.setData(this.data.map(row => rows.find(r => r[this.identifier] == row[this.identifier]) || row));
+            this.datasource.setData(this.data.map(row => rows.find(r => this.haveEqualIds(r,row)) || row));
         }));
     }
 
     private handleRowsRemoved() {
         this.subscriptions.push(this.datasource.onRowsRemoved.subscribe(rows => {
-            rows.forEach(row => {
-                this.data.splice(this.findIndex(row), 1);
-            });
-            this.backUpData();
+            this.datasource.setData(this.data.filter(el=> !rows.find(e=>this.haveEqualIds(e, el))));
         }));
     }
-
     handleError() {
         this.subscriptions.push(this.datasource.onRowErrors.subscribe(resp => {
-            const element = this.data.find(el => el[this.identifier] == resp.row[this.identifier]) || resp.row;
+            const element = this.data.find(el => this.haveEqualIds(resp.row,el)) || resp.row;
             element.errors = resp.errors;
             element.isSaving = false;
             resp.errors?.forEach(err => {
@@ -142,14 +132,11 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
         }));
     }
 
-    private findIndex(row: T) {
-        return this.data.findIndex(r => r[this.identifier] === row[this.identifier]);
-    }
-
     onSave(element: T) {
         element.errors = [];
         element.isSaving = true;
         element.isNewItem ? this.dataAdded.emit(element) : this.dataUpdated.emit(element);
+        this.currentElement = element;
     }
 
     remove(element: T) {
@@ -179,15 +166,14 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
 
     onValueChanged(el: T) {
         el.dirty = true;
-        this.isDataChanged = true;
         el.errors = [];
     }
 
     onRowClicked(element: T) {
         if (this.isCurrentElement(element) || this.isBatchEnabled)
             return;
-        if (this.currentElement.dirty && !this.currentElement.isSaving)
-            this.rolleback();
+        if (!this.currentElement.isSaving)
+            this.rollback(this.data.findIndex(e=>this.haveEqualIds(e,this.currentElement)));
         element.isNewItem = false;
         this.currentElement = element;
     }
@@ -236,24 +222,24 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
     }
 
     addNewItem() {
+        this.openDialog();
         this.currentElement = { isNewItem: true } as T;
         this.myForm.reset({});
-        const dialogRef = this.openDialog();
-        dialogRef.afterClosed().subscribe(() => this.rolleback());
     }
 
     handleEdit(element: T) {
+        const dialogRef = this.openDialog();
+        dialogRef.afterOpened().subscribe(() => {
+            this.myForm.patchValue(element);
+        });
+        dialogRef.afterClosed().subscribe(() => {
+            this.isDialogOpened = false;
+            element.dirty=false;
+        });
         element.isNewItem = false;
         element.dirty = true;
         this.currentElement = element;
-        const dialogRef = this.openDialog();
-        this.isFormEditing = true;
-        dialogRef.afterOpened().subscribe(() => {
-        this.myForm.patchValue(element);
-        });
-        dialogRef.afterClosed().subscribe(() => {
-            this.isFormEditing = false;
-        });
+        this.isDialogOpened = true;
     }
     handleSubmit() {
         if (this.myForm.invalid)
@@ -271,7 +257,7 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
     }
 
     isCurrentElement(element: any) {
-        return element[this.identifier] === this.currentElement[this.identifier];
+        return this.haveEqualIds(element,this.currentElement);
     }
 
     hasFocus(element: HTMLElement) {
@@ -292,27 +278,30 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
         return el.dirty;
     }
 
+    hasDataChanged(): boolean {
+    return this.data.some(el=>el.dirty);
+    }
+
     isColHide(field: Schema) {
         return (field.readOnly && Object.keys(this.currentElement)?.length)
             || (this.isBatchEnabled && field.type == 'image')
             || (field.readOnly && this.isBatchEnabled);
     }
 
-
+    private haveEqualIds(e: T, el: T): boolean {
+        return e[this.identifier] == el[this.identifier];
+    }
     private openDialog() {
+        if (!this.currentElement.isSaving)
+            this.rollback(this.data.findIndex(e=>this.haveEqualIds(e,this.currentElement)));
         return this.dialog.open(this.editingModal, {
             width: '500px'
         });
     }
 
-
-    rolleback() {
+    rollback(index?: number) {
         this.currentElement = {} as T;
-        this.datasource.roleBack();
-    }
-    backUpData() {
-        this.currentElement = {} as T;
-        this.datasource.backupData();
+        this.datasource.roleBack(index);
     }
 
     getFormControl(name: string) {
@@ -320,7 +309,7 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
     }
 
     isRowEditing(el: T, field: Schema) {
-        return (this.isCurrentElement(el) || this.isBatchEnabled) && !field.readOnly && !this.isFormEditing;
+        return (this.isCurrentElement(el) || this.isBatchEnabled) && !field.readOnly && !this.isDialogOpened;
     }
 }
 
