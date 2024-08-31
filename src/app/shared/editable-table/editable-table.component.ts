@@ -1,12 +1,12 @@
-import { Component, EventEmitter, Input, OnDestroy, Output, TemplateRef, ViewChild } from '@angular/core';
-import { Subscription } from "rxjs";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { ConfirmComponent } from "../confirm-dialogue/confirm.component";
-import { FormControl, FormGroup } from "@angular/forms";
-import { MatDialog } from "@angular/material/dialog";
-import { DataSource } from "./models/data.source";
-import { Schema } from "./models/schema";
-import { ApiError } from "./models/api.error";
+import {Component, EventEmitter, Input, OnDestroy, Output, TemplateRef, ViewChild} from '@angular/core';
+import {Subscription} from "rxjs";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {ConfirmComponent} from "../confirm-dialogue/confirm.component";
+import {FormControl, FormGroup} from "@angular/forms";
+import {MatDialog} from "@angular/material/dialog";
+import {DataSource} from "./models/data.source";
+import {Schema} from "./models/schema";
+import {ApiError} from "./models/api.error";
 
 
 @Component({
@@ -24,7 +24,7 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
     @Output() UpdateAll = new EventEmitter<T[]>();
     @Output() RemoveAll = new EventEmitter<T[]>();
 
-    datasource: DataSource<T> = new DataSource<T>([],[]);
+    datasource: DataSource<T> = new DataSource<T>([], []);
     isBatchEnabled = false;
     isDialogOpened = false;
     selectedSize = 0;
@@ -33,15 +33,15 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
     zoomedImage = '';
 
     @Input()
-    set dataSource(datasource: DataSource<T>){
-        if(!datasource)
+    set dataSource(datasource: DataSource<T>) {
+        if (!datasource)
             return;
         this.datasource = datasource;
         this.handleDatasourceChanges()
-        this.myForm = new FormGroup(datasource.schema.reduce((obj: any,current)=>{
+        this.myForm = new FormGroup(datasource.schema.reduce((obj: any, current) => {
             obj[current.name] = current.formControl;
             return obj;
-            },{[this.identifier]: new FormControl(null)}));
+        }, {[this.identifier]: new FormControl(null)}));
     }
 
     constructor(public dialog: MatDialog, private modalService: NgbModal) {
@@ -50,7 +50,7 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
     @ViewChild('elementEdit') editingModal!: TemplateRef<any>;
     @ViewChild('zoomedImages') zoomedImagesModal!: TemplateRef<any>;
 
-     get data(): T[] & any[] {
+    get data(): T[] & any[] {
         return this.datasource.data;
     }
 
@@ -76,14 +76,16 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
         this.handleRowsUpdated();
         this.handleError();
     }
+
     private unsubscribeFromAll() {
         this.subscriptions.forEach(sub => sub.unsubscribe());
         this.subscriptions = [];
     }
+
     private handleRowAdded() {
         this.subscriptions.push(this.datasource.onRowAdded.subscribe(row => {
             row.isSaving = false;
-            this.datasource.setData([row,...this.data])
+            this.datasource.setData([row, ...this.data])
             this.dialog.closeAll();
         }));
     }
@@ -91,7 +93,7 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
     private handleRowUpdated() {
         this.subscriptions.push(this.datasource.onRowUpdated.subscribe(row => {
             row.isSaving = false;
-            this.datasource.setData(this.data.map(e=>this.haveEqualIds(e,row)?row:e));
+            this.datasource.setData(this.data.map(e => this.haveEqualIds(e, row) ? row : e));
             this.dialog.closeAll();
             this.currentElement = {} as T;
 
@@ -100,53 +102,52 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
 
     private handleRowRemoved() {
         this.subscriptions.push(this.datasource.onRowRemoved.subscribe(row => {
-            this.datasource.setData(this.data.filter(el=>!this.haveEqualIds(el,row)));
+            this.datasource.setData(this.data.filter(el => !this.haveEqualIds(el, row)));
         }));
     }
 
     private handleRowsAdded() {
         this.subscriptions.push(this.datasource.onRowsAdded.subscribe(rows => {
-            this.datasource.setData([...rows,...this.data]);
+            this.datasource.setData([...rows, ...this.data]);
         }));
     }
 
     private handleRowsUpdated() {
         this.subscriptions.push(this.datasource.onRowsUpdated.subscribe(rows => {
-            this.datasource.setData(this.data.map(row => rows.find(r => this.haveEqualIds(r,row)) || row));
+            this.datasource.setData(this.data.map(row => rows.find(r => this.haveEqualIds(r, row)) || row));
         }));
     }
 
     private handleRowsRemoved() {
         this.subscriptions.push(this.datasource.onRowsRemoved.subscribe(rows => {
-            this.datasource.setData(this.data.filter(el=> !rows.find(e=>this.haveEqualIds(e, el))));
+            this.datasource.setData(this.data.filter(el => !rows.find(e => this.haveEqualIds(e, el))));
         }));
     }
+
     handleError() {
         this.subscriptions.push(this.datasource.onRowErrors.subscribe(resp => {
-            const element = this.data.find(el => this.haveEqualIds(resp.row,el)) || resp.row;
+            const element = this.data.find(el => this.haveEqualIds(resp.row, el)) || resp.row;
+            this.currentElement = element;
             element.errors = resp.errors;
             element.isSaving = false;
-            resp.errors?.forEach(err => {
+            this.myForm.patchValue(element);
+            setTimeout(() => resp.errors?.forEach(err => {
                 this.myForm.setErrors({[err.fieldName]: err.message});
-            })
+            }));
         }));
     }
 
     onSave(element: T) {
         element.errors = [];
         element.isSaving = true;
-        element.isNewItem ? this.dataAdded.emit(element) : this.dataUpdated.emit(element);
+        this.isNew(element) ? this.dataAdded.emit(element) : this.dataUpdated.emit(element);
         this.currentElement = element;
     }
 
     remove(element: T) {
         this.modalService.open(ConfirmComponent.setTitle('Confirm').setContent('Are you sure to remove this row ?')).closed.subscribe(() => {
-            if (!element[this.identifier]) {
-                this.data.splice(0, 1);
-            } else {
-                element.errors = [];
-                this.dataDeleted.emit(element);
-            }
+            element.errors = [];
+            this.dataDeleted.emit(element);
         });
     }
 
@@ -160,49 +161,47 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
     }
 
     updateAll() {
-        let modifiedElements = this.data.filter(e => e.dirty);
+        let modifiedElements = this.data.filter(e => e.isModified);
         modifiedElements.length && this.UpdateAll.emit(modifiedElements);
     }
 
     onValueChanged(el: T) {
-        el.dirty = true;
+        el.isModified = true;
         el.errors = [];
     }
 
     onRowClicked(element: T) {
         if (this.isCurrentElement(element) || this.isBatchEnabled)
             return;
+        this.myForm.patchValue(element);
         if (!this.currentElement.isSaving)
-            this.rollback(this.data.findIndex(e=>this.haveEqualIds(e,this.currentElement)));
-        element.isNewItem = false;
+            this.rollback(this.data.findIndex(e => this.haveEqualIds(e, this.currentElement)));
         this.currentElement = element;
     }
 
     uploadFile(element: any, field: Schema, file: File) {
-        element.dirty = true;
         element[field.name] = file.name;
         element[field.fileField!] = file;
         this.myForm.controls[field.name].patchValue(file);
     }
-
 
     sort(sort: string, icon: HTMLElement) {
         let direction = '';
         if (icon.classList.contains('fa-sort-up')) {
             direction = 'DESC';
             icon.classList.replace('fa-sort-up', 'fa-sort-down');
-        }
-        else {
+        } else {
             icon.classList.remove('fa-sort-down');
             icon.classList.add('fa-sort-up');
             direction = 'ASC';
         }
-        this.dataSorted.emit({ sort, direction });
+        this.dataSorted.emit({sort, direction});
     }
 
     onElementSelected(el: T) {
         el.selected ? this.selectedSize++ : this.selectedSize--;
     }
+
     onImageClicked($event: Event, src: string) {
         $event.stopPropagation();
         this.zoomedImage = src;
@@ -223,24 +222,24 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
 
     addNewItem() {
         this.openDialog();
-        this.currentElement = { isNewItem: true } as T;
         this.myForm.reset({});
     }
 
-    handleEdit(element: T) {
+    editItem(element: T, index: number) {
+        this.myForm.patchValue(element);
         const dialogRef = this.openDialog();
         dialogRef.afterOpened().subscribe(() => {
-            this.myForm.patchValue(element);
+            this.currentElement = element;
+            this.isDialogOpened = true;
         });
         dialogRef.afterClosed().subscribe(() => {
             this.isDialogOpened = false;
-            element.dirty=false;
+            this.currentElement = {} as T;
+            if (this.hasError(element))
+                this.rollback(index);
         });
-        element.isNewItem = false;
-        element.dirty = true;
-        this.currentElement = element;
-        this.isDialogOpened = true;
     }
+
     handleSubmit() {
         if (this.myForm.invalid)
             return;
@@ -257,7 +256,7 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
     }
 
     isCurrentElement(element: any) {
-        return this.haveEqualIds(element,this.currentElement);
+        return this.haveEqualIds(element, this.currentElement);
     }
 
     hasFocus(element: HTMLElement) {
@@ -267,33 +266,39 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
     trackById(i: any, item: any): string {
         return item?.[this.identifier];
     }
+
     trackByField(i: any, item: Schema): string {
         return item.name;
     }
+
     compareWith(item1: any, item2: any): boolean {
         return (item1 && item2) ? item1.id === item2.id : item1 === item2;
     }
 
-    isDirty(el: T) {
-        return el.dirty;
-    }
-
     hasDataChanged(): boolean {
-    return this.data.some(el=>el.dirty);
+        return this.data.some(el => el.isModified);
     }
 
     isColHide(field: Schema) {
-        return (field.readOnly && Object.keys(this.currentElement)?.length)
-            || (this.isBatchEnabled && field.type == 'image')
+        return (this.isBatchEnabled && field.type == 'image')
             || (field.readOnly && this.isBatchEnabled);
+    }
+
+    isCurrentNew(): boolean {
+        return !Boolean(this.currentElement[this.identifier]);
     }
 
     private haveEqualIds(e: T, el: T): boolean {
         return e[this.identifier] == el[this.identifier];
     }
+
+    private isNew(element: T): boolean {
+        return !Boolean(element[this.identifier]);
+    }
+
     private openDialog() {
         if (!this.currentElement.isSaving)
-            this.rollback(this.data.findIndex(e=>this.haveEqualIds(e,this.currentElement)));
+            this.rollback(this.data.findIndex(e => this.haveEqualIds(e, this.currentElement)));
         return this.dialog.open(this.editingModal, {
             width: '500px'
         });
@@ -309,18 +314,18 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
     }
 
     isRowEditing(el: T, field: Schema) {
-        return (this.isCurrentElement(el) || this.isBatchEnabled) && !field.readOnly && !this.isDialogOpened;
+        return this.isCurrentElement(el) && !field.readOnly && !this.isDialogOpened;
     }
 }
 
 export interface Data {
     isSaving?: boolean,
-    isNewItem?: boolean,
     selected?: boolean,
-    dirty?: boolean,
+    isModified?: boolean,
     errors?: ApiError[],
     [key: string | symbol]: any;
 }
+
 export declare type InputType = 'text' | 'number' | 'decimal' | 'bool' | 'date' | 'textArea' | 'image' | 'select';
 
 

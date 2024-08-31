@@ -1,4 +1,4 @@
-import { AbstractControl } from "@angular/forms";
+import {AbstractControl} from "@angular/forms";
 import {InputType} from "../editable-table.component";
 
 export interface Schema {
