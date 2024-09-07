@@ -129,10 +129,10 @@ export class ProductsEditingComponent implements OnInit {
         return [
             {name: 'sku', display: 'Sku', type: 'text',formControl: new FormControl(null,[Validators.required])},
             {name: 'name', display: 'Name', type: 'text',formControl: new FormControl(null,[Validators.required])},
-            {name: 'description', display: 'Description', type: 'textArea',formControl: new FormControl(null,[Validators.required])},
-            {name: 'unitPrice', display: 'Price', type: 'decimal',formControl: new FormControl(null,[Validators.required])},
+            {name: 'description', display: 'Description', type: 'textArea',formControl: new FormControl(null,[Validators.required,Validators.minLength(10)])},
+            {name: 'unitPrice', display: 'Price', type: 'decimal',formControl: new FormControl(null,[Validators.required,Validators.pattern(/^-?\d*[.,]?\d{0,2}$/)])},
             {name: 'active', display: 'Enable', type: 'bool',formControl: new FormControl(false)},
-            {name: 'unitsInStock', display: 'Quantity', type: 'number',formControl: new FormControl(null,[Validators.required])},
+            {name: 'unitsInStock', display: 'Quantity', type: 'number',formControl: new FormControl(1,[Validators.required,Validators.pattern(/^\d+$/)])},
             {
                 name: 'category',
                 display: 'Category',

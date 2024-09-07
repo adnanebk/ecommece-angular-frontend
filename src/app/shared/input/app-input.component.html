@@ -5,7 +5,7 @@
 
         <input [class.disabledInput]="readonly" (input)="onChange(inp.value)" #inp matInput [readonly]="readonly"
                [formControl]="formControl" [placeholder]="placeHolder" (blur)="blur.emit()"
-               [required]="formControl.hasError('required')" type="{{inputType}}"/>
+               [required]="formControl.hasError('required')" type="text"/>
     </ng-container>
     <ng-container *ngIf="inputType==='textArea'">
         <textarea (input)="onChange(inp.value)" autosize #inp [formControl]="formControl" matInput> </textarea>
@@ -38,6 +38,7 @@
        </ng-container>
     <ng-container *ngIf="hasError()">
         <span class="error" *ngIf="formControl.hasError('required')"> this field is required </span>
+        <span class="error" *ngIf="formControl.hasError('pattern')"> Invalid format </span>
         <span class="error" *ngIf="formControl.hasError('email')"> email must be in valid format </span>
         <span class="error" *ngIf="formControl.hasError('mustMatch')">{{formControl.getError('mustMatch')}}</span>
         <span class="error" *ngIf="formControl.hasError('minlength')">The characters must be at least
