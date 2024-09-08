@@ -18,7 +18,6 @@
                  </ul>
              </div>
             <ng-container *ngIf="dataSource?.data?.length; else noProducts">
-                <button (click)="saveToExcel()" class="btn btn-primary rounded my-2 mx-5">download excel</button>
                 <div class="input-group mx-3">
                     <strong for="formFile" class="fs-5">Add/Update from excel</strong>
                     <div>
@@ -26,8 +25,7 @@
                                type="file" id="formFile">
                     </div>
                 </div>
-
-
+                <button (click)="saveToExcel()" class="btn btn-primary rounded  mx-5">download excel</button>
                 <app-editable-table [dataSource]="dataSource"
                                     [enableMultiEditing]="true"
                                     (dataUpdated)="updateProduct($event)"

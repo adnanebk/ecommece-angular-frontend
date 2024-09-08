@@ -1,10 +1,10 @@
 <div class="m-2" *ngIf="enableMultiEditing">
-    <div class="custom-control custom-switch">
+    <div class="custom-control custom-switch d-flex gap-4">
+        <button (click)="rollback()" class="btn btn-primary"><em class="fas fa-refresh"></em>Refresh</button>
         <div class="form-check form-switch fs-4">
-            enable multi editing
+            Multi editing
             <input (ngModelChange)="rollback()" class="form-check-input" type="checkbox" role="switch" checked
                    [(ngModel)]="isBatchEnabled"/>
-            <button (click)="rollback()" class="btn btn-primary"><em class="fas fa-refresh"></em>Refresh</button>
         </div>
     </div>
 
