@@ -16,7 +16,6 @@ import {ApiError} from "./models/api.error";
 })
 export class EditableTableComponent<T extends Data> implements OnDestroy {
     @Input() enableMultiEditing = false;
-    @Input() myForm: FormGroup = new FormGroup({});
     @Output() dataUpdated = new EventEmitter<T>();
     @Output() dataAdded = new EventEmitter<T>();
     @Output() dataDeleted = new EventEmitter<T>();
@@ -24,6 +23,7 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
     @Output() UpdateAll = new EventEmitter<T[]>();
     @Output() RemoveAll = new EventEmitter<T[]>();
 
+    myForm: FormGroup = new FormGroup({});
     datasource: DataSource<T> = new DataSource<T>([], []);
     isBatchEnabled = false;
     isDialogOpened = false;
@@ -180,9 +180,7 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
     }
 
     uploadFile(element: any, field: Schema, file: File) {
-        element[field.name] = file.name;
         element[field.fileField!] = file;
-        this.myForm.controls[field.name].patchValue(file);
     }
 
     sort(sort: string, icon: HTMLElement) {
@@ -307,10 +305,6 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
     rollback(index?: number) {
         this.currentElement = {} as T;
         this.datasource.roleBack(index);
-    }
-
-    getFormControl(name: string) {
-        return this.myForm.controls[name] as FormControl;
     }
 
     isRowEditing(el: T, field: Schema) {

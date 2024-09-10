@@ -14,6 +14,7 @@ import {SelectComponent} from "./select/select.component";
 import {FileInputComponent} from "./file-input/file-input.component";
 import {NgbPaginationModule} from "@ng-bootstrap/ng-bootstrap";
 import {AutosizeModule} from "ngx-autosize";
+import { TableFormComponent } from './editable-table/table-form/table-form.component';
 
 @NgModule({
     imports: [
@@ -34,6 +35,7 @@ import {AutosizeModule} from "ngx-autosize";
         AppInputComponent,
         SelectComponent,
         FileInputComponent,
+        TableFormComponent,
     ],
     exports: [
         FormsModule,

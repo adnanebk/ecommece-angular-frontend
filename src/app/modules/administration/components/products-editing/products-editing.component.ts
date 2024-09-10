@@ -59,6 +59,7 @@ export class ProductsEditingComponent implements OnInit {
     }
 
     updateProducts($products: Product[]) {
+        this.errors = [];
         this.productService.updateProducts($products).subscribe(products => {
                 this.dataSource.onRowsUpdated.next(products);
                 this.successAlert();
@@ -131,7 +132,6 @@ export class ProductsEditingComponent implements OnInit {
             {name: 'name', display: 'Name', type: 'text',formControl: new FormControl(null,[Validators.required])},
             {name: 'description', display: 'Description', type: 'textArea',formControl: new FormControl(null,[Validators.required,Validators.minLength(10)])},
             {name: 'unitPrice', display: 'Price', type: 'decimal',formControl: new FormControl(null,[Validators.required,Validators.pattern(/^-?\d*[.,]?\d{0,2}$/)])},
-            {name: 'active', display: 'Enable', type: 'bool',formControl: new FormControl(false)},
             {name: 'unitsInStock', display: 'Quantity', type: 'number',formControl: new FormControl(1,[Validators.required,Validators.pattern(/^\d+$/)])},
             {
                 name: 'category',
@@ -141,6 +141,7 @@ export class ProductsEditingComponent implements OnInit {
                 formControl: new FormControl(null,[Validators.required])
             },
             {name: 'image', display: 'Image', type: 'image', fileField: 'imageFile',formControl: new FormControl(null,[Validators.required])},
+            {name: 'active', display: 'Enable', type: 'bool',formControl: new FormControl(false)},
             {name: 'dateCreated', display: 'Newest', type: 'date', readOnly: true,formControl: new FormControl(null)},
             {name: 'lastUpdated', display: 'Last updated', type: 'date', readOnly: true,formControl: new FormControl(null)},
 

@@ -1,0 +1,37 @@
+<mat-form-field *ngIf="field.type==='select'" appearance="outline" class="w-100">
+    <mat-label>{{ field.display }}</mat-label>
+    <mat-select [required]="true" [formControl]="getFormControl(field.name)"
+                [compareWith]="compareWith">
+        <mat-option *ngFor="let item of field.selectOptions!.options" [value]="item">
+            {{ item[field.selectOptions!.displayField] }}
+        </mat-option>
+
+    </mat-select>
+
+</mat-form-field>
+<app-input *ngIf="field.type==='text'" appearance="outline" [label]="field.display"
+           [errorKeys]="[field.name]" [control]="myForm.controls[field.name]">
+</app-input>
+<app-input *ngIf="field.type==='number'" inputType="number" appearance="outline"
+           [errorKeys]="[field.name]" [label]="field.display"
+           [control]="myForm.controls[field.name]">
+</app-input>
+<app-input *ngIf="field.type==='decimal'" inputType="decimal" appearance="outline"
+           [errorKeys]="[field.name]" [label]="field.display"
+           [control]="myForm.controls[field.name]">
+</app-input>
+<app-input *ngIf="field.type==='textArea'" inputType="textArea" appearance="outline"
+           [errorKeys]="[field.name]" [label]="field.display"
+           [control]="myForm.controls[field.name]">
+</app-input>
+<div class="mb-4" *ngIf="field.type === 'image'">
+    <app-file-input text="Image" [accepts]="['.jpg','.jpeg','.png']"
+                    [control]="myForm.controls[field.name]" (upload)="uploadImage($event)">
+    </app-file-input>
+    <span *ngIf="myForm.controls && myForm.touched &&
+                       myForm.controls[field.name].hasError('required')" class="text-danger">
+                            Please upload an image</span>
+</div>
+<mat-slide-toggle *ngIf="field.type==='bool'" [formControl]="getFormControl(field.name)">
+    Enable
+</mat-slide-toggle>

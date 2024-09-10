@@ -1,11 +1,7 @@
 <div class="m-2" *ngIf="enableMultiEditing">
     <div class="custom-control custom-switch d-flex gap-4">
         <button (click)="rollback()" class="btn btn-primary"><em class="fas fa-refresh"></em>Refresh</button>
-        <div class="form-check form-switch fs-4">
-            Multi editing
-            <input (ngModelChange)="rollback()" class="form-check-input" type="checkbox" role="switch" checked
-                   [(ngModel)]="isBatchEnabled"/>
-        </div>
+        <mat-slide-toggle  [(ngModel)]="isBatchEnabled">Multi editing</mat-slide-toggle>
     </div>
 
 
@@ -15,7 +11,7 @@
     </div>
 
 </div>
-<div class="table-responsive table-wrapper-scroll-y" #tableContent>
+<div class="table-responsive table-wrapper-scroll-y">
 
     <table class="table table-bordered  table-light  m-auto text-center  float-start ">
         <caption>Editable table</caption>
@@ -23,7 +19,7 @@
         <tr>
             <th *ngIf="!isBatchEnabled" class="text-center text-primary align-middle  bg-info ">
 
-                <button role="button" class="btn btn-dark" (click)="addNewItem()">
+                <button class="btn btn-dark" (click)="addNewItem()">
                     <em class="fas fa-plus-square"></em></button>
             </th>
             <th *ngIf="isBatchEnabled" class="text-center align-middle bg-info text-dark">
@@ -55,7 +51,7 @@
                         <button (click)="remove(el)" type="button" class="btn btn-rounded  btn-sm  mx-2">
                             <em class="fas fa-trash-alt text-error"></em></button>
                     </div>
-                    <span *ngIf="el.isSaving" class="spinner-grow spinner-grow-sm" role="status"
+                    <span *ngIf="el.isSaving" class="spinner-grow spinner-grow-sm"
                           aria-hidden="true"></span>
                     <ng-container *ngIf="isCurrentElement(el) && !isDialogOpened">
                         <button [disabled]="myForm.invalid" *ngIf="!el.isSaving" (click)="handleSubmit()" type="button"
@@ -118,54 +114,11 @@
                             </option>
                         </select>
 
-                        <app-file-input *ngIf="field.type === 'image'" text="upload"
-                                        [accepts]="['.jpg','.jpeg','.png']" (upload)="uploadFile(el,this.field,$event)">
-
-                        </app-file-input>
-
                         <div *ngIf="hasError(el)" class="text-error">{{ getError(field.name, el) }}</div>
                     </div>
                     <div class="py-2 text-center" [formGroup]="myForm"
                          *ngIf="isRowEditing(el,field) && !isBatchEnabled">
-
-                        <mat-form-field *ngIf="field.type==='select'" appearance="outline" class="w-100">
-                            <mat-label>{{ field.display }}</mat-label>
-                            <mat-select [required]="true" [formControl]="getFormControl(field.name)"
-                                        [compareWith]="compareWith">
-                                <mat-option *ngFor="let item of field.selectOptions!.options" [value]="item">
-                                    {{ item[field.selectOptions!.displayField] }}
-                                </mat-option>
-
-                            </mat-select>
-
-                        </mat-form-field>
-                        <app-input *ngIf="field.type==='text'" appearance="outline" [label]="field.display"
-                                   [errorKeys]="[field.name]" [control]="myForm.controls[field.name]">
-                        </app-input>
-                        <app-input *ngIf="field.type==='number'" inputType="number" appearance="outline"
-                                   [errorKeys]="[field.name]" [label]="field.display"
-                                   [control]="myForm.controls[field.name]">
-                        </app-input>
-                        <app-input *ngIf="field.type==='decimal'" inputType="decimal" appearance="outline"
-                                   [errorKeys]="[field.name]" [label]="field.display"
-                                   [control]="myForm.controls[field.name]">
-                        </app-input>
-                        <app-input *ngIf="field.type==='textArea'" inputType="textArea" appearance="outline"
-                                   [errorKeys]="[field.name]" [label]="field.display"
-                                   [control]="myForm.controls[field.name]">
-                        </app-input>
-                        <mat-slide-toggle *ngIf="field.type==='bool'" [formControl]="getFormControl(field.name)">
-                        </mat-slide-toggle>
-
-                        <div class="mb-4" *ngIf="field.type === 'image'">
-                            <app-file-input [accepts]="['.jpg','.jpeg','.png']"
-                                            (upload)="uploadFile(currentElement,this.field,$event)">
-                            </app-file-input>
-                            <span *ngIf="myForm.controls && myForm.touched &&
-                       myForm.controls[field.name].hasError('required')" class="text-danger">
-                            Please upload a file</span>
-                        </div>
-
+                        <app-table-form [myForm]="myForm" [field]="field" (uploadFile)="uploadFile(currentElement,field,$event)"></app-table-form>
                     </div>
                 </td>
             </ng-container>
@@ -181,40 +134,7 @@
 
             <div mat-dialog-content>
                 <ng-container *ngFor="let field of schema; trackBy: trackByField">
-                    <mat-form-field *ngIf="field.type==='select'" appearance="outline" class="w-100">
-                        <mat-label>{{ field.display }}</mat-label>
-                        <mat-select [required]="true" [formControl]="getFormControl(field.name)"
-                                    [compareWith]="compareWith">
-                            <mat-option *ngFor="let item of field.selectOptions!.options" [value]="item">
-                                {{ item[field.selectOptions!.displayField] }}
-                            </mat-option>
-
-                        </mat-select>
-
-                    </mat-form-field>
-                    <app-input *ngIf="field.type==='text'" appearance="outline" [label]="field.display"
-                               [errorKeys]="[field.name]" [control]="myForm.controls[field.name]">
-                    </app-input>
-                    <app-input *ngIf="field.type==='number'" inputType="number" appearance="outline"
-                               [errorKeys]="[field.name]" [label]="field.display"
-                               [control]="myForm.controls[field.name]">
-                    </app-input>
-                    <app-input *ngIf="field.type==='decimal'" inputType="decimal" appearance="outline"
-                               [errorKeys]="[field.name]" [label]="field.display"
-                               [control]="myForm.controls[field.name]">
-                    </app-input>
-                    <app-input *ngIf="field.type==='textArea'" inputType="textArea" appearance="outline"
-                               [errorKeys]="[field.name]" [label]="field.display"
-                               [control]="myForm.controls[field.name]">
-                    </app-input>
-                    <div class="mb-4" *ngIf="field.type === 'image'">
-                        <app-file-input [label]="field.display" [accepts]="['.jpg','.jpeg','.png']"
-                                        (upload)="uploadFile(currentElement,this.field,$event)">
-                        </app-file-input>
-                        <span *ngIf="myForm.controls && myForm.touched &&
-                       myForm.controls[field.name].hasError('required')" class="text-danger">
-                            Please upload a file</span>
-                    </div>
+                 <app-table-form [myForm]="myForm" [field]="field" (uploadFile)="uploadFile(currentElement,field,$event)"></app-table-form>
                 </ng-container>
 
             </div>

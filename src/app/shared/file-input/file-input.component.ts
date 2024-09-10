@@ -1,4 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {AbstractControl, FormControl} from "@angular/forms";
 
 @Component({
     selector: 'app-file-input',
@@ -11,7 +12,11 @@ export class FileInputComponent implements OnInit {
     @Input() accepts: string[] = [];
     @Input() text = 'choose';
     @Input() label = '';
+    @Input() control: AbstractControl = new FormControl();
 
+    get formControl(): FormControl {
+        return this.control as FormControl;
+    }
 
     uploadFile(input: HTMLInputElement) {
         if (input?.files?.length) {
@@ -21,6 +26,7 @@ export class FileInputComponent implements OnInit {
             reader.addEventListener('load', () => {
                 this.upload.emit(file);
                 this.text=file.name;
+                this.control.patchValue(this.text);
             });
             reader.readAsDataURL(file);
         }
