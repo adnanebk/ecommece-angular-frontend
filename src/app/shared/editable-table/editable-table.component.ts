@@ -31,6 +31,7 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
     currentElement: T = {} as T;
     subscriptions: Subscription[] = [];
     zoomedImage = '';
+    currentSortedIcon?: HTMLElement;
 
     @Input()
     set dataSource(datasource: DataSource<T>) {
@@ -141,7 +142,7 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
         element.errors = [];
         element.isSaving = true;
         this.isNew(element) ? this.dataAdded.emit(element) : this.dataUpdated.emit(element);
-        this.currentElement = element;
+       // this.currentElement = element;
     }
 
     remove(element: T) {
@@ -185,8 +186,13 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
 
     sort(sort: string, icon: HTMLElement) {
         let direction = '';
+        if(icon!= this.currentSortedIcon){
+            this.currentSortedIcon?.setAttribute('class','fa fa-sort');
+        }
+        this.currentSortedIcon = icon;
         if (icon.classList.contains('fa-sort-up')) {
             direction = 'DESC';
+            icon.classList.remove('fa-sort');
             icon.classList.replace('fa-sort-up', 'fa-sort-down');
         } else {
             icon.classList.remove('fa-sort-down');

@@ -86,6 +86,7 @@ export class ProductsEditingComponent implements OnInit {
     }
 
     sortProducts({sort, direction}: any) {
+        this.productPage.number = 1;
         this.productPage.sortProperty = sort;
         this.productPage.sortDirection = direction;
         this.fetchProducts();
