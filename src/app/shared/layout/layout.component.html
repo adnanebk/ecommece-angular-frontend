@@ -14,7 +14,6 @@
         </a>
 
         <span class="navbar-spacer"></span>
-        <a routerLink="" (click)="openDialog()" class="text-white text-decoration-none" *ngIf="isLoggedIn() && !isUserEnabled()">Active my account</a>
         <button mat-icon-button routerLink="/shopping-cart">
             <mat-icon [matBadge]="getCartItemsCount() | async" matBadgeColor="accent">shopping_cart</mat-icon>
         </button>
@@ -71,6 +70,10 @@
                     <p mat-line> My cart </p>
                 </a>
                 <ng-container *ngIf="isLoggedIn()">
+                    <a (click)="openDialog()" *ngIf="!isUserEnabled()" mat-list-item >
+                        <mat-icon mat-list-icon>check</mat-icon>
+                        <p mat-line> Activate my account </p>
+                    </a>
                     <a *ngIf="isAdminUser()" mat-list-item [routerLink]="['/admin/products-editing']"
                        routerLinkActive="active">
                         <mat-icon mat-list-icon>settings</mat-icon>
