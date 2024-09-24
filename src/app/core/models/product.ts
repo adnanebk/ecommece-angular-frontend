@@ -6,13 +6,13 @@ export interface Product {
     name: string;
     description: string;
     unitPrice: number;
-    image: string;
+    images: string[];
     active: boolean;
     unitsInStock: number;
     category: Category;
     dateCreated: Date;
     lastUpdated: Date;
-    imageFile?: File;
+    imageFile?: File[];
 }
 
 

@@ -5,6 +5,7 @@ import {Product} from "../../../../core/models/product";
 import {ProductService} from "../../../../core/services/product.service";
 import {CartItem} from "../../../../core/models/cart-item";
 import {Observable} from "rxjs";
+import {tap} from "rxjs/operators";
 
 @Component({
     selector: 'app-product-details',
@@ -15,6 +16,7 @@ import {Observable} from "rxjs";
 export class ProductDetailsComponent implements OnInit {
     product$!: Observable<Product>;
     quantity = 1;
+    currentImage = ''
 
     constructor(private activatedRoute: ActivatedRoute, private productService: ProductService, private cartService: CartService, private route: Router) {
     }
@@ -27,6 +29,7 @@ export class ProductDetailsComponent implements OnInit {
         const sku = this.activatedRoute.snapshot.paramMap.get('sku');
         if (sku) {
             this.product$ = this.productService.getProduct(sku)
+                .pipe(tap(product => this.currentImage = product.images[0]))
         }
     }
 
@@ -49,4 +52,15 @@ export class ProductDetailsComponent implements OnInit {
         this.route.navigate(['/checkout'], {state: {cartItems: [cartItem]}});
     }
 
+    getNextImage(product: Product) {
+        const index = product.images.indexOf(this.currentImage);
+        if (index + 1 < product.images.length)
+            this.currentImage = product.images[index + 1];
+    }
+
+    getPrevImage(product: Product) {
+        const index = product.images.indexOf(this.currentImage);
+        if (index > 0)
+            this.currentImage = product.images[index - 1];
+    }
 }

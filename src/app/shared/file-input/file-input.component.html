@@ -1,6 +1,6 @@
 <div class="file-input d-flex justify-content-between">
     <span class="m-2 max-content" style="color: gray" *ngIf="label">{{label}}</span>
-    <input [formControl]="formControl" id="file" #file type="file" class="form-control file" [accept]="[accepts].join(',')"
+    <input [multiple]="isMultiple" [formControl]="formControl" id="file" #file type="file" class="form-control file" [accept]="[accepts].join(',')"
            (change)="uploadFile(file)">
     <label for="file">
         <span class="small">{{text && text.substring(text.lastIndexOf('/') + 1) | limitTo:'20'}}</span>

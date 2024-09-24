@@ -109,14 +109,12 @@ export class ProductsEditingComponent implements OnInit {
                 this.successAlert(products?.ADDED.length + " items has been added and " + products?.UPDATED.length + " items has been updated");
                 this.dataSource.onRowsAdded.next(products?.ADDED);
                 this.dataSource.onRowsUpdated.next(products?.UPDATED);
-                $input.value='';
             },
             (error:ApiError) => {
             if(error?.errors?.length)
                 this.errors = error?.errors;
             else 
                 this.toastrService.error(error.message);
-            $input.value='';
             }
         );
     }
@@ -141,7 +139,7 @@ export class ProductsEditingComponent implements OnInit {
                 selectOptions: {displayField: 'name', valueField: 'id', options: categories},
                 formControl: new FormControl(null,[Validators.required])
             },
-            {name: 'image', display: 'Image', type: 'image', fileField: 'imageFile',formControl: new FormControl(null,[Validators.required])},
+            {name: 'images', display: 'Images', type: 'image', fileField: 'imageFile',formControl: new FormControl(null,[Validators.required])},
             {name: 'active', display: 'Enable', type: 'bool',formControl: new FormControl(false)},
             {name: 'dateCreated', display: 'Newest', type: 'date', readOnly: true,formControl: new FormControl(null)},
             {name: 'lastUpdated', display: 'Last updated', type: 'date', readOnly: true,formControl: new FormControl(null)},

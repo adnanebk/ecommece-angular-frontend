@@ -9,27 +9,44 @@ import {AbstractControl, FormControl} from "@angular/forms";
 export class FileInputComponent implements OnInit {
 
     @Output() upload = new EventEmitter<File>();
+    @Output() uploadMulti = new EventEmitter<File[]>();
     @Input() accepts: string[] = [];
     @Input() text = 'choose';
     @Input() label = '';
     @Input() control: AbstractControl = new FormControl();
+    @Input() isMultiple = false;
 
     get formControl(): FormControl {
         return this.control as FormControl;
     }
 
     uploadFile(input: HTMLInputElement) {
-        if (input?.files?.length) {
+        if(!input?.files?.length)
+            return;
+    if (!this.isMultiple) {
             const file = input.files[0];
 
             const reader = new FileReader();
             reader.addEventListener('load', () => {
                 this.upload.emit(file);
-                this.text=file.name;
+                this.text = file.name;
                 this.control.patchValue(this.text);
             });
             reader.readAsDataURL(file);
+    }
+    else {
+            let files : File[] = [];
+        for (let i = 0; i < input.files.length; i++) {
+            files.push(input.files[i])
         }
+            const reader = new FileReader();
+        reader.addEventListener('load', () => {
+            this.uploadMulti.emit(files);
+                this.text = files[0].name;
+                this.control.patchValue(this.text);
+            });
+        reader.readAsDataURL(files[input.files.length-1]);
+    }
 
 
     }

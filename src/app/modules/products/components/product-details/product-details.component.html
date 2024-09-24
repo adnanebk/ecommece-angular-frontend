@@ -9,24 +9,41 @@
                             <button mat-icon-button fxHide="false" fxHide.gt-md>
                                 <mat-icon>fullscreen</mat-icon>
                             </button>
-                            <img [src]="product.image" alt="{{product.name}}"/>
+                            <img [src]="currentImage" alt="{{product.name}}"/>
                         </div>
                     </mat-card>
-                    
+                    <div class="images-container d-flex align-items-center">
+                        <button mat-icon-button class="swiper-button-prev swipe-arrow" (click)="getPrevImage(product)">
+                            <mat-icon>keyboard_arrow_left</mat-icon>
+                        </button>
+                        <div class="swiper-container d-flex mt-2">
+                            <div class="d-flex justify-content-between product-images">
+                                <mat-card class="p-0" *ngFor="let image of product.images">
+                                    <mat-card-content (click)="currentImage=image" class="bg-white">
+                                        <img mat-card-image [src]="image" alt="{{product.name}}"
+                                             [ngClass]="{'border border-2 border-info rounded':image===currentImage}"/>
+                                    </mat-card-content>
+                                </mat-card>
+                            </div>
+                        </div>
+                        <button mat-icon-button class="swiper-button-next swipe-arrow" (click)="getNextImage(product)">
+                            <mat-icon>keyboard_arrow_right</mat-icon>
+                        </button>
+                    </div>
                 </div>
                 <div fxFlex="100" fxFlex.gt-md="50" fxFlex.md="55" ngClass.gt-sm="px-3 m-0" ngClass.sm="mt-2"
                      ngClass.xs="mt-2">
 
                     <div class="product-right">
                         <div class="product-details">
-                            <h2>{{product.name}}</h2>
-                            <h3 class="price">{{product.unitPrice | currency:'$'}}</h3>
-                            <p class="text-muted description">{{product.description}}</p>
+                            <h2>{{ product.name }}</h2>
+                            <h3 class="price">{{ product.unitPrice | currency:'$' }}</h3>
+                            <p class="text-muted description">{{ product.description }}</p>
                         </div>
                         <div class="py-1 mt-15">
                             <p>
                                 <span class="fw-bolder fw-500">Avalibility: </span>
-                                <span class="avalibility"><span>{{product.unitsInStock}} in Stock</span></span>
+                                <span class="avalibility"><span>{{ product.unitsInStock }} in Stock</span></span>
                             </p>
                         </div>
                         <div class="quantity mb-4">
@@ -47,11 +64,13 @@
                             </div>
                         </div>
                         <div class="buttons">
-                            <button mat-raised-button color="primary" class="btn-project me-2" (click)="addToCart(product)">
+                            <button mat-raised-button color="primary" class="btn-project me-2"
+                                    (click)="addToCart(product)">
                                 <mat-icon>shopping_cart</mat-icon>
                                 ADD TO CARD
                             </button>
-                            <button mat-raised-button color="primary" class="btn-project" (click)="checkout(product)">BUY NOW
+                            <button mat-raised-button color="primary" class="btn-project" (click)="checkout(product)">
+                                BUY NOW
                             </button>
                         </div>
                     </div>

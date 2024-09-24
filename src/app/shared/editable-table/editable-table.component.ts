@@ -30,7 +30,7 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
     selectedSize = 0;
     currentElement: T = {} as T;
     subscriptions: Subscription[] = [];
-    zoomedImage = '';
+    zoomedImages : string[] = [];
     currentSortedIcon?: HTMLElement;
 
     @Input()
@@ -49,7 +49,7 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
     }
 
     @ViewChild('elementEdit') editingModal!: TemplateRef<any>;
-    @ViewChild('zoomedImages') zoomedImagesModal!: TemplateRef<any>;
+    @ViewChild('zoomedImagesCont') zoomedImagesModal!: TemplateRef<any>;
 
     get data(): T[] & any[] {
         return this.datasource.data;
@@ -180,8 +180,8 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
         this.currentElement = element;
     }
 
-    uploadFile(element: any, field: Schema, file: File) {
-        element[field.fileField!] = file;
+    uploadFile(element: any, field: Schema, files: File[]) {
+        element[field.fileField!] = files;
     }
 
     sort(sort: string, icon: HTMLElement) {
@@ -206,11 +206,11 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
         el.selected ? this.selectedSize++ : this.selectedSize--;
     }
 
-    onImageClicked($event: Event, src: string) {
+    onImageClicked($event: Event, images: string[]) {
         $event.stopPropagation();
-        this.zoomedImage = src;
+        this.zoomedImages = images;
         this.dialog.open(this.zoomedImagesModal, {
-            width: '500px', height: '500px'
+            width: '400px', height: '400px'
         });
     }
 

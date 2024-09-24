@@ -86,7 +86,7 @@
                             {{ el[field.name][field.selectOptions.displayField] }}</strong>
                         <img class="td-img" (click)="onImageClicked($event,el[field.name])"
                              *ngIf="field.type === 'image'"
-                             [src]="el[field.name]" alt="container"/>
+                             [src]="el[field.name]?.[0]" alt="container"/>
                     </div>
 
                     <div class="py-2 text-center" *ngIf="isBatchEnabled">
@@ -154,7 +154,9 @@
             </div>
         </form>
     </ng-template>
-    <ng-template #zoomedImages>
-        <img [src]="zoomedImage" class="zoom-img" alt="container"/>
+    <ng-template #zoomedImagesCont>
+        <div class="row gap-4">
+            <img *ngFor="let image of zoomedImages" [src]="image" class="zoom-img" alt="container"/>
+        </div>
     </ng-template>
 </div>

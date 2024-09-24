@@ -25,12 +25,12 @@
            [control]="myForm.controls[field.name]">
 </app-input>
 <div class="mb-4" *ngIf="field.type === 'image'">
-    <app-file-input text="Image" [accepts]="['.jpg','.jpeg','.png']"
-                    [control]="myForm.controls[field.name]" (upload)="uploadImage($event)">
+    <app-file-input [isMultiple]="true"  text="Images" [accepts]="['.jpg','.jpeg','.png']"
+                    [control]="myForm.controls[field.name]" (uploadMulti)="uploadImage($event)">
     </app-file-input>
     <span *ngIf="myForm.controls && myForm.touched &&
                        myForm.controls[field.name].hasError('required')" class="text-danger">
-                            Please upload an image</span>
+                            Please upload some images</span>
 </div>
 <mat-slide-toggle *ngIf="field.type==='bool'" [formControl]="getFormControl(field.name)">
     Enable

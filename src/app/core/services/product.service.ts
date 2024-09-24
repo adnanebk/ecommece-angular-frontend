@@ -23,8 +23,8 @@ export class ProductService {
         let params = new HttpParams()
             .append('number', productPage.number - 1)
             .append('size', productPage.size)
-            .append('sortProperty', productPage.sortProperty ?? 'dateCreated')
-            .append('sortDirection', productPage.sortDirection ?? 'ASC')
+            .append('sortProperty', productPage.sortProperty ?? 'lastUpdated')
+            .append('sortDirection', productPage.sortDirection ?? 'DESC')
         if (productPage.search)
             params = params.set('search', productPage.search);
         if (categoryName)
@@ -50,8 +50,8 @@ export class ProductService {
     private getFormData(product: Product) {
         const formData = new FormData();
         const blob = new Blob([JSON.stringify(product)], {type: "application/json"})
-        if (product.imageFile)
-            formData.append('file', product.imageFile);
+        if (product.imageFile?.length)
+            product.imageFile?.forEach(file=>formData.append('files', file));
         formData.append('product', blob);
         return formData;
     }

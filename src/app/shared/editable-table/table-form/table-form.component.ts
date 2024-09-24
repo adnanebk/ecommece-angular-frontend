@@ -14,7 +14,7 @@ export class TableFormComponent {
   @Output() uploadFile = new EventEmitter<any>();
 
 
-  uploadImage($event: File) {
+  uploadImage($event: any) {
     this.uploadFile.next($event)
   }
   getFormControl(name: string) {
