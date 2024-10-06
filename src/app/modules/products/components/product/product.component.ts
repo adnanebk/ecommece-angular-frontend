@@ -39,7 +39,7 @@ export class ProductComponent implements AfterContentInit {
                 this.currentImage = this.product.images[index++];
                 this.chd.markForCheck();
             }
-        }, 600);
+        }, 500);
     }
 
     backToFirstImage() {

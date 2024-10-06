@@ -17,7 +17,8 @@
                                 <mat-label><strong>Search</strong></mat-label>
                                 <input [(ngModel)]="productPage.search" matInput placeholder="search..."
                                        (keyup.enter)="getProductsInPage()">
-                                <mat-icon (click)="getProductsInPage(true)" role="button" matSuffix>search</mat-icon>
+                                <mat-icon (keyup.enter)="getProductsInPage(true)" (click)="getProductsInPage(true)"
+                                          class="search-btn" matSuffix>search</mat-icon>
                             </mat-form-field>
                             <mat-form-field *ngIf="categories$ | async as categories" appearance="fill" class="w-auto">
                                 <mat-label><strong>Categories</strong></mat-label>

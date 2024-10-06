@@ -17,11 +17,11 @@
     <mat-divider></mat-divider>
 
     <mat-card-footer>
-        <button mat-button>
-            <mat-icon color="primary" (click)="editCard()">edit</mat-icon>
+        <button mat-button (click)="editCard()">
+            <mat-icon color="primary">edit</mat-icon>
         </button>
-        <button mat-button class="float-end">
-            <mat-icon color="warn" (click)="removeCard()">delete</mat-icon>
+        <button mat-button class="float-end" (click)="removeCard()">
+            <mat-icon color="warn">delete</mat-icon>
         </button>
     </mat-card-footer>
 </mat-card>

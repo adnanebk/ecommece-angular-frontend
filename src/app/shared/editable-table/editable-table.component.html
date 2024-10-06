@@ -29,8 +29,8 @@
                 </h4>
             </th>
             <ng-container *ngFor="let field of schema; trackBy: trackByField">
-                <th *ngIf="!isColHide(field)" (click)="sort(field.name,icon)"
-                    class="text-center  align-middle bg-info border-secondary" role='button'>
+                <th *ngIf="!isColHide(field)" (keyup.enter)="sort(field.name,icon)" (click)="sort(field.name,icon)"
+                    class="text-center  align-middle bg-info border-secondary">
                     <a
                             class="max-content mx-2 text-dark fa-lg fw-bold  text-decoration-none"><strong>{{ field.display }}</strong></a>
                     <em #icon class="fa fa-sort" aria-hidden="true"></em>

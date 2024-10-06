@@ -40,6 +40,9 @@ export class AppInputComponent {
     onChange(value: any) {
         this.changeValue.emit(value);
     }
+    togglePasswordHiding(){
+        this.hidePassword = !this.hidePassword;
+    }
     
 }
 

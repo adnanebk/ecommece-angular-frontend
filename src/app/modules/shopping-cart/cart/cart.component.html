@@ -40,7 +40,7 @@
                     <div class="mat-cell total">{{item.unitPrice * item.quantity | currency : '$' }}</div>
                     <div class="mat-cell text-center">
                         <div class="p-1">
-                            <mat-icon (click)="removeItem(item)">close</mat-icon>
+                            <mat-icon (keyup.enter)="removeItem(item)" (click)="removeItem(item)">close</mat-icon>
                         </div>
                     </div>
                 </div>

@@ -3,7 +3,7 @@
     <input [multiple]="isMultiple" [formControl]="formControl" id="file" #file type="file" class="form-control file" [accept]="[accepts].join(',')"
            (change)="uploadFile(file)">
     <label for="file">
-        <span class="small">{{text && text.substring(text.lastIndexOf('/') + 1) | limitTo:'20'}}</span>
+        <span class="small max-content">{{text && text.substring(text.lastIndexOf('/') + 1) | limitTo:'20'}}</span>
         <em class="fas fa-upload"></em></label>
 
 </div>
