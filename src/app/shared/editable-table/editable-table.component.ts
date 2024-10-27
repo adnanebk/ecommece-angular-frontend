@@ -85,7 +85,6 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
 
     private handleRowAdded() {
         this.subscriptions.push(this.datasource.onRowAdded.subscribe(row => {
-            row.isSaving = false;
             this.datasource.setData([row, ...this.data])
             this.dialog.closeAll();
         }));
@@ -93,7 +92,6 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
 
     private handleRowUpdated() {
         this.subscriptions.push(this.datasource.onRowUpdated.subscribe(row => {
-            row.isSaving = false;
             this.datasource.setData(this.data.map(e => this.haveEqualIds(e, row) ? row : e));
             this.dialog.closeAll();
             this.currentElement = {} as T;
