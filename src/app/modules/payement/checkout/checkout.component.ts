@@ -20,7 +20,7 @@ import {Location} from "@angular/common";
 export class CheckoutComponent implements OnInit,AfterViewInit {
 
     customerForm!: FormGroup;
-    creditCardForm!: FormGroup;
+    creditCardForm?: FormGroup;
     cartItems: CartItem[] = [];
     totalQuantity: number = 0;
     totalPrice: number = 0;

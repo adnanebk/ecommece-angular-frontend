@@ -20,11 +20,11 @@
                     </div>
                 </form>
             </mat-step>
-            <mat-step #step2 [hasError]="hasCreditCardError()"  [stepControl]="formCard.cardForm" label="Fill out payment information">
+            <mat-step  [hasError]="hasCreditCardError()"  [stepControl]="formCard.cardForm" label="Fill out payment information">
                <app-credit-card-form class="m-1" #formCard  [selectedCard]="selectedCard!"  >
                </app-credit-card-form>
                 <button mat-raised-button color="accent" matStepperPrevious>Back</button>
-                <button [disabled]="creditCardForm.invalid" mat-raised-button class="mx-2" color="primary" matStepperNext>Next</button>
+                <button [disabled]="!!creditCardForm?.invalid" mat-raised-button class="mx-2" color="primary" matStepperNext>Next</button>
             </mat-step>
             <mat-step>
                 <ng-template matStepLabel>Done</ng-template>
