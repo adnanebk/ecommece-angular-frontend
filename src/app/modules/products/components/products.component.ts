@@ -16,8 +16,8 @@ import {PagedResponse} from "../../../core/models/pagedResponse";
     styleUrls: ['./products.component.css']
 })
 export class ProductsComponent implements OnInit {
-    filters: Filter[] = [{property: 'name', display: 'Name'}, {property: 'dateCreated', display: 'Newest'},
-        {property: 'unitPrice', display: 'Price: Low to high'},
+    filters: Filter[] = [{property: 'name',direction: 'ASC', display: 'Name'}, {property: 'dateCreated', display: 'Newest'},
+        {property: 'unitPrice',direction: 'ASC', display: 'Price: Low to high'},
         {property: 'unitPrice', direction: 'DESC', display: 'Price: High to low'}];
     pagedProducts$!: Observable<PagedResponse<Product[]>>;
     categories$!: Observable<Category[]>;
