@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {ToastrService} from "ngx-toastr";
 import {CategoryService} from "../../../../core/services/category.service";
 import {ProductService} from "../../../../core/services/product.service";
@@ -9,8 +9,11 @@ import {FormControl, Validators} from "@angular/forms";
 import {Category} from "../../../../core/models/category";
 import {ApiError, FieldError} from "../../../../core/models/api-error";
 import {DataSource} from "../../../../shared/editable-table/models/data.source";
-import { Schema } from 'src/app/shared/editable-table/models/schema';
-import { forkJoin } from 'rxjs';
+import {Schema} from 'src/app/shared/editable-table/models/schema';
+import {forkJoin} from 'rxjs';
+import {Images} from "../../../../shared/editable-table/editable-table.component";
+import {MatDialog} from "@angular/material/dialog";
+import {CdkDragRelease, moveItemInArray} from "@angular/cdk/drag-drop";
 
 
 @Component({
@@ -20,23 +23,29 @@ import { forkJoin } from 'rxjs';
 })
 export class ProductsEditingComponent implements OnInit {
     productPage: DataPage = {size: 8, number: 1, sortProperty: 'lastUpdated', sortDirection: 'DESC'};
-    dataSource! : DataSource<Product>;
-    errors: FieldError[]=[];
+    dataSource!: DataSource<Product>;
+    errors: FieldError[] = [];
+    selectedImages: string[] = [];
+    ImagesProductId?: number;
+    @ViewChild('zoomedImagesCont') zoomedImagesModal!: TemplateRef<any>;
+
 
     constructor(private productService: ProductService, private categoryService: CategoryService, private toastrService: ToastrService,
-    ) {
+                public dialog: MatDialog) {
     }
 
     ngOnInit(): void {
         this.setDatasource();
     }
+
     private setDatasource() {
-                forkJoin([this.categoryService.getCategories(),this.productService.getProductsInPage(this.productPage)])
-                .subscribe(([categories,products])=>{
+        forkJoin([this.categoryService.getCategories(), this.productService.getProductsInPage(this.productPage)])
+            .subscribe(([categories, products]) => {
                 this.productPage.totalSize = products.totalElements;
-                this.dataSource = new DataSource<Product>(this.createSchema(categories),products.content);
-                });
+                this.dataSource = new DataSource<Product>(this.createSchema(categories), products.content);
+            });
     }
+
     fetchProducts() {
         this.productService.getProductsInPage(this.productPage).subscribe(resp => {
             this.productPage.totalSize = resp.totalElements;
@@ -64,9 +73,9 @@ export class ProductsEditingComponent implements OnInit {
                 this.dataSource.onRowsUpdated.next(products);
                 this.successAlert();
             },
-            ({errors}:ApiError) => {
-             errors?.forEach(error=>this.sendErrors(error?.rootBean,[error]));
-                
+            ({errors}: ApiError) => {
+                errors?.forEach(error => this.sendErrors(error?.rootBean, [error]));
+
             });
     }
 
@@ -110,11 +119,11 @@ export class ProductsEditingComponent implements OnInit {
                 this.dataSource.onRowsAdded.next(products?.ADDED);
                 this.dataSource.onRowsUpdated.next(products?.UPDATED);
             },
-            (error:ApiError) => {
-            if(error?.errors?.length)
-                this.errors = error?.errors;
-            else 
-                this.toastrService.error(error.message);
+            (error: ApiError) => {
+                if (error?.errors?.length)
+                    this.errors = error?.errors;
+                else
+                    this.toastrService.error(error.message);
             }
         );
     }
@@ -127,22 +136,49 @@ export class ProductsEditingComponent implements OnInit {
 
     private createSchema(categories: Category[]): Schema[] {
         return [
-            {name: 'sku', display: 'Sku', type: 'text',formControl: new FormControl(null,[Validators.required])},
-            {name: 'name', display: 'Name', type: 'text',formControl: new FormControl(null,[Validators.required])},
-            {name: 'description', display: 'Description', type: 'textArea',formControl: new FormControl(null,[Validators.required,Validators.minLength(10)])},
-            {name: 'unitPrice', display: 'Price', type: 'decimal',formControl: new FormControl(null,[Validators.required,Validators.pattern(/^-?\d*[.,]?\d{0,2}$/)])},
-            {name: 'unitsInStock', display: 'Quantity', type: 'number',formControl: new FormControl(1,[Validators.required,Validators.pattern(/^\d+$/)])},
+            {name: 'sku', display: 'Sku', type: 'text', formControl: new FormControl(null, [Validators.required])},
+            {name: 'name', display: 'Name', type: 'text', formControl: new FormControl(null, [Validators.required])},
+            {
+                name: 'description',
+                display: 'Description',
+                type: 'textArea',
+                formControl: new FormControl(null, [Validators.required, Validators.minLength(10)])
+            },
+            {
+                name: 'unitPrice',
+                display: 'Price',
+                type: 'decimal',
+                formControl: new FormControl(null, [Validators.required, Validators.pattern(/^-?\d*[.,]?\d{0,2}$/)])
+            },
+            {
+                name: 'unitsInStock',
+                display: 'Quantity',
+                type: 'number',
+                formControl: new FormControl(1, [Validators.required, Validators.pattern(/^\d+$/)])
+            },
             {
                 name: 'category',
                 display: 'Category',
                 type: 'select',
                 selectOptions: {displayField: 'name', valueField: 'id', options: categories},
-                formControl: new FormControl(null,[Validators.required])
+                formControl: new FormControl(null, [Validators.required])
             },
-            {name: 'images', display: 'Images', type: 'image', fileField: 'imageFile',formControl: new FormControl(null,[Validators.required])},
-            {name: 'active', display: 'Enable', type: 'bool',formControl: new FormControl(false)},
-            {name: 'dateCreated', display: 'Newest', type: 'date', readOnly: true,formControl: new FormControl(null)},
-            {name: 'lastUpdated', display: 'Last updated', type: 'date', readOnly: true,formControl: new FormControl(null)},
+            {
+                name: 'images',
+                display: 'Images',
+                type: 'image',
+                fileField: 'imageFile',
+                formControl: new FormControl(null, [Validators.required])
+            },
+            {name: 'active', display: 'Enable', type: 'bool', formControl: new FormControl(false)},
+            {name: 'dateCreated', display: 'Newest', type: 'date', readOnly: true, formControl: new FormControl(null)},
+            {
+                name: 'lastUpdated',
+                display: 'Last updated',
+                type: 'date',
+                readOnly: true,
+                formControl: new FormControl(null)
+            },
 
         ];
     }
@@ -152,11 +188,54 @@ export class ProductsEditingComponent implements OnInit {
     }
 
     private sendErrors(product: Product, errors: FieldError[]) {
-        if(!product)
-            this.errors=errors;
+        if (!product)
+            this.errors = errors;
         else {
-        this.dataSource.onRowErrors.next({row: product, errors});
+            this.dataSource.onRowErrors.next({row: product, errors});
+        }
     }
+
+    onImageClicked({itemId, urls}: Images) {
+        this.ImagesProductId = itemId;
+        this.selectedImages = urls;
+        this.dialog.open(this.zoomedImagesModal, {
+            width: '400px', height: '400px'
+        });
+    }
+
+    uploadFile(input: HTMLInputElement) {
+        if (!input?.files?.length)
+            return;
+        const file = input.files[0];
+        const reader = new FileReader();
+        reader.addEventListener('load', (event) => {
+            this.productService.addImage(file, this.ImagesProductId!).subscribe((image) => {
+                this.selectedImages.push(image.url);
+            })
+        });
+        reader.readAsDataURL(file);
+    }
+
+    removeImage(image: string) {
+        this.selectedImages = this.selectedImages.filter(img => image != img);
+        this.productService.updateImages(this.selectedImages, this.ImagesProductId!).subscribe(() => {
+            const product = this.dataSource.data.find(product => product.id == this.ImagesProductId);
+            product!.images = this.selectedImages;
+        });
+    }
+
+    trackByIndex(i: any, item: any): string {
+        return i;
+    }
+
+    dropImage($event: CdkDragRelease, startIndex:number) {
+        const targetImageUrl = ($event.event.target as HTMLElement).getAttribute('src');
+        const endIndex = this.selectedImages.findIndex(img=>img===targetImageUrl);
+
+        moveItemInArray(this.selectedImages, startIndex, endIndex);
+        this.productService.updateImages(this.selectedImages, this.ImagesProductId!).subscribe()
+
+
     }
 }
 

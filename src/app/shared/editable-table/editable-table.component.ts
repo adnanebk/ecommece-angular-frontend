@@ -22,6 +22,7 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
     @Output() dataSorted = new EventEmitter<{ sort: string, direction: string }>();
     @Output() UpdateAll = new EventEmitter<T[]>();
     @Output() RemoveAll = new EventEmitter<T[]>();
+    @Output() imageClick = new EventEmitter<Images>();
 
     myForm: FormGroup = new FormGroup({});
     datasource: DataSource<T> = new DataSource<T>([], []);
@@ -30,7 +31,6 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
     selectedSize = 0;
     currentElement: T = {} as T;
     subscriptions: Subscription[] = [];
-    zoomedImages : string[] = [];
     currentSortedIcon?: HTMLElement;
 
     @Input()
@@ -49,7 +49,6 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
     }
 
     @ViewChild('elementEdit') editingModal!: TemplateRef<any>;
-    @ViewChild('zoomedImagesCont') zoomedImagesModal!: TemplateRef<any>;
 
     get data(): T[] & any[] {
         return this.datasource.data;
@@ -204,12 +203,9 @@ export class EditableTableComponent<T extends Data> implements OnDestroy {
         el.selected ? this.selectedSize++ : this.selectedSize--;
     }
 
-    onImageClicked($event: Event, images: string[]) {
+    onImageClicked($event: Event, element: T, field: Schema) {
         $event.stopPropagation();
-        this.zoomedImages = images;
-        this.dialog.open(this.zoomedImagesModal, {
-            width: '400px', height: '400px'
-        });
+        this.imageClick.next({urls: element[field.name],itemId:element[this.identifier]});
     }
 
     onAllSelected(checked: boolean) {
@@ -322,6 +318,11 @@ export interface Data {
     isModified?: boolean,
     errors?: ApiError[],
     [key: string | symbol]: any;
+}
+export interface Images {
+    itemId: number;
+    urls: string[];
+
 }
 
 export declare type InputType = 'text' | 'number' | 'decimal' | 'bool' | 'date' | 'textArea' | 'image' | 'select';

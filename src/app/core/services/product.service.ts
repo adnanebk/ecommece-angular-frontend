@@ -84,5 +84,14 @@ export class ProductService {
     }
 
 
+    addImage(imageFile: File, productId: number) {
+        const formData = new FormData();
+        formData.append('imageFile', imageFile);
+        return this.httpClient.post<{url:string}>(this.productUrl + '/'+productId+'/images',formData);
+    }
+
+    updateImages(imageUrls: string[], productId: number) {
+        return this.httpClient.put<void>(this.productUrl + '/'+productId+'/images',imageUrls);
+    }
 }
 

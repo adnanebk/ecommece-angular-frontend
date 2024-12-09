@@ -31,12 +31,6 @@
     cursor: zoom-in;
 }
 
-.zoom-img {
-    height: 100%;
-    width: 100%;
-    object-fit: contain;
-}
-
 .number-input {
     width: 80px !important;
 }
