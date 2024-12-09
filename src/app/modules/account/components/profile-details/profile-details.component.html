@@ -4,7 +4,9 @@
 
         <img *ngIf="user.imageUrl" [src]="user.imageUrl" referrerpolicy="no-referrer" class="circle "
              alt="My avatar">
-        <img *ngIf="!user.imageUrl" src="../../../../../assets/images/user.png" class="circle" alt="My avatar">
+        <img *ngIf="!user.imageUrl" ngSrc="/assets/images/user.png" class="circle" alt="My avatar"
+             height="128" width="128">
+        <div *ngIf="user.imageUrl">{{ user.imageUrl }}</div>
 
         <app-file-input [accepts]="['.jpg','.jpeg','.png']" class="mt-2" *ngIf="!isImageUploading" text="Modify image"
                         (upload)="handleFileUpload($event)"></app-file-input>

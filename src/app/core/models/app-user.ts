@@ -9,7 +9,7 @@ export interface AppUser {
     country?: string;
     street?: string;
     enabled?: boolean;
-    imageUrl?: any;
+    imageUrl?: string;
     social?: boolean;
     expirationDate?: Date;
     roles?: Role[];

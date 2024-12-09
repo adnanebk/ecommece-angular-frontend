@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 
 import {AccountRoutingModule} from './account-routing.module';
 import {ProfileComponent} from './components/profile.component';
@@ -12,6 +12,7 @@ import {ProfileDetailsComponent} from './components/profile-details/profile-deta
         CommonModule,
         SharedModule,
         AccountRoutingModule,
+        NgOptimizedImage,
     ],
     declarations: [ProfileComponent, ChangePasswordComponent, ProfileDetailsComponent],
     exports: [ProfileComponent]
