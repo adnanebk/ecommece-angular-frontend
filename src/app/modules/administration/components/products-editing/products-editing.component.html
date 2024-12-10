@@ -59,8 +59,8 @@
          <p class="fw-bold fs-4">Edit Images</p>
         <div   class="d-flex flex-wrap gap-2 ">
             <div cdkDropList  class="position-relative" *ngFor="let image of selectedImages;let i=index;  trackBy: trackByIndex;">
-                <button  (click)="removeImage(image)"  mat-icon-button aria-label="Remove" class="btn position-absolute end-0  w-auto h-auto p-1" matTooltip="Remove">
-                    <mat-icon class="d-block text-danger" >close</mat-icon>
+                <button   (click)="removeImage(image)"  mat-icon-button aria-label="Remove" class="position-absolute end-0  w-auto h-auto p-1" matTooltip="Remove">
+                    <mat-icon color="warn" class="d-block" >close</mat-icon>
                 </button>
                 <img cdkDrag (cdkDragReleased)="dropImage($event,i)" [src]="image" class="zoom-img" alt="container"/>
             </div >

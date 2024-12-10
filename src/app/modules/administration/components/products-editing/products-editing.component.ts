@@ -209,8 +209,15 @@ export class ProductsEditingComponent implements OnInit {
         const file = input.files[0];
         const reader = new FileReader();
         reader.addEventListener('load', (event) => {
-            this.productService.addImage(file, this.ImagesProductId!).subscribe((image) => {
-                this.selectedImages.push(image.url);
+            let tempUrl = event.target?.result as string ;
+            this.selectedImages.push(tempUrl);
+            const index = this.selectedImages.length-1;
+            this.productService.addImage(file, this.ImagesProductId!).subscribe({
+                next:(image)=> {
+                    this.selectedImages.splice(index, 1, image.url);
+                    this.toastrService.success("images has been successfully updated");
+                },
+                error:()=>this.selectedImages=this.selectedImages.filter(url=>url!=tempUrl)
             })
         });
         reader.readAsDataURL(file);
@@ -221,6 +228,7 @@ export class ProductsEditingComponent implements OnInit {
         this.productService.updateImages(this.selectedImages, this.ImagesProductId!).subscribe(() => {
             const product = this.dataSource.data.find(product => product.id == this.ImagesProductId);
             product!.images = this.selectedImages;
+            this.toastrService.success("images has been successfully updated")
         });
     }
 
@@ -231,11 +239,8 @@ export class ProductsEditingComponent implements OnInit {
     dropImage($event: CdkDragRelease, startIndex:number) {
         const targetImageUrl = ($event.event.target as HTMLElement).getAttribute('src');
         const endIndex = this.selectedImages.findIndex(img=>img===targetImageUrl);
-
         moveItemInArray(this.selectedImages, startIndex, endIndex);
-        this.productService.updateImages(this.selectedImages, this.ImagesProductId!).subscribe()
-
-
+        this.productService.updateImages(this.selectedImages, this.ImagesProductId!).subscribe(()=> this.toastrService.success("images has been successfully updated"))
     }
 }
 
