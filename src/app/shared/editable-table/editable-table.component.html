@@ -84,7 +84,7 @@
                         <strong *ngIf="field.type==='bool'"> {{ el[field.name] ? 'Yes' : 'No' }}</strong>
                         <strong *ngIf="field.type==='select' && field.selectOptions">
                             {{ el[field.name][field.selectOptions.displayField] }}</strong>
-                        <img class="td-img" (click)="onImageClicked($event,el,field)"
+                        <img class="td-img" (click)="onImageClicked($event,el,field)" matTooltip="Edit images" matTooltipPosition="after"
                              *ngIf="field.type === 'image'"
                              [src]="el[field.name]?.[0]" alt="container"/>
                     </div>

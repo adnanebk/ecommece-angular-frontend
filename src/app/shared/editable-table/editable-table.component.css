@@ -28,7 +28,7 @@
 .td-img {
     max-height: 50px;
     object-fit: contain;
-    cursor: zoom-in;
+    cursor: pointer;
 }
 
 .number-input {
