@@ -217,7 +217,12 @@ export class ProductsEditingComponent implements OnInit {
                     this.selectedImages.splice(index, 1, image.url);
                     this.toastrService.success("images has been successfully updated");
                 },
-                error:()=>this.selectedImages=this.selectedImages.filter(url=>url!=tempUrl)
+                error:(err)=> {
+                    this.selectedImages = this.selectedImages.filter(url => url != tempUrl);
+                    if(err.message)
+                    this.toastrService.error(err.message);
+
+                }
             })
         });
         reader.readAsDataURL(file);
