@@ -19,17 +19,15 @@ core features :
 
 * Product details
 
-* Credit cart management
+* Credit cards management
 
-* Products managements by admin
+* Products management by admin
 
-* using excel to add/modify products
+* Import and export to/from excel
 
-* Add to Cart ability with its management
+* Shopping Cart ability with its management
 
-* Displaying Orders
-
-* Making orders ability
+* Making and Displaying Orders
 
 * Dark/light theme switching
 
