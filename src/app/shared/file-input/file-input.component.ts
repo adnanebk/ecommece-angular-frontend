@@ -16,10 +16,6 @@ export class FileInputComponent implements OnInit {
     @Input() control: AbstractControl = new FormControl();
     @Input() isMultiple = false;
 
-    get formControl(): FormControl {
-        return this.control as FormControl;
-    }
-
     uploadFile(input: HTMLInputElement) {
         if(!input?.files?.length)
             return;

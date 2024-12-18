@@ -209,8 +209,7 @@ export class ProductsEditingComponent implements OnInit {
         const file = input.files[0];
         const reader = new FileReader();
         reader.addEventListener('load', (event) => {
-            let tempUrl = event.target?.result as string ;
-            this.selectedImages.push(tempUrl);
+            this.selectedImages.push(event.target?.result as string);
             const index = this.selectedImages.length-1;
             this.productService.addImage(file, this.ImagesProductId!).subscribe({
                 next:(image)=> {
@@ -218,7 +217,7 @@ export class ProductsEditingComponent implements OnInit {
                     this.toastrService.success("images has been successfully updated");
                 },
                 error:(err)=> {
-                    this.selectedImages = this.selectedImages.filter(url => url != tempUrl);
+                    this.selectedImages.splice(this.selectedImages.length-1,1);
                     if(err.message)
                     this.toastrService.error(err.message);
 
