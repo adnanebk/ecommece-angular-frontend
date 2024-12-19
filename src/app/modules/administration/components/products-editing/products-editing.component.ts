@@ -1,4 +1,4 @@
-import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ToastrService} from "ngx-toastr";
 import {CategoryService} from "../../../../core/services/category.service";
 import {ProductService} from "../../../../core/services/product.service";
@@ -12,8 +12,7 @@ import {DataSource} from "../../../../shared/editable-table/models/data.source";
 import {Schema} from 'src/app/shared/editable-table/models/schema';
 import {forkJoin} from 'rxjs';
 import {Images} from "../../../../shared/editable-table/editable-table.component";
-import {MatDialog} from "@angular/material/dialog";
-import {CdkDragRelease, moveItemInArray} from "@angular/cdk/drag-drop";
+import {EditImagesComponent} from "../../../../shared/edit-images/edit-images.component";
 
 
 @Component({
@@ -25,13 +24,15 @@ export class ProductsEditingComponent implements OnInit {
     productPage: DataPage = {size: 8, number: 1, sortProperty: 'lastUpdated', sortDirection: 'DESC'};
     dataSource!: DataSource<Product>;
     errors: FieldError[] = [];
-    selectedImages: string[] = [];
-    ImagesProductId?: number;
-    @ViewChild('zoomedImagesCont') zoomedImagesModal!: TemplateRef<any>;
+    selectedProductId?: number;
+    @ViewChild(EditImagesComponent) editableImagesComp!: EditImagesComponent;
 
+    get selectedImages(){
+        return this.editableImagesComp.imageUrls || [];
+    }
 
     constructor(private productService: ProductService, private categoryService: CategoryService, private toastrService: ToastrService,
-                public dialog: MatDialog) {
+                ) {
     }
 
     ngOnInit(): void {
@@ -196,55 +197,30 @@ export class ProductsEditingComponent implements OnInit {
     }
 
     onImageClicked({itemId, urls}: Images) {
-        this.ImagesProductId = itemId;
-        this.selectedImages = urls;
-        this.dialog.open(this.zoomedImagesModal, {
-            width: '400px', height: '400px'
-        });
+        this.selectedProductId = itemId;
+        this.editableImagesComp.openDialog(urls);
     }
 
-    uploadFile(input: HTMLInputElement) {
-        if (!input?.files?.length)
-            return;
-        const file = input.files[0];
-        const reader = new FileReader();
-        reader.addEventListener('load', (event) => {
-            this.selectedImages.push(event.target?.result as string);
-            const index = this.selectedImages.length-1;
-            this.productService.addImage(file, this.ImagesProductId!).subscribe({
-                next:(image)=> {
-                    this.selectedImages.splice(index, 1, image.url);
-                    this.toastrService.success("images has been successfully updated");
-                },
-                error:(err)=> {
-                    this.selectedImages.splice(this.selectedImages.length-1,1);
-                    if(err.message)
+    onUploadFile(file:File) {
+        const index = this.selectedImages.length-1;
+        this.productService.addImage(file, this.selectedProductId!).subscribe({
+            next:(image)=> {
+                this.selectedImages.splice(index, 1, image.url);
+                this.toastrService.success("images has been successfully updated");
+            },
+            error:(err)=> {
+                this.selectedImages.splice(this.selectedImages.length-1,1);
+                if(err.message)
                     this.toastrService.error(err.message);
-
-                }
-            })
-        });
-        reader.readAsDataURL(file);
+            }
+        })
     }
 
-    removeImage(image: string) {
-        this.selectedImages = this.selectedImages.filter(img => image != img);
-        this.productService.updateImages(this.selectedImages, this.ImagesProductId!).subscribe(() => {
-            const product = this.dataSource.data.find(product => product.id == this.ImagesProductId);
-            product!.images = this.selectedImages;
-            this.toastrService.success("images has been successfully updated")
-        });
-    }
 
-    trackByIndex(i: any, item: any): string {
-        return i;
-    }
-
-    dropImage($event: CdkDragRelease, startIndex:number) {
-        const targetImageUrl = ($event.event.target as HTMLElement).getAttribute('src');
-        const endIndex = this.selectedImages.findIndex(img=>img===targetImageUrl);
-        moveItemInArray(this.selectedImages, startIndex, endIndex);
-        this.productService.updateImages(this.selectedImages, this.ImagesProductId!).subscribe(()=> this.toastrService.success("images has been successfully updated"))
+    onImagesChange(images:string[]) {
+        this.productService.updateImages(images, this.selectedProductId!).subscribe(()=> {
+            this.toastrService.success("images has been successfully updated");
+        })
     }
 }
 

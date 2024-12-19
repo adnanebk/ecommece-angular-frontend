@@ -1,0 +1,18 @@
+<ng-template #zoomedImagesCont>
+    <div class="position-relative full-height">
+        <p class="fw-bold fs-4">Edit Images</p>
+        <div   class="d-flex flex-wrap gap-2 ">
+            <div cdkDropList  class="position-relative" *ngFor="let image of imageUrls;let i=index;  trackBy: trackByIndex;">
+                <button   (click)="removeImage(image)"  mat-icon-button aria-label="Remove" class="position-absolute end-0  w-auto h-auto p-1" matTooltip="Remove">
+                    <mat-icon color="warn" class="d-block" >close</mat-icon>
+                </button>
+                <img cdkDrag (cdkDragReleased)="dropImage($event,i)" [src]="image" class="zoom-img" alt="container"/>
+            </div >
+            <div class="zoom-img d-flex align-items-center justify-content-center bg-light"  matTooltip="Add new image">
+                <input  id="file" #file (change)="uploadFile(file)" type="file" class="form-control file" accept="image/*">
+                <label for="file" class="file-label">
+                    <em class="fas fa-plus fa-2xl"></em></label>
+            </div>
+        </div>
+    </div>
+</ng-template>

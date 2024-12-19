@@ -15,6 +15,7 @@ import {FileInputComponent} from "./file-input/file-input.component";
 import {NgbPaginationModule} from "@ng-bootstrap/ng-bootstrap";
 import {AutosizeModule} from "ngx-autosize";
 import { TableFormComponent } from './editable-table/table-form/table-form.component';
+import { EditImagesComponent } from './edit-images/edit-images.component';
 
 @NgModule({
     imports: [
@@ -36,6 +37,7 @@ import { TableFormComponent } from './editable-table/table-form/table-form.compo
         SelectComponent,
         FileInputComponent,
         TableFormComponent,
+        EditImagesComponent,
     ],
     exports: [
         FormsModule,
@@ -49,6 +51,7 @@ import { TableFormComponent } from './editable-table/table-form/table-form.compo
         SelectComponent,
         EditableTableComponent,
         LayoutComponent,
+        EditImagesComponent,
     ]
 })
 export class SharedModule {
