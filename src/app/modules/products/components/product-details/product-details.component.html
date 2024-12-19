@@ -17,7 +17,7 @@
                             <mat-icon>keyboard_arrow_left</mat-icon>
                         </button>
                         <div class="swiper-container d-flex mt-2">
-                            <div class="d-flex justify-content-between product-images">
+                            <div class="d-flex justify-content-center flex-wrap  product-images">
                                 <mat-card class="p-0" *ngFor="let image of product.images">
                                     <mat-card-content (click)="currentImage=image" class="bg-white">
                                         <img mat-card-image [src]="image" alt="{{product.name}}"
