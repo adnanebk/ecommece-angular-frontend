@@ -2,7 +2,7 @@
     <ng-template #noProducts>
         <ngb-alert>No products found</ngb-alert>
     </ng-template>
-    <div fxFlex="100%" *ngIf="pagedProducts$ | async as pagedProducts">
+    <div fxFlex="100%">
         <ng-container>
             <div class="container" fxLayout="row" fxLayoutAlign="center none">
 
@@ -18,7 +18,8 @@
                                 <input [(ngModel)]="productPage.search" matInput placeholder="search..."
                                        (keyup.enter)="getProductsInPage()">
                                 <mat-icon (keyup.enter)="getProductsInPage(true)" (click)="getProductsInPage(true)"
-                                          class="search-btn" matSuffix>search</mat-icon>
+                                          class="search-btn" matSuffix>search
+                                </mat-icon>
                             </mat-form-field>
                             <mat-form-field *ngIf="categories$ | async as categories" appearance="fill" class="w-auto">
                                 <mat-label><strong>Categories</strong></mat-label>
@@ -28,7 +29,7 @@
                                         All
                                     </mat-option>
                                     <mat-option *ngFor="let op of categories" [value]="op.name">
-                                        {{op.name}}
+                                        {{ op.name }}
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>
@@ -37,33 +38,38 @@
                                 <mat-select name="sort" [(ngModel)]="selectedFilter"
                                             (selectionChange)="getProductsByFilter()">
                                     <mat-option *ngFor="let filter of filters" [value]="filter">
-                                        {{filter.display}}
+                                        {{ filter.display }}
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>
 
                         </div>
+                        <mat-spinner class="m-auto" *ngIf="isLoading"></mat-spinner>
+                        <ng-container *ngIf="pagedProducts$ | async as pagedProducts">
 
-                        <ng-container *ngIf="pagedProducts.totalElements; else noProducts">
-                            <div class="row">
-                                <div class="col-md-3" *ngFor="let product of pagedProducts.content ">
+                            <ng-container *ngIf="pagedProducts.totalElements; else noProducts">
+                                <div class="row">
+                                    <div class="col-md-3" *ngFor="let product of pagedProducts.content ">
 
-                                    <app-product [product]="product"></app-product>
+                                        <app-product [product]="product"></app-product>
+                                    </div>
+
+
                                 </div>
+                                <div class="row">
+                                    <div class="justify-content-start  ">
 
-
-                            </div>
-                            <div class="row">
-                                <div class="justify-content-start  ">
-
-                                    <ngb-pagination [collectionSize]="pagedProducts.totalElements"
-                                                    [(page)]="productPage.number" 
-                                                    [pageSize]="productPage.size" [maxSize]="4" [boundaryLinks]="true"
-                                                    (pageChange)="getProductsInPage()"
-                                    ></ngb-pagination>
+                                        <ngb-pagination [collectionSize]="pagedProducts.totalElements"
+                                                        [(page)]="productPage.number"
+                                                        [pageSize]="productPage.size" [maxSize]="4"
+                                                        [boundaryLinks]="true"
+                                                        (pageChange)="getProductsInPage()"
+                                        ></ngb-pagination>
+                                    </div>
                                 </div>
-                            </div>
+                            </ng-container>
                         </ng-container>
+
                     </div>
 
                 </div>

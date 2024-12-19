@@ -6,7 +6,7 @@ import {DataPage} from "../../../core/models/dataPage";
 import {CategoryService} from "../../../core/services/category.service";
 import {Category} from "../../../core/models/category";
 import {Filter} from "../../../core/models/filter";
-import {Observable} from "rxjs";
+import {Observable, tap} from "rxjs";
 import {PagedResponse} from "../../../core/models/pagedResponse";
 
 @Component({
@@ -24,8 +24,9 @@ export class ProductsComponent implements OnInit {
     selectedCategoryName?: string;
     productPage: DataPage = {size: 10, number: 1};
     selectedFilter?: Filter;
+    isLoading= false;
 
-    constructor(private productService: ProductService, private route: ActivatedRoute, private categoryService: CategoryService) {
+    constructor(private productService: ProductService, private categoryService: CategoryService) {
     }
 
     ngOnInit() {
@@ -35,8 +36,10 @@ export class ProductsComponent implements OnInit {
 
     getProductsInPage(fromFirst: boolean = false) {
         if(fromFirst)
-           this.productPage.number=1; 
-        this.pagedProducts$ = this.productService.getProductsInPage(this.productPage, this.selectedCategoryName);
+           this.productPage.number=1;
+        this.isLoading = true;
+        this.pagedProducts$ = this.productService.getProductsInPage(this.productPage, this.selectedCategoryName)
+            .pipe(tap(()=>this.isLoading=false));
     }
 
     private getCategories() {
